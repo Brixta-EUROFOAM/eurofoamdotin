@@ -1,9 +1,5 @@
 import Link from "next/link";
 import { getStoreData } from "@/lib/store";
-import {
-  BUSINESS_ACTIVITY,
-  BUSINESS_LEGAL_NAME,
-} from "@/lib/business";
 
 export default async function Footer() {
   const { site } = await getStoreData();
@@ -47,36 +43,13 @@ export default async function Footer() {
           <div className="mt-4 space-y-3 text-sm text-white/70">
             <Link className="block hover:text-white" href="/why-eurofoam">Why Eurofoam</Link>
             <Link className="block hover:text-white" href="/reviews">Reviews</Link>
-            <Link className="block hover:text-white" href="/business-information">
-              Business Information
-            </Link>
             <Link className="block hover:text-white" href="/admin">Admin</Link>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-white/10 px-5 py-6">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-center text-xs text-white/45 md:flex-row md:text-left">
-
-          <div>
-            <span className="text-white/70">
-              Legal business name: {BUSINESS_LEGAL_NAME}
-            </span>
-
-            <span className="mx-2 hidden text-white/25 md:inline">
-              ·
-            </span>
-
-            <span className="block mt-1 md:mt-0 md:inline">
-              {BUSINESS_ACTIVITY}
-            </span>
-          </div>
-
-          <div>
-            © {new Date().getFullYear()} {site.brandName} {site.brandSuffix}.
-          </div>
-
-        </div>
+      <div className="border-t border-white/10 px-5 py-6 text-center text-xs text-white/45">
+        © {new Date().getFullYear()} {site.brandName} {site.brandSuffix}.
       </div>
     </footer>
   );

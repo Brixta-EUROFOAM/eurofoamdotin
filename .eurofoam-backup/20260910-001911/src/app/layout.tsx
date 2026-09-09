@@ -18,7 +18,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Eurofoam Mattresses | Keep the world at rest",
   description:
-    "Eurofoam sells pillows and mattresses through its official website, including mattress shopping, product comparison and sleep-product information."
+    "Eurofoam Mattresses direct-to-consumer storefront with product comparison, mattress matching and configurable mattress shopping."
 };
 
 export default function RootLayout({
