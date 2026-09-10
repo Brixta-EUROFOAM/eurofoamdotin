@@ -1,84 +1,848 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import { useCart } from "@/components/CartProvider";
-import type { SiteSettings } from "@/lib/catalog";
+import type {
+  Mattress,
+  SiteSettings
+} from "@/lib/catalog";
 
-const links = [
-  { label: "Mattresses", href: "/mattresses" },
-  { label: "Why Eurofoam", href: "/why-eurofoam" },
-  { label: "Compare", href: "/compare" },
-  { label: "Reviews", href: "/reviews" },
-  { label: "Sleep Quiz", href: "/sleep-quiz" }
-];
+type HeaderAction = {
+  id: string;
+  label: string;
+  href: string;
+  icon: string;
+  presentation: "text" | "icon";
+  enabled: boolean;
+};
 
-export default function HeaderClient({ site }: { site: SiteSettings }) {
-  const [open, setOpen] = useState(false);
+type Customer = {
+  id: string;
+  name: string;
+  email: string;
+  mobile: string;
+};
+
+function Icon({
+  name,
+  className = "h-5 w-5"
+}: {
+  name:
+    | "phone"
+    | "heart"
+    | "account"
+    | "pin"
+    | "cart";
+  className?: string;
+}) {
+  const common = {
+    className,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true
+  };
+
+  if (name === "phone") {
+    return (
+      <svg {...common}>
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z" />
+      </svg>
+    );
+  }
+
+  if (name === "heart") {
+    return (
+      <svg {...common}>
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+      </svg>
+    );
+  }
+
+  if (name === "account") {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4.5 21a7.5 7.5 0 0 1 15 0" />
+      </svg>
+    );
+  }
+
+  if (name === "pin") {
+    return (
+      <svg {...common}>
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...common}>
+      <path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20 8H6.2" />
+      <circle cx="9" cy="20" r="1" />
+      <circle cx="18" cy="20" r="1" />
+    </svg>
+  );
+}
+
+export default function HeaderClient({
+  site,
+  products
+}: {
+  site: SiteSettings;
+  products: Mattress[];
+}) {
+  const [catalogOpen, setCatalogOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const [pinOpen, setPinOpen] = useState(false);
+  const [pincode, setPincode] = useState("");
+  const [pinDraft, setPinDraft] = useState("");
+  const [pinError, setPinError] = useState("");
+  const pinWrapRef = useRef<HTMLDivElement>(null);
+
+  const [customer, setCustomer] =
+    useState<Customer | null>(null);
+
+  const [wishlistCount, setWishlistCount] =
+    useState(0);
+
   const { count } = useCart();
+
+  const siteWithActions = site as SiteSettings & {
+    headerUtilities?: HeaderAction[];
+  };
+
+  const extraActions = (
+    siteWithActions.headerUtilities || []
+  ).filter(
+    (action) =>
+      action.enabled &&
+      !["phone", "wishlist", "account"].includes(
+        action.id
+      )
+  );
+
+  const groups = useMemo(() => {
+    const grouped = new Map<string, Mattress[]>();
+
+    for (const product of products) {
+      const category =
+        product.category?.trim() || "Other";
+
+      grouped.set(category, [
+        ...(grouped.get(category) || []),
+        product
+      ]);
+    }
+
+    return Array.from(grouped.entries());
+  }, [products]);
+
+  const featured =
+    products.find((item) => item.badge) ||
+    products[0];
+
+  function refreshAccount() {
+    fetch("/api/customer/me")
+      .then((response) => response.json())
+      .then((body) =>
+        setCustomer(body.customer || null)
+      )
+      .catch(() => setCustomer(null));
+  }
+
+  function refreshWishlist() {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(
+          "eurofoam-wishlist"
+        ) || "[]"
+      );
+
+      setWishlistCount(
+        Array.isArray(saved) ? saved.length : 0
+      );
+    } catch {
+      setWishlistCount(0);
+    }
+  }
+
+  useEffect(() => {
+    const stored =
+      localStorage.getItem("eurofoam-pincode") || "";
+
+    setPincode(stored);
+    setPinDraft(stored);
+
+    refreshAccount();
+    refreshWishlist();
+
+    window.addEventListener(
+      "eurofoam:account",
+      refreshAccount
+    );
+
+    window.addEventListener(
+      "eurofoam:wishlist",
+      refreshWishlist
+    );
+
+    return () => {
+      window.removeEventListener(
+        "eurofoam:account",
+        refreshAccount
+      );
+
+      window.removeEventListener(
+        "eurofoam:wishlist",
+        refreshWishlist
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!pinOpen) return;
+
+    function handleOutside(event: MouseEvent | TouchEvent) {
+      const target = event.target as Node;
+
+      if (
+        pinWrapRef.current &&
+        !pinWrapRef.current.contains(target)
+      ) {
+        setPinOpen(false);
+        setPinError("");
+      }
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setPinOpen(false);
+        setPinError("");
+      }
+    }
+
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("touchstart", handleOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("touchstart", handleOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [pinOpen]);
+
+  function savePincode() {
+    const value = pinDraft.trim();
+
+    if (!/^\d{6}$/.test(value)) {
+      setPinError(
+        "Enter a valid 6-digit PIN code."
+      );
+      return;
+    }
+
+    localStorage.setItem(
+      "eurofoam-pincode",
+      value
+    );
+
+    setPincode(value);
+    setPinError("");
+    setPinOpen(false);
+  }
+
+  const phoneHref = `tel:${site.phone.replace(
+    /[^\d+]/g,
+    ""
+  )}`;
 
   return (
     <>
       <div className="bg-[#FF7A00] px-4 py-2 text-center text-xs font-semibold tracking-wide text-white">
         {site.announcement}
       </div>
-     <header className="sticky top-0 z-50 border-b border-ink/10 bg-[#FAF6E8] backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 lg:px-8">
-          <Link href="/" className="flex items-center gap-3">
+
+      <header
+        className="relative sticky top-0 z-50 border-b border-ink/10 bg-[#FAF6E8]"
+        onMouseLeave={() =>
+          setCatalogOpen(false)
+        }
+      >
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-5 px-5 py-3 lg:px-8">
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-4"
+          >
             <img
               src={site.logoUrl}
-              alt={`${site.brandName} ${site.brandSuffix}`}
-              className="h-12 w-auto max-w-[175px] object-contain"
+              alt={site.brandName}
+              className="h-20 w-auto max-w-[285px] object-contain"
             />
-            <span className="hidden border-l border-ink/15 pl-3 text-[10px] font-black uppercase tracking-[0.18em] text-ink/55 sm:block">
+
+            <span className="hidden border-l border-ink/15 pl-4 text-[10px] font-black uppercase tracking-[.18em] text-ink/55 md:block">
               {site.brandSuffix}
             </span>
           </Link>
 
           <nav className="hidden items-center gap-7 lg:flex">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-semibold text-ink/70 transition hover:text-gold-dark"
-              >
-                {link.label}
-              </Link>
-            ))}
+            <button
+              type="button"
+              onMouseEnter={() =>
+                setCatalogOpen(true)
+              }
+              onClick={() =>
+                setCatalogOpen((v) => !v)
+              }
+              className="flex items-center gap-2 text-sm font-bold text-ink/75 hover:text-[#D95F0E]"
+            >
+              Mattresses
+              <span className="text-[9px]">
+                ▼
+              </span>
+            </button>
+
+            <Link
+              href="/reviews"
+              className="text-sm font-bold text-ink/75 hover:text-[#D95F0E]"
+            >
+              Reviews
+            </Link>
+
+            <Link
+              href="/sleep-quiz"
+              className="rounded-full border border-[#FF7A00]/55 bg-white/50 px-5 py-2.5 text-sm font-bold transition hover:bg-white"
+            >
+              Find My Match
+            </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-1 xl:gap-2">
+            {extraActions.length ? (
+              <div className="hidden items-center gap-1 2xl:flex">
+                {extraActions.map((action) => (
+                  <a
+                    key={action.id}
+                    href={action.href}
+                    className="rounded-full px-3 py-2 text-sm font-semibold text-ink/65 hover:bg-white/70"
+                  >
+                    {action.label}
+                  </a>
+                ))}
+              </div>
+            ) : null}
+
+            <a
+              href={phoneHref}
+              className="hidden items-center gap-2 rounded-xl px-2.5 py-2 hover:bg-white/70 2xl:flex"
+            >
+              <Icon
+                name="phone"
+                className="h-6 w-6"
+              />
+
+              <span className="leading-tight">
+                <span className="block text-xs font-bold">
+                  Call
+                </span>
+
+                <span className="block text-[10px] text-ink/45">
+                  Eurofoam
+                </span>
+              </span>
+            </a>
+
+            <Link
+              href="/wishlist"
+              className="hidden items-center gap-2 rounded-xl px-2.5 py-2 hover:bg-white/70 xl:flex"
+            >
+              <Icon
+                name="heart"
+                className="h-6 w-6"
+              />
+
+              <span className="leading-tight">
+                <span className="block text-xs font-bold">
+                  Saved
+                </span>
+
+                <span className="block text-[10px] text-ink/45">
+                  {wishlistCount
+                    ? `${wishlistCount} item${
+                        wishlistCount === 1
+                          ? ""
+                          : "s"
+                      }`
+                    : "Wishlist"}
+                </span>
+              </span>
+            </Link>
+
+            <Link
+              href="/account"
+              className="hidden items-center gap-2 rounded-xl px-2.5 py-2 hover:bg-white/70 xl:flex"
+            >
+              <Icon
+                name="account"
+                className="h-6 w-6"
+              />
+
+              <span className="leading-tight">
+                <span className="block max-w-[110px] truncate text-xs font-bold">
+                  {customer
+                    ? `Hi, ${
+                        customer.name.split(
+                          " "
+                        )[0]
+                      }`
+                    : "My Account"}
+                </span>
+
+                <span className="block text-[10px] text-ink/45">
+                  {customer
+                    ? "Account"
+                    : "Sign in / Sign up"}
+                </span>
+              </span>
+            </Link>
+
+            <div
+              ref={pinWrapRef}
+              className="relative hidden xl:block"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setPinDraft(pincode);
+                  setPinError("");
+                  setPinOpen((v) => !v);
+                }}
+                className="flex items-center gap-2 rounded-xl px-2.5 py-2 text-left hover:bg-white/70"
+              >
+                <Icon
+                  name="pin"
+                  className="h-6 w-6"
+                />
+
+                <span className="leading-tight">
+                  <span className="block text-xs font-bold">
+                    Deliver to
+                  </span>
+
+                  <span className="block text-[10px] text-ink/45">
+                    {pincode ||
+                      "Enter PIN"}
+                  </span>
+                </span>
+              </button>
+
+              {pinOpen ? (
+                <div className="absolute right-0 top-[calc(100%+12px)] w-72 rounded-[1.4rem] border border-ink/10 bg-white p-5 shadow-[0_20px_60px_rgba(24,24,24,.16)]">
+                  <p className="text-xs font-black uppercase tracking-[.12em] text-[#D95F0E]">
+                    Delivery location
+                  </p>
+
+                  <p className="mt-2 text-sm text-ink/55">
+                    Enter your 6-digit PIN code.
+                  </p>
+
+                  <input
+                    value={pinDraft}
+                    onChange={(e) =>
+                      setPinDraft(
+                        e.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 6)
+                      )
+                    }
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        savePincode();
+                      }
+                    }}
+                    inputMode="numeric"
+                    placeholder="781001"
+                    className="mt-4 w-full rounded-xl border border-ink/15 px-4 py-3 text-lg font-bold tracking-[.15em] outline-none focus:border-[#FF7A00]"
+                  />
+
+                  {pinError ? (
+                    <p className="mt-2 text-xs font-semibold text-red-600">
+                      {pinError}
+                    </p>
+                  ) : null}
+
+                  <button
+                    type="button"
+                    onClick={savePincode}
+                    className="mt-4 w-full rounded-full bg-ink px-4 py-3 text-xs font-black text-white"
+                  >
+                    USE THIS PIN
+                  </button>
+                </div>
+              ) : null}
+            </div>
+
             <Link
               href="/cart"
-              className="rounded-full border border-ink/15 bg-sand px-4 py-2 text-sm font-bold text-ink"
+              title="Cart"
+              aria-label={
+                count
+                  ? `Cart with ${count} items`
+                  : "Cart"
+              }
+              className="relative flex h-12 w-12 items-center justify-center rounded-full hover:bg-white"
             >
-              Cart{count ? ` (${count})` : ""}
+              <Icon
+                name="cart"
+                className="h-7 w-7"
+              />
+
+              {count ? (
+                <span className="absolute right-0 top-0 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#FF7A00] px-1 text-[10px] font-black text-white">
+                  {count > 99
+                    ? "99+"
+                    : count}
+                </span>
+              ) : null}
             </Link>
+
             <button
-              onClick={() => setOpen((v) => !v)}
-              className="rounded-full border border-ink/15 bg-sand px-3 py-2 text-sm font-bold lg:hidden"
-              aria-label="Toggle navigation"
+              type="button"
+              onClick={() =>
+                setMobileOpen(true)
+              }
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/60 lg:hidden"
+              aria-label="Open menu"
             >
-              Menu
+              <span className="space-y-1">
+                <span className="block h-[2px] w-5 bg-ink" />
+                <span className="block h-[2px] w-5 bg-ink" />
+                <span className="block h-[2px] w-5 bg-ink" />
+              </span>
             </button>
           </div>
         </div>
 
-        {open ? (
-          <nav className="border-t border-ink/10 bg-white px-5 py-4 lg:hidden">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="block border-b border-ink/10 py-3 text-sm font-semibold"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+        {catalogOpen ? (
+          <div
+            className="absolute left-0 right-0 top-full hidden border-y border-ink/10 bg-white shadow-[0_30px_70px_rgba(24,24,24,.15)] lg:block"
+            onMouseEnter={() =>
+              setCatalogOpen(true)
+            }
+          >
+            <div className="mx-auto max-w-[1500px] px-8 py-8">
+              <div className="mb-7 flex items-end justify-between">
+                <div>
+                  <p className="text-[11px] font-black uppercase tracking-[.18em] text-[#D95F0E]">
+                    Shop mattresses
+                  </p>
+
+                  <h2 className="mt-2 font-display text-3xl">
+                    Find the right sleep feel.
+                  </h2>
+                </div>
+
+                <Link
+                  href="/mattresses"
+                  onClick={() =>
+                    setCatalogOpen(false)
+                  }
+                  className="text-sm font-black underline underline-offset-4"
+                >
+                  SHOP ALL →
+                </Link>
+              </div>
+
+              <div className="grid gap-8 xl:grid-cols-[1fr_270px]">
+                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                  {groups.map(
+                    ([category, items]) => (
+                      <div key={category}>
+                        <div className="border-b-2 border-[#FF7A00]/70 pb-2 text-xs font-black uppercase tracking-[.12em]">
+                          {category}
+                        </div>
+
+                        <div className="mt-3">
+                          {items.map(
+                            (product) => (
+                              <Link
+                                key={
+                                  product.slug
+                                }
+                                href={`/mattresses/${product.slug}`}
+                                onClick={() =>
+                                  setCatalogOpen(
+                                    false
+                                  )
+                                }
+                                className="block rounded-xl px-2 py-2.5 hover:bg-[#FFF7F0]"
+                              >
+                                <div className="text-sm font-bold text-ink/80">
+                                  {
+                                    product.name
+                                  }
+                                </div>
+
+                                <div className="mt-0.5 text-[11px] text-ink/40">
+                                  {
+                                    product.kicker
+                                  }
+                                </div>
+                              </Link>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+
+                {featured ? (
+                  <Link
+                    href={`/mattresses/${featured.slug}`}
+                    onClick={() =>
+                      setCatalogOpen(false)
+                    }
+                    className="overflow-hidden rounded-[1.6rem] bg-[#FAF6E8]"
+                  >
+                    <img
+                      src={featured.image}
+                      alt={featured.name}
+                      className="aspect-[16/10] w-full object-cover"
+                    />
+
+                    <div className="p-5">
+                      <div className="text-[10px] font-black uppercase tracking-[.15em] text-[#D95F0E]">
+                        {featured.badge ||
+                          "Featured"}
+                      </div>
+
+                      <div className="mt-1 font-display text-2xl">
+                        {featured.name}
+                      </div>
+                    </div>
+                  </Link>
+                ) : null}
+              </div>
+
+              <div className="mt-8 flex gap-3 border-t border-ink/10 pt-5">
+                <Link
+                  href="/mattresses"
+                  className="rounded-full bg-ink px-5 py-2.5 text-xs font-black text-white"
+                >
+                  SHOP ALL
+                </Link>
+
+                <Link
+                  href="/compare"
+                  className="rounded-full border border-ink/15 px-5 py-2.5 text-xs font-black"
+                >
+                  COMPARE MATTRESSES
+                </Link>
+              </div>
+            </div>
+          </div>
         ) : null}
       </header>
+
+      {mobileOpen ? (
+        <div className="fixed inset-0 z-[100] lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/40"
+            onClick={() =>
+              setMobileOpen(false)
+            }
+            aria-label="Close menu"
+          />
+
+          <aside className="absolute right-0 top-0 h-full w-[min(92vw,430px)] overflow-y-auto bg-white shadow-2xl">
+            <div className="border-b border-ink/10 bg-[#FAF6E8] p-5">
+              <div className="flex items-center justify-between">
+                <img
+                  src={site.logoUrl}
+                  alt={site.brandName}
+                  className="h-14 w-auto"
+                />
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setMobileOpen(false)
+                  }
+                  className="h-10 w-10 rounded-full bg-white text-xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                <Link
+                  href="/account"
+                  onClick={() =>
+                    setMobileOpen(false)
+                  }
+                  className="rounded-[1.2rem] bg-white p-4"
+                >
+                  <Icon
+                    name="account"
+                    className="h-6 w-6"
+                  />
+
+                  <div className="mt-3 text-sm font-black">
+                    {customer
+                      ? customer.name
+                      : "My Account"}
+                  </div>
+
+                  <div className="mt-1 text-xs text-ink/45">
+                    {customer
+                      ? "View account"
+                      : "Sign in / Sign up"}
+                  </div>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const entered =
+                      window.prompt(
+                        "Enter your 6-digit delivery PIN",
+                        pincode
+                      );
+
+                    if (
+                      entered &&
+                      /^\d{6}$/.test(
+                        entered.trim()
+                      )
+                    ) {
+                      const value =
+                        entered.trim();
+
+                      localStorage.setItem(
+                        "eurofoam-pincode",
+                        value
+                      );
+
+                      setPincode(value);
+                      setPinDraft(value);
+                    }
+                  }}
+                  className="rounded-[1.2rem] bg-white p-4 text-left"
+                >
+                  <Icon
+                    name="pin"
+                    className="h-6 w-6"
+                  />
+
+                  <div className="mt-3 text-sm font-black">
+                    Deliver to
+                  </div>
+
+                  <div className="mt-1 text-xs text-ink/45">
+                    {pincode ||
+                      "Enter PIN"}
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div className="p-5">
+              <Link
+                href="/mattresses"
+                onClick={() =>
+                  setMobileOpen(false)
+                }
+                className="block py-4 text-lg font-black"
+              >
+                Mattresses
+              </Link>
+
+              {groups.map(
+                ([category, items]) => (
+                  <div
+                    key={category}
+                    className="border-t border-ink/10 py-4"
+                  >
+                    <div className="text-xs font-black uppercase tracking-[.12em] text-ink/40">
+                      {category}
+                    </div>
+
+                    {items.map(
+                      (product) => (
+                        <Link
+                          key={product.slug}
+                          href={`/mattresses/${product.slug}`}
+                          onClick={() =>
+                            setMobileOpen(
+                              false
+                            )
+                          }
+                          className="block py-2.5 font-bold"
+                        >
+                          {product.name}
+                        </Link>
+                      )
+                    )}
+                  </div>
+                )
+              )}
+
+              <div className="border-t border-ink/10 py-3">
+                <Link
+                  href="/wishlist"
+                  onClick={() =>
+                    setMobileOpen(false)
+                  }
+                  className="flex items-center gap-3 py-4 font-bold"
+                >
+                  <Icon
+                    name="heart"
+                    className="h-5 w-5"
+                  />
+                  Saved mattresses
+                </Link>
+
+                <a
+                  href={phoneHref}
+                  className="flex items-center gap-3 py-4 font-bold"
+                >
+                  <Icon
+                    name="phone"
+                    className="h-5 w-5"
+                  />
+                  Call Eurofoam
+                </a>
+
+                {extraActions.map(
+                  (action) => (
+                    <a
+                      key={action.id}
+                      href={action.href}
+                      className="block py-4 font-bold"
+                    >
+                      {action.label}
+                    </a>
+                  )
+                )}
+              </div>
+            </div>
+          </aside>
+        </div>
+      ) : null}
     </>
   );
 }

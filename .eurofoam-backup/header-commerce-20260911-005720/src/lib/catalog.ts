@@ -21,76 +21,6 @@ export type Mattress = {
   heights: { label: string; priceAdd: number }[];
 };
 
-
-export type HeaderUtilityIcon =
-  | "none"
-  | "phone"
-  | "heart"
-  | "account"
-  | "store"
-  | "dealer"
-  | "bulk";
-
-export type HeaderUtility = {
-  id: string;
-  label: string;
-  href: string;
-  icon: HeaderUtilityIcon;
-  presentation: "text" | "icon";
-  enabled: boolean;
-};
-
-export const defaultHeaderUtilities: HeaderUtility[] = [
-  {
-    id: "dealer",
-    label: "Become Dealer",
-    href: "/dealer",
-    icon: "dealer",
-    presentation: "text",
-    enabled: false
-  },
-  {
-    id: "stores",
-    label: "Stores",
-    href: "/stores",
-    icon: "store",
-    presentation: "text",
-    enabled: false
-  },
-  {
-    id: "bulk",
-    label: "Bulk Orders",
-    href: "/bulk-orders",
-    icon: "bulk",
-    presentation: "text",
-    enabled: false
-  },
-  {
-    id: "phone",
-    label: "Call Eurofoam",
-    href: "tel:",
-    icon: "phone",
-    presentation: "icon",
-    enabled: true
-  },
-  {
-    id: "wishlist",
-    label: "Wishlist",
-    href: "/wishlist",
-    icon: "heart",
-    presentation: "icon",
-    enabled: true
-  },
-  {
-    id: "account",
-    label: "Account",
-    href: "/account",
-    icon: "account",
-    presentation: "icon",
-    enabled: true
-  }
-];
-
 export type SiteSettings = {
   brandName: string;
   brandSuffix: string;
@@ -105,7 +35,6 @@ export type SiteSettings = {
   secondaryCtaLabel: string;
   email: string;
   phone: string;
-  headerUtilities?: HeaderUtility[];
 };
 
 export type Review = {
@@ -138,8 +67,7 @@ export const defaultStoreData: StoreData = {
     primaryCtaLabel: "SHOP MATTRESSES",
     secondaryCtaLabel: "FIND MY MATCH",
     email: "care@eurofoam.example",
-    phone: "+91 00000 00000",
-    headerUtilities: defaultHeaderUtilities
+    phone: "+91 00000 00000"
   },
   products: [
     {

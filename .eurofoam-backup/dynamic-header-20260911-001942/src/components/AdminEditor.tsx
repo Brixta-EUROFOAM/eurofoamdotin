@@ -2,7 +2,6 @@
 
 import { useMemo, useState, type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode } from "react";
 import type {
-  HeaderUtility,
   Mattress,
   Review,
   SiteSettings,
@@ -177,57 +176,6 @@ export default function AdminEditor({
     }));
   }
 
-  function updateHeaderUtility(
-    index: number,
-    patch: Partial<HeaderUtility>
-  ) {
-    setData((current) => {
-      const next = clone(current);
-      const actions = [...(next.site.headerUtilities || [])];
-
-      if (!actions[index]) return current;
-
-      actions[index] = {
-        ...actions[index],
-        ...patch
-      };
-
-      next.site.headerUtilities = actions;
-      return next;
-    });
-  }
-
-  function addHeaderUtility() {
-    setData((current) => {
-      const next = clone(current);
-      const actions = [...(next.site.headerUtilities || [])];
-
-      actions.push({
-        id: `header-action-${Date.now()}`,
-        label: "New header link",
-        href: "/",
-        icon: "none",
-        presentation: "text",
-        enabled: false
-      });
-
-      next.site.headerUtilities = actions;
-      return next;
-    });
-  }
-
-  function removeHeaderUtility(index: number) {
-    setData((current) => {
-      const next = clone(current);
-      const actions = [...(next.site.headerUtilities || [])];
-
-      actions.splice(index, 1);
-      next.site.headerUtilities = actions;
-
-      return next;
-    });
-  }
-
   function updateProduct(patch: Partial<Mattress>) {
     if (selectedIndex < 0) return;
 
@@ -358,7 +306,6 @@ export default function AdminEditor({
                 <div className="mt-5 grid gap-4 text-sm leading-6 text-ink/65 md:grid-cols-2">
                   <div>• Logo, brand copy, announcement and homepage hero</div>
                   <div>• Mattress names, prices, descriptions and positioning</div>
-                  <div>• Product categories automatically build the storefront header menu</div>
                   <div>• Product images, sizes, heights, layers and features</div>
                   <div>• Customer reviews shown across the storefront</div>
                   <div>• Admin username and password from inside the website</div>
@@ -469,129 +416,6 @@ export default function AdminEditor({
                     onChange={(e) => updateSite({ phone: e.target.value })}
                   />
                 </label>
-
-                <div className="md:col-span-2 mt-4 rounded-[1.5rem] border border-ink/10 bg-sand/45 p-5 md:p-6">
-                  <div className="flex flex-wrap items-center justify-between gap-4">
-                    <div>
-                      <FieldLabel>Header utilities</FieldLabel>
-                      <h2 className="font-display text-2xl">
-                        Header actions
-                      </h2>
-                      <p className="mt-2 max-w-2xl text-xs leading-5 text-ink/50">
-                        Enable only facilities that currently exist. Add future links here
-                        and they will appear automatically in the storefront header.
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={addHeaderUtility}
-                      className="rounded-full bg-ink px-4 py-2.5 text-xs font-black text-white"
-                    >
-                      + HEADER ACTION
-                    </button>
-                  </div>
-
-                  <div className="mt-5 space-y-4">
-                    {(data.site.headerUtilities || []).map((action, index) => (
-                      <div
-                        key={action.id}
-                        className="rounded-[1.25rem] border border-ink/10 bg-white p-4"
-                      >
-                        <div className="grid gap-4 md:grid-cols-[1fr_1.3fr_.75fr_.75fr_auto] md:items-end">
-                          <label>
-                            <FieldLabel>Label</FieldLabel>
-                            <TextInput
-                              value={action.label}
-                              onChange={(e) =>
-                                updateHeaderUtility(index, {
-                                  label: e.target.value
-                                })
-                              }
-                            />
-                          </label>
-
-                          <label>
-                            <FieldLabel>URL / route</FieldLabel>
-                            <TextInput
-                              value={action.href}
-                              onChange={(e) =>
-                                updateHeaderUtility(index, {
-                                  href: e.target.value
-                                })
-                              }
-                              placeholder="/stores or https://..."
-                            />
-                          </label>
-
-                          <label>
-                            <FieldLabel>Icon</FieldLabel>
-                            <select
-                              value={action.icon}
-                              onChange={(e) =>
-                                updateHeaderUtility(index, {
-                                  icon: e.target.value as HeaderUtility["icon"]
-                                })
-                              }
-                              className="w-full rounded-xl border border-ink/15 bg-white px-3 py-3 text-sm outline-none"
-                            >
-                              <option value="none">Arrow</option>
-                              <option value="phone">Phone</option>
-                              <option value="heart">Wishlist</option>
-                              <option value="account">Account</option>
-                              <option value="store">Store</option>
-                              <option value="dealer">Dealer</option>
-                              <option value="bulk">Bulk / Box</option>
-                            </select>
-                          </label>
-
-                          <label>
-                            <FieldLabel>Display</FieldLabel>
-                            <select
-                              value={action.presentation}
-                              onChange={(e) =>
-                                updateHeaderUtility(index, {
-                                  presentation: e.target.value as
-                                    | "text"
-                                    | "icon"
-                                })
-                              }
-                              className="w-full rounded-xl border border-ink/15 bg-white px-3 py-3 text-sm outline-none"
-                            >
-                              <option value="text">Text</option>
-                              <option value="icon">Icon</option>
-                            </select>
-                          </label>
-
-                          <button
-                            type="button"
-                            onClick={() => removeHeaderUtility(index)}
-                            className="rounded-full border border-red-200 px-3 py-3 text-xs font-black text-red-700"
-                          >
-                            REMOVE
-                          </button>
-                        </div>
-
-                        <label className="mt-4 flex cursor-pointer items-center gap-3">
-                          <input
-                            type="checkbox"
-                            checked={action.enabled}
-                            onChange={(e) =>
-                              updateHeaderUtility(index, {
-                                enabled: e.target.checked
-                              })
-                            }
-                            className="h-4 w-4"
-                          />
-
-                          <span className="text-sm font-bold">
-                            Show this in the storefront header
-                          </span>
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </section>
           ) : null}
@@ -680,29 +504,11 @@ export default function AdminEditor({
                       </div>
                     </label>
                     <label>
-                      <FieldLabel>Header category</FieldLabel>
+                      <FieldLabel>Category</FieldLabel>
                       <TextInput
-                        list="eurofoam-product-categories"
                         value={product.category}
                         onChange={(e) => updateProduct({ category: e.target.value })}
-                        placeholder="e.g. Ortho, Cooling, Hybrid"
                       />
-                      <datalist id="eurofoam-product-categories">
-                        {Array.from(
-                          new Set(
-                            data.products
-                              .map((item) => item.category?.trim())
-                              .filter(Boolean)
-                          )
-                        ).map((category) => (
-                          <option key={category} value={category} />
-                        ))}
-                      </datalist>
-                      <p className="mt-2 text-xs leading-5 text-ink/45">
-                        Products with the same category are grouped together automatically
-                        inside the storefront Mattresses menu. Typing a new category creates
-                        a new menu group after you save.
-                      </p>
                     </label>
                     <label>
                       <FieldLabel>Badge</FieldLabel>
