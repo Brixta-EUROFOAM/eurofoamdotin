@@ -20,7 +20,7 @@ export default async function Home() {
     <>
       <Header />
       <main>
-        <section className="overflow-hidden bg-sand">
+        <section className="overflow-hidden bg-[#FFFFFF]">
           <div className="mx-auto grid min-h-[78vh] max-w-7xl items-center gap-10 px-5 py-12 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-20">
             <div>
               <div className="inline-flex items-center gap-3 rounded-full bg-gold-light px-4 py-2">
