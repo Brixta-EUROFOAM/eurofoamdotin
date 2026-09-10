@@ -10,12 +10,6 @@ export type MattressLayerVisual =
 export type MattressLayer = {
   name: string;
   description: string;
-  /**
-   * Transparent isolated render used by the
-   * homepage construction experience.
-   */
-  visualAsset?: string;
-
 
   /*
    * Optional engineering data.
@@ -126,49 +120,7 @@ export const defaultHeaderUtilities: HeaderUtility[] = [
   }
 ];
 
-
-export type HeroSlide = {
-  id: string;
-
-  /**
-   * High-resolution full-bleed banner image.
-   * Recommended master: 3200x1800 or 3840x2160.
-   */
-  image: string;
-
-  imageAlt?: string;
-
-  /**
-   * The ENTIRE slide links here.
-   */
-  href: string;
-
-  eyebrow?: string;
-  title: string;
-  body?: string;
-  ctaLabel?: string;
-
-  /**
-   * light = white copy over darker imagery
-   * dark  = black copy over lighter imagery
-   */
-  textTone?: "light" | "dark";
-
-  /**
-   * left or center content composition.
-   */
-  contentAlign?: "left" | "center";
-
-  /**
-   * CSS object-position, e.g. "50% 50%" or "70% 50%".
-   */
-  imagePosition?: string;
-
-  enabled?: boolean;
-};
-
 export type SiteSettings = {
-  heroSlides?: HeroSlide[];
   homeStoryProductSlug?: string;
   brandName: string;
   brandSuffix: string;

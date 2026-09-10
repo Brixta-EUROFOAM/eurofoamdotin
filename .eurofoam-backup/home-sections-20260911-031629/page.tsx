@@ -1,12 +1,8 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PremiumEditorialHero from "@/components/home/PremiumEditorialHero";
 import ProductCard from "@/components/ProductCard";
-import PromoBanners from "@/components/home/PromoBanners";
-import ShopByRooms from "@/components/home/ShopByRooms";
-import NewArrivalsSection from "@/components/home/NewArrivalsSection";
-import LayerScrollStory from "@/components/home/LayerScrollStory";
+import CinematicHomeHero from "@/components/CinematicHomeHero";
 import { getStoreData } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +21,12 @@ export default async function Home() {
   return (
     <>
       <Header />
-<main>\n        <PremiumEditorialHero site={site} products={products} />
+      <main>
+        <CinematicHomeHero
+          site={site}
+          products={products}
+        />
+
 <section className="border-y border-ink/10 bg-white">
           <div className="mx-auto grid max-w-7xl grid-cols-2 lg:grid-cols-4">
             {promises.map(([number, title, text]) => (
@@ -40,15 +41,6 @@ export default async function Home() {
             ))}
           </div>
         </section>
-
-
-        <LayerScrollStory />
-
-        <NewArrivalsSection products={products} />
-
-        <ShopByRooms products={products} />
-
-        <PromoBanners products={products} />
 
         <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">

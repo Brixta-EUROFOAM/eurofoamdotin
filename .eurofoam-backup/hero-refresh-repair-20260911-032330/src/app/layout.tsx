@@ -25,12 +25,8 @@ export default function RootLayout({
   children
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      data-scroll-behavior="smooth"
-      suppressHydrationWarning
-    >
-      <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} antialiased`}>
+    <html lang="en">
+      <body className={`${inter.variable} ${manrope.variable} antialiased`}>
         <CartProvider>{children}</CartProvider>
       </body>
     </html>

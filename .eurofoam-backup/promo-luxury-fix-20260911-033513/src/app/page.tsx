@@ -48,7 +48,7 @@ export default async function Home() {
 
         <ShopByRooms products={products} />
 
-        <PromoBanners products={products} />
+        <PromoBanners />
 
         <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">

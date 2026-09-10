@@ -3,13 +3,13 @@
 @theme inline {
   --color-ink: #181818;
   --color-sand: #f7f3e9;
-  --color-gold: #FF7A00;
-  --color-gold-light: #FFE3CC;
-  --color-gold-dark: #D95F0E;
+  --color-gold: #d9a21b;
+  --color-gold-light: #f0d995;
+  --color-gold-dark: #a97300;
   --color-sky: #dcebf0;
   --color-sage: #dfe9da;
   --color-lilac: #e7e1ef;
-  --color-butter: #FFF0E3;
+  --color-butter: #f5e7b7;
 
   --font-display: var(--font-manrope);
   --font-body: var(--font-inter);

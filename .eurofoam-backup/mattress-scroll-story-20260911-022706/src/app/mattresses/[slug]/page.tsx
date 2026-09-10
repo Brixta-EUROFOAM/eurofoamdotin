@@ -45,7 +45,8 @@ export default async function MattressPage({
                   Every layer has a job.
                 </h2>
                 <p className="mt-5 text-sm leading-7 text-ink/60">
-                  Construction details for this mattress.
+                  Use the admin panel to replace these descriptions with real
+                  foam density, ILD, spring gauge, fabric GSM and certifications.
                 </p>
               </div>
 

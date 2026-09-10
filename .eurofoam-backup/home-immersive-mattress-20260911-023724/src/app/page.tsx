@@ -1,19 +1,13 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PremiumEditorialHero from "@/components/home/PremiumEditorialHero";
 import ProductCard from "@/components/ProductCard";
-import PromoBanners from "@/components/home/PromoBanners";
-import ShopByRooms from "@/components/home/ShopByRooms";
-import NewArrivalsSection from "@/components/home/NewArrivalsSection";
-import LayerScrollStory from "@/components/home/LayerScrollStory";
 import { getStoreData } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const { site, products, reviews } = await getStoreData();
-
 
   const promises = [
     ["100", "NIGHT TRIAL", "Live with selected models before you commit."],
@@ -25,8 +19,81 @@ export default async function Home() {
   return (
     <>
       <Header />
-<main>\n        <PremiumEditorialHero site={site} products={products} />
-<section className="border-y border-ink/10 bg-white">
+      <main>
+        <section className="overflow-hidden bg-[#FFFFFF]">
+          <div className="mx-auto grid min-h-[78vh] max-w-7xl items-center gap-10 px-5 py-12 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-20">
+            <div>
+              <div className="inline-flex items-center gap-3 rounded-full bg-gold-light px-4 py-2">
+                <span className="text-xs font-black tracking-[0.15em] text-ink">
+                  {site.heroEyebrow}
+                </span>
+              </div>
+
+              <h1 className="mt-7 max-w-3xl font-display text-[clamp(3.5rem,8vw,7rem)] leading-[0.87] text-ink">
+                {site.heroTitle}
+              </h1>
+
+              <p className="mt-7 max-w-xl text-lg leading-8 text-ink/65">
+                {site.heroBody}
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/mattresses"
+                  className="rounded-full bg-gold px-7 py-4 text-sm font-black text-ink shadow-lg shadow-gold/20 transition hover:bg-gold-light"
+                >
+                  {site.primaryCtaLabel}
+                </Link>
+                <Link
+                  href="/sleep-quiz"
+                  className="rounded-full border border-ink/15 bg-white px-7 py-4 text-sm font-black text-ink"
+                >
+                  {site.secondaryCtaLabel} →
+                </Link>
+              </div>
+
+              <div className="mt-8 flex items-center gap-4">
+                <img
+                  src={site.logoUrl}
+                  alt={site.brandName}
+                  className="h-16 w-auto max-w-[210px] object-contain"
+                />
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -left-8 -top-8 h-40 w-40 rounded-full bg-butter blur-2xl" />
+              <div className="absolute -bottom-6 -right-6 h-48 w-48 rounded-full bg-gold-light blur-2xl" />
+              <div className="relative overflow-hidden rounded-[3rem] bg-ink p-3 shadow-2xl">
+                <img
+                  src={site.heroImage}
+                  alt="Eurofoam bedroom"
+                  className="aspect-[4/5] w-full rounded-[2.4rem] object-cover md:aspect-[5/4] lg:aspect-[4/5]"
+                />
+                {products[0] ? (
+                  <div className="absolute bottom-7 left-7 right-7 rounded-[1.5rem] bg-white/92 p-5 backdrop-blur">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-xs font-black uppercase tracking-[0.15em] text-gold-dark">
+                          Start here
+                        </p>
+                        <p className="mt-1 font-display text-2xl">{products[0].name}</p>
+                      </div>
+                      <Link
+                        href={`/mattresses/${products[0].slug}`}
+                        className="rounded-full bg-ink px-4 py-3 text-xs font-black text-white"
+                      >
+                        VIEW
+                      </Link>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-y border-ink/10 bg-white">
           <div className="mx-auto grid max-w-7xl grid-cols-2 lg:grid-cols-4">
             {promises.map(([number, title, text]) => (
               <div
@@ -40,15 +107,6 @@ export default async function Home() {
             ))}
           </div>
         </section>
-
-
-        <LayerScrollStory />
-
-        <NewArrivalsSection products={products} />
-
-        <ShopByRooms products={products} />
-
-        <PromoBanners products={products} />
 
         <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -72,6 +130,33 @@ export default async function Home() {
           </div>
         </section>
 
+        <section className="bg-ink text-white">
+          <div className="mx-auto grid max-w-7xl gap-10 px-5 py-20 lg:grid-cols-2 lg:px-8 lg:py-28">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-gold">
+                How Eurofoam explains a mattress
+              </p>
+              <h2 className="mt-4 font-display text-5xl leading-[0.95] sm:text-6xl">
+                Show what is inside. Explain what every layer does.
+              </h2>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                ["01", "Comfort layer", "Surface feel, contour and pressure response."],
+                ["02", "Transition layer", "Controls the movement from comfort into support."],
+                ["03", "Support core", "Foam or springs carrying the primary structural load."],
+                ["04", "Cover system", "Breathability, hand-feel, removability and finish."]
+              ].map(([n, title, body]) => (
+                <div key={n} className="rounded-[1.5rem] border border-white/12 bg-white/5 p-5">
+                  <p className="text-xs font-black text-gold">{n}</p>
+                  <h3 className="mt-3 font-display text-2xl">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-white/55">{body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <section className="bg-gold-light">
           <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-20 lg:grid-cols-2 lg:px-8 lg:py-24">
