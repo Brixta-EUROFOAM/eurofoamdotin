@@ -1,9 +1,5 @@
 "use client";
 
-import AdminDashboard from "@/components/admin/AdminDashboard";
-
-import HomepageControlPanel from "@/components/admin/HomepageControlPanel";
-
 import {
   useEffect,
   useMemo,
@@ -21,7 +17,7 @@ import type {
   StoreData
 } from "@/lib/catalog";
 
-type Tab = "dashboard" | "homepage" | "site" | "products" | "reviews" | "account";
+type Tab = "dashboard" | "site" | "products" | "reviews" | "account";
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
@@ -364,7 +360,6 @@ export default function AdminEditor({
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "dashboard", label: "Dashboard" },
-    { id: "homepage", label: "Homepage" },
     { id: "site", label: "Site & Home" },
     { id: "products", label: "Products" },
     { id: "reviews", label: "Reviews" },
@@ -434,14 +429,40 @@ export default function AdminEditor({
 
         <main>
           {tab === "dashboard" ? (
-            <AdminDashboard />
-          ) : null}
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.15em] text-gold-dark">
+                Control centre
+              </p>
+              <h1 className="mt-3 font-display text-5xl">Eurofoam Admin.</h1>
 
-          {tab === "homepage" ? (
-            <HomepageControlPanel
-              data={data}
-              onChange={setData}
-            />
+              <div className="mt-8 grid gap-5 sm:grid-cols-3">
+                {[
+                  [String(data.products.length), "Products"],
+                  [String(data.reviews.length), "Reviews"],
+                  [data.site.tagline, "Current tagline"]
+                ].map(([value, label]) => (
+                  <div key={label} className="rounded-[1.5rem] border border-ink/10 bg-white p-6">
+                    <div className="font-display text-3xl">{value}</div>
+                    <div className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-ink/45">
+                      {label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 rounded-[1.5rem] border border-ink/10 bg-white p-6">
+                <h2 className="font-display text-3xl">What this admin controls</h2>
+                <div className="mt-5 grid gap-4 text-sm leading-6 text-ink/65 md:grid-cols-2">
+                  <div>• Logo, brand copy, announcement and homepage hero</div>
+                  <div>• Mattress names, prices, descriptions and positioning</div>
+                  <div>• Product categories automatically build the storefront header menu</div>
+                  <div>• Product images, sizes, heights, layers and features</div>
+                  <div>• Customer reviews shown across the storefront</div>
+                  <div>• Admin username and password from inside the website</div>
+                  <div>• Uploaded media persisted outside disposable containers</div>
+                </div>
+              </div>
+            </div>
           ) : null}
 
           {tab === "site" ? (

@@ -167,68 +167,7 @@ export type HeroSlide = {
   enabled?: boolean;
 };
 
-
-export type HomeTrustItem = {
-  id: string;
-  value: string;
-  title: string;
-  body?: string;
-};
-
-export type NewArrivalsSettings = {
-  enabled?: boolean;
-  eyebrow?: string;
-  title?: string;
-  body?: string;
-  viewAllLabel?: string;
-  viewAllHref?: string;
-  productSlugs?: string[];
-};
-
-export type LayerStorySettings = {
-  enabled?: boolean;
-  eyebrow?: string;
-  title?: string;
-  body?: string;
-  productSlug?: string;
-};
-
-export type HomeBanner = {
-  id: string;
-  enabled?: boolean;
-  eyebrow?: string;
-  title: string;
-  body?: string;
-  ctaLabel?: string;
-  href: string;
-  image?: string;
-  imagePosition?: string;
-  theme?: "light" | "dark";
-};
-
-export type HomeSectionVisibility = {
-  hero?: boolean;
-  layerStory?: boolean;
-  newArrivals?: boolean;
-  shopByRooms?: boolean;
-  promos?: boolean;
-  productGrid?: boolean;
-  sleepQuiz?: boolean;
-  reviews?: boolean;
-};
-
 export type SiteSettings = {
-  announcementEnabled?: boolean;
-  announcementHref?: string;
-  announcementBackground?: string;
-  announcementForeground?: string;
-
-  trustItems?: HomeTrustItem[];
-
-  newArrivals?: NewArrivalsSettings;
-  layerStory?: LayerStorySettings;
-  homeBanners?: HomeBanner[];
-  homeSections?: HomeSectionVisibility;
   heroSlides?: HeroSlide[];
   homeStoryProductSlug?: string;
   brandName: string;

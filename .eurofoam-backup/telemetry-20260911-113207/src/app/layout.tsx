@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import CartProvider from "@/components/CartProvider";
-import TelemetryTracker from "@/components/TelemetryTracker";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,10 +31,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} antialiased`}>
-        <CartProvider>
-          <TelemetryTracker />
-          {children}
-        </CartProvider>
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );

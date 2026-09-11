@@ -1,17 +1,6 @@
 "use client";
 
-import AdminDashboard from "@/components/admin/AdminDashboard";
-
-import HomepageControlPanel from "@/components/admin/HomepageControlPanel";
-
-import {
-  useEffect,
-  useMemo,
-  useState,
-  type InputHTMLAttributes,
-  type TextareaHTMLAttributes,
-  type ReactNode
-} from "react";
+import { useMemo, useState, type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode } from "react";
 import type {
   HeaderUtility,
   HeroSlide,
@@ -21,7 +10,7 @@ import type {
   StoreData
 } from "@/lib/catalog";
 
-type Tab = "dashboard" | "homepage" | "site" | "products" | "reviews" | "account";
+type Tab = "dashboard" | "site" | "products" | "reviews" | "account";
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
@@ -364,7 +353,6 @@ export default function AdminEditor({
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "dashboard", label: "Dashboard" },
-    { id: "homepage", label: "Homepage" },
     { id: "site", label: "Site & Home" },
     { id: "products", label: "Products" },
     { id: "reviews", label: "Reviews" },
@@ -434,14 +422,40 @@ export default function AdminEditor({
 
         <main>
           {tab === "dashboard" ? (
-            <AdminDashboard />
-          ) : null}
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.15em] text-gold-dark">
+                Control centre
+              </p>
+              <h1 className="mt-3 font-display text-5xl">Eurofoam Admin.</h1>
 
-          {tab === "homepage" ? (
-            <HomepageControlPanel
-              data={data}
-              onChange={setData}
-            />
+              <div className="mt-8 grid gap-5 sm:grid-cols-3">
+                {[
+                  [String(data.products.length), "Products"],
+                  [String(data.reviews.length), "Reviews"],
+                  [data.site.tagline, "Current tagline"]
+                ].map(([value, label]) => (
+                  <div key={label} className="rounded-[1.5rem] border border-ink/10 bg-white p-6">
+                    <div className="font-display text-3xl">{value}</div>
+                    <div className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-ink/45">
+                      {label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 rounded-[1.5rem] border border-ink/10 bg-white p-6">
+                <h2 className="font-display text-3xl">What this admin controls</h2>
+                <div className="mt-5 grid gap-4 text-sm leading-6 text-ink/65 md:grid-cols-2">
+                  <div>• Logo, brand copy, announcement and homepage hero</div>
+                  <div>• Mattress names, prices, descriptions and positioning</div>
+                  <div>• Product categories automatically build the storefront header menu</div>
+                  <div>• Product images, sizes, heights, layers and features</div>
+                  <div>• Customer reviews shown across the storefront</div>
+                  <div>• Admin username and password from inside the website</div>
+                  <div>• Uploaded media persisted outside disposable containers</div>
+                </div>
+              </div>
+            </div>
           ) : null}
 
           {tab === "site" ? (
@@ -1637,883 +1651,80 @@ export default function AdminEditor({
   );
 }
 
-type AdminTeamMember = {
-  id: string;
-  username: string;
-  role: "owner" | "admin";
-  createdAt: string;
-  updatedAt: string;
-};
-
-
-function AccountPanel({
-  username
-}: {
-  username: string;
-}) {
-  const [
-    newUsername,
-    setNewUsername
-  ] = useState(username);
-
-  const [
-    currentPassword,
-    setCurrentPassword
-  ] = useState("");
-
-  const [
-    newPassword,
-    setNewPassword
-  ] = useState("");
-
-  const [
-    message,
-    setMessage
-  ] = useState("");
-
-
-  const [
-    admins,
-    setAdmins
-  ] =
-    useState<AdminTeamMember[]>(
-      []
-    );
-
-  const [
-    myRole,
-    setMyRole
-  ] =
-    useState<
-      "owner" |
-      "admin" |
-      null
-    >(null);
-
-  const [
-    currentTeamUsername,
-    setCurrentTeamUsername
-  ] =
-    useState(username);
-
-  const [
-    teamMessage,
-    setTeamMessage
-  ] =
-    useState("");
-
-  const [
-    teamLoading,
-    setTeamLoading
-  ] =
-    useState(true);
-
-
-  const [
-    addUsername,
-    setAddUsername
-  ] =
-    useState("");
-
-  const [
-    addPassword,
-    setAddPassword
-  ] =
-    useState("");
-
-  const [
-    addRole,
-    setAddRole
-  ] =
-    useState<
-      "admin" |
-      "owner"
-    >("admin");
-
-
-  async function loadAdmins() {
-    setTeamLoading(true);
-
-    try {
-      const response =
-        await fetch(
-          "/api/admin/users",
-          {
-            cache:
-              "no-store"
-          }
-        );
-
-      const body =
-        await response.json();
-
-      if (!response.ok) {
-        setTeamMessage(
-          body.error ||
-          "Could not load administrators."
-        );
-
-        return;
-      }
-
-      setAdmins(
-        body.admins ||
-        []
-      );
-
-      setMyRole(
-        body.currentRole ||
-        null
-      );
-
-      setCurrentTeamUsername(
-        body.currentUsername ||
-        username
-      );
-
-      setTeamMessage("");
-    } catch {
-      setTeamMessage(
-        "Could not load administrators."
-      );
-    } finally {
-      setTeamLoading(false);
-    }
-  }
-
-
-  useEffect(() => {
-    void loadAdmins();
-  }, []);
-
-
-  async function createAdministrator() {
-    setTeamMessage(
-      "Creating administrator..."
-    );
-
-    const response =
-      await fetch(
-        "/api/admin/users",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-              username:
-                addUsername,
-
-              password:
-                addPassword,
-
-              role:
-                addRole
-            })
-        }
-      );
-
-    const body =
-      await response.json();
-
-    if (!response.ok) {
-      setTeamMessage(
-        body.error ||
-        "Could not create administrator."
-      );
-
-      return;
-    }
-
-    setAddUsername("");
-    setAddPassword("");
-
-    setAdmins(
-      body.admins ||
-      []
-    );
-
-    setTeamMessage(
-      "Administrator created."
-    );
-  }
-
-
-  async function updateRole(
-    member:
-      AdminTeamMember,
-
-    role:
-      "owner" |
-      "admin"
-  ) {
-    setTeamMessage(
-      `Updating ${member.username}...`
-    );
-
-    const response =
-      await fetch(
-        "/api/admin/users",
-        {
-          method: "PATCH",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-              username:
-                member.username,
-              role
-            })
-        }
-      );
-
-    const body =
-      await response.json();
-
-    if (!response.ok) {
-      setTeamMessage(
-        body.error ||
-        "Could not update role."
-      );
-
-      return;
-    }
-
-    setAdmins(
-      body.admins ||
-      []
-    );
-
-    setTeamMessage(
-      "Role updated."
-    );
-  }
-
-
-  async function resetPassword(
-    member:
-      AdminTeamMember
-  ) {
-    const password =
-      window.prompt(
-        `Set a new password for ${member.username}.\n\nMinimum 10 characters:`
-      );
-
-    if (!password) {
-      return;
-    }
-
-    setTeamMessage(
-      `Resetting password for ${member.username}...`
-    );
-
-    const response =
-      await fetch(
-        "/api/admin/users",
-        {
-          method: "PATCH",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-              username:
-                member.username,
-
-              newPassword:
-                password
-            })
-        }
-      );
-
-    const body =
-      await response.json();
-
-    if (!response.ok) {
-      setTeamMessage(
-        body.error ||
-        "Could not reset password."
-      );
-
-      return;
-    }
-
-    setAdmins(
-      body.admins ||
-      []
-    );
-
-    setTeamMessage(
-      "Password reset."
-    );
-  }
-
-
-  async function removeAdministrator(
-    member:
-      AdminTeamMember
-  ) {
-    if (
-      !window.confirm(
-        `Remove administrator "${member.username}"?\n\nThey will no longer be able to sign in.`
-      )
-    ) {
-      return;
-    }
-
-    setTeamMessage(
-      `Removing ${member.username}...`
-    );
-
-    const response =
-      await fetch(
-        "/api/admin/users",
-        {
-          method: "DELETE",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-              username:
-                member.username
-            })
-        }
-      );
-
-    const body =
-      await response.json();
-
-    if (!response.ok) {
-      setTeamMessage(
-        body.error ||
-        "Could not remove administrator."
-      );
-
-      return;
-    }
-
-    setAdmins(
-      body.admins ||
-      []
-    );
-
-    setTeamMessage(
-      "Administrator removed."
-    );
-  }
-
+function AccountPanel({ username }: { username: string }) {
+  const [newUsername, setNewUsername] = useState(username);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   return (
-    <div className="max-w-5xl space-y-6">
+    <section className="max-w-2xl rounded-[1.5rem] border border-ink/10 bg-white p-6 md:p-8">
+      <p className="text-xs font-black uppercase tracking-[0.15em] text-gold-dark">
+        Security
+      </p>
+      <h1 className="mt-2 font-display text-4xl">Admin account.</h1>
+      <p className="mt-4 text-sm leading-6 text-ink/55">
+        Change the login from here. The current password is required. Leave the
+        new-password field empty if you only want to change the username.
+      </p>
 
-      {/* =====================================
-          YOUR OWN ACCOUNT
-      ====================================== */}
+      <div className="mt-8 space-y-5">
+        <label className="block">
+          <FieldLabel>Username</FieldLabel>
+          <TextInput
+            value={newUsername}
+            onChange={(e) => setNewUsername(e.target.value)}
+          />
+        </label>
+        <label className="block">
+          <FieldLabel>Current password</FieldLabel>
+          <TextInput
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+          />
+        </label>
+        <label className="block">
+          <FieldLabel>New password (optional)</FieldLabel>
+          <TextInput
+            type="password"
+            minLength={10}
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+        </label>
 
-      <section className="rounded-[1.5rem] border border-ink/10 bg-white p-6 md:p-8">
+        <button
+          onClick={async () => {
+            setMessage("Saving...");
 
-        <p className="text-xs font-black uppercase tracking-[0.15em] text-gold-dark">
-          Security
-        </p>
-
-        <h1 className="mt-2 font-display text-4xl">
-          Your admin account.
-        </h1>
-
-        <p className="mt-4 max-w-2xl text-sm leading-6 text-ink/55">
-          Change your own login credentials here.
-          Your current password is required before
-          any changes are accepted.
-        </p>
-
-
-        <div className="mt-8 grid gap-5 md:grid-cols-2">
-
-          <label className="block">
-            <FieldLabel>
-              Username
-            </FieldLabel>
-
-            <TextInput
-              value={
-                newUsername
-              }
-              onChange={(e) =>
-                setNewUsername(
-                  e.target.value
-                )
-              }
-            />
-          </label>
-
-
-          <label className="block">
-            <FieldLabel>
-              Current password
-            </FieldLabel>
-
-            <TextInput
-              type="password"
-              value={
-                currentPassword
-              }
-              onChange={(e) =>
-                setCurrentPassword(
-                  e.target.value
-                )
-              }
-            />
-          </label>
-
-
-          <label className="block md:col-span-2">
-            <FieldLabel>
-              New password
-              (optional)
-            </FieldLabel>
-
-            <TextInput
-              type="password"
-              minLength={10}
-              value={
+            const response = await fetch("/api/admin/account", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: newUsername,
+                currentPassword,
                 newPassword
-              }
-              placeholder="Leave blank to keep your current password"
-              onChange={(e) =>
-                setNewPassword(
-                  e.target.value
-                )
-              }
-            />
-          </label>
-
-        </div>
-
-
-        <div className="mt-6 flex flex-wrap items-center gap-4">
-
-          <button
-            onClick={async () => {
-              setMessage(
-                "Saving..."
-              );
-
-              const response =
-                await fetch(
-                  "/api/admin/account",
-                  {
-                    method:
-                      "PUT",
-
-                    headers: {
-                      "Content-Type":
-                        "application/json"
-                    },
-
-                    body:
-                      JSON.stringify({
-                        username:
-                          newUsername,
-
-                        currentPassword,
-
-                        newPassword
-                      })
-                  }
-                );
-
-              const body =
-                await response.json();
-
-              if (
-                response.ok
-              ) {
-                setCurrentPassword(
-                  ""
-                );
-
-                setNewPassword(
-                  ""
-                );
-
-                setMessage(
-                  "Account updated."
-                );
-
-                await loadAdmins();
-
-                /*
-                 * If the username changed,
-                 * refresh so the server-side
-                 * Admin header gets the new one.
-                 */
-                if (
-                  newUsername !==
-                  username
-                ) {
-                  window.setTimeout(
-                    () =>
-                      window.location.reload(),
-                    500
-                  );
-                }
-              } else {
-                setMessage(
-                  body.error ||
-                  "Update failed."
-                );
-              }
-            }}
-            className="rounded-full bg-ink px-6 py-3 text-sm font-black text-white"
-          >
-            UPDATE MY ACCOUNT
-          </button>
-
-          {message ? (
-            <p className="text-sm text-ink/60">
-              {message}
-            </p>
-          ) : null}
-
-        </div>
-      </section>
-
-
-      {/* =====================================
-          TEAM ADMINS
-      ====================================== */}
-
-      <section className="rounded-[1.5rem] border border-ink/10 bg-white p-6 md:p-8">
-
-        <div className="flex flex-wrap items-start justify-between gap-4">
-
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.15em] text-gold-dark">
-              Administration
-            </p>
-
-            <h2 className="mt-2 font-display text-4xl">
-              Admin team.
-            </h2>
-
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-ink/55">
-              Super Admins can add administrators,
-              reset passwords, change roles and
-              revoke access.
-            </p>
-          </div>
-
-
-          {myRole ? (
-            <div className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-xs font-black uppercase tracking-[0.12em]">
-              Your role:{" "}
-              {myRole ===
-              "owner"
-                ? "Super Admin"
-                : "Admin"}
-            </div>
-          ) : null}
-
-        </div>
-
-
-        {/* CREATE ADMIN */}
-
-        {myRole === "owner" ? (
-          <div className="mt-8 rounded-[1.3rem] border border-ink/10 bg-sand/55 p-5">
-
-            <div className="text-sm font-black">
-              Add administrator
-            </div>
-
-            <div className="mt-4 grid gap-4 md:grid-cols-[1fr_1fr_180px_auto] md:items-end">
-
-              <label>
-                <FieldLabel>
-                  Username
-                </FieldLabel>
-
-                <TextInput
-                  value={
-                    addUsername
-                  }
-                  placeholder="new.admin"
-                  onChange={(e) =>
-                    setAddUsername(
-                      e.target.value
-                    )
-                  }
-                />
-              </label>
-
-
-              <label>
-                <FieldLabel>
-                  Temporary password
-                </FieldLabel>
-
-                <TextInput
-                  type="password"
-                  minLength={10}
-                  value={
-                    addPassword
-                  }
-                  placeholder="Minimum 10 characters"
-                  onChange={(e) =>
-                    setAddPassword(
-                      e.target.value
-                    )
-                  }
-                />
-              </label>
-
-
-              <label>
-                <FieldLabel>
-                  Role
-                </FieldLabel>
-
-                <select
-                  value={
-                    addRole
-                  }
-                  onChange={(e) =>
-                    setAddRole(
-                      e.target
-                        .value as
-                        | "admin"
-                        | "owner"
-                    )
-                  }
-                  className="w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-sm outline-none focus:border-gold-dark"
-                >
-                  <option value="admin">
-                    Admin
-                  </option>
-
-                  <option value="owner">
-                    Super Admin
-                  </option>
-                </select>
-              </label>
-
-
-              <button
-                type="button"
-                disabled={
-                  !addUsername.trim() ||
-                  addPassword.length <
-                    10
-                }
-                onClick={
-                  createAdministrator
-                }
-                className="rounded-xl bg-ink px-5 py-3 text-xs font-black text-white disabled:cursor-not-allowed disabled:opacity-35"
-              >
-                + ADD ADMIN
-              </button>
-
-            </div>
-
-          </div>
-        ) : null}
-
-
-        {/* ADMIN LIST */}
-
-        <div className="mt-8 overflow-hidden rounded-[1.3rem] border border-ink/10">
-
-          <div className="grid grid-cols-[1fr_150px] gap-4 border-b border-ink/10 bg-sand px-5 py-3 text-[10px] font-black uppercase tracking-[0.15em] text-ink/45 md:grid-cols-[1fr_180px_1fr]">
-            <div>
-              Administrator
-            </div>
-
-            <div>
-              Role
-            </div>
-
-            <div className="hidden md:block">
-              Management
-            </div>
-          </div>
-
-
-          {teamLoading ? (
-            <div className="p-6 text-sm text-ink/50">
-              Loading administrators...
-            </div>
-          ) : admins.length ? (
-            admins.map(
-              (member) => {
-                const isMe =
-                  member.username
-                    .toLowerCase() ===
-                  currentTeamUsername
-                    .toLowerCase();
-
-                return (
-                  <div
-                    key={
-                      member.id
-                    }
-                    className="grid gap-4 border-b border-ink/10 px-5 py-5 last:border-b-0 md:grid-cols-[1fr_180px_1fr] md:items-center"
-                  >
-
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
-
-                        <span className="font-bold">
-                          {
-                            member.username
-                          }
-                        </span>
-
-                        {isMe ? (
-                          <span className="rounded-full bg-ink px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white">
-                            You
-                          </span>
-                        ) : null}
-
-                      </div>
-
-                      <div className="mt-1 text-xs text-ink/40">
-                        Added{" "}
-                        {new Date(
-                          member.createdAt
-                        ).toLocaleDateString()}
-                      </div>
-                    </div>
-
-
-                    <div>
-                      {myRole ===
-                        "owner" &&
-                      !isMe ? (
-                        <select
-                          value={
-                            member.role
-                          }
-                          onChange={(e) =>
-                            void updateRole(
-                              member,
-                              e.target
-                                .value as
-                                | "owner"
-                                | "admin"
-                            )
-                          }
-                          className="rounded-lg border border-ink/10 bg-white px-3 py-2 text-xs font-bold"
-                        >
-                          <option value="admin">
-                            Admin
-                          </option>
-
-                          <option value="owner">
-                            Super Admin
-                          </option>
-                        </select>
-                      ) : (
-                        <span
-                          className={`inline-flex rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.11em] ${
-                            member.role ===
-                            "owner"
-                              ? "bg-gold-light text-ink"
-                              : "bg-sand text-ink/65"
-                          }`}
-                        >
-                          {member.role ===
-                          "owner"
-                            ? "Super Admin"
-                            : "Admin"}
-                        </span>
-                      )}
-                    </div>
-
-
-                    <div className="flex flex-wrap gap-2">
-
-                      {myRole ===
-                        "owner" &&
-                      !isMe ? (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              void resetPassword(
-                                member
-                              )
-                            }
-                            className="rounded-full border border-ink/15 px-3 py-2 text-[10px] font-black"
-                          >
-                            RESET PASSWORD
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              void removeAdministrator(
-                                member
-                              )
-                            }
-                            className="rounded-full border border-red-200 px-3 py-2 text-[10px] font-black text-red-700"
-                          >
-                            REMOVE
-                          </button>
-                        </>
-                      ) : isMe ? (
-                        <span className="text-xs text-ink/40">
-                          Manage your own credentials above.
-                        </span>
-                      ) : (
-                        <span className="text-xs text-ink/40">
-                          Super Admin access required.
-                        </span>
-                      )}
-
-                    </div>
-                  </div>
-                );
-              }
-            )
-          ) : (
-            <div className="p-6 text-sm text-ink/50">
-              No administrators found.
-            </div>
-          )}
-
-        </div>
-
-
-        {teamMessage ? (
-          <p className="mt-4 text-sm text-ink/60">
-            {teamMessage}
-          </p>
-        ) : null}
-
-
-        <div className="mt-6 border-t border-ink/10 pt-5 text-xs leading-5 text-ink/45">
-          Passwords are never displayed or stored
-          in plain text. New and reset passwords
-          are stored only as salted password hashes.
-        </div>
-
-      </section>
-
-    </div>
+              })
+            });
+
+            const body = await response.json();
+
+            if (response.ok) {
+              setCurrentPassword("");
+              setNewPassword("");
+              setMessage("Account updated.");
+            } else {
+              setMessage(body.error || "Update failed.");
+            }
+          }}
+          className="rounded-full bg-gold px-6 py-3 text-sm font-black"
+        >
+          UPDATE ACCOUNT
+        </button>
+
+        {message ? <p className="text-sm text-ink/60">{message}</p> : null}
+      </div>
+    </section>
   );
 }

@@ -1,225 +1,423 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 
-type LayerItem = {
-  step: string;
-  eyebrow: string;
-  title: string;
-  body: string;
-  image: string;
-  fallback: string;
-};
+import type {
+  Mattress,
+  SiteSettings
+} from "@/lib/catalog";
 
-const layers: LayerItem[] = [
-  {
-    step: "01",
-    eyebrow: "FABRIC",
-    title: "AirKnit Cover",
-    body: "Soft-touch breathable top fabric designed for a clean first-touch feel.",
-    image: "/layers/Layer1.png",
-    fallback: "linear-gradient(180deg, #f8f3ea 0%, #eee6d8 100%)"
-  },
-  {
-    step: "02",
-    eyebrow: "COMFORT",
-    title: "Pressure Relief Layer",
-    body: "Responsive foam that cushions the body and reduces sharp pressure points.",
-    image: "/layers/Layer2.png",
-    fallback: "linear-gradient(180deg, #f4dfc6 0%, #e9cba9 100%)"
-  },
-  {
-    step: "03",
-    eyebrow: "SUPPORT",
-    title: "Adaptive Transition Layer",
-    body: "A stabilising layer that controls sink and guides the body into support.",
-    image: "/layers/Layer3.png",
-    fallback: "linear-gradient(180deg, #ff9b45 0%, #f57b19 100%)"
-  },
-  {
-    step: "04",
-    eyebrow: "CORE",
-    title: "Structural Base Core",
-    body: "The foundation that carries load, improves alignment and holds the mattress shape.",
-    image: "/layers/Layer4.png",
-    fallback: "linear-gradient(180deg, #2b2b2b 0%, #111111 100%)"
-  }
-];
 
-function clamp(value: number, min = 0, max = 1) {
-  return Math.max(min, Math.min(max, value));
+function fallbackFor(
+  index: number
+) {
+  const colors = [
+    "#F2EEE7",
+    "#D7C1A9",
+    "#B9A58F",
+    "#2B2B2B",
+    "#D8D1C6"
+  ];
+
+  return colors[
+    index %
+      colors.length
+  ];
 }
 
-export default function LayerScrollStory() {
-  const [active, setActive] = useState(0);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+export default function LayerScrollStory({
+  site,
+  product
+}: {
+  site: SiteSettings;
+  product?: Mattress;
+}) {
+  const [
+    active,
+    setActive
+  ] =
+    useState(0);
+
+  const refs =
+    useRef<
+      (
+        | HTMLDivElement
+        | null
+      )[]
+    >([]);
+
+
+  const settings = {
+    enabled: true,
+    eyebrow:
+      "MATTRESS CONSTRUCTION",
+    title:
+      "Go beneath the surface.",
+    body:
+      "Explore the mattress from the first touch to the support underneath.",
+    ...(site.layerStory ||
+      {})
+  };
+
+
+  const productLayers =
+    product?.layers ||
+    [];
+
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let bestIndex = active;
-        let bestRatio = 0;
+    if (
+      active >=
+      productLayers.length
+    ) {
+      setActive(0);
+    }
+  }, [
+    active,
+    productLayers.length
+  ]);
 
-        entries.forEach((entry) => {
-          const index = Number(entry.target.getAttribute("data-step-index") || 0);
 
-          if (entry.isIntersecting && entry.intersectionRatio >= bestRatio) {
-            bestRatio = entry.intersectionRatio;
-            bestIndex = index;
+  useEffect(() => {
+    const observer =
+      new IntersectionObserver(
+        (
+          entries
+        ) => {
+          let next =
+            active;
+
+          let best =
+            0;
+
+          for (
+            const entry
+            of entries
+          ) {
+            if (
+              !entry.isIntersecting
+            ) {
+              continue;
+            }
+
+            const ratio =
+              entry.intersectionRatio;
+
+            if (
+              ratio >
+              best
+            ) {
+              best =
+                ratio;
+
+              next =
+                Number(
+                  entry.target.getAttribute(
+                    "data-layer-index"
+                  ) ||
+                    0
+                );
+            }
           }
-        });
 
-        if (bestRatio > 0) {
-          setActive(bestIndex);
+          if (
+            best > 0
+          ) {
+            setActive(
+              next
+            );
+          }
+        },
+        {
+          threshold: [
+            0.3,
+            0.5,
+            0.7
+          ]
         }
-      },
-      {
-        threshold: [0.35, 0.55, 0.75]
+      );
+
+    refs.current.forEach(
+      (node) => {
+        if (node) {
+          observer.observe(
+            node
+          );
+        }
       }
     );
 
-    cardRefs.current.forEach((node) => {
-      if (node) observer.observe(node);
-    });
+    return () =>
+      observer.disconnect();
+  }, [
+    active,
+    productLayers.length
+  ]);
 
-    return () => observer.disconnect();
-  }, [active]);
 
-  const visualLayers = useMemo(() => {
-    return layers.map((layer, index) => {
-      const depth = layers.length - index;
-      const progress = clamp((active - index) + 1, 0, 1);
+  const visual =
+    useMemo(
+      () =>
+        productLayers.map(
+          (
+            layer,
+            index
+          ) => {
+            const delta =
+              index -
+              active;
 
-      const y = index * 42 - progress * 48;
-      const scale = 1 - index * 0.015 + progress * 0.02;
-      const opacity = index <= active ? 1 : 0.86;
-      const rotate = (index - active) * 0.4;
+            return {
+              ...layer,
+              index,
+              y:
+                index *
+                  54 -
+                Math.max(
+                  0,
+                  active -
+                    index +
+                    1
+                ) *
+                  16,
+              scale:
+                1 -
+                Math.abs(
+                  delta
+                ) *
+                  0.012,
+              opacity:
+                index <=
+                active
+                  ? 1
+                  : 0.74
+            };
+          }
+        ),
+      [
+        productLayers,
+        active
+      ]
+    );
 
-      return {
-        ...layer,
-        y,
-        scale,
-        opacity,
-        rotate,
-        z: depth
-      };
-    });
-  }, [active]);
+
+  if (
+    settings.enabled ===
+      false ||
+    !product ||
+    !productLayers.length
+  ) {
+    return null;
+  }
+
 
   return (
-    <section className="bg-[#F7F5F0]">
-      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-[#D95F0E]">
-            Mattress construction
+    <section className="bg-white">
+      <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
+
+        <div className="max-w-4xl">
+
+          <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-black/42">
+            {
+              settings.eyebrow
+            }
           </p>
-          <h2 className="mt-4 font-display text-5xl leading-[0.92] sm:text-6xl">
-            Go beneath the surface.
+
+          <h2 className="mt-5 text-[clamp(3.2rem,6vw,6rem)] font-medium leading-[0.88] tracking-[-0.055em] text-[#111111]">
+            {
+              settings.title
+            }
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-ink/60">
-            Scroll through the build, layer by layer. The motion is quieter,
-            cleaner and better blended into the homepage.
+
+          <p className="mt-6 max-w-2xl text-base leading-7 text-black/55">
+            {
+              settings.body
+            }
           </p>
         </div>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-          <div className="space-y-6">
-            {layers.map((layer, index) => {
-              const isActive = index === active;
 
-              return (
+        <div className="mt-16 grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
+
+          <div className="space-y-4">
+
+            {productLayers.map(
+              (
+                layer,
+                index
+              ) => (
                 <div
-                  key={layer.step}
-                  ref={(node) => {
-                    cardRefs.current[index] = node;
+                  key={
+                    `${layer.name}-${index}`
+                  }
+                  ref={(
+                    node
+                  ) => {
+                    refs.current[
+                      index
+                    ] =
+                      node;
                   }}
-                  data-step-index={index}
-                  className={`rounded-[2rem] border p-7 transition-all duration-300 ${
-                    isActive
-                      ? "border-[#F4B27A] bg-white shadow-[0_18px_50px_rgba(0,0,0,0.06)]"
-                      : "border-ink/8 bg-white/70"
+                  data-layer-index={
+                    index
+                  }
+                  className={`border-t py-9 transition ${
+                    active ===
+                    index
+                      ? "border-black"
+                      : "border-black/12"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-black tracking-[0.2em] text-[#D95F0E]">
-                      {layer.step}
+
+                  <div className="flex items-center gap-4">
+
+                    <span className="text-[10px] font-semibold tracking-[0.25em] text-black/38">
+                      {String(
+                        index +
+                          1
+                      ).padStart(
+                        2,
+                        "0"
+                      )}
                     </span>
-                    <span className="h-px w-10 bg-[#F4B27A]" />
-                    <span className="text-[11px] font-black uppercase tracking-[0.24em] text-ink/45">
-                      {layer.eyebrow}
-                    </span>
+
+                    {layer.material ? (
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-black/38">
+                        {
+                          layer.material
+                        }
+                      </span>
+                    ) : null}
+
                   </div>
 
-                  <h3 className="mt-5 font-display text-3xl sm:text-4xl">
-                    {layer.title}
+
+                  <h3 className="mt-4 text-3xl font-medium tracking-[-0.04em]">
+                    {
+                      layer.name
+                    }
                   </h3>
 
-                  <p className="mt-4 max-w-xl text-sm leading-7 text-ink/60 sm:text-base">
-                    {layer.body}
+
+                  <p className="mt-4 max-w-xl text-sm leading-7 text-black/52">
+                    {
+                      layer.description
+                    }
                   </p>
+
+
+                  {layer.thickness ||
+                  layer.density ? (
+                    <div className="mt-5 flex flex-wrap gap-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-black/42">
+
+                      {layer.thickness ? (
+                        <span>
+                          {
+                            layer.thickness
+                          }
+                        </span>
+                      ) : null}
+
+                      {layer.density ? (
+                        <span>
+                          {
+                            layer.density
+                          }
+                        </span>
+                      ) : null}
+
+                    </div>
+                  ) : null}
+
                 </div>
-              );
-            })}
+              )
+            )}
           </div>
 
-          <div className="lg:sticky lg:top-24">
-            <div className="rounded-[2.4rem] border border-ink/8 bg-[radial-gradient(circle_at_50%_30%,rgba(255,122,0,0.08),transparent_35%),linear-gradient(180deg,#ffffff_0%,#faf7f1_100%)] p-6 shadow-[0_30px_80px_rgba(31,20,8,0.08)] sm:p-8">
-              <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-transparent">
-                {visualLayers.map((layer, index) => (
+
+          <div className="lg:sticky lg:top-28 lg:h-fit">
+
+            <div className="relative aspect-[5/4] overflow-hidden bg-[#F9F8F6]">
+
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(255,255,255,.9),transparent_50%)]" />
+
+              {visual.map(
+                (
+                  layer
+                ) => (
                   <div
-                    key={layer.step}
-                    className="absolute left-[7%] right-[7%] top-[16%] mx-auto"
+                    key={
+                      `${layer.name}-visual`
+                    }
+                    className="absolute left-[7%] right-[7%] top-[14%]"
                     style={{
-                      zIndex: layer.z,
-                      transform: `translateY(${layer.y}px) scale(${layer.scale}) rotateX(0deg) rotateZ(${layer.rotate}deg)`,
-                      opacity: layer.opacity,
-                      transition: "transform 500ms cubic-bezier(.22,.61,.36,1), opacity 350ms ease"
+                      zIndex:
+                        productLayers.length -
+                        layer.index,
+
+                      transform:
+                        `translateY(${layer.y}px) scale(${layer.scale})`,
+
+                      opacity:
+                        layer.opacity,
+
+                      transition:
+                        "transform 600ms cubic-bezier(.22,.61,.36,1), opacity 400ms ease"
                     }}
                   >
-                    <div
-                      className="relative mx-auto h-[72px] w-full rounded-[999px] shadow-[0_18px_32px_rgba(0,0,0,0.16)] md:h-[82px]"
-                      style={{ background: layer.fallback }}
-                    >
+
+                    {layer.visualAsset ? (
                       <img
-                        src={layer.image}
-                        alt={layer.title}
-                        className="absolute inset-0 h-full w-full rounded-[999px] object-contain"
-                        onError={(event) => {
-                          event.currentTarget.style.display = "none";
+                        src={
+                          layer.visualAsset
+                        }
+                        alt={
+                          layer.name
+                        }
+                        className="h-[92px] w-full object-contain drop-shadow-[0_20px_16px_rgba(0,0,0,.13)] md:h-[120px]"
+                      />
+                    ) : (
+                      <div
+                        className="h-[74px] w-full rounded-[40px] shadow-[0_18px_28px_rgba(0,0,0,.10)] md:h-[90px]"
+                        style={{
+                          background:
+                            fallbackFor(
+                              layer.index
+                            )
                         }}
                       />
-                    </div>
+                    )}
+
                   </div>
-                ))}
+                )
+              )}
 
-                <div className="absolute inset-x-[14%] bottom-[10%] h-10 rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.14),rgba(0,0,0,0))] blur-xl" />
-              </div>
 
-              <div className="mt-5 flex items-center justify-between rounded-[1.4rem] border border-ink/8 bg-white/80 px-5 py-4 backdrop-blur">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#D95F0E]">
-                    Active layer
-                  </p>
-                  <p className="mt-2 font-display text-2xl">
-                    {layers[active].title}
-                  </p>
-                </div>
+              <div className="absolute inset-x-[18%] bottom-[12%] h-10 rounded-full bg-black/10 blur-2xl" />
+            </div>
 
-                <div className="flex items-center gap-2">
-                  {layers.map((layer, index) => (
-                    <button
-                      key={layer.step}
-                      type="button"
-                      onClick={() => setActive(index)}
-                      aria-label={`Show ${layer.title}`}
-                      className={`h-2.5 rounded-full transition-all ${
-                        index === active ? "w-8 bg-[#FF7A00]" : "w-2.5 bg-ink/18"
-                      }`}
-                    />
-                  ))}
-                </div>
+
+            <div className="border-x border-b border-black/10 bg-white px-5 py-5">
+
+              <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-black/38">
+                Active layer
+              </p>
+
+              <div className="mt-2 text-xl font-medium">
+                {
+                  productLayers[
+                    active
+                  ]?.name
+                }
               </div>
             </div>
+
           </div>
         </div>
       </div>

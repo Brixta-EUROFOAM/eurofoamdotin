@@ -271,30 +271,9 @@ export default function HeaderClient({
 
   return (
     <>
-      {site.announcementEnabled !== false && site.announcement ? (
-        site.announcementHref ? (
-          <a
-            href={site.announcementHref}
-            className="block px-4 py-2 text-center text-xs font-semibold tracking-wide"
-            style={{
-              backgroundColor: site.announcementBackground || "#FF7A00",
-              color: site.announcementForeground || "#FFFFFF"
-            }}
-          >
-            {site.announcement}
-          </a>
-        ) : (
-          <div
-            className="px-4 py-2 text-center text-xs font-semibold tracking-wide"
-            style={{
-              backgroundColor: site.announcementBackground || "#FF7A00",
-              color: site.announcementForeground || "#FFFFFF"
-            }}
-          >
-            {site.announcement}
-          </div>
-        )
-      ) : null}
+      <div className="bg-[#FF7A00] px-4 py-2 text-center text-xs font-semibold tracking-wide text-white">
+        {site.announcement}
+      </div>
 
       <header
         className="relative sticky top-0 z-50 border-b border-ink/10 bg-[#FAF6E8]"

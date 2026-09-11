@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "admins": [
+    {
+      "id": "24fa87575595440ad864a456652a8795",
+      "username": "eurobois",
+      "salt": "73929019db5683843b2badd9d08177d7",
+      "passwordHash": "0641befa182c94476d5b7fa8eb639de0268a12c14bcfcff07a305893125ad019090a23462662b82848c79cf67f84b55b0ecf227beff8699ab96447c967fe7a6a",
+      "role": "owner",
+      "createdAt": "2026-09-11T05:45:56.860Z",
+      "updatedAt": "2026-09-11T05:45:56.860Z"
+    }
+  ]
+}

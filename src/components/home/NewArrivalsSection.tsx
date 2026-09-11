@@ -1,122 +1,198 @@
 import Link from "next/link";
 
-function getPrice(product: any) {
-  return (
-    product?.price ??
-    product?.salePrice ??
-    product?.priceFrom ??
-    product?.startingPrice ??
-    product?.mrp ??
-    null
-  );
-}
+import type {
+  Mattress,
+  SiteSettings
+} from "@/lib/catalog";
 
-function formatPrice(value: any) {
-  if (value === null || value === undefined || value === "") return null;
+import {
+  money
+} from "@/lib/catalog";
 
-  if (typeof value === "number") {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0
-    }).format(value);
-  }
-
-  return String(value);
-}
 
 export default function NewArrivalsSection({
-  products
+  products,
+  site
 }: {
-  products: any[];
+  products: Mattress[];
+  site: SiteSettings;
 }) {
-  const items = products.slice(0, 8);
+  const settings = {
+    enabled: true,
+    eyebrow:
+      "NEW ARRIVALS",
+    title:
+      "Latest from Eurofoam.",
+    body:
+      "New mattresses and sleep products selected for the homepage.",
+    viewAllLabel:
+      "VIEW ALL",
+    viewAllHref:
+      "/mattresses",
+    productSlugs:
+      products
+        .slice(0, 8)
+        .map(
+          (product) =>
+            product.slug
+        ),
+    ...(site.newArrivals ||
+      {})
+  };
+
+
+  if (
+    settings.enabled ===
+    false
+  ) {
+    return null;
+  }
+
+
+  const bySlug =
+    new Map(
+      products.map(
+        (product) => [
+          product.slug,
+          product
+        ]
+      )
+    );
+
+
+  const selected =
+    (
+      settings
+        .productSlugs ||
+      []
+    )
+      .map(
+        (slug) =>
+          bySlug.get(slug)
+      )
+      .filter(
+        Boolean
+      ) as Mattress[];
+
+
+  const items =
+    selected.length
+      ? selected
+      : products.slice(
+          0,
+          8
+        );
+
 
   return (
-    <section className="bg-[#F6EFE8]">
-      <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+    <section className="bg-[#F9F8F6]">
+      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
+
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#D95F0E]">
-              New arrivals
+            <p className="text-[10px] font-semibold uppercase tracking-[0.30em] text-black/46">
+              {
+                settings.eyebrow
+              }
             </p>
-            <h2 className="mt-3 font-display text-5xl leading-[0.92] sm:text-6xl">
-              Fresh picks for the home.
+
+            <h2 className="mt-4 max-w-3xl text-[clamp(2.8rem,5vw,5rem)] font-medium leading-[0.92] tracking-[-0.05em] text-[#111111]">
+              {
+                settings.title
+              }
             </h2>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-ink/60">
-              A merchandised section inspired by large-format retail browsing,
-              but kept cleaner and calmer for Eurofoam.
+
+            <p className="mt-5 max-w-2xl text-base leading-7 text-black/55">
+              {
+                settings.body
+              }
             </p>
           </div>
 
+
           <Link
-            href="/mattresses"
-            className="inline-flex rounded-full border border-ink/12 bg-white px-6 py-3 text-sm font-black text-ink"
+            href={
+              settings.viewAllHref
+            }
+            className="inline-flex items-center gap-3 border-b border-black/60 pb-2 text-sm font-semibold"
           >
-            View all
+            {
+              settings.viewAllLabel
+            }
+
+            <span>
+              →
+            </span>
           </Link>
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          {["Mattresses", "Pillows", "Protectors", "Accessories"].map((item, index) => (
-            <button
-              key={item}
-              type="button"
-              className={`rounded-full px-5 py-3 text-sm font-black transition ${
-                index === 0
-                  ? "bg-[#FFB783] text-ink shadow-[0_12px_24px_rgba(255,122,0,0.14)]"
-                  : "border border-[#E6B08B] bg-white/80 text-ink"
-              }`}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
 
-        <div className="mt-10 overflow-x-auto pb-2">
+        <div className="mt-10 overflow-x-auto pb-5">
+
           <div className="flex min-w-max gap-5">
-            {items.map((product, index) => {
-              const href = `/mattresses/${product.slug}`;
-              const price = formatPrice(getPrice(product));
 
-              return (
+            {items.map(
+              (
+                product
+              ) => (
                 <Link
-                  key={product.slug || index}
-                  href={href}
-                  className="group w-[280px] overflow-hidden rounded-[1.8rem] border border-ink/8 bg-white shadow-[0_14px_40px_rgba(0,0,0,0.05)]"
+                  key={
+                    product.slug
+                  }
+                  href={`/mattresses/${product.slug}`}
+                  className="group w-[290px]"
                 >
-                  <div className="relative aspect-[4/4.2] overflow-hidden bg-[#F8F6F2]">
+
+                  <div className="aspect-[4/4.35] overflow-hidden rounded-[8px] bg-[#EEECE8]">
                     <img
-                      src={product.image}
-                      alt={product.name}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                      src={
+                        product.image
+                      }
+                      alt={
+                        product.name
+                      }
+                      className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]"
                     />
                   </div>
 
-                  <div className="p-5">
-                    <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#D95F0E]">
-                      Eurofoam
+
+                  <div className="pt-5">
+
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-black/42">
+                      {
+                        product.category
+                      }
                     </p>
 
-                    <h3 className="mt-3 line-clamp-2 text-xl font-semibold leading-7 text-ink">
-                      {product.name}
+                    <h3 className="mt-2 text-xl font-semibold tracking-[-0.025em]">
+                      {
+                        product.name
+                      }
                     </h3>
 
-                    {price ? (
-                      <p className="mt-4 text-2xl font-black text-ink">
-                        {price}
-                      </p>
-                    ) : null}
+                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-black/52">
+                      {
+                        product.shortDescription
+                      }
+                    </p>
 
-                    <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-ink/10 px-4 py-2 text-xs font-black text-ink">
-                      Shop now <span aria-hidden="true">→</span>
-                    </div>
+                    <p className="mt-4 text-lg font-semibold">
+                      From{" "}
+                      {
+                        money(
+                          product.basePrice
+                        )
+                      }
+                    </p>
                   </div>
+
                 </Link>
-              );
-            })}
+              )
+            )}
           </div>
         </div>
+
       </div>
     </section>
   );
