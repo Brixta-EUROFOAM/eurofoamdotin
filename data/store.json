@@ -67,7 +67,7 @@
     "heroSlides": [
       {
         "id": "hero-brand",
-        "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=90",
+        "image": "/media/1789122018422-a-mattress-on-a-wooden-floor-in-a-bedroom-photo.jpg",
         "imageAlt": "Eurofoam mattress",
         "href": "/mattresses/euro-align",
         "eyebrow": "EUROFOAM MATTRESSES",
@@ -81,7 +81,7 @@
       },
       {
         "id": "hero-euro-align",
-        "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",
+        "image": "/media/1789122036701-brixta-work-hero.jpg",
         "imageAlt": "Euro Align",
         "href": "/mattresses/euro-align",
         "eyebrow": "BESTSELLER",
@@ -486,7 +486,7 @@
       "id": "review-1",
       "stars": 5,
       "quote": "I wanted support without the rock-hard orthopedic feel. The medium-firm balance is exactly what I was looking for.",
-      "name": "Demo customer · Bengaluru",
+      "name": "Bittu Pehelwan",
       "product": "Euro Align"
     },
     {

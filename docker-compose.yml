@@ -7,7 +7,8 @@ services:
       - "55002:3000"
     environment:
       - CMS_DATA_DIR=/app/data
-      #- ADMIN_SESSION_SECRET=${ADMIN_SESSION_SECRET}
+      - ADMIN_SESSION_SECRET=${ADMIN_SESSION_SECRET}
+      - PUBLIC_SITE_URL=${PUBLIC_SITE_URL}
     volumes:
       - eurofoam_data:/app/data
 

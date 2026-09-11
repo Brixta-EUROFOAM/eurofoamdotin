@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { publicUrl } from "@/lib/public-url";
 import {
   adminCookie,
   createSessionToken,
@@ -18,7 +19,7 @@ function clientKey(request: Request) {
 
 export async function POST(request: Request) {
   if (!(await hasAdminAccount())) {
-    return NextResponse.redirect(new URL("/admin/setup", request.url), 303);
+    return NextResponse.redirect(publicUrl(request, "/admin/setup"), 303);
   }
 
   const key = clientKey(request);
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
   const current = failures.get(key);
 
   if (current && current.resetAt > now && current.count >= MAX_ATTEMPTS) {
-    return NextResponse.redirect(new URL("/admin/login?locked=1", request.url), 303);
+    return NextResponse.redirect(publicUrl(request, "/admin/login?locked=1"), 303);
   }
 
   const form = await request.formData();
@@ -44,12 +45,12 @@ export async function POST(request: Request) {
       resetAt: existing.resetAt
     });
 
-    return NextResponse.redirect(new URL("/admin/login?error=1", request.url), 303);
+    return NextResponse.redirect(publicUrl(request, "/admin/login?error=1"), 303);
   }
 
   failures.delete(key);
 
-  const response = NextResponse.redirect(new URL("/admin", request.url), 303);
+  const response = NextResponse.redirect(publicUrl(request, "/admin"), 303);
   response.cookies.set(adminCookie.name, createSessionToken(username), {
     httpOnly: true,
     sameSite: "lax",
