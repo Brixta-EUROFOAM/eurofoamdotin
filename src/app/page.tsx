@@ -13,6 +13,7 @@ import ShopByRooms from "@/components/home/ShopByRooms";
 import {
   getStoreData
 } from "@/lib/store";
+import EurofoamCartPrank from "@/components/idea2/euroFakeAddToCart";
 
 
 export const dynamic =
@@ -50,9 +51,9 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
 
-      <main>
+      {/* <main>
 
         {sections.hero !==
         false ? (
@@ -293,9 +294,10 @@ export default async function Home() {
           </section>
         ) : null}
 
-      </main>
+      </main> */}
+      <EurofoamCartPrank/>
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
