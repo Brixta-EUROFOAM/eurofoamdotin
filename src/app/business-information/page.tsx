@@ -12,9 +12,9 @@ import {
 
 
 export const metadata: Metadata = {
-  title: "Business Information | Eurofoam",
+  title: "Business Information | GADDA",
   description:
-    "Official business information for Eurofoam, a seller of pillows and mattresses.",
+    "Official business information for GADDA, a seller of pillows and mattresses.",
 };
 
 
@@ -35,12 +35,12 @@ export default function BusinessInformationPage() {
               </p>
 
               <h1 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">
-                Eurofoam
+                GADDA
               </h1>
 
               <p className="mt-5 max-w-3xl text-base leading-7 text-black/60">
                 This page provides the legal business identity and the
-                products and services offered through the Eurofoam website.
+                products and services offered through the GADDA website.
               </p>
 
             </div>
@@ -107,7 +107,7 @@ export default function BusinessInformationPage() {
                     </div>
 
                     <div className="mt-1 text-sm text-black/50">
-                      Available through Eurofoam.
+                      Available through GADDA.
                     </div>
                   </div>
                 ))}
@@ -120,9 +120,9 @@ export default function BusinessInformationPage() {
             <section className="border-t border-black/10 bg-black/[0.025] px-6 py-6 sm:px-10">
 
               <p className="text-sm leading-6 text-black/55">
-                The EUROFOAM name and website are operated under the legal
+                The GADDA name and website are operated under the legal
                 business name <strong className="text-black/75">UMADUTT INDUSTRIES</strong>.
-                Eurofoam is the brand name used for the sale of pillows and mattresses.
+                GADDA is the brand name used for the sale of pillows and mattresses.
               </p>
 
             </section>

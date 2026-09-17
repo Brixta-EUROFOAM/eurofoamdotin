@@ -278,7 +278,7 @@ export default function HeaderClient({
             href={site.announcementHref}
             className="block px-4 py-2 text-center text-xs font-semibold tracking-wide"
             style={{
-              backgroundColor: site.announcementBackground || "#FF6500",
+              backgroundColor: site.announcementBackground || "#FF7A00",
               color: site.announcementForeground || "#FFFFFF"
             }}
           >
@@ -288,7 +288,7 @@ export default function HeaderClient({
           <div
             className="px-4 py-2 text-center text-xs font-semibold tracking-wide"
             style={{
-              backgroundColor: site.announcementBackground || "#FF6500",
+              backgroundColor: site.announcementBackground || "#FF7A00",
               color: site.announcementForeground || "#FFFFFF"
             }}
           >
@@ -298,7 +298,7 @@ export default function HeaderClient({
       ) : null}
 
       <header
-        className="relative sticky top-0 z-50 border-b border-ink/10 bg-[#F3ECDD]"
+        className="relative sticky top-0 z-50 border-b border-ink/10 bg-[#FAF6E8]"
         onMouseLeave={() =>
           setCatalogOpen(false)
         }
@@ -324,7 +324,7 @@ export default function HeaderClient({
               onClick={() =>
                 setCatalogOpen((v) => !v)
               }
-              className="flex items-center gap-2 text-sm font-bold text-ink/75 hover:text-[#FF6500]"
+              className="flex items-center gap-2 text-sm font-bold text-ink/75 hover:text-[#D95F0E]"
             >
               Gadda Menu
               <span className="text-[9px]">
@@ -334,14 +334,14 @@ export default function HeaderClient({
 
             <Link
               href="/reviews"
-              className="text-sm font-bold text-ink/75 hover:text-[#FF6500]"
+              className="text-sm font-bold text-ink/75 hover:text-[#D95F0E]"
             >
               Reviews
             </Link>
 
             <Link
               href="/sleep-quiz"
-              className="rounded-full border border-[#FF6500]/55 bg-white/50 px-5 py-2.5 text-sm font-bold transition hover:bg-white"
+              className="rounded-full border border-[#FF7A00]/55 bg-white/50 px-5 py-2.5 text-sm font-bold transition hover:bg-white"
             >
               Find My Match
             </Link>
@@ -468,7 +468,7 @@ export default function HeaderClient({
 
               {pinOpen ? (
                 <div className="absolute right-0 top-[calc(100%+12px)] w-72 rounded-[1.4rem] border border-ink/10 bg-white p-5 shadow-[0_20px_60px_rgba(24,24,24,.16)]">
-                  <p className="text-xs font-black uppercase tracking-[.12em] text-[#FF6500]">
+                  <p className="text-xs font-black uppercase tracking-[.12em] text-[#D95F0E]">
                     Delivery location
                   </p>
 
@@ -492,7 +492,7 @@ export default function HeaderClient({
                     }}
                     inputMode="numeric"
                     placeholder="781001"
-                    className="mt-4 w-full rounded-xl border border-ink/15 px-4 py-3 text-lg font-bold tracking-[.15em] outline-none focus:border-[#FF6500]"
+                    className="mt-4 w-full rounded-xl border border-ink/15 px-4 py-3 text-lg font-bold tracking-[.15em] outline-none focus:border-[#FF7A00]"
                   />
 
                   {pinError ? (
@@ -528,7 +528,7 @@ export default function HeaderClient({
               />
 
               {count ? (
-                <span className="absolute right-0 top-0 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#FF6500] px-1 text-[10px] font-black text-white">
+                <span className="absolute right-0 top-0 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#FF7A00] px-1 text-[10px] font-black text-white">
                   {count > 99
                     ? "99+"
                     : count}
@@ -575,7 +575,7 @@ export default function HeaderClient({
           />
 
           <aside className="absolute right-0 top-0 h-full w-[min(92vw,430px)] overflow-y-auto bg-white shadow-2xl">
-            <div className="border-b border-ink/10 bg-[#F3ECDD] p-5">
+            <div className="border-b border-ink/10 bg-[#FAF6E8] p-5">
               <div className="flex items-center justify-between">
                 <img
                   src={site.logoUrl}

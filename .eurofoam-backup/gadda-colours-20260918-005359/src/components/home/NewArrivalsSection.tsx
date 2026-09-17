@@ -85,7 +85,7 @@ export default function NewArrivalsSection({
 
 
   return (
-    <section className="bg-[#F8F4E9]">
+    <section className="bg-[#F9F8F6]">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
 
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">

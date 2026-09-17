@@ -68,8 +68,8 @@ export default function WishlistButton({
       title={saved ? "Saved" : "Save mattress"}
       className={`absolute right-6 top-6 z-20 flex h-11 w-11 items-center justify-center rounded-full border shadow-sm transition ${
         saved
-          ? "border-[#FF6500] bg-[#FF6500] text-white"
-          : "border-white/70 bg-white/90 text-ink hover:text-[#FF6500]"
+          ? "border-[#FF7A00] bg-[#FF7A00] text-white"
+          : "border-white/70 bg-white/90 text-ink hover:text-[#D95F0E]"
       }`}
     >
       <svg

@@ -19,7 +19,7 @@ export default function ShopByRooms({
       <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#FF6500]">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#D95F0E]">
               Discover by space
             </p>
             <h2 className="mt-3 font-display text-5xl leading-[0.92] sm:text-6xl">

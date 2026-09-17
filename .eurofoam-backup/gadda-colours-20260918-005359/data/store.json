@@ -107,11 +107,7 @@
         "imagePosition": "50% 50%",
         "enabled": true
       }
-    ],
-    "announcementBackground": "#FF6500",
-    "announcementForeground": "#FFFFFF",
-    "homeBackground": "#111111",
-    "homeForeground": "#FFFFFF"
+    ]
   },
   "products": [
     {
@@ -130,7 +126,7 @@
       "trial": "100-night trial",
       "warranty": "10-year warranty",
       "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",
-      "accent": "from-[#F3ECDD] to-[#FF6500]",
+      "accent": "from-[#f6ead0] to-[#ead49e]",
       "features": [
         "Zoned support architecture",
         "Pressure-relieving comfort foam",
@@ -228,7 +224,7 @@
       "trial": "100-night trial",
       "warranty": "10-year warranty",
       "image": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=85",
-      "accent": "from-[#F8F4E9] to-[#FF6500]",
+      "accent": "from-[#e7f1f4] to-[#cfe3e9]",
       "features": [
         "Cool-touch top fabric",
         "Open-cell comfort layer",
@@ -322,7 +318,7 @@
       "trial": "100-night trial",
       "warranty": "12-year warranty",
       "image": "https://images.unsplash.com/photo-1616627981212-9d22b0fd8d2e?auto=format&fit=crop&w=1200&q=85",
-      "accent": "from-[#F3ECDD] to-[#F8F4E9]",
+      "accent": "from-[#f3eee5] to-[#e2d4be]",
       "features": [
         "Individually wrapped pocket springs",
         "Reinforced perimeter support",
@@ -415,7 +411,7 @@
       "trial": "30-night trial",
       "warranty": "7-year warranty",
       "image": "https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?auto=format&fit=crop&w=1200&q=85",
-      "accent": "from-[#FF6500] to-[#F3ECDD]",
+      "accent": "from-[#f7f3ed] to-[#eee6d8]",
       "features": [
         "Two-layer construction",
         "Removable knitted cover",

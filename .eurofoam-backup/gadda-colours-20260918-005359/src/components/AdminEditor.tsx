@@ -572,7 +572,7 @@ export default function AdminEditor({
                         >
                           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/10 px-5 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="flex h-8 min-w-8 items-center justify-center rounded-full bg-[#F3ECDD] px-2 text-xs font-black text-[#FF6500]">
+                              <div className="flex h-8 min-w-8 items-center justify-center rounded-full bg-[#FFF0E3] px-2 text-xs font-black text-[#D95F0E]">
                                 {String(index + 1).padStart(2, "0")}
                               </div>
 

@@ -222,7 +222,7 @@ export default function PremiumEditorialHero({
 
 
   return (
-    <section className="bg-[#F8F4E9]">
+    <section className="bg-[#F9F8F6]">
       <div className="mx-auto max-w-[1600px] px-0 lg:px-6 lg:pt-6">
 
         <div className="relative overflow-hidden bg-[#0D0D0D] lg:rounded-[10px]">

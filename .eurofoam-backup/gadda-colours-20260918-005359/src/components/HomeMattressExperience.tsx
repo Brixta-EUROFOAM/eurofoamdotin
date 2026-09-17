@@ -825,7 +825,7 @@ export default function HomeMattressExperience({
           }}
         >
           <div className="mb-[37vh] text-center md:mb-[38vh]">
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#FF6500]">
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#D95F0E]">
               Inside {
                 mattress.name
               }
@@ -1137,7 +1137,7 @@ export default function HomeMattressExperience({
               }}
             >
               <div className="flex items-center gap-3">
-                <span className="text-xs font-black tracking-[0.19em] text-[#FF6500]">
+                <span className="text-xs font-black tracking-[0.19em] text-[#D95F0E]">
                   {String(
                     activeIndex +
                     1
@@ -1147,7 +1147,7 @@ export default function HomeMattressExperience({
                   )}
                 </span>
 
-                <span className="h-px w-12 bg-[#FF6500]/55" />
+                <span className="h-px w-12 bg-[#FF7A00]/55" />
 
                 <span className="text-[10px] font-black uppercase tracking-[0.17em] text-ink/35">
                   {
@@ -1190,7 +1190,7 @@ export default function HomeMattressExperience({
                   `
                 }}
               >
-                <div className="text-[9px] font-black uppercase tracking-[0.19em] text-[#FF6500]">
+                <div className="text-[9px] font-black uppercase tracking-[0.19em] text-[#D95F0E]">
                   Construction
                 </div>
 
@@ -1245,7 +1245,7 @@ export default function HomeMattressExperience({
           }}
         >
           <div className="absolute left-[6vw] top-[15vh] max-w-[480px]">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#FF6500]">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#D95F0E]">
               The complete system
             </p>
 
@@ -1273,7 +1273,7 @@ export default function HomeMattressExperience({
                   }
                   className="flex items-center gap-3"
                 >
-                  <span className="w-6 text-right text-[9px] font-black text-[#FF6500]">
+                  <span className="w-6 text-right text-[9px] font-black text-[#D95F0E]">
                     {String(
                       index + 1
                     ).padStart(
@@ -1346,7 +1346,7 @@ export default function HomeMattressExperience({
               `
             }}
           >
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#FF6500]">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#D95F0E]">
               {
                 mattress.name
               }
@@ -1362,7 +1362,7 @@ export default function HomeMattressExperience({
               href={
                 `/mattresses/${mattress.slug}`
               }
-              className="mt-7 inline-flex rounded-full bg-ink px-7 py-4 text-sm font-black text-white transition hover:bg-[#FF6500]"
+              className="mt-7 inline-flex rounded-full bg-ink px-7 py-4 text-sm font-black text-white transition hover:bg-[#D95F0E]"
             >
               EXPLORE {
                 mattress.name.toUpperCase()
@@ -1406,7 +1406,7 @@ export default function HomeMattressExperience({
               linear-gradient(
                 to bottom,
                 transparent,
-                #F3ECDD
+                #FFE3CC
               )
             `
           }}
@@ -1419,7 +1419,7 @@ export default function HomeMattressExperience({
 
         <div className="absolute bottom-0 left-0 right-0 z-[80] h-[2px] bg-black/[0.035]">
           <div
-            className="h-full bg-[#FF6500]"
+            className="h-full bg-[#FF7A00]"
             style={{
               width:
                 `${
@@ -1447,7 +1447,7 @@ export default function HomeMattressExperience({
             Scroll to enter
           </div>
 
-          <div className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-[#FF6500] to-transparent" />
+          <div className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-[#FF7A00] to-transparent" />
         </div>
       </div>
     </section>

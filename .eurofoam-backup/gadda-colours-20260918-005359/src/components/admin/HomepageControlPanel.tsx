@@ -876,11 +876,11 @@ export default function HomepageControlPanel({
             type="button"
             onClick={() =>
               replaceSite({
-                homeBackground: "#F8F4E9",
+                homeBackground: "#F9F8F6",
                 homeForeground: "#111111"
               })
             }
-            className="rounded-full border border-ink/15 bg-[#F8F4E9] px-5 py-2.5 text-xs font-black text-black"
+            className="rounded-full border border-ink/15 bg-[#F9F8F6] px-5 py-2.5 text-xs font-black text-black"
           >
             OFF-WHITE
           </button>
@@ -1052,7 +1052,7 @@ export default function HomepageControlPanel({
                   type="color"
                   value={
                     site.announcementBackground ||
-                    "#FF6500"
+                    "#FF7A00"
                   }
                   onChange={(e) =>
                     replaceSite({
@@ -1066,7 +1066,7 @@ export default function HomepageControlPanel({
                 <Input
                   value={
                     site.announcementBackground ||
-                    "#FF6500"
+                    "#FF7A00"
                   }
                   onChange={(e) =>
                     replaceSite({
@@ -1121,7 +1121,7 @@ export default function HomepageControlPanel({
           style={{
             background:
               site.announcementBackground ||
-              "#FF6500",
+              "#FF7A00",
 
             color:
               site.announcementForeground ||

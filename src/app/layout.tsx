@@ -17,9 +17,9 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Eurofoam Mattresses | Keep the world at rest",
+  title: "GADDA Mattresses | Gadda hi hai yaar.",
   description:
-    "Eurofoam sells pillows and mattresses through its official website, including mattress shopping, product comparison and sleep-product information."
+    "GADDA sells pillows and mattresses through its official website, including mattress shopping, product comparison and sleep-product information."
 };
 
 export default function RootLayout({

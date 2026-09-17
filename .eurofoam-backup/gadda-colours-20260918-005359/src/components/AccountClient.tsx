@@ -92,7 +92,7 @@ export default function AccountClient() {
     return (
       <div className="grid gap-6 lg:grid-cols-[1.1fr_.9fr]">
         <section className="rounded-[2rem] border border-ink/10 bg-white p-7 md:p-9">
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#FF6500]">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#D95F0E]">
             TERA GADDA ACCOUNT
           </p>
 
@@ -137,7 +137,7 @@ export default function AccountClient() {
         <section className="space-y-4">
           <Link
             href="/cart"
-            className="block rounded-[1.6rem] border border-ink/10 bg-[#F3ECDD] p-6 transition hover:border-[#FF6500]/40"
+            className="block rounded-[1.6rem] border border-ink/10 bg-[#FAF6E8] p-6 transition hover:border-[#FF7A00]/40"
           >
             <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
               GADDA SHOPPING
@@ -149,7 +149,7 @@ export default function AccountClient() {
 
           <Link
             href="/wishlist"
-            className="block rounded-[1.6rem] border border-ink/10 bg-white p-6 transition hover:border-[#FF6500]/40"
+            className="block rounded-[1.6rem] border border-ink/10 bg-white p-6 transition hover:border-[#FF7A00]/40"
           >
             <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
               Saved
@@ -161,7 +161,7 @@ export default function AccountClient() {
 
           <Link
             href="/sleep-quiz"
-            className="block rounded-[1.6rem] border border-ink/10 bg-white p-6 transition hover:border-[#FF6500]/40"
+            className="block rounded-[1.6rem] border border-ink/10 bg-white p-6 transition hover:border-[#FF7A00]/40"
           >
             <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
               KAUNSA GADDA?
@@ -177,7 +177,7 @@ export default function AccountClient() {
 
   return (
     <section className="mx-auto max-w-xl border-2 border-black bg-[#F3ECDD] p-7 shadow-[10px_10px_0_#111] md:p-9">
-      <div className="flex gap-2 rounded-full bg-[#F3ECDD] p-1">
+      <div className="flex gap-2 rounded-full bg-[#FAF6E8] p-1">
         <button
           type="button"
           onClick={() => {
@@ -223,7 +223,7 @@ export default function AccountClient() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Full name"
-              className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF6500]"
+              className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF7A00]"
             />
 
             <input
@@ -231,7 +231,7 @@ export default function AccountClient() {
               onChange={(e) => setMobile(e.target.value)}
               placeholder="Mobile number"
               inputMode="tel"
-              className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF6500]"
+              className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF7A00]"
             />
           </>
         ) : null}
@@ -242,7 +242,7 @@ export default function AccountClient() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email address"
-          className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF6500]"
+          className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF7A00]"
         />
 
         <input
@@ -252,7 +252,7 @@ export default function AccountClient() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF6500]"
+          className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF7A00]"
         />
 
         {error ? (

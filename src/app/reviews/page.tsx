@@ -10,29 +10,80 @@ export default async function ReviewsPage() {
   return (
     <>
       <Header />
-      <main>
-        <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-24">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-gold-dark">
-            Reviews
-          </p>
-          <h1 className="mt-4 font-display text-6xl sm:text-8xl">What sleepers say.</h1>
 
-          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {reviews.map((review) => (
-              <article key={review.id} className="rounded-[2rem] border border-ink/10 bg-white p-7">
-                <div className="text-gold-dark">
-                  {"★".repeat(Math.max(1, Math.min(5, review.stars)))}
-                </div>
-                <p className="mt-5 text-lg leading-8">“{review.quote}”</p>
-                <div className="mt-7 border-t border-ink/10 pt-4 text-sm">
-                  <strong>{review.name}</strong>
-                  <div className="mt-1 text-ink/45">{review.product}</div>
-                </div>
-              </article>
-            ))}
+      <main className="bg-[#F3ECDD] text-[#111]">
+
+        <section className="mx-auto max-w-[1500px] px-5 py-16 lg:px-10 lg:py-28">
+
+          <div className="border-b-2 border-black pb-8">
+
+            <p className="text-[11px] font-black uppercase tracking-[.2em] text-[#FF6500]">
+              LOG KYA BOLENGE!!!???
+            </p>
+
+            <h1 className="mt-5 max-w-5xl font-display text-[clamp(4.5rem,10vw,10rem)] leading-[.78] tracking-[-.075em]">
+              SOYE.
+              <br />
+              PHIR BOLE.
+            </h1>
+
           </div>
+
+
+          <div className="grid md:grid-cols-2 xl:grid-cols-3">
+
+            {reviews.map((review, index) => (
+
+              <article
+                key={review.id}
+                className="relative min-h-[430px] border-b border-r border-black p-7 lg:p-9"
+              >
+
+                <div className="flex items-start justify-between">
+
+                  <span className="text-xs font-black tracking-[.15em]">
+                    0{index + 1}
+                  </span>
+
+                  <span className="text-[#FF6500]">
+                    {"★".repeat(
+                      Math.max(
+                        1,
+                        Math.min(5, review.stars)
+                      )
+                    )}
+                  </span>
+
+                </div>
+
+
+                <p className="mt-16 text-[clamp(1.4rem,2vw,2rem)] font-semibold leading-[1.25] tracking-[-.025em]">
+                  “{review.quote}”
+                </p>
+
+
+                <div className="absolute bottom-7 left-7 right-7 border-t border-black/30 pt-5 lg:bottom-9 lg:left-9 lg:right-9">
+
+                  <strong className="text-sm">
+                    {review.name}
+                  </strong>
+
+                  <div className="mt-1 text-xs uppercase tracking-[.12em] opacity-45">
+                    {review.product}
+                  </div>
+
+                </div>
+
+              </article>
+
+            ))}
+
+          </div>
+
         </section>
+
       </main>
+
       <Footer />
     </>
   );

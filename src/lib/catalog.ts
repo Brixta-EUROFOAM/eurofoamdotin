@@ -102,7 +102,7 @@ export const defaultHeaderUtilities: HeaderUtility[] = [
   },
   {
     id: "phone",
-    label: "Call Eurofoam",
+    label: "Call GADDA",
     href: "tel:",
     icon: "phone",
     presentation: "icon",
@@ -269,14 +269,14 @@ export type StoreData = {
 
 export const defaultStoreData: StoreData = {
   site: {
-    brandName: "EUROFOAM",
+    brandName: "GADDA",
     brandSuffix: "MATTRESSES",
-    tagline: "Keep the world at rest",
+    tagline: "Gadda hi hai yaar.",
     logoUrl: "/eurofoam-logo-v2.png",
     announcement: "FREE SHIPPING · EASY TRIALS · WARRANTY INCLUDED",
     homeBackground: "#000000",
     homeForeground: "#FFFFFF",
-    heroEyebrow: "EUROFOAM MATTRESSES",
+    heroEyebrow: "GADDA MATTRESSES",
     heroTitle: "A better mattress shouldn't need a showroom.",
     heroBody:
       "Clear comfort choices, transparent construction and direct-to-your-door convenience. Choose the feel that fits you and try it where sleep actually happens: at home.",

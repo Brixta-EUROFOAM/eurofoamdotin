@@ -89,7 +89,7 @@ export default function WishlistClient() {
             </Link>
 
             <div className="p-6">
-              <div className="text-xs font-bold uppercase tracking-[.12em] text-[#FF6500]">
+              <div className="text-xs font-bold uppercase tracking-[.12em] text-[#D95F0E]">
                 {item.kicker}
               </div>
 

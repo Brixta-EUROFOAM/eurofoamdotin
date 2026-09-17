@@ -343,7 +343,7 @@ export default function LayerScrollStory({
 
           <div className="lg:sticky lg:top-28 lg:h-fit">
 
-            <div className="relative aspect-[5/4] overflow-hidden bg-[#F8F4E9]">
+            <div className="relative aspect-[5/4] overflow-hidden bg-[#F9F8F6]">
 
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(255,255,255,.9),transparent_50%)]" />
 

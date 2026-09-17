@@ -733,7 +733,7 @@ export default function CinematicHomeHero({
             `
           }}
         >
-          <div className="text-[9px] font-black uppercase tracking-[0.30em] text-[#FF6500] md:text-[10px]">
+          <div className="text-[9px] font-black uppercase tracking-[0.30em] text-[#D95F0E] md:text-[10px]">
             EUROFOAM
           </div>
 
@@ -746,7 +746,7 @@ export default function CinematicHomeHero({
               Scroll
             </span>
 
-            <span className="h-px w-9 bg-[#FF6500]/45" />
+            <span className="h-px w-9 bg-[#FF7A00]/45" />
 
             <span>
               Discover
@@ -1362,7 +1362,7 @@ export default function CinematicHomeHero({
             Scroll to enter
           </div>
 
-          <div className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-[#FF6500]/70 to-transparent" />
+          <div className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-[#FF7A00]/70 to-transparent" />
         </div>
 
 
@@ -1380,7 +1380,7 @@ export default function CinematicHomeHero({
           }}
         >
           <div
-            className="h-full bg-[#FF6500]"
+            className="h-full bg-[#FF7A00]"
             style={{
               width:
                 `${

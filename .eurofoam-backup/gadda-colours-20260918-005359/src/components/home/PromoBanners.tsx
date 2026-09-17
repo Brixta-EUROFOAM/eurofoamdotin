@@ -85,7 +85,7 @@ export default function PromoBanners({
                   className={`group grid overflow-hidden rounded-[10px] border border-black/10 lg:grid-cols-[0.86fr_1.14fr] ${
                     dark
                       ? "bg-[#0D0D0D] text-white"
-                      : "bg-[#F8F4E9] text-[#111111]"
+                      : "bg-[#F9F8F6] text-[#111111]"
                   }`}
                 >
 
@@ -173,7 +173,7 @@ export default function PromoBanners({
                       <div
                         className={`absolute inset-0 ${
                           dark
-                            ? "bg-[#111111]"
+                            ? "bg-[#181818]"
                             : "bg-[#EEECE8]"
                         }`}
                       />

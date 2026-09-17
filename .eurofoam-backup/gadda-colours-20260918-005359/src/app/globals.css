@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-ink: #111111;
-  --color-sand: #F3ECDD;
-  --color-gold: #FF6500;
-  --color-gold-light: #F3ECDD;
-  --color-gold-dark: #FF6500;
-  --color-sky: #F3ECDD;
-  --color-sage: #F3ECDD;
-  --color-lilac: #F3ECDD;
-  --color-butter: #F8F4E9;
+  --color-ink: #181818;
+  --color-sand: #f7f3e9;
+  --color-gold: #FF7A00;
+  --color-gold-light: #FFE3CC;
+  --color-gold-dark: #D95F0E;
+  --color-sky: #dcebf0;
+  --color-sage: #dfe9da;
+  --color-lilac: #e7e1ef;
+  --color-butter: #FFF0E3;
 
   --font-display: var(--font-manrope);
   --font-body: var(--font-inter);
@@ -42,10 +42,10 @@ body {
    ========================================================= */
 
 :root {
-  --social-black: #111111;
+  --social-black: #0a0a0a;
   --social-cream: #f0e9d8;
   --social-paper: #f8f4e8;
-  --social-orange: #FF6500;
+  --social-orange: #ff6a00;
   --social-acid: #d9ff46;
   --social-pink: #ff7ca8;
   --social-blue: #79c9ff;
@@ -401,7 +401,7 @@ body {
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 2rem;
-  background: #111111;
+  background: #181818;
   box-shadow: 0 -2rem 5rem rgba(0,0,0,.34);
 }
 
@@ -501,8 +501,8 @@ body {
   padding:
     clamp(5rem, 10vw, 10rem)
     clamp(1.25rem, 4vw, 4rem);
-  background: #FF6500;
-  color: #111111;
+  background: #ff6a00;
+  color: #0a0a0a;
 }
 
 .social-inside-sticky {
@@ -724,7 +724,7 @@ body {
 
 .social-final {
   padding-bottom: 4rem;
-  background: #111111;
+  background: #0a0a0a;
   color: #fff;
 }
 
@@ -1013,8 +1013,8 @@ body {
 
 
 .gadda-menu-close:hover {
-  background: #FF6500;
-  border-color: #FF6500;
+  background: #ff6a00;
+  border-color: #ff6a00;
   color: #111;
   transform: rotate(6deg);
 }
@@ -1081,7 +1081,7 @@ body {
 
 
 .gadda-menu-nav a:hover {
-  color: #FF6500;
+  color: #ff6a00;
   padding-left: .5rem;
 }
 
@@ -1103,7 +1103,7 @@ body {
 
 
 .gadda-menu-side-actions a:hover {
-  color: #FF6500;
+  color: #ff6a00;
   opacity: 1;
 }
 
@@ -1134,7 +1134,7 @@ body {
       rgba(0,0,0,.055) 1px,
       transparent 1px
     ),
-    #F3ECDD;
+    #f5efe2;
   background-size: 42px 42px;
   padding: clamp(2rem, 5vw, 5rem);
 }
@@ -1154,7 +1154,7 @@ body {
 
 .gadda-menu-cover-title p {
   margin-bottom: .4rem;
-  color: #FF6500;
+  color: #ff5f00;
   font-size: clamp(1.5rem, 3vw, 3rem);
   font-weight: 950;
 }
@@ -1198,7 +1198,7 @@ body {
   grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
   scroll-snap-align: start;
   border-top: 1px solid #111;
-  background: #F3ECDD;
+  background: #f6f0e4;
 }
 
 
@@ -1229,7 +1229,7 @@ body {
 
 
 .gadda-menu-attitude {
-  color: #FF6500;
+  color: #ff5f00;
   font-size: clamp(1rem, 1.5vw, 1.5rem);
   font-weight: 950;
   letter-spacing: .04em;
@@ -1348,8 +1348,8 @@ body {
 
 
 .gadda-menu-price a:hover {
-  color: #FF6500;
-  border-color: #FF6500;
+  color: #ff5f00;
+  border-color: #ff5f00;
 }
 
 
@@ -1358,7 +1358,7 @@ body {
   grid-template-rows: 1.35fr .65fr;
   min-height: 100svh;
   border-left: 1px solid #111;
-  background: #FF6500;
+  background: #ff5f00;
 }
 
 
@@ -1387,7 +1387,7 @@ body {
   top: 1.2rem;
   right: 1.2rem;
   border: 2px solid #111;
-  background: #F3ECDD;
+  background: #f5efe2;
   padding: .7rem .9rem;
   font-size: .65rem;
   font-weight: 950;
@@ -1411,7 +1411,7 @@ body {
       rgba(0,0,0,.05) 12px,
       rgba(0,0,0,.05) 13px
     ),
-    #FF6500;
+    #ff6a00;
   padding: clamp(1.5rem, 4vw, 4rem);
 }
 
@@ -1440,13 +1440,13 @@ body {
   justify-content: center;
   scroll-snap-align: start;
   background: #171717;
-  color: #F3ECDD;
+  color: #f5efe2;
   padding: clamp(2rem, 6vw, 6rem);
 }
 
 
 .gadda-menu-back-cover > p {
-  color: #FF6500;
+  color: #ff6a00;
   font-size: 1rem;
   font-weight: 950;
   letter-spacing: .12em;
@@ -1479,7 +1479,7 @@ body {
 
 
 .gadda-menu-back-cover a:hover {
-  color: #FF6500;
+  color: #ff6a00;
 }
 
 
@@ -1490,7 +1490,7 @@ body {
   .gadda-menu-shell {
     display: block;
     overflow-y: auto;
-    background: #F3ECDD;
+    background: #f5efe2;
   }
 
   .gadda-menu-sidebar {
@@ -1595,208 +1595,3 @@ body {
   }
 
 }
-
-
-/* GADDA GLOBAL PALETTE */
-
-:root {
-  --gadda-black: #111111;
-  --gadda-orange: #FF6500;
-  --gadda-paper: #F3ECDD;
-  --gadda-light: #F8F4E9;
-  --gadda-white: #FFFFFF;
-
-  --gadda-muted:
-    rgba(17, 17, 17, .55);
-
-  --gadda-muted-dark:
-    rgba(255, 255, 255, .60);
-}
-
-
-html {
-  background: var(--gadda-paper);
-}
-
-
-body {
-  background: var(--gadda-paper);
-  color: var(--gadda-black);
-}
-
-
-/* SELECTION */
-
-::selection {
-  background: var(--gadda-orange);
-  color: var(--gadda-black);
-}
-
-
-/* LINKS */
-
-a {
-  text-decoration-color:
-    var(--gadda-orange);
-}
-
-
-/* FORM CONTROLS */
-
-input,
-textarea,
-select {
-  border-color:
-    rgba(17, 17, 17, .22);
-  background:
-    var(--gadda-white);
-  color:
-    var(--gadda-black);
-}
-
-
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color:
-    var(--gadda-orange) !important;
-}
-
-
-/* BUTTON LANGUAGE */
-
-button,
-a {
-  -webkit-tap-highlight-color:
-    transparent;
-}
-
-
-/* GADDA GENERIC CARD */
-
-.gadda-card {
-  border: 1px solid
-    var(--gadda-black);
-  background:
-    var(--gadda-paper);
-}
-
-
-/* DARK SECTIONS */
-
-.gadda-dark {
-  background:
-    var(--gadda-black);
-  color:
-    var(--gadda-white);
-}
-
-
-/* ORANGE SECTIONS */
-
-.gadda-orange {
-  background:
-    var(--gadda-orange);
-  color:
-    var(--gadda-black);
-}
-
-
-/* PAPER SECTIONS */
-
-.gadda-paper {
-  background:
-    var(--gadda-paper);
-  color:
-    var(--gadda-black);
-}
-
-
-/* PRIMARY CTA */
-
-.gadda-button-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  background:
-    var(--gadda-black);
-
-  color:
-    var(--gadda-white);
-
-  border:
-    2px solid var(--gadda-black);
-
-  transition:
-    background .18s ease,
-    color .18s ease,
-    transform .18s ease;
-}
-
-
-.gadda-button-primary:hover {
-  background:
-    var(--gadda-orange);
-
-  color:
-    var(--gadda-black);
-
-  transform:
-    translateY(-2px);
-}
-
-
-/* ORANGE CTA */
-
-.gadda-button-orange {
-  background:
-    var(--gadda-orange);
-
-  color:
-    var(--gadda-black);
-
-  border:
-    2px solid var(--gadda-black);
-}
-
-
-/* RULES / DIVIDERS */
-
-.gadda-rule {
-  border-color:
-    var(--gadda-black);
-}
-
-
-/* SCROLLBAR — DESKTOP */
-
-@media (pointer: fine) {
-
-  * {
-    scrollbar-color:
-      var(--gadda-orange)
-      var(--gadda-black);
-  }
-
-}
-
-
-/* REMOVE OLD PASTEL FEEL FROM COMMON SURFACES */
-
-.bg-white {
-  background-color:
-    var(--gadda-white);
-}
-
-
-/*
-  DESIGN PRINCIPLE:
-
-  BLACK  = structure
-  ORANGE = punctuation
-  PAPER  = breathing room
-
-  Don't turn every surface orange.
-*/
