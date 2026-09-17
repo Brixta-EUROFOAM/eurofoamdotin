@@ -1,4 +1,4 @@
-export const BUSINESS_LEGAL_NAME = "Eurofoam";
+export const BUSINESS_LEGAL_NAME = "UMADUTT INDUSTRIES";
 
 export const BUSINESS_BRAND_NAME = "EUROFOAM";
 

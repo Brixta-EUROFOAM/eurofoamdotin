@@ -223,12 +223,6 @@ export type SiteSettings = {
   announcementBackground?: string;
   announcementForeground?: string;
 
-  /*
-   * Homepage base appearance.
-   */
-  homeBackground?: string;
-  homeForeground?: string;
-
   trustItems?: HomeTrustItem[];
 
   newArrivals?: NewArrivalsSettings;
@@ -274,8 +268,6 @@ export const defaultStoreData: StoreData = {
     tagline: "Keep the world at rest",
     logoUrl: "/eurofoam-logo-v2.png",
     announcement: "FREE SHIPPING · EASY TRIALS · WARRANTY INCLUDED",
-    homeBackground: "#000000",
-    homeForeground: "#FFFFFF",
     heroEyebrow: "EUROFOAM MATTRESSES",
     heroTitle: "A better mattress shouldn't need a showroom.",
     heroBody:

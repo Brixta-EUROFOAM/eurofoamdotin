@@ -52,16 +52,7 @@ export default async function Home() {
     <>
       <Header />
 
-      <main
-        style={{
-          backgroundColor:
-            site.homeBackground ||
-            "#000000",
-          color:
-            site.homeForeground ||
-            "#FFFFFF"
-        }}
-      >
+      <main>
 
         {sections.hero !==
         false ? (
@@ -125,7 +116,7 @@ export default async function Home() {
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
 
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.30em] opacity-45">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.30em] text-black/42">
                   EUROFOAM COLLECTION
                 </p>
 
@@ -167,12 +158,12 @@ export default async function Home() {
 
         {sections.sleepQuiz !==
         false ? (
-          <section className="bg-[#F9F8F6] text-black">
+          <section className="bg-[#F9F8F6]">
 
             <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-20 lg:grid-cols-2 lg:px-8 lg:py-24">
 
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.30em] opacity-45">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.30em] text-black/42">
                   FIND YOUR MATCH
                 </p>
 
@@ -231,7 +222,7 @@ export default async function Home() {
           <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
 
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.30em] opacity-45">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.30em] text-black/42">
                 CUSTOMER PROOF
               </p>
 
@@ -256,7 +247,7 @@ export default async function Home() {
                       key={
                         review.id
                       }
-                      className="bg-white p-7 text-black"
+                      className="bg-white p-7"
                     >
 
                       <div className="text-sm tracking-[0.12em]">
@@ -287,7 +278,7 @@ export default async function Home() {
                           }
                         </strong>
 
-                        <div className="mt-1 opacity-45">
+                        <div className="mt-1 text-black/42">
                           {
                             review.product
                           }

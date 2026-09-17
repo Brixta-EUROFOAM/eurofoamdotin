@@ -121,8 +121,8 @@ export default function BusinessInformationPage() {
 
               <p className="text-sm leading-6 text-black/55">
                 The EUROFOAM name and website are operated under the legal
-                business name <strong className="text-black/75">Eurofoam</strong>.
-                Eurofoam sells pillows and mattresses.
+                business name <strong className="text-black/75">UMADUTT INDUSTRIES</strong>.
+                Eurofoam is the brand name used for the sale of pillows and mattresses.
               </p>
 
             </section>
