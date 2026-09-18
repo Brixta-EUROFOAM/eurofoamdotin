@@ -1,7 +1,5 @@
 "use client";
 
-import AnimatedGallery from "@/components/home/AnimatedGallery";
-import CampaignHero from "@/components/home/CampaignHero";
 import AnimatedCollection from "@/components/home/AnimatedCollection";
 import ExplodedLayers from "@/components/home/ExplodedLayers";
 import Link from "next/link";
@@ -9,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import type {
   Mattress,
@@ -86,12 +85,45 @@ export default function SocialInspiredHome({
   site: SiteSettings;
   products: Mattress[];
 }) {
-const featured = useMemo(
+  const heroRef = useRef<HTMLElement>(null);
+  const [heroProgress, setHeroProgress] = useState(0);
+
+  const featured = useMemo(
     () => products.slice(0, Math.min(4, products.length)),
     [products]
   );
 
+  useEffect(() => {
+    let frame = 0;
 
+    const update = () => {
+      frame = 0;
+      const hero = heroRef.current;
+      if (!hero) return;
+
+      const rect = hero.getBoundingClientRect();
+      const height = Math.max(window.innerHeight, hero.offsetHeight);
+      const progress = Math.min(
+        1,
+        Math.max(0, -rect.top / height)
+      );
+      setHeroProgress(progress);
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   const heroImage =
     site.heroSlides?.find((slide) => slide.enabled !== false)?.image ||
@@ -100,7 +132,51 @@ const featured = useMemo(
 
   return (
     <main className="social-home">
-      <CampaignHero site={site} products={products} />
+      <section
+        ref={heroRef}
+        id="top"
+        className="social-hero"
+      >
+        <div
+          className="social-hero-media"
+          style={{
+            transform: `scale(${1 + heroProgress * 0.075}) translateY(${heroProgress * 3}%)`,
+          }}
+        >
+          {heroImage ? (
+            <img src={heroImage} alt="GADDA mattress bedroom" />
+          ) : (
+            <GraphicPlaceholder label="HERO CAMPAIGN" />
+          )}
+        </div>
+
+        <div className="social-hero-shade" />
+
+        <div className="social-hero-top">
+          <div className="social-hero-kicker">
+            {site.brandName} · {site.brandSuffix}
+          </div>
+          <Link href="/mattresses" className="social-outline-button">
+            SHOP MATTRESSES <Arrow />
+          </Link>
+        </div>
+
+        <div className="social-hero-copy">
+          <p className="social-micro">Gadda hi hai yaar.</p>
+          <h1 className="gadda-hero-word">GADDA</h1>
+
+          <div className="social-hero-bottom">
+            <p>
+              Mattress engineering made understandable.
+              Comfort you can choose without showroom theatre.
+            </p>
+            <a href="#story" className="social-scroll-cue">
+              <span>SCROLL TO EXPLORE</span>
+              <b>↓</b>
+            </a>
+          </div>
+        </div>
+      </section>
 
       <nav className="social-subnav" aria-label="Homepage sections">
         <a href="#story">STORY</a>
@@ -168,7 +244,46 @@ const featured = useMemo(
 
       <ExplodedLayers />
 
-      <AnimatedGallery products={products} />
+      <section id="gallery" className="social-gallery">
+        <div className="social-gallery-copy">
+          <p className="social-micro">04 / IN THE WILD</p>
+          <h2>
+            BEDROOMS,
+            <br />
+            NOT SHOWROOMS.
+          </h2>
+        </div>
+
+        <div className="social-gallery-grid">
+          <figure className="social-gallery-large">
+            <img
+              src={featured[0]?.image || heroImage}
+              alt="GADDA bedroom campaign"
+            />
+            <figcaption>HOME / 01</figcaption>
+          </figure>
+
+          <GraphicPlaceholder label="LIFESTYLE CAMPAIGN 02" />
+
+          <figure>
+            <img
+              src={featured[1]?.image || heroImage}
+              alt="GADDA cooling mattress"
+            />
+            <figcaption>DETAIL / 03</figcaption>
+          </figure>
+
+          <GraphicPlaceholder label="MATERIAL MACRO 04" />
+
+          <figure className="social-gallery-wide">
+            <img
+              src={featured[2]?.image || featured[0]?.image || heroImage}
+              alt="GADDA mattress collection"
+            />
+            <figcaption>COLLECTION / 05</figcaption>
+          </figure>
+        </div>
+      </section>
 
       <section id="match" className="social-match">
         <div className="social-match-orbit" aria-hidden="true">

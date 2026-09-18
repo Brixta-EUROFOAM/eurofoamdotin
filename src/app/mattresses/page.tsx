@@ -11,29 +11,109 @@ export default async function MattressesPage() {
   return (
     <>
       <Header />
-      <main>
-        <section className="bg-ink text-white">
-          <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-24">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-gold">
-              Shop mattresses
-            </p>
-            <h1 className="mt-4 max-w-4xl font-display text-6xl leading-[0.9] sm:text-8xl">
-              Choose by feel, support and construction.
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/60">
-              Pick a model, then configure size and height on the product page.
-            </p>
+
+      <main className="gadda-shop-page">
+
+        <section className="gadda-shop-hero">
+
+          <div className="gadda-shop-hero-top">
+
+            <span>
+              THE GADDA MENU
+            </span>
+
+            <span>
+              {String(products.length).padStart(2, "0")} GADDE
+            </span>
+
           </div>
+
+
+          <div className="gadda-shop-hero-grid">
+
+            <div>
+
+              <p className="gadda-shop-kicker">
+                SHOP MATTRESSES
+              </p>
+
+              <h1>
+                KAUNSA
+                <br />
+                GADDA?
+              </h1>
+
+            </div>
+
+
+            <div className="gadda-shop-hero-side">
+
+              <p>
+                Feel dekh.
+                <br />
+                Support dekh.
+                <br />
+                Phir gadda dekh.
+              </p>
+
+              <div className="gadda-shop-hero-sticker">
+                GADDA
+                <br />
+                HI HAI
+                <br />
+                YAAR.
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div className="gadda-shop-rule">
+
+            <span>
+              SCROLL THE MENU ↓
+            </span>
+
+            <span>
+              SIZE + HEIGHT PRODUCT PAGE PE
+            </span>
+
+          </div>
+
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-24">
-          <div className="grid gap-6 md:grid-cols-2">
-            {products.map((mattress) => (
-              <ProductCard key={mattress.slug} mattress={mattress} />
-            ))}
+
+
+        <section className="gadda-shop-list">
+
+          <div className="gadda-shop-list-head">
+
+            <span>
+              PICK BY PROBLEM.
+            </span>
+
+            <span>
+              NOT JARGON.
+            </span>
+
           </div>
+
+
+          {products.map((mattress, index) => (
+
+            <ProductCard
+              key={mattress.slug}
+              mattress={mattress}
+              index={index}
+            />
+
+          ))}
+
         </section>
+
       </main>
+
       <Footer />
     </>
   );

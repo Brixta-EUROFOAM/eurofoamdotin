@@ -111,33 +111,7 @@
     "announcementBackground": "#FF6500",
     "announcementForeground": "#FFFFFF",
     "homeBackground": "#111111",
-    "homeForeground": "#FFFFFF",
-    "campaignHero": {
-      "enabled": true,
-      "kicker": "GADDA / EURO AIR",
-      "headlineTop": "GARMI MEIN?",
-      "headlineBottom": "THANDA GADDA.",
-      "body": "Euro Air. Cooling comfort without the showroom gyaan.",
-      "ctaLabel": "THANDA WALA DEKHO ↗",
-      "ctaHref": "/mattresses",
-      "productSlug": "",
-      "background": "#FF6500",
-      "paper": "#F3ECDD",
-      "promoBadge": "ACCHA WALA",
-      "cornerNote": "AAJ KA GADDA / 01",
-      "stickers": [
-        "HOT SLEEPER?",
-        "COOLING WALA",
-        "NO GYAAN",
-        "100 NIGHTS"
-      ],
-      "proof": [
-        "100 NIGHT TRIAL",
-        "10 YEAR WARRANTY",
-        "FREE SHIPPING",
-        "EASY RETURNS"
-      ]
-    }
+    "homeForeground": "#FFFFFF"
   },
   "products": [
     {

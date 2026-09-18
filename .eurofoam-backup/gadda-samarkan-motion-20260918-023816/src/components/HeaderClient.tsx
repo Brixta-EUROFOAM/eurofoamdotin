@@ -318,13 +318,13 @@ export default function HeaderClient({
             
           </Link>
 
-          <nav className="gadda-main-nav hidden items-center gap-7 lg:flex">
+          <nav className="hidden items-center gap-7 lg:flex">
             <button
               type="button"
               onClick={() =>
                 setCatalogOpen((v) => !v)
               }
-              className="gadda-nav-link flex items-center gap-2 text-sm font-bold text-ink/75"
+              className="flex items-center gap-2 text-sm font-bold text-ink/75 hover:text-[#FF6500]"
             >
               Gadda Menu
               <span className="text-[9px]">
@@ -334,20 +334,20 @@ export default function HeaderClient({
 
             <Link
               href="/reviews"
-              className="gadda-nav-link text-sm font-bold text-ink/75"
+              className="text-sm font-bold text-ink/75 hover:text-[#FF6500]"
             >
               Reviews
             </Link>
 
             <Link
               href="/sleep-quiz"
-              className="gadda-match-button px-5 py-2.5 text-sm font-bold"
+              className="rounded-full border border-[#FF6500]/55 bg-white/50 px-5 py-2.5 text-sm font-bold transition hover:bg-white"
             >
               Find My Match
             </Link>
           </nav>
 
-          <div className="gadda-header-tools flex shrink-0 items-center gap-1 xl:gap-2">
+          <div className="flex shrink-0 items-center gap-1 xl:gap-2">
             {extraActions.length ? (
               <div className="hidden items-center gap-1 2xl:flex">
                 {extraActions.map((action) => (

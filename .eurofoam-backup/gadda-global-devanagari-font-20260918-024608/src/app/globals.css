@@ -1,0 +1,2691 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #111111;
+  --color-sand: #F3ECDD;
+  --color-gold: #FF6500;
+  --color-gold-light: #F3ECDD;
+  --color-gold-dark: #FF6500;
+  --color-sky: #F3ECDD;
+  --color-sage: #F3ECDD;
+  --color-lilac: #F3ECDD;
+  --color-butter: #F8F4E9;
+
+  --font-display: var(--font-manrope);
+  --font-body: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-sand);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+
+/* =========================================================
+   SOCIAL-INSPIRED EUROFOAM HOMEPAGE
+   ========================================================= */
+
+:root {
+  --social-black: #111111;
+  --social-cream: #f0e9d8;
+  --social-paper: #f8f4e8;
+  --social-orange: #FF6500;
+  --social-acid: #d9ff46;
+  --social-pink: #ff7ca8;
+  --social-blue: #79c9ff;
+}
+
+.social-home {
+  overflow: clip;
+  background: var(--social-paper);
+  color: var(--social-black);
+}
+
+.social-home a {
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.social-hero {
+  position: relative;
+  min-height: calc(100svh - 5rem);
+  overflow: hidden;
+  background: #111;
+  color: #fff;
+}
+
+.social-hero-media,
+.social-hero-shade {
+  position: absolute;
+  inset: 0;
+}
+
+.social-hero-media {
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.social-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.social-hero-shade {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.08) 35%, rgba(0,0,0,.72)),
+    linear-gradient(90deg, rgba(0,0,0,.34), transparent 58%);
+}
+
+.social-hero-top,
+.social-hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+.social-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem clamp(1.25rem, 4vw, 4rem);
+}
+
+.social-hero-kicker,
+.social-micro,
+.social-eyebrow,
+.social-section-label {
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.social-outline-button,
+.social-solid-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+  border-radius: 999px;
+  padding: .85rem 1.1rem;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.social-outline-button {
+  border: 1px solid rgba(255,255,255,.65);
+  color: #fff;
+  backdrop-filter: blur(8px);
+}
+
+.social-outline-button:hover {
+  background: #fff;
+  color: #000;
+}
+
+.social-hero-copy {
+  min-height: calc(100svh - 10rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem clamp(1.25rem, 4vw, 4rem) 3rem;
+}
+
+.social-hero-copy h1 {
+  max-width: 10ch;
+  margin-top: .9rem;
+  font-size: clamp(4.25rem, 13vw, 12rem);
+  font-weight: 900;
+  line-height: .73;
+  letter-spacing: -.075em;
+}
+
+.social-hero-copy h1 span {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #fff;
+}
+
+.social-hero-bottom {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid rgba(255,255,255,.28);
+  padding-top: 1.25rem;
+}
+
+.social-hero-bottom > p {
+  max-width: 34rem;
+  font-size: clamp(.95rem, 1.25vw, 1.2rem);
+  line-height: 1.55;
+  color: rgba(255,255,255,.82);
+}
+
+.social-scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  white-space: nowrap;
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.social-scroll-cue b {
+  display: grid;
+  width: 2.7rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 50%;
+  animation: social-bob 1.8s ease-in-out infinite;
+}
+
+@keyframes social-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(.35rem); }
+}
+
+.social-subnav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 4rem);
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(0,0,0,.16);
+  background: rgba(240,233,216,.92);
+  padding: 1rem 1.25rem;
+  backdrop-filter: blur(14px);
+  scrollbar-width: none;
+}
+
+.social-subnav::-webkit-scrollbar { display: none; }
+
+.social-subnav a {
+  flex: 0 0 auto;
+  font-size: .65rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.social-subnav a:hover { color: var(--social-orange); }
+
+.social-story,
+.social-collection,
+.social-gallery,
+.social-match,
+.social-final {
+  position: relative;
+  padding:
+    clamp(4.5rem, 10vw, 9rem)
+    clamp(1.25rem, 4vw, 4rem);
+}
+
+.social-story {
+  min-height: 100svh;
+  background: var(--social-cream);
+}
+
+.social-section-label { opacity: .55; }
+
+.social-story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(18rem, .65fr);
+  gap: clamp(2rem, 6vw, 8rem);
+  align-items: end;
+  margin-top: clamp(4rem, 10vw, 9rem);
+}
+
+.social-story h2,
+.social-section-head h2,
+.social-inside h2,
+.social-gallery h2,
+.social-match h2 {
+  font-size: clamp(4rem, 10vw, 9.5rem);
+  font-weight: 900;
+  line-height: .79;
+  letter-spacing: -.075em;
+}
+
+.social-story .social-eyebrow {
+  margin-bottom: 1rem;
+  color: var(--social-orange);
+}
+
+.social-story-copy {
+  display: grid;
+  gap: 1.35rem;
+  max-width: 34rem;
+  font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.social-story-copy p + p { opacity: .68; }
+
+.social-text-link {
+  width: max-content;
+  display: inline-flex;
+  gap: .75rem;
+  margin-top: 1rem;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: .3rem;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.social-chip-row {
+  position: relative;
+  min-height: 22rem;
+  margin-top: 5rem;
+}
+
+.social-chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 10rem;
+  min-height: 4.8rem;
+  border: 2px solid #000;
+  border-radius: 999px;
+  padding: 1rem 1.4rem;
+  background: #fff;
+  box-shadow: .45rem .45rem 0 #000;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  transform: rotate(var(--r, 0deg));
+}
+
+.social-chip-1 { left: 3%; top: 4%; --r: -8deg; background: var(--social-acid); }
+.social-chip-2 { left: 28%; top: 38%; --r: 5deg; background: var(--social-blue); }
+.social-chip-3 { left: 49%; top: 2%; --r: -3deg; background: var(--social-pink); }
+.social-chip-4 { right: 7%; top: 42%; --r: 8deg; background: #fff; }
+.social-chip-5 { left: 52%; bottom: 1%; --r: -5deg; background: var(--social-orange); color: #fff; }
+
+.social-story-art {
+  max-width: 42rem;
+  margin: -7rem 0 0 auto;
+}
+
+.social-graphic-placeholder {
+  min-height: 18rem;
+  display: grid;
+  place-content: center;
+  gap: .45rem;
+  border: 1px dashed rgba(0,0,0,.38);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0,0,0,.025) 0,
+      rgba(0,0,0,.025) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+  text-align: center;
+}
+
+.social-graphic-placeholder span {
+  font-size: clamp(1.4rem, 3vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -.04em;
+}
+
+.social-graphic-placeholder small {
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+  opacity: .48;
+}
+
+.social-collection {
+  background: var(--social-black);
+  color: #fff;
+}
+
+.social-section-head {
+  display: grid;
+  grid-template-columns: 1.3fr .7fr;
+  gap: 3rem;
+  align-items: end;
+  margin-bottom: 5rem;
+}
+
+.social-section-head .social-micro {
+  margin-bottom: 1.5rem;
+  color: var(--social-orange);
+}
+
+.social-section-intro {
+  max-width: 30rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,.62);
+}
+
+.social-product-stack {
+  display: grid;
+  gap: 7rem;
+}
+
+.social-product-panel {
+  position: sticky;
+  min-height: min(74rem, 80svh);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(22rem, .85fr);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 2rem;
+  background: #111111;
+  box-shadow: 0 -2rem 5rem rgba(0,0,0,.34);
+}
+
+.social-product-visual {
+  position: relative;
+  min-height: 38rem;
+  overflow: hidden;
+  background: #222;
+}
+
+.social-product-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));
+}
+
+.social-product-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.social-product-index {
+  position: absolute;
+  z-index: 2;
+  left: 1.5rem;
+  bottom: 1rem;
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(255,255,255,.88);
+  letter-spacing: -.08em;
+}
+
+.social-product-copy {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+.social-product-copy .social-eyebrow { color: var(--social-orange); }
+
+.social-product-copy h3 {
+  margin-top: .65rem;
+  font-size: clamp(3.3rem, 6vw, 6.4rem);
+  font-weight: 900;
+  line-height: .84;
+  letter-spacing: -.065em;
+}
+
+.social-product-kicker {
+  margin-top: 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.social-product-copy > p:not(.social-eyebrow):not(.social-product-kicker) {
+  max-width: 31rem;
+  margin-top: 1rem;
+  color: rgba(255,255,255,.62);
+  line-height: 1.6;
+}
+
+.social-product-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  margin-top: 2rem;
+}
+
+.social-product-meta span {
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  padding: .55rem .75rem;
+  font-size: .65rem;
+  font-weight: 800;
+}
+
+.social-product-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255,255,255,.18);
+  padding-top: 1.5rem;
+  font-size: .8rem;
+  font-weight: 900;
+}
+
+.social-product-footer a { color: var(--social-orange); }
+
+.social-inside {
+  display: grid;
+  grid-template-columns: minmax(20rem, .7fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 7vw, 8rem);
+  padding:
+    clamp(5rem, 10vw, 10rem)
+    clamp(1.25rem, 4vw, 4rem);
+  background: #FF6500;
+  color: #111111;
+}
+
+.social-inside-sticky {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+}
+
+.social-inside-sticky h2 { margin-top: 1.4rem; }
+
+.social-inside-sticky > p:last-child {
+  max-width: 27rem;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+.social-layer-list {
+  display: grid;
+  gap: 2rem;
+}
+
+.social-layer-card {
+  display: grid;
+  grid-template-columns: 4rem minmax(12rem, .7fr) minmax(18rem, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  min-height: 19rem;
+  border-top: 2px solid #000;
+  padding: 1.7rem 0;
+}
+
+.social-layer-num {
+  align-self: start;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.social-layer-art,
+.social-layer-art img { width: 100%; }
+
+.social-layer-art {
+  display: grid;
+  place-items: center;
+  min-height: 14rem;
+}
+
+.social-layer-art img {
+  max-height: 16rem;
+  object-fit: contain;
+}
+
+.social-layer-card h3 {
+  margin-top: .45rem;
+  font-size: clamp(2.3rem, 4vw, 4.6rem);
+  font-weight: 900;
+  line-height: .9;
+  letter-spacing: -.055em;
+}
+
+.social-layer-card > div:last-child > p:last-child {
+  margin-top: 1rem;
+  max-width: 30rem;
+  line-height: 1.55;
+}
+
+.social-gallery { background: var(--social-paper); }
+
+.social-gallery-copy {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.social-gallery-copy .social-micro {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.social-gallery-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 1.2rem;
+}
+
+.social-gallery-grid > * { min-height: 34rem; }
+
+.social-gallery-grid figure {
+  position: relative;
+  overflow: hidden;
+  background: #ddd;
+}
+
+.social-gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1);
+}
+
+.social-gallery-grid figure:hover img { transform: scale(1.035); }
+
+.social-gallery-grid figcaption {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  background: #fff;
+  padding: .55rem .7rem;
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.social-gallery-large { grid-row: span 2; }
+
+.social-gallery-wide {
+  grid-column: 1 / -1;
+  min-height: 48rem !important;
+}
+
+.social-match {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--social-acid);
+  text-align: center;
+}
+
+.social-match-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 74rem;
+}
+
+.social-match-inner h2 { margin-top: 1.4rem; }
+
+.social-match-inner > p:not(.social-micro) {
+  max-width: 42rem;
+  margin: 2rem auto 0;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.social-solid-button {
+  margin-top: 2.2rem;
+  background: #000;
+  color: #fff;
+}
+
+.social-solid-button:hover {
+  transform: translateY(-2px);
+  background: var(--social-orange);
+}
+
+.social-match-orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.social-match-orbit span {
+  position: absolute;
+  display: grid;
+  width: clamp(6rem, 10vw, 10rem);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: var(--social-paper);
+  font-size: .72rem;
+  font-weight: 900;
+  animation: social-float 6s ease-in-out infinite;
+}
+
+.social-match-orbit span:nth-child(1) { left: 8%; top: 15%; }
+.social-match-orbit span:nth-child(2) { right: 8%; top: 18%; animation-delay: -1.5s; }
+.social-match-orbit span:nth-child(3) { left: 12%; bottom: 12%; animation-delay: -3s; }
+.social-match-orbit span:nth-child(4) { right: 13%; bottom: 10%; animation-delay: -4.5s; }
+
+@keyframes social-float {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-1.2rem) rotate(4deg); }
+}
+
+.social-service-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #fff;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #111;
+}
+
+.social-service-strip > div {
+  min-height: 15rem;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .6rem;
+  border-right: 1px solid #111;
+  text-align: center;
+}
+
+.social-service-strip > div:last-child { border-right: 0; }
+
+.social-service-strip strong {
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 1;
+  letter-spacing: -.06em;
+}
+
+.social-service-strip span {
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.social-final {
+  padding-bottom: 4rem;
+  background: #111111;
+  color: #fff;
+}
+
+.social-final-word {
+  white-space: nowrap;
+  font-size: clamp(5.4rem, 19vw, 19rem);
+  font-weight: 900;
+  line-height: .75;
+  letter-spacing: -.095em;
+}
+
+.social-final-word span { color: var(--social-orange); }
+
+.social-final-grid {
+  display: grid;
+  grid-template-columns: 1.4fr .6fr .6fr;
+  gap: 3rem;
+  margin-top: 4rem;
+  border-top: 1px solid rgba(255,255,255,.2);
+  padding-top: 2rem;
+}
+
+.social-final-grid > p {
+  font-size: clamp(1.5rem, 2.5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.04em;
+}
+
+.social-final-grid > div {
+  display: grid;
+  align-content: start;
+  gap: .8rem;
+}
+
+.social-final-grid a {
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.7);
+}
+
+.social-final-grid a:hover { color: var(--social-orange); }
+
+.social-reveal {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  transition:
+    opacity .85s cubic-bezier(.2,.7,.2,1),
+    transform .85s cubic-bezier(.2,.7,.2,1);
+}
+
+.social-reveal[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-hero-media,
+  .social-scroll-cue b,
+  .social-match-orbit span,
+  .social-reveal,
+  .social-gallery-grid img {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .social-reveal { opacity: 1 !important; }
+}
+
+@media (max-width: 980px) {
+  .social-story-grid,
+  .social-section-head,
+  .social-inside,
+  .social-product-panel,
+  .social-final-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .social-product-panel {
+    position: relative;
+    top: auto !important;
+    min-height: 0;
+  }
+
+  .social-product-visual { min-height: 28rem; }
+  .social-product-copy { min-height: 34rem; }
+
+  .social-inside-sticky {
+    position: relative;
+    top: auto;
+  }
+
+  .social-layer-card {
+    grid-template-columns: 3rem minmax(10rem, .65fr) minmax(15rem, 1fr);
+  }
+
+  .social-service-strip { grid-template-columns: repeat(2, 1fr); }
+  .social-service-strip > div:nth-child(2) { border-right: 0; }
+  .social-service-strip > div:nth-child(-n+2) { border-bottom: 1px solid #111; }
+}
+
+@media (max-width: 680px) {
+  .social-hero { min-height: 90svh; }
+  .social-hero-top { padding-top: 1.25rem; }
+  .social-hero-copy { min-height: 74svh; }
+
+  .social-hero-bottom,
+  .social-gallery-copy {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .social-scroll-cue { display: none; }
+  .social-subnav { justify-content: start; }
+
+  .social-story h2,
+  .social-section-head h2,
+  .social-inside h2,
+  .social-gallery h2,
+  .social-match h2 {
+    font-size: clamp(3.5rem, 17vw, 6rem);
+  }
+
+  .social-chip-row { min-height: 30rem; }
+
+  .social-chip {
+    min-width: 8rem;
+    min-height: 4rem;
+    padding: .75rem 1rem;
+    font-size: .62rem;
+  }
+
+  .social-chip-1 { left: 0; top: 0; }
+  .social-chip-2 { left: 35%; top: 20%; }
+  .social-chip-3 { left: 3%; top: 42%; }
+  .social-chip-4 { right: 0; top: 59%; }
+  .social-chip-5 { left: 16%; bottom: 0; }
+
+  .social-story-art { margin-top: 1rem; }
+
+  .social-layer-card {
+    grid-template-columns: 2.5rem 1fr;
+  }
+
+  .social-layer-card > div:last-child { grid-column: 2; }
+
+  .social-gallery-grid { grid-template-columns: 1fr; }
+
+  .social-gallery-grid > *,
+  .social-gallery-wide {
+    min-height: 28rem !important;
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .social-gallery-copy .social-micro {
+    writing-mode: initial;
+    transform: none;
+  }
+
+  .social-match-orbit { opacity: .35; }
+  .social-service-strip > div { min-height: 10rem; }
+  .social-final-grid { gap: 2rem; }
+}
+
+
+/* GADDA BRAND SYSTEM */
+
+.gadda-wordmark {
+  position: relative;
+  display: inline-block;
+  padding-top: .12em;
+  font-size: clamp(2rem, 3.2vw, 3.8rem);
+  font-weight: 900;
+  line-height: .82;
+  letter-spacing: -.075em;
+  color: #111;
+}
+
+.gadda-wordmark::before {
+  content: "";
+  position: absolute;
+  left: -.05em;
+  right: -.05em;
+  top: 0;
+  height: .09em;
+  background: currentColor;
+}
+
+.gadda-hero-word {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  max-width: 100%;
+  padding-top: .06em;
+  font-size: clamp(6rem, 20vw, 19rem) !important;
+  font-weight: 900 !important;
+  line-height: .72 !important;
+  letter-spacing: -.09em !important;
+}
+
+.gadda-hero-word::before {
+  content: "";
+  position: absolute;
+  left: -.02em;
+  right: -.02em;
+  top: 0;
+  height: .045em;
+  background: currentColor;
+}
+
+.gadda-final-word {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  padding-top: .04em;
+}
+
+.gadda-final-word::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: .04em;
+  background: currentColor;
+}
+
+@media (max-width: 680px) {
+  .gadda-wordmark {
+    font-size: 2.15rem;
+  }
+
+  .gadda-hero-word {
+    font-size: clamp(5rem, 25vw, 8rem) !important;
+  }
+}
+
+
+/* =========================================================
+   THE GADDA MENU
+   Editorial mattress catalogue / digital booklet
+   ========================================================= */
+
+.gadda-menu-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  grid-template-columns: minmax(260px, 29vw) 1fr;
+  background: #171717;
+  color: #111;
+}
+
+
+.gadda-menu-sidebar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  height: 100svh;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,.12);
+  background: #171717;
+  color: #f7f2e7;
+  padding: clamp(1.4rem, 3vw, 3rem);
+}
+
+
+.gadda-menu-sidebar-top {
+  display: grid;
+  gap: 3rem;
+}
+
+
+.gadda-menu-close {
+  width: 3.4rem;
+  height: 3.4rem;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  font-size: 2rem;
+  line-height: 1;
+  transition: .2s ease;
+}
+
+
+.gadda-menu-close:hover {
+  background: #FF6500;
+  border-color: #FF6500;
+  color: #111;
+  transform: rotate(6deg);
+}
+
+
+.gadda-menu-side-brand {
+  position: relative;
+  width: max-content;
+  padding-top: .12em;
+  font-size: clamp(3rem, 5vw, 6rem);
+  font-weight: 950;
+  line-height: .75;
+  letter-spacing: -.08em;
+}
+
+
+.gadda-menu-side-brand::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -.02em;
+  right: -.02em;
+  height: .07em;
+  background: currentColor;
+}
+
+
+.gadda-menu-side-line {
+  margin-top: 1rem;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  opacity: .6;
+}
+
+
+.gadda-menu-nav {
+  display: grid;
+  margin-top: clamp(3rem, 7vh, 6rem);
+}
+
+
+.gadda-menu-nav a {
+  display: grid;
+  grid-template-columns: 2.8rem 1fr;
+  gap: .8rem;
+  border-top: 1px solid rgba(255,255,255,.14);
+  padding: 1rem 0;
+  font-size: clamp(.7rem, 1vw, .95rem);
+  font-weight: 850;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+
+.gadda-menu-nav a:last-child {
+  border-bottom: 1px solid rgba(255,255,255,.14);
+}
+
+
+.gadda-menu-nav a span {
+  opacity: .35;
+}
+
+
+.gadda-menu-nav a:hover {
+  color: #FF6500;
+  padding-left: .5rem;
+}
+
+
+.gadda-menu-side-actions {
+  display: grid;
+  gap: .7rem;
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
+
+.gadda-menu-side-actions a {
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .09em;
+  opacity: .7;
+}
+
+
+.gadda-menu-side-actions a:hover {
+  color: #FF6500;
+  opacity: 1;
+}
+
+
+.gadda-menu-book {
+  height: 100svh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+  background: #f1ecdf;
+}
+
+
+.gadda-menu-cover {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  scroll-snap-align: start;
+  background:
+    linear-gradient(
+      rgba(0,0,0,.055) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.055) 1px,
+      transparent 1px
+    ),
+    #F3ECDD;
+  background-size: 42px 42px;
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+
+.gadda-menu-cover-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  border-bottom: 2px solid #111;
+  padding-bottom: 1rem;
+  font-size: .7rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+
+
+.gadda-menu-cover-title p {
+  margin-bottom: .4rem;
+  color: #FF6500;
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 950;
+}
+
+
+.gadda-menu-cover-title h2 {
+  font-size: clamp(5rem, 13vw, 13rem);
+  font-weight: 950;
+  line-height: .71;
+  letter-spacing: -.09em;
+}
+
+
+.gadda-menu-cover-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: end;
+  border-top: 2px solid #111;
+  padding-top: 1rem;
+}
+
+
+.gadda-menu-cover-bottom p {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 850;
+  letter-spacing: -.045em;
+}
+
+
+.gadda-menu-cover-bottom span {
+  font-size: .68rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+
+
+.gadda-menu-page {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  scroll-snap-align: start;
+  border-top: 1px solid #111;
+  background: #F3ECDD;
+}
+
+
+.gadda-menu-page-reverse .gadda-menu-page-copy {
+  order: 2;
+}
+
+
+.gadda-menu-page-reverse .gadda-menu-page-visual {
+  order: 1;
+}
+
+
+.gadda-menu-page-copy {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+
+.gadda-menu-page-number {
+  margin-bottom: auto;
+  padding-bottom: 3rem;
+  font-size: .7rem;
+  font-weight: 950;
+  letter-spacing: .13em;
+}
+
+
+.gadda-menu-attitude {
+  color: #FF6500;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  font-weight: 950;
+  letter-spacing: .04em;
+}
+
+
+.gadda-menu-page-copy h3 {
+  margin-top: .7rem;
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 950;
+  line-height: .76;
+  letter-spacing: -.08em;
+}
+
+
+.gadda-menu-kicker {
+  margin-top: 1.2rem;
+  max-width: 30rem;
+  font-size: clamp(1rem, 1.5vw, 1.4rem);
+  font-weight: 850;
+}
+
+
+.gadda-menu-description {
+  max-width: 34rem;
+  margin-top: .8rem;
+  font-size: .96rem;
+  line-height: 1.6;
+  opacity: .58;
+}
+
+
+.gadda-menu-spec-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 2rem;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #111;
+}
+
+
+.gadda-menu-spec-row > div {
+  padding: 1rem .8rem 1rem 0;
+}
+
+
+.gadda-menu-spec-row small,
+.gadda-menu-price small {
+  display: block;
+  margin-bottom: .35rem;
+  font-size: .56rem;
+  font-weight: 950;
+  letter-spacing: .13em;
+  opacity: .45;
+}
+
+
+.gadda-menu-spec-row strong {
+  font-size: .78rem;
+  line-height: 1.3;
+}
+
+
+.gadda-menu-feature-list {
+  display: grid;
+  margin-top: 1.5rem;
+}
+
+
+.gadda-menu-feature-list > div {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr;
+  gap: .5rem;
+  border-bottom: 1px solid rgba(0,0,0,.13);
+  padding: .72rem 0;
+}
+
+
+.gadda-menu-feature-list span {
+  font-size: .65rem;
+  font-weight: 950;
+  opacity: .35;
+}
+
+
+.gadda-menu-feature-list p {
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+
+.gadda-menu-price {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+
+.gadda-menu-price strong {
+  display: block;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: .9;
+  letter-spacing: -.06em;
+}
+
+
+.gadda-menu-price a {
+  border-bottom: 2px solid #111;
+  padding-bottom: .3rem;
+  font-size: .75rem;
+  font-weight: 950;
+  letter-spacing: .08em;
+}
+
+
+.gadda-menu-price a:hover {
+  color: #FF6500;
+  border-color: #FF6500;
+}
+
+
+.gadda-menu-page-visual {
+  display: grid;
+  grid-template-rows: 1.35fr .65fr;
+  min-height: 100svh;
+  border-left: 1px solid #111;
+  background: #FF6500;
+}
+
+
+.gadda-menu-image-frame {
+  position: relative;
+  overflow: hidden;
+}
+
+
+.gadda-menu-image-frame img {
+  width: 100%;
+  height: 100%;
+  min-height: 58vh;
+  object-fit: cover;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1);
+}
+
+
+.gadda-menu-page:hover .gadda-menu-image-frame img {
+  transform: scale(1.025);
+}
+
+
+.gadda-menu-image-label {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  border: 2px solid #111;
+  background: #F3ECDD;
+  padding: .7rem .9rem;
+  font-size: .65rem;
+  font-weight: 950;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  transform: rotate(3deg);
+}
+
+
+.gadda-menu-art-placeholder {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  border-top: 1px solid #111;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 12px,
+      rgba(0,0,0,.05) 12px,
+      rgba(0,0,0,.05) 13px
+    ),
+    #FF6500;
+  padding: clamp(1.5rem, 4vw, 4rem);
+}
+
+
+.gadda-menu-art-placeholder span {
+  font-size: clamp(2rem, 4.5vw, 5rem);
+  font-weight: 950;
+  line-height: .8;
+  letter-spacing: -.065em;
+}
+
+
+.gadda-menu-art-placeholder small {
+  max-width: 11rem;
+  font-size: .58rem;
+  font-weight: 950;
+  letter-spacing: .1em;
+  text-align: right;
+}
+
+
+.gadda-menu-back-cover {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+  background: #171717;
+  color: #F3ECDD;
+  padding: clamp(2rem, 6vw, 6rem);
+}
+
+
+.gadda-menu-back-cover > p {
+  color: #FF6500;
+  font-size: 1rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+
+
+.gadda-menu-back-cover h2 {
+  margin-top: 1rem;
+  font-size: clamp(5rem, 11vw, 12rem);
+  font-weight: 950;
+  line-height: .72;
+  letter-spacing: -.09em;
+}
+
+
+.gadda-menu-back-cover > div {
+  display: flex;
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+
+.gadda-menu-back-cover a {
+  border-bottom: 1px solid currentColor;
+  padding-bottom: .3rem;
+  font-size: .75rem;
+  font-weight: 950;
+  letter-spacing: .08em;
+}
+
+
+.gadda-menu-back-cover a:hover {
+  color: #FF6500;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+  .gadda-menu-shell {
+    display: block;
+    overflow-y: auto;
+    background: #F3ECDD;
+  }
+
+  .gadda-menu-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+    padding: .9rem 1rem;
+  }
+
+  .gadda-menu-sidebar-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .gadda-menu-close {
+    width: 2.7rem;
+    height: 2.7rem;
+    font-size: 1.5rem;
+  }
+
+  .gadda-menu-side-brand {
+    font-size: 2.2rem;
+  }
+
+  .gadda-menu-side-line,
+  .gadda-menu-nav,
+  .gadda-menu-side-actions {
+    display: none;
+  }
+
+  .gadda-menu-book {
+    height: auto;
+    overflow: visible;
+  }
+
+  .gadda-menu-cover {
+    min-height: 82svh;
+  }
+
+  .gadda-menu-page,
+  .gadda-menu-page-reverse {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .gadda-menu-page-reverse .gadda-menu-page-copy,
+  .gadda-menu-page-reverse .gadda-menu-page-visual {
+    order: initial;
+  }
+
+  .gadda-menu-page-copy {
+    padding: 2rem 1.2rem 3rem;
+  }
+
+  .gadda-menu-page-number {
+    margin-bottom: 3rem;
+  }
+
+  .gadda-menu-page-copy h3 {
+    font-size: clamp(4rem, 19vw, 7rem);
+  }
+
+  .gadda-menu-spec-row {
+    grid-template-columns: 1fr;
+  }
+
+  .gadda-menu-spec-row > div {
+    border-bottom: 1px solid rgba(0,0,0,.1);
+  }
+
+  .gadda-menu-page-visual {
+    min-height: 0;
+    border-left: 0;
+    border-top: 1px solid #111;
+  }
+
+  .gadda-menu-image-frame img {
+    min-height: 52svh;
+  }
+
+  .gadda-menu-art-placeholder {
+    min-height: 18rem;
+  }
+
+  .gadda-menu-price {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .gadda-menu-back-cover > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+}
+
+
+/* GADDA GLOBAL PALETTE */
+
+:root {
+  --gadda-black: #111111;
+  --gadda-orange: #FF6500;
+  --gadda-paper: #F3ECDD;
+  --gadda-light: #F8F4E9;
+  --gadda-white: #FFFFFF;
+
+  --gadda-muted:
+    rgba(17, 17, 17, .55);
+
+  --gadda-muted-dark:
+    rgba(255, 255, 255, .60);
+}
+
+
+html {
+  background: var(--gadda-paper);
+}
+
+
+body {
+  background: var(--gadda-paper);
+  color: var(--gadda-black);
+}
+
+
+/* SELECTION */
+
+::selection {
+  background: var(--gadda-orange);
+  color: var(--gadda-black);
+}
+
+
+/* LINKS */
+
+a {
+  text-decoration-color:
+    var(--gadda-orange);
+}
+
+
+/* FORM CONTROLS */
+
+input,
+textarea,
+select {
+  border-color:
+    rgba(17, 17, 17, .22);
+  background:
+    var(--gadda-white);
+  color:
+    var(--gadda-black);
+}
+
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color:
+    var(--gadda-orange) !important;
+}
+
+
+/* BUTTON LANGUAGE */
+
+button,
+a {
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+
+/* GADDA GENERIC CARD */
+
+.gadda-card {
+  border: 1px solid
+    var(--gadda-black);
+  background:
+    var(--gadda-paper);
+}
+
+
+/* DARK SECTIONS */
+
+.gadda-dark {
+  background:
+    var(--gadda-black);
+  color:
+    var(--gadda-white);
+}
+
+
+/* ORANGE SECTIONS */
+
+.gadda-orange {
+  background:
+    var(--gadda-orange);
+  color:
+    var(--gadda-black);
+}
+
+
+/* PAPER SECTIONS */
+
+.gadda-paper {
+  background:
+    var(--gadda-paper);
+  color:
+    var(--gadda-black);
+}
+
+
+/* PRIMARY CTA */
+
+.gadda-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    var(--gadda-black);
+
+  color:
+    var(--gadda-white);
+
+  border:
+    2px solid var(--gadda-black);
+
+  transition:
+    background .18s ease,
+    color .18s ease,
+    transform .18s ease;
+}
+
+
+.gadda-button-primary:hover {
+  background:
+    var(--gadda-orange);
+
+  color:
+    var(--gadda-black);
+
+  transform:
+    translateY(-2px);
+}
+
+
+/* ORANGE CTA */
+
+.gadda-button-orange {
+  background:
+    var(--gadda-orange);
+
+  color:
+    var(--gadda-black);
+
+  border:
+    2px solid var(--gadda-black);
+}
+
+
+/* RULES / DIVIDERS */
+
+.gadda-rule {
+  border-color:
+    var(--gadda-black);
+}
+
+
+/* SCROLLBAR — DESKTOP */
+
+@media (pointer: fine) {
+
+  * {
+    scrollbar-color:
+      var(--gadda-orange)
+      var(--gadda-black);
+  }
+
+}
+
+
+/* REMOVE OLD PASTEL FEEL FROM COMMON SURFACES */
+
+.bg-white {
+  background-color:
+    var(--gadda-white);
+}
+
+
+/*
+  DESIGN PRINCIPLE:
+
+  BLACK  = structure
+  ORANGE = punctuation
+  PAPER  = breathing room
+
+  Don't turn every surface orange.
+*/
+
+
+
+/* GADDA SAMARKAN + SOCIAL-STYLE MOTION */
+
+/*
+  Put the licensed font file here:
+
+  public/fonts/Samarkan.woff2
+*/
+
+@font-face {
+  font-family: "Samarkan";
+  src:
+    local("Samarkan"),
+    url("/fonts/Samarkan.woff2")
+    format("woff2");
+
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+
+:root {
+
+  --gadda-black: #111111;
+  --gadda-orange: #FF6500;
+  --gadda-paper: #F3ECDD;
+
+  /*
+    Editorial motion language:
+    fast UI → 220ms
+    navigation → 520ms
+    reveals → 850ms
+    imagery → 1100ms
+  */
+
+  --gadda-ease:
+    cubic-bezier(.22, 1, .36, 1);
+
+  --gadda-ease-soft:
+    cubic-bezier(.16, 1, .3, 1);
+
+  --gadda-fast:
+    220ms;
+
+  --gadda-nav:
+    520ms;
+
+  --gadda-reveal:
+    850ms;
+
+  --gadda-image:
+    1100ms;
+}
+
+
+/* =========================================================
+   DISPLAY TYPE
+   ========================================================= */
+
+.gadda-samarkan,
+.gadda-section-kicker,
+.gadda-nav-link,
+.gadda-match-button {
+  font-family:
+    "Samarkan",
+    var(--font-display),
+    sans-serif;
+}
+
+
+/*
+  Keep huge functional body headings readable.
+  Use Samarkan as spice, not every paragraph.
+*/
+
+.social-eyebrow,
+.social-micro,
+.social-section-label,
+.gadda-menu-attitude,
+.gadda-menu-cover-meta,
+.gadda-menu-page-number {
+  font-family:
+    "Samarkan",
+    var(--font-display),
+    sans-serif;
+
+  letter-spacing:
+    .08em !important;
+}
+
+
+/* =========================================================
+   GADDA WORDMARK
+   ========================================================= */
+
+.gadda-wordmark {
+  position: relative;
+
+  display: inline-block;
+
+  padding:
+    .13em .03em 0;
+
+  font-family:
+    "Samarkan",
+    var(--font-display),
+    sans-serif !important;
+
+  font-size:
+    clamp(2.5rem, 3.3vw, 4.1rem);
+
+  font-weight:
+    400 !important;
+
+  line-height:
+    .78;
+
+  letter-spacing:
+    -.035em !important;
+
+  color:
+    var(--gadda-black);
+}
+
+
+/*
+  Orange shirorekha / headline.
+*/
+
+.gadda-wordmark::before {
+  content: "";
+
+  position: absolute;
+
+  left: -.02em;
+  right: -.02em;
+  top: 0;
+
+  height:
+    .085em;
+
+  background:
+    var(--gadda-orange);
+
+  transform-origin:
+    left center;
+
+  transition:
+    transform var(--gadda-nav)
+    var(--gadda-ease);
+}
+
+
+.gadda-wordmark:hover::before {
+  transform:
+    scaleX(.62);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header {
+  transition:
+    background-color var(--gadda-nav)
+    var(--gadda-ease),
+    border-color var(--gadda-nav)
+    var(--gadda-ease);
+}
+
+
+.gadda-main-nav {
+  align-self:
+    stretch;
+}
+
+
+/* navigation text */
+
+.gadda-nav-link {
+  position: relative;
+
+  height:
+    100%;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  color:
+    var(--gadda-black) !important;
+
+  font-size:
+    .96rem !important;
+
+  font-weight:
+    400 !important;
+
+  letter-spacing:
+    .025em !important;
+
+  transition:
+    color var(--gadda-fast)
+    var(--gadda-ease),
+    transform var(--gadda-fast)
+    var(--gadda-ease);
+}
+
+
+.gadda-nav-link::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: -.2rem;
+
+  height:
+    3px;
+
+  background:
+    var(--gadda-orange);
+
+  transform:
+    scaleX(0);
+
+  transform-origin:
+    left center;
+
+  transition:
+    transform var(--gadda-nav)
+    var(--gadda-ease);
+}
+
+
+.gadda-nav-link:hover {
+  color:
+    var(--gadda-orange) !important;
+
+  transform:
+    translateY(-1px);
+}
+
+
+.gadda-nav-link:hover::before {
+  transform:
+    scaleX(1);
+}
+
+
+/* =========================================================
+   FIND MY MATCH
+   ========================================================= */
+
+.gadda-match-button {
+  position: relative;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  overflow:
+    hidden;
+
+  border:
+    1.5px solid
+    var(--gadda-orange);
+
+  border-radius:
+    999px;
+
+  background:
+    transparent;
+
+  color:
+    var(--gadda-black);
+
+  font-weight:
+    400 !important;
+
+  letter-spacing:
+    .035em;
+
+  transition:
+    color var(--gadda-nav)
+    var(--gadda-ease),
+    border-color var(--gadda-nav)
+    var(--gadda-ease),
+    transform var(--gadda-fast)
+    var(--gadda-ease);
+}
+
+
+.gadda-match-button::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index:
+    -1;
+
+  background:
+    var(--gadda-orange);
+
+  transform:
+    translateY(105%);
+
+  transition:
+    transform var(--gadda-nav)
+    var(--gadda-ease);
+}
+
+
+.gadda-match-button:hover {
+  color:
+    var(--gadda-black);
+
+  transform:
+    translateY(-2px);
+}
+
+
+.gadda-match-button:hover::before {
+  transform:
+    translateY(0);
+}
+
+
+/* =========================================================
+   HEADER UTILITIES
+   ========================================================= */
+
+.gadda-header-tools a,
+.gadda-header-tools button {
+  transition:
+    color var(--gadda-fast)
+    var(--gadda-ease),
+    transform var(--gadda-fast)
+    var(--gadda-ease),
+    background-color var(--gadda-fast)
+    var(--gadda-ease);
+}
+
+
+.gadda-header-tools a:hover,
+.gadda-header-tools button:hover {
+  color:
+    var(--gadda-orange);
+
+  transform:
+    translateY(-2px);
+}
+
+
+/* primary utility labels */
+
+.gadda-header-tools a span:first-of-type {
+  transition:
+    color var(--gadda-fast)
+    var(--gadda-ease);
+}
+
+
+/* =========================================================
+   ORANGE TOP ACCENT
+   ========================================================= */
+
+header::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: -4px;
+
+  height:
+    4px;
+
+  background:
+    var(--gadda-orange);
+
+  transform-origin:
+    left center;
+
+  animation:
+    gadda-header-line
+    900ms
+    var(--gadda-ease)
+    both;
+}
+
+
+@keyframes gadda-header-line {
+
+  from {
+    transform:
+      scaleX(0);
+  }
+
+  to {
+    transform:
+      scaleX(1);
+  }
+
+}
+
+
+/* =========================================================
+   SECTION LABEL LANGUAGE
+   ========================================================= */
+
+.social-micro,
+.social-eyebrow,
+.social-section-label,
+.gadda-menu-attitude {
+
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  color:
+    var(--gadda-black) !important;
+
+  padding-top:
+    .7rem;
+}
+
+
+.social-micro::before,
+.social-eyebrow::before,
+.social-section-label::before,
+.gadda-menu-attitude::before {
+
+  content: "";
+
+  position:
+    absolute;
+
+  left: 0;
+  top: 0;
+
+  width:
+    2.8rem;
+
+  height:
+    4px;
+
+  background:
+    var(--gadda-orange);
+}
+
+
+/*
+  Orange sections need black rule.
+*/
+
+.social-inside
+.social-micro::before,
+
+.social-inside
+.social-eyebrow::before {
+
+  background:
+    var(--gadda-black);
+}
+
+
+/* =========================================================
+   SOCIAL-STYLE REVEAL MOTION
+   ========================================================= */
+
+.social-reveal {
+
+  opacity:
+    0;
+
+  transform:
+    translate3d(0, 42px, 0);
+
+  filter:
+    blur(3px);
+
+  transition:
+    opacity
+      var(--gadda-reveal)
+      var(--gadda-ease-soft),
+
+    transform
+      var(--gadda-reveal)
+      var(--gadda-ease-soft),
+
+    filter
+      700ms
+      var(--gadda-ease-soft);
+}
+
+
+.social-reveal[data-visible="true"] {
+
+  opacity:
+    1;
+
+  transform:
+    translate3d(0, 0, 0);
+
+  filter:
+    blur(0);
+}
+
+
+/* =========================================================
+   IMAGE MOTION
+   ========================================================= */
+
+.social-product-visual img,
+.social-gallery-grid img,
+.gadda-menu-image-frame img {
+
+  transition:
+    transform
+    var(--gadda-image)
+    var(--gadda-ease-soft),
+
+    filter
+    var(--gadda-image)
+    var(--gadda-ease-soft);
+}
+
+
+.social-product-panel:hover
+.social-product-visual img,
+
+.social-gallery-grid figure:hover img,
+
+.gadda-menu-page:hover
+.gadda-menu-image-frame img {
+
+  transform:
+    scale(1.035);
+}
+
+
+/* =========================================================
+   HARD EDITORIAL BUTTONS
+   ========================================================= */
+
+.social-solid-button {
+
+  border:
+    2px solid
+    var(--gadda-black);
+
+  border-radius:
+    0 !important;
+
+  background:
+    var(--gadda-black);
+
+  color:
+    white;
+
+  transition:
+    transform var(--gadda-fast)
+    var(--gadda-ease),
+
+    background-color var(--gadda-fast)
+    var(--gadda-ease),
+
+    color var(--gadda-fast)
+    var(--gadda-ease);
+}
+
+
+.social-solid-button:hover {
+
+  background:
+    var(--gadda-orange);
+
+  color:
+    var(--gadda-black);
+
+  transform:
+    translate3d(
+      5px,
+      -5px,
+      0
+    );
+}
+
+
+/* =========================================================
+   LINK MOTION
+   ========================================================= */
+
+.social-text-link,
+.gadda-menu-price a,
+.gadda-menu-side-actions a {
+
+  transition:
+    color var(--gadda-fast)
+    var(--gadda-ease),
+
+    padding-left var(--gadda-nav)
+    var(--gadda-ease),
+
+    border-color var(--gadda-fast)
+    var(--gadda-ease);
+}
+
+
+.social-text-link:hover,
+.gadda-menu-price a:hover,
+.gadda-menu-side-actions a:hover {
+
+  padding-left:
+    .65rem;
+
+  color:
+    var(--gadda-orange);
+}
+
+
+/* =========================================================
+   BIG DISPLAY HEADINGS
+   ========================================================= */
+
+.social-story h2,
+.social-section-head h2,
+.social-inside h2,
+.social-gallery h2,
+.social-match h2,
+.gadda-menu-page-copy h3 {
+
+  text-rendering:
+    geometricPrecision;
+
+  transition:
+    letter-spacing
+    500ms
+    var(--gadda-ease);
+}
+
+
+.social-story h2:hover,
+.social-section-head h2:hover,
+.social-inside h2:hover,
+.social-gallery h2:hover,
+.social-match h2:hover {
+
+  letter-spacing:
+    -.085em;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+
+  *,
+  *::before,
+  *::after {
+
+    animation-duration:
+      .01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      .01ms !important;
+
+    scroll-behavior:
+      auto !important;
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (
+  max-width: 900px
+) {
+
+  .gadda-wordmark {
+
+    font-size:
+      2.6rem;
+
+  }
+
+  .gadda-nav-link {
+
+    font-size:
+      .9rem !important;
+
+  }
+
+}
+
+
+
+/* DEVANAGARI-INSPIRED ENGLISH WORDMARK SYSTEM */
+
+/*
+  Optional licensed font file:
+  public/fonts/Samarkan.woff2
+*/
+
+@font-face {
+  font-family: "Samarkan";
+  src:
+    local("Samarkan"),
+    url("/fonts/Samarkan.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+:root {
+  --dw-black: #111111;
+  --dw-orange: #FF6500;
+  --dw-paper: #F3ECDD;
+}
+
+.devanagari-wordmark-shell {
+  --dw-bg: #FF6500;
+  --dw-fg: #111111;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  background: var(--dw-bg);
+  overflow: hidden;
+}
+
+.devanagari-wordmark-text {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  padding-top: .11em;
+  padding-inline: .03em;
+  color: var(--dw-fg);
+  font-family:
+    "Samarkan",
+    "Noto Serif Devanagari",
+    "Noto Sans Devanagari",
+    var(--font-display),
+    serif;
+  font-weight: 400;
+  line-height: .82;
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-rendering: geometricPrecision;
+  transform: translateZ(0);
+}
+
+.devanagari-wordmark-text::before {
+  content: "";
+  position: absolute;
+  left: -.04em;
+  right: -.04em;
+  top: 0;
+  height: .08em;
+  background: currentColor;
+  border-radius: 999px;
+}
+
+.devanagari-wordmark-shell--sm .devanagari-wordmark-text {
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+}
+
+.devanagari-wordmark-shell--md .devanagari-wordmark-text {
+  font-size: clamp(2.4rem, 7vw, 4.8rem);
+}
+
+.devanagari-wordmark-shell--lg .devanagari-wordmark-text {
+  font-size: clamp(3rem, 9vw, 6.8rem);
+}
+
+.devanagari-wordmark-shell--xl .devanagari-wordmark-text {
+  font-size: clamp(4rem, 13vw, 10rem);
+}
+
+
+/* Smaller label style for nav / section titles */
+
+.devanagari-label {
+  position: relative;
+  display: inline-block;
+  padding-top: .42rem;
+  color: var(--dw-black);
+  font-family:
+    "Samarkan",
+    "Noto Serif Devanagari",
+    var(--font-display),
+    serif;
+  font-size: clamp(.95rem, 1.3vw, 1.3rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: .03em;
+}
+
+.devanagari-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.6rem;
+  height: 3px;
+  background: var(--dw-orange);
+}
+
+
+/* Optional override hooks for current GADDA system */
+
+.gadda-wordmark {
+  font-family:
+    "Samarkan",
+    "Noto Serif Devanagari",
+    var(--font-display),
+    serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -.035em !important;
+}
+
+.gadda-wordmark::before {
+  background: var(--dw-orange) !important;
+}
+
+.gadda-nav-link,
+.gadda-match-button,
+.social-micro,
+.social-eyebrow,
+.social-section-label {
+  font-family:
+    "Samarkan",
+    "Noto Serif Devanagari",
+    var(--font-display),
+    serif !important;
+  font-weight: 400 !important;
+  letter-spacing: .03em !important;
+}
+
+
+/* Harder vector-like feel */
+
+.devanagari-wordmark-text,
+.gadda-wordmark,
+.gadda-nav-link,
+.gadda-match-button {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 700px) {
+  .devanagari-wordmark-text {
+    white-space: normal;
+    text-wrap: balance;
+  }
+}
