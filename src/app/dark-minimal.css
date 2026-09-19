@@ -1,0 +1,914 @@
+
+/*
+============================================================
+GADDA / EUROFOAM
+DARK MINIMAL D2C OVERRIDE
+============================================================
+Keeps the existing interactive product storytelling,
+but removes the loud poster / sticker / carnival treatment.
+============================================================
+*/
+
+:root {
+  --ef-bg: #0a0a0b;
+  --ef-bg-2: #101012;
+  --ef-surface: #151517;
+  --ef-surface-2: #1a1a1d;
+
+  --ef-text: #f5f4f0;
+  --ef-muted: rgba(245,244,240,.62);
+  --ef-soft: rgba(245,244,240,.38);
+
+  --ef-line: rgba(255,255,255,.10);
+  --ef-line-strong: rgba(255,255,255,.18);
+
+  --ef-orange: #ff6500;
+}
+
+
+/* ========================================================
+   GLOBAL
+======================================================== */
+
+html,
+body {
+  background: var(--ef-bg) !important;
+  color: var(--ef-text) !important;
+}
+
+body,
+p,
+span,
+a,
+button,
+input,
+textarea,
+select,
+label,
+small,
+li,
+strong,
+div {
+  font-family:
+    var(--font-inter),
+    Arial,
+    Helvetica,
+    sans-serif !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-display,
+.gadda-wordmark,
+.gadda-hero-word,
+.gadda-final-word {
+  font-family:
+    var(--font-manrope),
+    var(--font-inter),
+    Arial,
+    sans-serif !important;
+
+  font-weight: 800 !important;
+  letter-spacing: -.045em !important;
+  text-decoration: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+::selection {
+  background: var(--ef-orange) !important;
+  color: white !important;
+}
+
+
+/* ========================================================
+   HEADER
+======================================================== */
+
+header {
+  background: rgba(10,10,11,.88) !important;
+  border-color: var(--ef-line) !important;
+  color: var(--ef-text) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+header a,
+header button,
+header span,
+.gadda-nav-link,
+.gadda-wordmark {
+  color: var(--ef-text) !important;
+}
+
+.gadda-wordmark {
+  padding-top: 0 !important;
+  font-family:
+    var(--font-manrope),
+    sans-serif !important;
+
+  font-size:
+    clamp(2rem, 2.4vw, 3rem) !important;
+
+  font-weight: 900 !important;
+  letter-spacing: -.07em !important;
+}
+
+.gadda-wordmark::before {
+  display: none !important;
+}
+
+.gadda-match-button {
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  color: #0a0a0b !important;
+  padding: .72rem 1.1rem !important;
+}
+
+.gadda-header-tools a:hover,
+.gadda-header-tools button:hover,
+.gadda-nav-link:hover {
+  background: rgba(255,255,255,.06) !important;
+}
+
+
+/* ========================================================
+   HOMEPAGE
+======================================================== */
+
+.social-home {
+  background: var(--ef-bg) !important;
+  color: var(--ef-text) !important;
+}
+
+
+/* ========================================================
+   SUB NAV
+======================================================== */
+
+.social-subnav {
+  background: rgba(10,10,11,.88) !important;
+  border-color: var(--ef-line) !important;
+  backdrop-filter: blur(18px);
+}
+
+.social-subnav a {
+  color: var(--ef-muted) !important;
+  font-family: var(--font-inter), sans-serif !important;
+  letter-spacing: .08em !important;
+}
+
+.social-subnav a:hover {
+  color: #fff !important;
+}
+
+
+/* ========================================================
+   HERO
+======================================================== */
+
+.gadda-campaign {
+  --campaign-bg: var(--ef-bg) !important;
+  --campaign-paper: var(--ef-surface) !important;
+
+  background:
+    radial-gradient(
+      circle at 72% 45%,
+      rgba(255,101,0,.10),
+      transparent 30%
+    ),
+    var(--ef-bg) !important;
+
+  color: var(--ef-text) !important;
+
+  border-bottom:
+    1px solid var(--ef-line) !important;
+
+  min-height:
+    min(82svh, 58rem) !important;
+}
+
+.gadda-campaign-top {
+  color: var(--ef-soft) !important;
+  border-color: var(--ef-line) !important;
+}
+
+.gadda-campaign-grid {
+  min-height: 66svh !important;
+}
+
+.gadda-campaign-copy {
+  padding:
+    clamp(3rem,6vw,6rem)
+    clamp(1.4rem,5vw,5.5rem) !important;
+}
+
+.gadda-campaign-mini {
+  color: var(--ef-orange) !important;
+}
+
+.gadda-campaign-mini::before {
+  display: none !important;
+}
+
+.gadda-campaign-headline span,
+.gadda-campaign-headline strong {
+  display: block;
+
+  font-family:
+    var(--font-manrope),
+    sans-serif !important;
+
+  font-weight: 800 !important;
+  letter-spacing: -.065em !important;
+  line-height: .9 !important;
+}
+
+.gadda-campaign-headline span {
+  color: white !important;
+
+  font-size:
+    clamp(4rem,7vw,7.6rem) !important;
+}
+
+.gadda-campaign-headline strong {
+  width: auto !important;
+  max-width: 11ch !important;
+
+  margin-top: .25rem !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+  color: white !important;
+
+  box-shadow: none !important;
+  transform: none !important;
+
+  font-size:
+    clamp(3.6rem,6.5vw,7rem) !important;
+}
+
+.gadda-campaign-body {
+  max-width: 34rem !important;
+
+  color: var(--ef-muted) !important;
+
+  font-size:
+    clamp(1rem,1.3vw,1.2rem) !important;
+}
+
+.gadda-campaign-cta {
+  margin-top: 2rem !important;
+
+  border: 0 !important;
+  border-radius: 999px !important;
+
+  background: white !important;
+  color: #0a0a0b !important;
+
+  box-shadow: none !important;
+  transform: none !important;
+
+  padding: .95rem 1.4rem !important;
+
+  font-weight: 700 !important;
+}
+
+.gadda-campaign-cta:hover {
+  background: var(--ef-orange) !important;
+  color: white !important;
+
+  transform:
+    translateY(-2px) !important;
+
+  box-shadow: none !important;
+}
+
+
+/* HERO VISUAL */
+
+.gadda-campaign-visual {
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255,255,255,.055),
+      transparent 42%
+    ),
+    var(--ef-surface) !important;
+
+  border-left:
+    1px solid var(--ef-line) !important;
+}
+
+.gadda-campaign-product img {
+  filter:
+    drop-shadow(
+      0 35px 35px rgba(0,0,0,.55)
+    ) !important;
+
+  animation-duration: 7s !important;
+}
+
+
+/* REMOVE VISUAL NOISE */
+
+.gadda-campaign-sun,
+.gadda-campaign-arrow,
+.gadda-campaign-big-word,
+.gadda-campaign-starburst,
+.gadda-sticker,
+.gadda-campaign-corner {
+  display: none !important;
+}
+
+
+/* PRODUCT LABEL */
+
+.gadda-campaign-product-name {
+  border:
+    1px solid var(--ef-line) !important;
+
+  border-radius: 1rem !important;
+
+  background:
+    rgba(10,10,11,.78) !important;
+
+  color: white !important;
+
+  box-shadow: none !important;
+  transform: none !important;
+
+  backdrop-filter: blur(12px);
+}
+
+.gadda-campaign-product-name small {
+  color: var(--ef-soft) !important;
+}
+
+
+/* HERO PROOF */
+
+.gadda-campaign-proof {
+  background:
+    var(--ef-surface) !important;
+
+  color:
+    var(--ef-text) !important;
+
+  border-color:
+    var(--ef-line) !important;
+}
+
+.gadda-campaign-proof > div {
+  border-color:
+    var(--ef-line) !important;
+}
+
+.gadda-campaign-proof span {
+  color:
+    var(--ef-orange) !important;
+}
+
+
+/* ========================================================
+   STORY
+======================================================== */
+
+.social-story {
+  background:
+    var(--ef-bg) !important;
+
+  color:
+    var(--ef-text) !important;
+
+  min-height:
+    auto !important;
+}
+
+.social-section-label,
+.social-eyebrow,
+.social-micro {
+  color:
+    var(--ef-soft) !important;
+}
+
+.social-section-label::before,
+.social-eyebrow::before,
+.social-micro::before {
+  display: none !important;
+}
+
+.social-story h2,
+.social-gallery h2,
+.social-match h2 {
+  color: white !important;
+
+  padding-top: 0 !important;
+
+  font-size:
+    clamp(3.5rem,6.2vw,6.5rem) !important;
+
+  line-height: .98 !important;
+}
+
+.social-story h2::before,
+.social-gallery h2::before,
+.social-match h2::before {
+  display: none !important;
+}
+
+.social-story-copy {
+  color:
+    var(--ef-muted) !important;
+}
+
+
+/* CLEAN BENEFIT PILLS */
+
+.social-chip-row {
+  position: relative !important;
+
+  min-height: 0 !important;
+
+  display: flex !important;
+  flex-wrap: wrap !important;
+
+  gap: .65rem !important;
+
+  margin-top: 3.5rem !important;
+}
+
+.social-chip {
+  position: static !important;
+
+  min-width: 0 !important;
+  min-height: 0 !important;
+
+  border:
+    1px solid var(--ef-line) !important;
+
+  border-radius:
+    999px !important;
+
+  background:
+    var(--ef-surface) !important;
+
+  color:
+    var(--ef-muted) !important;
+
+  padding:
+    .7rem 1rem !important;
+
+  box-shadow:
+    none !important;
+
+  transform:
+    none !important;
+}
+
+
+/* PLACEHOLDER BECOMES QUIET */
+
+.social-story-art {
+  max-width: none !important;
+
+  margin:
+    4rem 0 0 !important;
+}
+
+.social-graphic-placeholder {
+  min-height:
+    12rem !important;
+
+  border:
+    1px solid var(--ef-line) !important;
+
+  border-radius:
+    1.25rem !important;
+
+  background:
+    var(--ef-surface) !important;
+
+  color:
+    var(--ef-soft) !important;
+}
+
+
+/* ========================================================
+   COLLECTION
+======================================================== */
+
+.gadda-collection-motion,
+.social-collection {
+  background:
+    #0d0d0f !important;
+
+  color:
+    var(--ef-text) !important;
+}
+
+.gadda-collection-copy h2,
+.gadda-collection-active h3 {
+  color:
+    white !important;
+}
+
+.gadda-collection-copy h2::before,
+.gadda-collection-label::before,
+.gadda-collection-active
+> p:first-child::before {
+  display:
+    none !important;
+}
+
+.gadda-collection-label,
+.gadda-collection-progress span,
+.gadda-collection-active > p:first-child,
+.gadda-collection-specs small,
+.gadda-collection-price small,
+.gadda-collection-price a,
+.gadda-collection-click strong {
+  color:
+    var(--ef-orange) !important;
+}
+
+.gadda-collection-stage,
+.gadda-collection-info-number,
+.gadda-collection-specs,
+.gadda-collection-picker {
+  border-color:
+    var(--ef-line) !important;
+}
+
+
+/* PRODUCT DECK CARDS */
+
+.gadda-product-card {
+  border:
+    1px solid var(--ef-line) !important;
+
+  border-radius:
+    1.25rem !important;
+
+  background:
+    var(--ef-surface-2) !important;
+
+  color:
+    var(--ef-text) !important;
+
+  overflow:
+    hidden !important;
+
+  box-shadow:
+    0 25px 65px rgba(0,0,0,.38) !important;
+}
+
+.gadda-product-card.is-active {
+  box-shadow:
+    0 35px 90px rgba(0,0,0,.58) !important;
+}
+
+.gadda-product-card-bottom small {
+  color:
+    var(--ef-orange) !important;
+}
+
+
+/* ========================================================
+   EXPLODED MATTRESS
+======================================================== */
+
+.gadda-explode {
+  background:
+    var(--ef-bg) !important;
+
+  color:
+    var(--ef-text) !important;
+}
+
+.gadda-explode-label::before,
+.gadda-explode-copy h2::before,
+.gadda-explode-active
+> p:first-child::before {
+  display:
+    none !important;
+}
+
+.gadda-explode-copy h2,
+.gadda-explode-active h3,
+.gadda-layer-picker button,
+.gadda-explode-stage-top,
+.gadda-layer-caption,
+.gadda-explode-label {
+  color:
+    var(--ef-text) !important;
+}
+
+.gadda-explode-intro,
+.gadda-explode-active p,
+.gadda-layer-picker button {
+  color:
+    var(--ef-muted) !important;
+}
+
+.gadda-explode-stage,
+.gadda-explode-number,
+.gadda-layer-picker {
+  border-color:
+    var(--ef-line) !important;
+}
+
+.gadda-explode-scroll > div,
+.gadda-explode-callout span {
+  background:
+    var(--ef-line) !important;
+}
+
+.gadda-explode-scroll i {
+  background:
+    var(--ef-orange) !important;
+}
+
+.gadda-layer-dot {
+  border-color:
+    white !important;
+
+  background:
+    var(--ef-orange) !important;
+}
+
+.gadda-layer-picker button.is-active {
+  color:
+    white !important;
+}
+
+
+/* ========================================================
+   GALLERY
+======================================================== */
+
+.social-gallery {
+  background:
+    var(--ef-surface) !important;
+
+  color:
+    var(--ef-text) !important;
+}
+
+.social-gallery-grid figure {
+  background:
+    var(--ef-bg) !important;
+
+  border-radius:
+    1rem !important;
+}
+
+.social-gallery-grid figcaption {
+  border:
+    1px solid var(--ef-line) !important;
+
+  border-radius:
+    999px !important;
+
+  background:
+    rgba(10,10,11,.82) !important;
+
+  color:
+    white !important;
+
+  backdrop-filter:
+    blur(10px);
+}
+
+
+/* ========================================================
+   MATCH / QUIZ CTA
+======================================================== */
+
+.social-match {
+  min-height:
+    78svh !important;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255,101,0,.08),
+      transparent 35%
+    ),
+    var(--ef-bg) !important;
+
+  color:
+    var(--ef-text) !important;
+}
+
+.social-match-orbit {
+  display:
+    none !important;
+}
+
+.social-match-inner
+> p:not(.social-micro) {
+  color:
+    var(--ef-muted) !important;
+}
+
+.social-solid-button {
+  border-radius:
+    999px !important;
+
+  background:
+    white !important;
+
+  color:
+    #0a0a0b !important;
+
+  padding:
+    .95rem 1.4rem !important;
+}
+
+.social-solid-button:hover {
+  background:
+    var(--ef-orange) !important;
+
+  color:
+    white !important;
+}
+
+
+/* ========================================================
+   TRUST STRIP
+======================================================== */
+
+.social-service-strip {
+  background:
+    var(--ef-surface) !important;
+
+  color:
+    var(--ef-text) !important;
+
+  border-color:
+    var(--ef-line) !important;
+}
+
+.social-service-strip > div {
+  min-height:
+    11rem !important;
+
+  border-color:
+    var(--ef-line) !important;
+}
+
+.social-service-strip strong {
+  font-family:
+    var(--font-manrope),
+    sans-serif !important;
+
+  font-size:
+    clamp(2.7rem,4.5vw,4.5rem) !important;
+}
+
+.social-service-strip span {
+  color:
+    var(--ef-muted) !important;
+}
+
+
+/* ========================================================
+   FINAL SECTION + FOOTER
+======================================================== */
+
+.social-final,
+footer {
+  background:
+    #070708 !important;
+
+  color:
+    var(--ef-text) !important;
+}
+
+.social-final-word {
+  color:
+    white !important;
+
+  font-size:
+    clamp(5rem,15vw,15rem) !important;
+
+  letter-spacing:
+    -.075em !important;
+}
+
+.social-final-word::before {
+  display:
+    none !important;
+}
+
+.social-final-grid {
+  border-color:
+    var(--ef-line) !important;
+}
+
+.social-final-grid a {
+  color:
+    var(--ef-muted) !important;
+}
+
+.social-final-grid a:hover {
+  color:
+    white !important;
+}
+
+
+/* ========================================================
+   FORMS / MODALS / COMMON WHITE SURFACES
+======================================================== */
+
+input,
+textarea,
+select {
+  background:
+    var(--ef-surface-2) !important;
+
+  color:
+    var(--ef-text) !important;
+
+  border-color:
+    var(--ef-line) !important;
+}
+
+.bg-white {
+  background-color:
+    var(--ef-surface) !important;
+}
+
+
+/* ========================================================
+   MOBILE
+======================================================== */
+
+@media (max-width: 900px) {
+
+  .gadda-campaign-grid {
+    grid-template-columns:
+      1fr !important;
+  }
+
+  .gadda-campaign-copy {
+    min-height:
+      auto !important;
+
+    padding:
+      3.5rem 1.25rem !important;
+  }
+
+  .gadda-campaign-visual {
+    border-left:
+      0 !important;
+
+    border-top:
+      1px solid var(--ef-line) !important;
+  }
+
+  .gadda-campaign-headline span,
+  .gadda-campaign-headline strong {
+    font-size:
+      clamp(3.4rem,15vw,5.4rem) !important;
+  }
+
+  .social-story,
+  .social-gallery,
+  .social-match,
+  .social-final {
+    padding-inline:
+      1.25rem !important;
+  }
+
+}
+
+
+@media (max-width: 640px) {
+
+  .social-subnav {
+    display:
+      none !important;
+  }
+
+  .gadda-campaign-proof {
+    grid-template-columns:
+      repeat(2,1fr) !important;
+  }
+
+  .social-service-strip {
+    grid-template-columns:
+      repeat(2,1fr) !important;
+  }
+
+  .social-service-strip > div {
+    min-height:
+      8.5rem !important;
+  }
+
+}

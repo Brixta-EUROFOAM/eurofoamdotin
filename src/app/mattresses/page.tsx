@@ -12,102 +12,91 @@ export default async function MattressesPage() {
     <>
       <Header />
 
-      <main className="gadda-shop-page">
+      <main className="site-shop">
 
-        <section className="gadda-shop-hero">
+        <section className="site-shop-hero">
 
-          <div className="gadda-shop-hero-top">
-
-            <span>
-              THE GADDA MENU
-            </span>
-
-            <span>
-              {String(products.length).padStart(2, "0")} GADDE
-            </span>
-
+          <div className="site-page-meta">
+            <span>THE GADDA RANGE</span>
+            <span>{String(products.length).padStart(2, "0")} GADDAS</span>
           </div>
 
-
-          <div className="gadda-shop-hero-grid">
+          <div className="site-shop-title">
 
             <div>
-
-              <p className="gadda-shop-kicker">
-                SHOP MATTRESSES
+              <p className="site-orange">
+                YOU KNOW WHAT MATTERS NOW.
               </p>
 
               <h1>
-                KAUNSA
+                PICK THE
                 <br />
-                GADDA?
+                JOB.
+                <br />
+                <em>THEN THE GADDA.</em>
               </h1>
-
             </div>
 
-
-            <div className="gadda-shop-hero-side">
-
+            <div className="site-shop-side">
               <p>
-                Feel dekh.
-                <br />
-                Support dekh.
-                <br />
-                Phir gadda dekh.
+                No fifty almost-identical models.
+                No mattress naming maze.
               </p>
 
-              <div className="gadda-shop-hero-sticker">
-                GADDA
+              <strong>
+                START WITH WHAT
                 <br />
-                HI HAI
-                <br />
-                YAAR.
-              </div>
-
+                YOU WANT IT TO DO.
+              </strong>
             </div>
-
-          </div>
-
-
-          <div className="gadda-shop-rule">
-
-            <span>
-              SCROLL THE MENU ↓
-            </span>
-
-            <span>
-              SIZE + HEIGHT PRODUCT PAGE PE
-            </span>
 
           </div>
 
         </section>
 
 
+        <section className="site-shop-guide">
+
+          <div>
+            <span>01</span>
+            <strong>SUPPORT</strong>
+            <p>Stable, medium-firm everyday sleep.</p>
+          </div>
+
+          <div>
+            <span>02</span>
+            <strong>COOLING</strong>
+            <p>For people who tend to sleep warm.</p>
+          </div>
+
+          <div>
+            <span>03</span>
+            <strong>BOUNCE</strong>
+            <p>More response. Easier movement.</p>
+          </div>
+
+          <div>
+            <span>04</span>
+            <strong>SIMPLE</strong>
+            <p>The basics done properly.</p>
+          </div>
+
+        </section>
+
 
         <section className="gadda-shop-list">
 
           <div className="gadda-shop-list-head">
-
-            <span>
-              PICK BY PROBLEM.
-            </span>
-
-            <span>
-              NOT JARGON.
-            </span>
-
+            <span>THE MENU</span>
+            <span>PICK BY PROBLEM. NOT JARGON.</span>
           </div>
 
-
           {products.map((mattress, index) => (
-
             <ProductCard
               key={mattress.slug}
               mattress={mattress}
               index={index}
             />
-
           ))}
 
         </section>

@@ -11,267 +11,362 @@ type Customer = {
 };
 
 export default function AccountClient() {
-  const [customer, setCustomer] = useState<Customer | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState<"login" | "register">("login");
-  const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [password, setPassword] = useState("");
+  const [customer, setCustomer] =
+    useState<Customer | null>(null);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [mode, setMode] =
+    useState<"login" | "register">("login");
+
+  const [error, setError] =
+    useState("");
+
+  const [busy, setBusy] =
+    useState(false);
+
+  const [name, setName] =
+    useState("");
+
+  const [email, setEmail] =
+    useState("");
+
+  const [mobile, setMobile] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
+
 
   useEffect(() => {
+
     fetch("/api/customer/me")
       .then((response) => response.json())
-      .then((body) => setCustomer(body.customer || null))
-      .finally(() => setLoading(false));
+      .then((body) =>
+        setCustomer(body.customer || null)
+      )
+      .finally(() =>
+        setLoading(false)
+      );
+
   }, []);
 
-  async function submit(event: React.FormEvent) {
+
+  async function submit(
+    event: React.FormEvent
+  ) {
+
     event.preventDefault();
+
     setError("");
     setBusy(true);
 
     try {
+
       const endpoint =
         mode === "register"
           ? "/api/customer/register"
           : "/api/customer/login";
 
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(
-          mode === "register"
-            ? { name, email, mobile, password }
-            : { email, password }
-        )
-      });
+      const response =
+        await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            mode === "register"
+              ? {
+                  name,
+                  email,
+                  mobile,
+                  password,
+                }
+              : {
+                  email,
+                  password,
+                }
+          ),
+        });
 
-      const body = await response.json();
+      const body =
+        await response.json();
 
       if (!response.ok) {
-        throw new Error(body.error || "Something went wrong.");
+        throw new Error(
+          body.error ||
+          "Something went wrong."
+        );
       }
 
       setCustomer(body.customer);
-      window.dispatchEvent(new Event("eurofoam:account"));
+
+      window.dispatchEvent(
+        new Event("eurofoam:account")
+      );
+
     } catch (error) {
+
       setError(
         error instanceof Error
           ? error.message
           : "Something went wrong."
       );
+
     } finally {
+
       setBusy(false);
+
     }
   }
 
+
   async function logout() {
-    await fetch("/api/customer/logout", {
-      method: "POST"
-    });
+
+    await fetch(
+      "/api/customer/logout",
+      {
+        method: "POST",
+      }
+    );
 
     setCustomer(null);
-    window.dispatchEvent(new Event("eurofoam:account"));
+
+    window.dispatchEvent(
+      new Event("eurofoam:account")
+    );
   }
+
 
   if (loading) {
     return (
-      <div className="rounded-[2rem] border border-ink/10 bg-white p-8">
-        Loading account…
+      <div className="site-account-loading">
+        LOADING YOUR CORNER…
       </div>
     );
   }
 
+
   if (customer) {
+
     return (
-      <div className="grid gap-6 lg:grid-cols-[1.1fr_.9fr]">
-        <section className="rounded-[2rem] border border-ink/10 bg-white p-7 md:p-9">
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#FF6500]">
+      <section className="site-account">
+
+        <div className="site-utility-heading">
+
+          <p className="site-orange">
             TERA GADDA ACCOUNT
           </p>
 
-          <h1 className="mt-3 font-display text-4xl">
-            Hi, {customer.name.split(" ")[0]}.
+          <h1>
+            HI,
+            <br />
+            {customer.name.split(" ")[0].toUpperCase()}.
           </h1>
 
-          <div className="mt-8 space-y-5 text-sm">
+        </div>
+
+
+        <div className="site-account-grid">
+
+          <section className="site-account-card">
+
+            <p className="site-orange">
+              YOUR DETAILS
+            </p>
+
             <div>
-              <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
-                Name
-              </div>
-              <div className="mt-1 font-bold">{customer.name}</div>
+              <small>NAME</small>
+              <strong>{customer.name}</strong>
             </div>
 
             <div>
-              <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
-                Email
-              </div>
-              <div className="mt-1 font-bold">{customer.email}</div>
+              <small>EMAIL</small>
+              <strong>{customer.email}</strong>
             </div>
 
             {customer.mobile ? (
               <div>
-                <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
-                  Mobile
-                </div>
-                <div className="mt-1 font-bold">{customer.mobile}</div>
+                <small>MOBILE</small>
+                <strong>{customer.mobile}</strong>
               </div>
             ) : null}
-          </div>
 
-          <button
-            type="button"
-            onClick={logout}
-            className="mt-8 rounded-full border border-ink/15 px-5 py-3 text-sm font-black"
-          >
-            SIGN OUT
-          </button>
-        </section>
+            <button
+              type="button"
+              onClick={logout}
+            >
+              SIGN OUT
+            </button>
 
-        <section className="space-y-4">
-          <Link
-            href="/cart"
-            className="block rounded-[1.6rem] border border-ink/10 bg-[#F3ECDD] p-6 transition hover:border-[#FF6500]/40"
-          >
-            <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
-              GADDA SHOPPING
-            </div>
-            <div className="mt-2 font-display text-3xl">
-              MERA CART →
-            </div>
-          </Link>
+          </section>
 
-          <Link
-            href="/wishlist"
-            className="block rounded-[1.6rem] border border-ink/10 bg-white p-6 transition hover:border-[#FF6500]/40"
-          >
-            <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
-              Saved
-            </div>
-            <div className="mt-2 font-display text-3xl">
-              PASAND WALE →
-            </div>
-          </Link>
 
-          <Link
-            href="/sleep-quiz"
-            className="block rounded-[1.6rem] border border-ink/10 bg-white p-6 transition hover:border-[#FF6500]/40"
-          >
-            <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/40">
-              KAUNSA GADDA?
-            </div>
-            <div className="mt-2 font-display text-3xl">
-              PATA KARO →
-            </div>
-          </Link>
-        </section>
-      </div>
+          <nav className="site-account-links">
+
+            <Link href="/cart">
+              <small>SHOPPING</small>
+              <strong>MERA CART →</strong>
+            </Link>
+
+            <Link href="/wishlist">
+              <small>SAVED</small>
+              <strong>PASAND WALE →</strong>
+            </Link>
+
+            <Link href="/sleep-quiz">
+              <small>CONFUSED?</small>
+              <strong>KAUNSA GADDA? →</strong>
+            </Link>
+
+          </nav>
+
+        </div>
+
+      </section>
     );
   }
 
-  return (
-    <section className="mx-auto max-w-xl border-2 border-black bg-[#F3ECDD] p-7 shadow-[10px_10px_0_#111] md:p-9">
-      <div className="flex gap-2 rounded-full bg-[#F3ECDD] p-1">
-        <button
-          type="button"
-          onClick={() => {
-            setMode("login");
-            setError("");
-          }}
-          className={`flex-1 rounded-full px-4 py-3 text-sm font-black ${
-            mode === "login"
-              ? "bg-white shadow-sm"
-              : "text-ink/50"
-          }`}
-        >
-          SIGN IN
-        </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            setMode("register");
-            setError("");
-          }}
-          className={`flex-1 rounded-full px-4 py-3 text-sm font-black ${
-            mode === "register"
-              ? "bg-white shadow-sm"
-              : "text-ink/50"
-          }`}
-        >
-          CREATE ACCOUNT
-        </button>
+  return (
+    <section className="site-account-auth">
+
+      <div className="site-account-auth-copy">
+
+        <p className="site-orange">
+          YOUR CORNER OF GADDA.
+        </p>
+
+        <h1>
+          WAPAS
+          <br />
+          AA GAYA?
+        </h1>
+
+        <p>
+          Sign in for your account.
+          Or make one. No ceremony.
+        </p>
+
       </div>
 
-      <h1 className="mt-8 font-display text-4xl">
-        {mode === "login"
-          ? "WAPAS AA GAYA?"
-          : "Apna GADDA account bana."}
-      </h1>
 
-      <form onSubmit={submit} className="mt-7 space-y-4">
-        {mode === "register" ? (
-          <>
-            <input
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full name"
-              className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF6500]"
-            />
+      <section className="site-account-form">
 
-            <input
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              placeholder="Mobile number"
-              inputMode="tel"
-              className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF6500]"
-            />
-          </>
-        ) : null}
+        <div className="site-account-tabs">
 
-        <input
-          required
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email address"
-          className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF6500]"
-        />
+          <button
+            type="button"
+            onClick={() => {
+              setMode("login");
+              setError("");
+            }}
+            className={
+              mode === "login"
+                ? "is-active"
+                : ""
+            }
+          >
+            SIGN IN
+          </button>
 
-        <input
-          required
-          type="password"
-          minLength={8}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="w-full rounded-xl border border-ink/15 px-4 py-3.5 outline-none focus:border-[#FF6500]"
-        />
+          <button
+            type="button"
+            onClick={() => {
+              setMode("register");
+              setError("");
+            }}
+            className={
+              mode === "register"
+                ? "is-active"
+                : ""
+            }
+          >
+            CREATE ACCOUNT
+          </button>
 
-        {error ? (
-          <div className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-            {error}
-          </div>
-        ) : null}
+        </div>
 
-        <button
-          disabled={busy}
-          className="w-full rounded-full bg-ink px-5 py-4 text-sm font-black text-white disabled:opacity-50"
-        >
-          {busy
-            ? "PLEASE WAIT…"
-            : mode === "login"
-              ? "SIGN IN"
-              : "CREATE ACCOUNT"}
-        </button>
-      </form>
+
+        <h2>
+          {mode === "login"
+            ? "GOOD TO SEE YOU."
+            : "JOIN THE GADDA SIDE."}
+        </h2>
+
+
+        <form onSubmit={submit}>
+
+          {mode === "register" ? (
+            <>
+              <input
+                required
+                value={name}
+                onChange={(e) =>
+                  setName(e.target.value)
+                }
+                placeholder="Full name"
+              />
+
+              <input
+                value={mobile}
+                onChange={(e) =>
+                  setMobile(e.target.value)
+                }
+                placeholder="Mobile number"
+                inputMode="tel"
+              />
+            </>
+          ) : null}
+
+
+          <input
+            required
+            type="email"
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+            placeholder="Email address"
+          />
+
+
+          <input
+            required
+            type="password"
+            minLength={8}
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+            placeholder="Password"
+          />
+
+
+          {error ? (
+            <div className="site-account-error">
+              {error}
+            </div>
+          ) : null}
+
+
+          <button
+            disabled={busy}
+            className="site-account-submit"
+          >
+            {busy
+              ? "PLEASE WAIT…"
+              : mode === "login"
+                ? "SIGN IN →"
+                : "CREATE ACCOUNT →"}
+          </button>
+
+        </form>
+
+      </section>
+
     </section>
   );
 }

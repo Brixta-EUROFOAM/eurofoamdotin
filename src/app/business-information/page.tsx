@@ -10,126 +10,121 @@ import {
   BUSINESS_PRODUCTS,
 } from "@/lib/business";
 
-
 export const metadata: Metadata = {
   title: "Business Information | GADDA",
   description:
     "Official business information for GADDA, a seller of pillows and mattresses.",
 };
 
-
 export default function BusinessInformationPage() {
+
   return (
     <>
       <Header />
 
-      <main className="bg-[#f7f4ee] text-ink">
-        <section className="mx-auto max-w-5xl px-5 py-16 sm:py-20 lg:px-8 lg:py-24">
+      <main className="site-business">
 
-          <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-white shadow-sm">
+        <section className="site-business-head">
 
-            <div className="border-b border-black/10 px-6 py-8 sm:px-10 sm:py-10">
+          <p className="site-orange">
+            THE BORING-BUT-IMPORTANT BIT.
+          </p>
 
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-black/45">
-                Official Business Information
-              </p>
+          <h1>
+            OFFICIAL
+            <br />
+            BUSINESS
+            <br />
+            INFORMATION.
+          </h1>
 
-              <h1 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">
-                GADDA
-              </h1>
+          <p>
+            Legal identity, business activity and the products
+            sold through the GADDA website.
+          </p>
 
-              <p className="mt-5 max-w-3xl text-base leading-7 text-black/60">
-                This page provides the legal business identity and the
-                products and services offered through the GADDA website.
-              </p>
-
-            </div>
-
-
-            <div className="grid gap-0 md:grid-cols-2">
-
-              <section className="border-b border-black/10 p-6 sm:p-10 md:border-b-0 md:border-r">
-
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-black/40">
-                  Legal business name
-                </p>
-
-                <p className="mt-3 text-2xl font-semibold">
-                  {BUSINESS_LEGAL_NAME}
-                </p>
-
-              </section>
+        </section>
 
 
-              <section className="p-6 sm:p-10">
+        <section className="site-business-sheet">
 
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-black/40">
-                  Nature of business
-                </p>
+          <div className="site-business-row">
 
-                <p className="mt-3 text-xl font-semibold">
-                  {BUSINESS_ACTIVITY}
-                </p>
+            <span>
+              LEGAL BUSINESS NAME
+            </span>
 
-              </section>
-
-            </div>
-
-
-            <section className="border-t border-black/10 px-6 py-8 sm:px-10">
-
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-black/40">
-                About the business
-              </p>
-
-              <p className="mt-4 max-w-3xl text-base leading-7 text-black/65">
-                {BUSINESS_DESCRIPTION}
-              </p>
-
-            </section>
-
-
-            <section className="border-t border-black/10 px-6 py-8 sm:px-10">
-
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-black/40">
-                Products offered
-              </p>
-
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-
-                {BUSINESS_PRODUCTS.map((product) => (
-                  <div
-                    key={product}
-                    className="rounded-2xl border border-black/10 bg-[#f7f4ee] px-5 py-4"
-                  >
-                    <div className="font-semibold">
-                      {product}
-                    </div>
-
-                    <div className="mt-1 text-sm text-black/50">
-                      Available through GADDA.
-                    </div>
-                  </div>
-                ))}
-
-              </div>
-
-            </section>
-
-
-            <section className="border-t border-black/10 bg-black/[0.025] px-6 py-6 sm:px-10">
-
-              <p className="text-sm leading-6 text-black/55">
-                The GADDA name and website are operated under the legal
-                business name <strong className="text-black/75">UMADUTT INDUSTRIES</strong>.
-                GADDA is the brand name used for the sale of pillows and mattresses.
-              </p>
-
-            </section>
+            <strong>
+              {BUSINESS_LEGAL_NAME}
+            </strong>
 
           </div>
 
+
+          <div className="site-business-row">
+
+            <span>
+              NATURE OF BUSINESS
+            </span>
+
+            <strong>
+              {BUSINESS_ACTIVITY}
+            </strong>
+
+          </div>
+
+
+          <div className="site-business-block">
+
+            <span>
+              ABOUT THE BUSINESS
+            </span>
+
+            <p>
+              {BUSINESS_DESCRIPTION}
+            </p>
+
+          </div>
+
+
+          <div className="site-business-block">
+
+            <span>
+              PRODUCTS OFFERED
+            </span>
+
+            <div className="site-business-products">
+
+              {BUSINESS_PRODUCTS.map(
+                (product, index) => (
+                  <div key={product}>
+                    <small>
+                      {String(index + 1).padStart(2, "0")}
+                    </small>
+
+                    <strong>
+                      {product}
+                    </strong>
+                  </div>
+                )
+              )}
+
+            </div>
+
+          </div>
+
+
+          <div className="site-business-note">
+            GADDA is the brand name used for the sale of pillows
+            and mattresses under the legal business entity
+            {" "}
+            <strong>
+              {BUSINESS_LEGAL_NAME}
+            </strong>.
+          </div>
+
         </section>
+
       </main>
 
       <Footer />

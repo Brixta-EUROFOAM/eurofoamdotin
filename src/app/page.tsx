@@ -2,18 +2,16 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SocialInspiredHome from "@/components/home/SocialInspiredHome";
 import { getStoreData } from "@/lib/store";
-import FloatingPillMotion from "@/components/home/FloatingPillMotion";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const { site, products } = await getStoreData();
+  const { site, products, reviews } = await getStoreData();
 
   return (
     <>
       <Header />
-      <FloatingPillMotion />
-      <SocialInspiredHome site={site} products={products} />
+      <SocialInspiredHome site={site} products={products} reviews={reviews} />
       <Footer />
     </>
   );

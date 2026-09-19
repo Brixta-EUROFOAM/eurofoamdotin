@@ -5,78 +5,114 @@ import { getStoreData } from "@/lib/store";
 export const dynamic = "force-dynamic";
 
 export default async function ReviewsPage() {
-  const { reviews } = await getStoreData();
+
+  const { reviews } =
+    await getStoreData();
 
   return (
     <>
       <Header />
 
-      <main className="bg-[#F3ECDD] text-[#111]">
+      <main className="pro-reviews">
 
-        <section className="mx-auto max-w-[1500px] px-5 py-16 lg:px-10 lg:py-28">
+        <section className="pro-reviews-wrap">
 
-          <div className="border-b-2 border-black pb-8">
+          <header className="pro-reviews-head">
 
-            <p className="text-[11px] font-black uppercase tracking-[.2em] text-[#FF6500]">
-              LOG KYA BOLENGE!!!???
+            <p>
+              REAL PEOPLE. REAL SLEEP.
             </p>
 
-            <h1 className="mt-5 max-w-5xl font-display text-[clamp(4.5rem,10vw,10rem)] leading-[.78] tracking-[-.075em]">
-              SOYE.
+            <h1>
+              SLEPT ON IT.
               <br />
-              PHIR BOLE.
+              THEN SPOKE.
             </h1>
+
+            <div className="pro-review-intro">
+
+              <p>
+                Product pages tell you what a mattress
+                is designed to do.
+              </p>
+
+              <strong>
+                These are the people
+                who actually slept on one.
+              </strong>
+
+            </div>
+
+          </header>
+
+
+          <div className="pro-review-grid">
+
+            {reviews.map(
+              (review, index) => (
+
+                <article
+                  key={review.id}
+                  className="pro-review-card"
+                >
+
+                  <div className="pro-review-top">
+
+                    <span>
+                      {String(index + 1)
+                        .padStart(2, "0")}
+                    </span>
+
+                    <span>
+                      {"★".repeat(
+                        Math.max(
+                          1,
+                          Math.min(
+                            5,
+                            review.stars
+                          )
+                        )
+                      )}
+                    </span>
+
+                  </div>
+
+
+                  <blockquote>
+                    “{review.quote}”
+                  </blockquote>
+
+
+                  <footer>
+
+                    <strong>
+                      {review.name}
+                    </strong>
+
+                    <span>
+                      {review.product}
+                    </span>
+
+                  </footer>
+
+                </article>
+
+              )
+            )}
 
           </div>
 
 
-          <div className="grid md:grid-cols-2 xl:grid-cols-3">
+          <div className="pro-reviews-end">
 
-            {reviews.map((review, index) => (
+            <span>
+              SOYE. PHIR BOLE.
+            </span>
 
-              <article
-                key={review.id}
-                className="relative min-h-[430px] border-b border-r border-black p-7 lg:p-9"
-              >
-
-                <div className="flex items-start justify-between">
-
-                  <span className="text-xs font-black tracking-[.15em]">
-                    0{index + 1}
-                  </span>
-
-                  <span className="text-[#FF6500]">
-                    {"★".repeat(
-                      Math.max(
-                        1,
-                        Math.min(5, review.stars)
-                      )
-                    )}
-                  </span>
-
-                </div>
-
-
-                <p className="mt-16 text-[clamp(1.4rem,2vw,2rem)] font-semibold leading-[1.25] tracking-[-.025em]">
-                  “{review.quote}”
-                </p>
-
-
-                <div className="absolute bottom-7 left-7 right-7 border-t border-black/30 pt-5 lg:bottom-9 lg:left-9 lg:right-9">
-
-                  <strong className="text-sm">
-                    {review.name}
-                  </strong>
-
-                  <div className="mt-1 text-xs uppercase tracking-[.12em] opacity-45">
-                    {review.product}
-                  </div>
-
-                </div>
-
-              </article>
-
-            ))}
+            <p>
+              No scripted testimonials.
+              Just customer feedback.
+            </p>
 
           </div>
 

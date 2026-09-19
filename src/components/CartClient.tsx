@@ -5,136 +5,173 @@ import { useCart } from "@/components/CartProvider";
 import { money } from "@/lib/catalog";
 
 export default function CartClient() {
-  const { items, removeItem, changeQty, subtotal } = useCart();
+
+  const {
+    items,
+    removeItem,
+    changeQty,
+    subtotal,
+  } = useCart();
 
   return (
-    <main className="mx-auto max-w-6xl px-5 py-14 lg:px-8 lg:py-20">
-      <h1 className="font-display text-6xl sm:text-7xl">
-        Your cart.
-      </h1>
+    <section className="site-cart">
+
+      <div className="site-utility-heading">
+        <p className="site-orange">
+          ALMOST YOURS.
+        </p>
+
+        <h1>
+          YOUR
+          <br />
+          CART.
+        </h1>
+      </div>
+
 
       {!items.length ? (
-        <div className="mt-10 rounded-[2rem] bg-white p-10 text-center">
-          <p className="text-lg text-ink/60">
-            Your cart is empty.
+
+        <div className="site-empty">
+
+          <span>0</span>
+
+          <h2>
+            CART MEIN
+            <br />
+            KUCH NAHI.
+          </h2>
+
+          <p>
+            Fair enough. The Gaddas are still there.
           </p>
 
-          <Link
-            href="/mattresses"
-            className="mt-6 inline-flex rounded-full bg-gold px-6 py-4 text-sm font-black text-ink"
-          >
-            SHOP MATTRESSES
+          <Link href="/mattresses">
+            GO SEE THEM →
           </Link>
+
         </div>
+
       ) : (
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_360px]">
-          <div className="space-y-4">
-            {items.map((item) => (
+
+        <div className="site-cart-grid">
+
+          <div className="site-cart-items">
+
+            {items.map((item, index) => (
+
               <article
                 key={item.id}
-                className="grid gap-5 rounded-[2rem] border border-ink/10 bg-white p-5 sm:grid-cols-[150px_1fr]"
+                className="site-cart-item"
               >
+
+                <div className="site-cart-number">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="aspect-square w-full rounded-[1.4rem] object-cover"
                 />
 
-                <div className="flex flex-col justify-between">
-                  <div className="flex justify-between gap-5">
-                    <div>
-                      <h2 className="font-display text-3xl">
-                        {item.name}
-                      </h2>
+                <div className="site-cart-copy">
 
-                      <p className="mt-1 text-sm text-ink/50">
-                        {item.size} · {item.height}
-                      </p>
-                    </div>
+                  <div>
 
-                    <strong>
-                      {money(item.price * item.quantity)}
-                    </strong>
+                    <h2>
+                      {item.name}
+                    </h2>
+
+                    <p>
+                      {item.size} · {item.height}
+                    </p>
+
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() =>
-                          changeQty(item.id, item.quantity - 1)
-                        }
-                        className="h-9 w-9 rounded-full border border-ink/15"
-                      >
-                        −
-                      </button>
 
-                      <span className="w-8 text-center font-bold">
-                        {item.quantity}
-                      </span>
+                  <strong>
+                    {money(item.price * item.quantity)}
+                  </strong>
 
-                      <button
-                        onClick={() =>
-                          changeQty(item.id, item.quantity + 1)
-                        }
-                        className="h-9 w-9 rounded-full border border-ink/15"
-                      >
-                        +
-                      </button>
-                    </div>
+
+                  <div className="site-cart-controls">
 
                     <button
+                      onClick={() =>
+                        changeQty(item.id, item.quantity - 1)
+                      }
+                    >
+                      −
+                    </button>
+
+                    <span>
+                      {item.quantity}
+                    </span>
+
+                    <button
+                      onClick={() =>
+                        changeQty(item.id, item.quantity + 1)
+                      }
+                    >
+                      +
+                    </button>
+
+                    <button
+                      className="site-cart-remove"
                       onClick={() => removeItem(item.id)}
-                      className="text-xs font-bold text-gold-dark"
                     >
                       REMOVE
                     </button>
+
                   </div>
+
                 </div>
+
               </article>
+
             ))}
+
           </div>
 
-          <aside className="h-fit rounded-[2rem] bg-ink p-7 text-white">
-            <p className="text-xs font-black uppercase tracking-[0.15em] text-gold">
-              Order summary
+
+          <aside className="site-cart-summary">
+
+            <p className="site-orange">
+              ORDER SUMMARY
             </p>
 
-            <div className="mt-6 flex justify-between text-sm text-white/60">
+            <div>
               <span>Subtotal</span>
-              <span>{money(subtotal)}</span>
+              <strong>{money(subtotal)}</strong>
             </div>
 
-            <div className="mt-3 flex justify-between text-sm text-white/60">
+            <div>
               <span>Shipping</span>
-              <span>FREE</span>
+              <strong>INCLUDED</strong>
             </div>
 
-            <div className="mt-6 border-t border-white/10 pt-6">
-              <div className="flex items-end justify-between">
-                <span className="font-bold">Total</span>
-                <span className="font-display text-3xl">
-                  {money(subtotal)}
-                </span>
-              </div>
+            <div className="site-cart-total">
+              <span>TOTAL</span>
+              <strong>{money(subtotal)}</strong>
             </div>
 
             <button
               onClick={() =>
-                alert(
-                  "Demo only — connect Razorpay/Shopify checkout here."
-                )
+                alert("Demo only — connect the live payment checkout here.")
               }
-              className="mt-7 w-full rounded-full bg-gold px-5 py-4 text-sm font-black text-ink"
             >
-              CHECKOUT
+              CHECKOUT →
             </button>
 
-            <p className="mt-4 text-center text-[11px] leading-5 text-white/40">
+            <small>
               Checkout is currently a demo.
-            </p>
+            </small>
+
           </aside>
+
         </div>
+
       )}
-    </main>
+
+    </section>
   );
 }

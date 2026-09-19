@@ -7,10 +7,8 @@ export default function AccountPage() {
     <>
       <Header />
 
-      <main className="min-h-[70vh] bg-[#F3ECDD] px-5 py-12 lg:py-20">
-        <div className="mx-auto max-w-6xl">
-          <AccountClient />
-        </div>
+      <main className="site-utility-page">
+        <AccountClient />
       </main>
 
       <Footer />

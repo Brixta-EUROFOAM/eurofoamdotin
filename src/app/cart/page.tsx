@@ -6,7 +6,9 @@ export default function CartPage() {
   return (
     <>
       <Header />
-      <CartClient />
+      <main className="site-utility-page">
+        <CartClient />
+      </main>
       <Footer />
     </>
   );

@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
+import "./dark-minimal.css";
+import "./gadda-story.css";
+import "./gadda-site.css";
+import "./gadda-professional.css";
 import CartProvider from "@/components/CartProvider";
 import TelemetryTracker from "@/components/TelemetryTracker";
 

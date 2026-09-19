@@ -8,11 +8,12 @@ function money(value: number) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }).format(value);
 }
 
 export default function WishlistClient() {
+
   const [items, setItems] = useState<SavedMattress[]>([]);
   const [ready, setReady] = useState(false);
 
@@ -28,10 +29,13 @@ export default function WishlistClient() {
     }
   }, []);
 
+
   function remove(slug: string) {
-    const next = items.filter(
-      (item) => item.slug !== slug
-    );
+
+    const next =
+      items.filter(
+        (item) => item.slug !== slug
+      );
 
     setItems(next);
 
@@ -45,76 +49,130 @@ export default function WishlistClient() {
     );
   }
 
+
   if (!ready) return null;
 
+
   if (!items.length) {
+
     return (
-      <div className="border-2 border-black bg-[#F3ECDD] px-7 py-20 text-center">
-        <h1 className="font-display text-[clamp(3.5rem,8vw,7rem)] leading-[.8] tracking-[-.07em]">
-          ABHI KUCH NAHI.
-        </h1>
+      <section className="site-wishlist">
 
-        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/55">
-          Jo gadda pasand aaye, dil daba do. Yahan mil jayega.
-        </p>
+        <div className="site-utility-heading">
 
-        <Link
-          href="/mattresses"
-          className="mt-8 inline-flex border-2 border-black bg-black px-7 py-3 text-xs font-black tracking-[.08em] text-white transition hover:bg-[#FF6500] hover:text-black"
-        >
-          GADDE DEKHO
-        </Link>
-      </div>
+          <p className="site-orange">
+            THE ONES YOU LIKED.
+          </p>
+
+          <h1>
+            ABHI
+            <br />
+            KUCH
+            <br />
+            NAHI.
+          </h1>
+
+        </div>
+
+
+        <div className="site-empty">
+
+          <span>♡</span>
+
+          <h2>
+            DIL DABAO.
+            <br />
+            YAHAAN MILEGA.
+          </h2>
+
+          <p>
+            Save the Gaddas you want to come back to.
+          </p>
+
+          <Link href="/mattresses">
+            SEE THE RANGE →
+          </Link>
+
+        </div>
+
+      </section>
     );
   }
 
-  return (
-    <div>
-      <h1 className="font-display text-5xl">
-        TERE WALE GADDE.
-      </h1>
 
-      <div className="mt-8 grid gap-5 md:grid-cols-2">
-        {items.map((item) => (
+  return (
+    <section className="site-wishlist">
+
+      <div className="site-utility-heading">
+
+        <p className="site-orange">
+          SAVED FOR LATER
+        </p>
+
+        <h1>
+          TERE
+          <br />
+          WALE
+          <br />
+          GADDE.
+        </h1>
+
+      </div>
+
+
+      <div className="site-wishlist-grid">
+
+        {items.map((item, index) => (
+
           <article
             key={item.slug}
-            className="overflow-hidden rounded-[1.8rem] border border-ink/10 bg-white"
+            className="site-wishlist-card"
           >
+
+            <div className="site-wishlist-number">
+              {String(index + 1).padStart(2, "0")}
+            </div>
+
             <Link href={`/mattresses/${item.slug}`}>
+
               <img
                 src={item.image}
                 alt={item.name}
-                className="aspect-[16/9] w-full object-cover"
               />
+
             </Link>
 
-            <div className="p-6">
-              <div className="text-xs font-bold uppercase tracking-[.12em] text-[#FF6500]">
-                {item.kicker}
-              </div>
+            <div className="site-wishlist-copy">
 
-              <Link
-                href={`/mattresses/${item.slug}`}
-                className="mt-2 block font-display text-3xl"
-              >
-                {item.name}
+              <small>
+                {item.kicker}
+              </small>
+
+              <Link href={`/mattresses/${item.slug}`}>
+                <h2>
+                  {item.name}
+                </h2>
               </Link>
 
-              <div className="mt-3 font-black">
+              <strong>
                 {money(item.basePrice)}
-              </div>
+              </strong>
 
               <button
                 type="button"
                 onClick={() => remove(item.slug)}
-                className="mt-5 text-xs font-black text-ink/45 underline underline-offset-4"
               >
                 REMOVE
               </button>
+
             </div>
+
           </article>
+
         ))}
+
       </div>
-    </div>
+
+    </section>
   );
 }

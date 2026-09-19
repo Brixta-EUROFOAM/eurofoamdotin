@@ -1,65 +1,194 @@
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getStoreData } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
-export default async function WhyEurofoam() {
-  const { site } = await getStoreData();
-
-  const pillars = [
-    ["01", "Focused range", "A compact catalogue makes the differences between mattresses easier to understand."],
-    ["02", "Transparent construction", "Explain materials and the job each layer is intended to perform."],
-    ["03", "At-home buying", "Let customers evaluate the mattress in the environment that matters: their bedroom."],
-    ["04", "Direct feedback", "D2C reviews, returns and support conversations can feed directly into product iteration."]
-  ];
+export default function WhyGaddaPage() {
 
   return (
     <>
       <Header />
-      <main>
-        <section className="bg-ink text-white">
-          <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-20 lg:grid-cols-[1fr_.55fr] lg:px-8 lg:py-28">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-gold">
-                Why {site.brandName}
-              </p>
-              <h1 className="mt-4 max-w-5xl font-display text-6xl leading-[0.9] sm:text-8xl">
-                {site.tagline}.
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-white/60">
-                This page is ready for the actual Eurofoam factory story,
-                material expertise, certifications, test data, founders and
-                manufacturing advantages.
-              </p>
-            </div>
-            <div className="rounded-[2rem] bg-white p-6">
-              <img
-                src={site.logoUrl}
-                alt={site.brandName}
-                className="w-full object-contain"
-              />
-            </div>
+
+      <main className="site-why">
+
+        <section className="site-why-hero">
+
+          <p className="site-orange">
+            WHY GADDA?
+          </p>
+
+          <h1>
+            WE GOT
+            <br />
+            TIRED OF
+            <br />
+            <em>MATTRESS THEATRE.</em>
+          </h1>
+
+          <div className="site-why-lead">
+            <strong>
+              A mattress is already a big purchase.
+              It does not need to become a research project too.
+            </strong>
+
+            <p>
+              GADDA exists to make the product easier to understand:
+              fewer decisions, clearer construction and a much more
+              straightforward conversation about comfort.
+            </p>
           </div>
+
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-          <div className="grid gap-5 md:grid-cols-2">
-            {pillars.map(([n, title, body], index) => (
-              <div
-                key={n}
-                className={`rounded-[2rem] p-7 ${
-                  ["bg-gold-light", "bg-sky", "bg-lilac", "bg-sage"][index]
-                }`}
-              >
-                <div className="font-display text-5xl text-ink/25">{n}</div>
-                <h2 className="mt-8 font-display text-4xl">{title}</h2>
-                <p className="mt-4 max-w-xl text-sm leading-7 text-ink/60">{body}</p>
-              </div>
-            ))}
+
+        <section className="site-why-problem">
+
+          <div>
+            <p className="site-orange">
+              WHAT WE DIDN&apos;T LIKE
+            </p>
+
+            <h2>
+              THE CATEGORY
+              <br />
+              STARTED SELLING
+              <br />
+              COMPLEXITY.
+            </h2>
           </div>
+
+          <div className="site-why-list">
+
+            <article>
+              <span>01</span>
+              <h3>Too many choices.</h3>
+              <p>
+                When every mattress sounds almost identical,
+                more options stop being useful.
+              </p>
+            </article>
+
+            <article>
+              <span>02</span>
+              <h3>Too much jargon.</h3>
+              <p>
+                Material names mean very little unless somebody
+                explains what they actually change while you sleep.
+              </p>
+            </article>
+
+            <article>
+              <span>03</span>
+              <h3>Too much showroom theatre.</h3>
+              <p>
+                Ten minutes under bright lights is not how anyone
+                actually sleeps.
+              </p>
+            </article>
+
+          </div>
+
         </section>
+
+
+        <section className="site-why-belief">
+
+          <p className="site-dark-label">
+            OUR VERSION IS LESS EXCITING.
+          </p>
+
+          <h2>
+            MAKE A GOOD
+            <br />
+            MATTRESS.
+            <br />
+            SHOW WHAT&apos;S
+            <br />
+            INSIDE.
+            <br />
+            PRICE IT CLEARLY.
+          </h2>
+
+          <div className="site-why-belief-foot">
+
+            <p>
+              We would rather earn trust by being understandable
+              than impress you with a longer vocabulary.
+            </p>
+
+            <strong>
+              GOOD SLEEP.
+              <br />
+              NO DRAMA.
+            </strong>
+
+          </div>
+
+        </section>
+
+
+        <section className="site-why-pillars">
+
+          <article>
+            <span>01</span>
+            <h3>FEWER GADDAS.</h3>
+            <p>
+              Different mattresses should exist for different reasons,
+              not just to create a bigger catalogue.
+            </p>
+          </article>
+
+          <article>
+            <span>02</span>
+            <h3>NO BLACK BOX.</h3>
+            <p>
+              If a layer matters, you should be able to see it
+              and understand the job it is doing.
+            </p>
+          </article>
+
+          <article>
+            <span>03</span>
+            <h3>TRY IT AT HOME.</h3>
+            <p>
+              Your bedroom is a better test environment
+              than a mattress showroom.
+            </p>
+          </article>
+
+          <article>
+            <span>04</span>
+            <h3>REAL FEEDBACK.</h3>
+            <p>
+              Reviews, support conversations and returns should
+              make the next product better.
+            </p>
+          </article>
+
+        </section>
+
+
+        <section className="site-why-final">
+
+          <p className="site-orange">
+            ENOUGH ABOUT US.
+          </p>
+
+          <h2>
+            SEE THE
+            <br />
+            GADDAS.
+          </h2>
+
+          <Link href="/mattresses">
+            SHOP THE RANGE →
+          </Link>
+
+        </section>
+
       </main>
+
       <Footer />
     </>
   );
