@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SiteCommerceEndcap from "@/components/SiteCommerceEndcap";
 import { getStoreData } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -117,6 +118,11 @@ export default async function ReviewsPage() {
           </div>
 
         </section>
+
+        <SiteCommerceEndcap
+          eyebrow="DONE READING PEOPLE?"
+          title="GO MEET THE GADDAS."
+        />
 
       </main>
 

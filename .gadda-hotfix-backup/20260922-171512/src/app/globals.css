@@ -1,0 +1,11114 @@
+@import url("https://fonts.googleapis.com/css2?family=Shrikhand&family=Yatra+One&display=swap");
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #111111;
+  --color-sand: #F3ECDD;
+  --color-gold: #FF6500;
+  --color-gold-light: #F3ECDD;
+  --color-gold-dark: #FF6500;
+  --color-sky: #F3ECDD;
+  --color-sage: #F3ECDD;
+  --color-lilac: #F3ECDD;
+  --color-butter: #F8F4E9;
+
+  --font-display: var(--font-manrope);
+  --font-body: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-sand);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+
+/* =========================================================
+   SOCIAL-INSPIRED EUROFOAM HOMEPAGE
+   ========================================================= */
+
+:root {
+  --social-black: #111111;
+  --social-cream: #f0e9d8;
+  --social-paper: #f8f4e8;
+  --social-orange: #FF6500;
+  --social-acid: #d9ff46;
+  --social-pink: #ff7ca8;
+  --social-blue: #79c9ff;
+}
+
+.social-home {
+  overflow: clip;
+  background: var(--social-paper);
+  color: var(--social-black);
+}
+
+.social-home a {
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.social-hero {
+  position: relative;
+  min-height: calc(100svh - 5rem);
+  overflow: hidden;
+  background: #111;
+  color: #fff;
+}
+
+.social-hero-media,
+.social-hero-shade {
+  position: absolute;
+  inset: 0;
+}
+
+.social-hero-media {
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.social-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.social-hero-shade {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.08) 35%, rgba(0,0,0,.72)),
+    linear-gradient(90deg, rgba(0,0,0,.34), transparent 58%);
+}
+
+.social-hero-top,
+.social-hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+.social-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem clamp(1.25rem, 4vw, 4rem);
+}
+
+.social-hero-kicker,
+.social-micro,
+.social-eyebrow,
+.social-section-label {
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.social-outline-button,
+.social-solid-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+  border-radius: 999px;
+  padding: .85rem 1.1rem;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.social-outline-button {
+  border: 1px solid rgba(255,255,255,.65);
+  color: #fff;
+  backdrop-filter: blur(8px);
+}
+
+.social-outline-button:hover {
+  background: #fff;
+  color: #000;
+}
+
+.social-hero-copy {
+  min-height: calc(100svh - 10rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem clamp(1.25rem, 4vw, 4rem) 3rem;
+}
+
+.social-hero-copy h1 {
+  max-width: 10ch;
+  margin-top: .9rem;
+  font-size: clamp(4.25rem, 13vw, 12rem);
+  font-weight: 900;
+  line-height: .73;
+  letter-spacing: -.075em;
+}
+
+.social-hero-copy h1 span {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #fff;
+}
+
+.social-hero-bottom {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid rgba(255,255,255,.28);
+  padding-top: 1.25rem;
+}
+
+.social-hero-bottom > p {
+  max-width: 34rem;
+  font-size: clamp(.95rem, 1.25vw, 1.2rem);
+  line-height: 1.55;
+  color: rgba(255,255,255,.82);
+}
+
+.social-scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  white-space: nowrap;
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.social-scroll-cue b {
+  display: grid;
+  width: 2.7rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 50%;
+  animation: social-bob 1.8s ease-in-out infinite;
+}
+
+@keyframes social-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(.35rem); }
+}
+
+.social-subnav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 4rem);
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(0,0,0,.16);
+  background: rgba(240,233,216,.92);
+  padding: 1rem 1.25rem;
+  backdrop-filter: blur(14px);
+  scrollbar-width: none;
+}
+
+.social-subnav::-webkit-scrollbar { display: none; }
+
+.social-subnav a {
+  flex: 0 0 auto;
+  font-size: .65rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.social-subnav a:hover { color: var(--social-orange); }
+
+.social-story,
+.social-collection,
+.social-gallery,
+.social-match,
+.social-final {
+  position: relative;
+  padding:
+    clamp(4.5rem, 10vw, 9rem)
+    clamp(1.25rem, 4vw, 4rem);
+}
+
+.social-story {
+  min-height: 100svh;
+  background: var(--social-cream);
+}
+
+.social-section-label { opacity: .55; }
+
+.social-story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(18rem, .65fr);
+  gap: clamp(2rem, 6vw, 8rem);
+  align-items: end;
+  margin-top: clamp(4rem, 10vw, 9rem);
+}
+
+.social-story h2,
+.social-section-head h2,
+.social-inside h2,
+.social-gallery h2,
+.social-match h2 {
+  font-size: clamp(4rem, 10vw, 9.5rem);
+  font-weight: 900;
+  line-height: .79;
+  letter-spacing: -.075em;
+}
+
+.social-story .social-eyebrow {
+  margin-bottom: 1rem;
+  color: var(--social-orange);
+}
+
+.social-story-copy {
+  display: grid;
+  gap: 1.35rem;
+  max-width: 34rem;
+  font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.social-story-copy p + p { opacity: .68; }
+
+.social-text-link {
+  width: max-content;
+  display: inline-flex;
+  gap: .75rem;
+  margin-top: 1rem;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: .3rem;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.social-chip-row {
+  position: relative;
+  min-height: 22rem;
+  margin-top: 5rem;
+}
+
+.social-chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 10rem;
+  min-height: 4.8rem;
+  border: 2px solid #000;
+  border-radius: 999px;
+  padding: 1rem 1.4rem;
+  background: #fff;
+  box-shadow: .45rem .45rem 0 #000;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  transform: rotate(var(--r, 0deg));
+}
+
+.social-chip-1 { left: 3%; top: 4%; --r: -8deg; background: var(--social-acid); }
+.social-chip-2 { left: 28%; top: 38%; --r: 5deg; background: var(--social-blue); }
+.social-chip-3 { left: 49%; top: 2%; --r: -3deg; background: var(--social-pink); }
+.social-chip-4 { right: 7%; top: 42%; --r: 8deg; background: #fff; }
+.social-chip-5 { left: 52%; bottom: 1%; --r: -5deg; background: var(--social-orange); color: #fff; }
+
+.social-story-art {
+  max-width: 42rem;
+  margin: -7rem 0 0 auto;
+}
+
+.social-graphic-placeholder {
+  min-height: 18rem;
+  display: grid;
+  place-content: center;
+  gap: .45rem;
+  border: 1px dashed rgba(0,0,0,.38);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0,0,0,.025) 0,
+      rgba(0,0,0,.025) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+  text-align: center;
+}
+
+.social-graphic-placeholder span {
+  font-size: clamp(1.4rem, 3vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -.04em;
+}
+
+.social-graphic-placeholder small {
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+  opacity: .48;
+}
+
+.social-collection {
+  background: var(--social-black);
+  color: #fff;
+}
+
+.social-section-head {
+  display: grid;
+  grid-template-columns: 1.3fr .7fr;
+  gap: 3rem;
+  align-items: end;
+  margin-bottom: 5rem;
+}
+
+.social-section-head .social-micro {
+  margin-bottom: 1.5rem;
+  color: var(--social-orange);
+}
+
+.social-section-intro {
+  max-width: 30rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,.62);
+}
+
+.social-product-stack {
+  display: grid;
+  gap: 7rem;
+}
+
+.social-product-panel {
+  position: sticky;
+  min-height: min(74rem, 80svh);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(22rem, .85fr);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 2rem;
+  background: #111111;
+  box-shadow: 0 -2rem 5rem rgba(0,0,0,.34);
+}
+
+.social-product-visual {
+  position: relative;
+  min-height: 38rem;
+  overflow: hidden;
+  background: #222;
+}
+
+.social-product-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));
+}
+
+.social-product-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.social-product-index {
+  position: absolute;
+  z-index: 2;
+  left: 1.5rem;
+  bottom: 1rem;
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(255,255,255,.88);
+  letter-spacing: -.08em;
+}
+
+.social-product-copy {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+.social-product-copy .social-eyebrow { color: var(--social-orange); }
+
+.social-product-copy h3 {
+  margin-top: .65rem;
+  font-size: clamp(3.3rem, 6vw, 6.4rem);
+  font-weight: 900;
+  line-height: .84;
+  letter-spacing: -.065em;
+}
+
+.social-product-kicker {
+  margin-top: 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.social-product-copy > p:not(.social-eyebrow):not(.social-product-kicker) {
+  max-width: 31rem;
+  margin-top: 1rem;
+  color: rgba(255,255,255,.62);
+  line-height: 1.6;
+}
+
+.social-product-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  margin-top: 2rem;
+}
+
+.social-product-meta span {
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  padding: .55rem .75rem;
+  font-size: .65rem;
+  font-weight: 800;
+}
+
+.social-product-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255,255,255,.18);
+  padding-top: 1.5rem;
+  font-size: .8rem;
+  font-weight: 900;
+}
+
+.social-product-footer a { color: var(--social-orange); }
+
+.social-inside {
+  display: grid;
+  grid-template-columns: minmax(20rem, .7fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 7vw, 8rem);
+  padding:
+    clamp(5rem, 10vw, 10rem)
+    clamp(1.25rem, 4vw, 4rem);
+  background: #FF6500;
+  color: #111111;
+}
+
+.social-inside-sticky {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+}
+
+.social-inside-sticky h2 { margin-top: 1.4rem; }
+
+.social-inside-sticky > p:last-child {
+  max-width: 27rem;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+.social-layer-list {
+  display: grid;
+  gap: 2rem;
+}
+
+.social-layer-card {
+  display: grid;
+  grid-template-columns: 4rem minmax(12rem, .7fr) minmax(18rem, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  min-height: 19rem;
+  border-top: 2px solid #000;
+  padding: 1.7rem 0;
+}
+
+.social-layer-num {
+  align-self: start;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.social-layer-art,
+.social-layer-art img { width: 100%; }
+
+.social-layer-art {
+  display: grid;
+  place-items: center;
+  min-height: 14rem;
+}
+
+.social-layer-art img {
+  max-height: 16rem;
+  object-fit: contain;
+}
+
+.social-layer-card h3 {
+  margin-top: .45rem;
+  font-size: clamp(2.3rem, 4vw, 4.6rem);
+  font-weight: 900;
+  line-height: .9;
+  letter-spacing: -.055em;
+}
+
+.social-layer-card > div:last-child > p:last-child {
+  margin-top: 1rem;
+  max-width: 30rem;
+  line-height: 1.55;
+}
+
+.social-gallery { background: var(--social-paper); }
+
+.social-gallery-copy {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.social-gallery-copy .social-micro {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.social-gallery-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 1.2rem;
+}
+
+.social-gallery-grid > * { min-height: 34rem; }
+
+.social-gallery-grid figure {
+  position: relative;
+  overflow: hidden;
+  background: #ddd;
+}
+
+.social-gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1);
+}
+
+.social-gallery-grid figure:hover img { transform: scale(1.035); }
+
+.social-gallery-grid figcaption {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  background: #fff;
+  padding: .55rem .7rem;
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.social-gallery-large { grid-row: span 2; }
+
+.social-gallery-wide {
+  grid-column: 1 / -1;
+  min-height: 48rem !important;
+}
+
+.social-match {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--social-acid);
+  text-align: center;
+}
+
+.social-match-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 74rem;
+}
+
+.social-match-inner h2 { margin-top: 1.4rem; }
+
+.social-match-inner > p:not(.social-micro) {
+  max-width: 42rem;
+  margin: 2rem auto 0;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.social-solid-button {
+  margin-top: 2.2rem;
+  background: #000;
+  color: #fff;
+}
+
+.social-solid-button:hover {
+  transform: translateY(-2px);
+  background: var(--social-orange);
+}
+
+.social-match-orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.social-match-orbit span {
+  position: absolute;
+  display: grid;
+  width: clamp(6rem, 10vw, 10rem);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: var(--social-paper);
+  font-size: .72rem;
+  font-weight: 900;
+  animation: social-float 6s ease-in-out infinite;
+}
+
+.social-match-orbit span:nth-child(1) { left: 8%; top: 15%; }
+.social-match-orbit span:nth-child(2) { right: 8%; top: 18%; animation-delay: -1.5s; }
+.social-match-orbit span:nth-child(3) { left: 12%; bottom: 12%; animation-delay: -3s; }
+.social-match-orbit span:nth-child(4) { right: 13%; bottom: 10%; animation-delay: -4.5s; }
+
+@keyframes social-float {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-1.2rem) rotate(4deg); }
+}
+
+.social-service-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #fff;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #111;
+}
+
+.social-service-strip > div {
+  min-height: 15rem;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .6rem;
+  border-right: 1px solid #111;
+  text-align: center;
+}
+
+.social-service-strip > div:last-child { border-right: 0; }
+
+.social-service-strip strong {
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 1;
+  letter-spacing: -.06em;
+}
+
+.social-service-strip span {
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.social-final {
+  padding-bottom: 4rem;
+  background: #111111;
+  color: #fff;
+}
+
+.social-final-word {
+  white-space: nowrap;
+  font-size: clamp(5.4rem, 19vw, 19rem);
+  font-weight: 900;
+  line-height: .75;
+  letter-spacing: -.095em;
+}
+
+.social-final-word span { color: var(--social-orange); }
+
+.social-final-grid {
+  display: grid;
+  grid-template-columns: 1.4fr .6fr .6fr;
+  gap: 3rem;
+  margin-top: 4rem;
+  border-top: 1px solid rgba(255,255,255,.2);
+  padding-top: 2rem;
+}
+
+.social-final-grid > p {
+  font-size: clamp(1.5rem, 2.5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.04em;
+}
+
+.social-final-grid > div {
+  display: grid;
+  align-content: start;
+  gap: .8rem;
+}
+
+.social-final-grid a {
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.7);
+}
+
+.social-final-grid a:hover { color: var(--social-orange); }
+
+.social-reveal {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  transition:
+    opacity .85s cubic-bezier(.2,.7,.2,1),
+    transform .85s cubic-bezier(.2,.7,.2,1);
+}
+
+.social-reveal[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-hero-media,
+  .social-scroll-cue b,
+  .social-match-orbit span,
+  .social-reveal,
+  .social-gallery-grid img {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .social-reveal { opacity: 1 !important; }
+}
+
+@media (max-width: 980px) {
+  .social-story-grid,
+  .social-section-head,
+  .social-inside,
+  .social-product-panel,
+  .social-final-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .social-product-panel {
+    position: relative;
+    top: auto !important;
+    min-height: 0;
+  }
+
+  .social-product-visual { min-height: 28rem; }
+  .social-product-copy { min-height: 34rem; }
+
+  .social-inside-sticky {
+    position: relative;
+    top: auto;
+  }
+
+  .social-layer-card {
+    grid-template-columns: 3rem minmax(10rem, .65fr) minmax(15rem, 1fr);
+  }
+
+  .social-service-strip { grid-template-columns: repeat(2, 1fr); }
+  .social-service-strip > div:nth-child(2) { border-right: 0; }
+  .social-service-strip > div:nth-child(-n+2) { border-bottom: 1px solid #111; }
+}
+
+@media (max-width: 680px) {
+  .social-hero { min-height: 90svh; }
+  .social-hero-top { padding-top: 1.25rem; }
+  .social-hero-copy { min-height: 74svh; }
+
+  .social-hero-bottom,
+  .social-gallery-copy {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .social-scroll-cue { display: none; }
+  .social-subnav { justify-content: start; }
+
+  .social-story h2,
+  .social-section-head h2,
+  .social-inside h2,
+  .social-gallery h2,
+  .social-match h2 {
+    font-size: clamp(3.5rem, 17vw, 6rem);
+  }
+
+  .social-chip-row { min-height: 30rem; }
+
+  .social-chip {
+    min-width: 8rem;
+    min-height: 4rem;
+    padding: .75rem 1rem;
+    font-size: .62rem;
+  }
+
+  .social-chip-1 { left: 0; top: 0; }
+  .social-chip-2 { left: 35%; top: 20%; }
+  .social-chip-3 { left: 3%; top: 42%; }
+  .social-chip-4 { right: 0; top: 59%; }
+  .social-chip-5 { left: 16%; bottom: 0; }
+
+  .social-story-art { margin-top: 1rem; }
+
+  .social-layer-card {
+    grid-template-columns: 2.5rem 1fr;
+  }
+
+  .social-layer-card > div:last-child { grid-column: 2; }
+
+  .social-gallery-grid { grid-template-columns: 1fr; }
+
+  .social-gallery-grid > *,
+  .social-gallery-wide {
+    min-height: 28rem !important;
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .social-gallery-copy .social-micro {
+    writing-mode: initial;
+    transform: none;
+  }
+
+  .social-match-orbit { opacity: .35; }
+  .social-service-strip > div { min-height: 10rem; }
+  .social-final-grid { gap: 2rem; }
+}
+
+
+/* GADDA BRAND SYSTEM */
+
+.gadda-wordmark {
+  position: relative;
+  display: inline-block;
+  padding-top: .12em;
+  font-size: clamp(2rem, 3.2vw, 3.8rem);
+  font-weight: 900;
+  line-height: .82;
+  letter-spacing: -.075em;
+  color: #111;
+}
+
+.gadda-wordmark::before {
+  content: "";
+  position: absolute;
+  left: -.05em;
+  right: -.05em;
+  top: 0;
+  height: .09em;
+  background: currentColor;
+}
+
+.gadda-hero-word {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  max-width: 100%;
+  padding-top: .06em;
+  font-size: clamp(6rem, 20vw, 19rem) !important;
+  font-weight: 900 !important;
+  line-height: .72 !important;
+  letter-spacing: -.09em !important;
+}
+
+.gadda-hero-word::before {
+  content: "";
+  position: absolute;
+  left: -.02em;
+  right: -.02em;
+  top: 0;
+  height: .045em;
+  background: currentColor;
+}
+
+.gadda-final-word {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  padding-top: .04em;
+}
+
+.gadda-final-word::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: .04em;
+  background: currentColor;
+}
+
+@media (max-width: 680px) {
+  .gadda-wordmark {
+    font-size: 2.15rem;
+  }
+
+  .gadda-hero-word {
+    font-size: clamp(5rem, 25vw, 8rem) !important;
+  }
+}
+
+
+/* =========================================================
+   THE GADDA MENU
+   Editorial mattress catalogue / digital booklet
+   ========================================================= */
+
+.gadda-menu-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  grid-template-columns: minmax(260px, 29vw) 1fr;
+  background: #171717;
+  color: #111;
+}
+
+
+.gadda-menu-sidebar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  height: 100svh;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,.12);
+  background: #171717;
+  color: #f7f2e7;
+  padding: clamp(1.4rem, 3vw, 3rem);
+}
+
+
+.gadda-menu-sidebar-top {
+  display: grid;
+  gap: 3rem;
+}
+
+
+.gadda-menu-close {
+  width: 3.4rem;
+  height: 3.4rem;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  font-size: 2rem;
+  line-height: 1;
+  transition: .2s ease;
+}
+
+
+.gadda-menu-close:hover {
+  background: #FF6500;
+  border-color: #FF6500;
+  color: #111;
+  transform: rotate(6deg);
+}
+
+
+.gadda-menu-side-brand {
+  position: relative;
+  width: max-content;
+  padding-top: .12em;
+  font-size: clamp(3rem, 5vw, 6rem);
+  font-weight: 950;
+  line-height: .75;
+  letter-spacing: -.08em;
+}
+
+
+.gadda-menu-side-brand::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -.02em;
+  right: -.02em;
+  height: .07em;
+  background: currentColor;
+}
+
+
+.gadda-menu-side-line {
+  margin-top: 1rem;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  opacity: .6;
+}
+
+
+.gadda-menu-nav {
+  display: grid;
+  margin-top: clamp(3rem, 7vh, 6rem);
+}
+
+
+.gadda-menu-nav a {
+  display: grid;
+  grid-template-columns: 2.8rem 1fr;
+  gap: .8rem;
+  border-top: 1px solid rgba(255,255,255,.14);
+  padding: 1rem 0;
+  font-size: clamp(.7rem, 1vw, .95rem);
+  font-weight: 850;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+
+.gadda-menu-nav a:last-child {
+  border-bottom: 1px solid rgba(255,255,255,.14);
+}
+
+
+.gadda-menu-nav a span {
+  opacity: .35;
+}
+
+
+.gadda-menu-nav a:hover {
+  color: #FF6500;
+  padding-left: .5rem;
+}
+
+
+.gadda-menu-side-actions {
+  display: grid;
+  gap: .7rem;
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
+
+.gadda-menu-side-actions a {
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .09em;
+  opacity: .7;
+}
+
+
+.gadda-menu-side-actions a:hover {
+  color: #FF6500;
+  opacity: 1;
+}
+
+
+.gadda-menu-book {
+  height: 100svh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+  background: #f1ecdf;
+}
+
+
+.gadda-menu-cover {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  scroll-snap-align: start;
+  background:
+    linear-gradient(
+      rgba(0,0,0,.055) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.055) 1px,
+      transparent 1px
+    ),
+    #F3ECDD;
+  background-size: 42px 42px;
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+
+.gadda-menu-cover-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  border-bottom: 2px solid #111;
+  padding-bottom: 1rem;
+  font-size: .7rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+
+
+.gadda-menu-cover-title p {
+  margin-bottom: .4rem;
+  color: #FF6500;
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 950;
+}
+
+
+.gadda-menu-cover-title h2 {
+  font-size: clamp(5rem, 13vw, 13rem);
+  font-weight: 950;
+  line-height: .71;
+  letter-spacing: -.09em;
+}
+
+
+.gadda-menu-cover-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: end;
+  border-top: 2px solid #111;
+  padding-top: 1rem;
+}
+
+
+.gadda-menu-cover-bottom p {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-weight: 850;
+  letter-spacing: -.045em;
+}
+
+
+.gadda-menu-cover-bottom span {
+  font-size: .68rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+
+
+.gadda-menu-page {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  scroll-snap-align: start;
+  border-top: 1px solid #111;
+  background: #F3ECDD;
+}
+
+
+.gadda-menu-page-reverse .gadda-menu-page-copy {
+  order: 2;
+}
+
+
+.gadda-menu-page-reverse .gadda-menu-page-visual {
+  order: 1;
+}
+
+
+.gadda-menu-page-copy {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+
+.gadda-menu-page-number {
+  margin-bottom: auto;
+  padding-bottom: 3rem;
+  font-size: .7rem;
+  font-weight: 950;
+  letter-spacing: .13em;
+}
+
+
+.gadda-menu-attitude {
+  color: #FF6500;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  font-weight: 950;
+  letter-spacing: .04em;
+}
+
+
+.gadda-menu-page-copy h3 {
+  margin-top: .7rem;
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 950;
+  line-height: .76;
+  letter-spacing: -.08em;
+}
+
+
+.gadda-menu-kicker {
+  margin-top: 1.2rem;
+  max-width: 30rem;
+  font-size: clamp(1rem, 1.5vw, 1.4rem);
+  font-weight: 850;
+}
+
+
+.gadda-menu-description {
+  max-width: 34rem;
+  margin-top: .8rem;
+  font-size: .96rem;
+  line-height: 1.6;
+  opacity: .58;
+}
+
+
+.gadda-menu-spec-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 2rem;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #111;
+}
+
+
+.gadda-menu-spec-row > div {
+  padding: 1rem .8rem 1rem 0;
+}
+
+
+.gadda-menu-spec-row small,
+.gadda-menu-price small {
+  display: block;
+  margin-bottom: .35rem;
+  font-size: .56rem;
+  font-weight: 950;
+  letter-spacing: .13em;
+  opacity: .45;
+}
+
+
+.gadda-menu-spec-row strong {
+  font-size: .78rem;
+  line-height: 1.3;
+}
+
+
+.gadda-menu-feature-list {
+  display: grid;
+  margin-top: 1.5rem;
+}
+
+
+.gadda-menu-feature-list > div {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr;
+  gap: .5rem;
+  border-bottom: 1px solid rgba(0,0,0,.13);
+  padding: .72rem 0;
+}
+
+
+.gadda-menu-feature-list span {
+  font-size: .65rem;
+  font-weight: 950;
+  opacity: .35;
+}
+
+
+.gadda-menu-feature-list p {
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+
+.gadda-menu-price {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+
+.gadda-menu-price strong {
+  display: block;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: .9;
+  letter-spacing: -.06em;
+}
+
+
+.gadda-menu-price a {
+  border-bottom: 2px solid #111;
+  padding-bottom: .3rem;
+  font-size: .75rem;
+  font-weight: 950;
+  letter-spacing: .08em;
+}
+
+
+.gadda-menu-price a:hover {
+  color: #FF6500;
+  border-color: #FF6500;
+}
+
+
+.gadda-menu-page-visual {
+  display: grid;
+  grid-template-rows: 1.35fr .65fr;
+  min-height: 100svh;
+  border-left: 1px solid #111;
+  background: #FF6500;
+}
+
+
+.gadda-menu-image-frame {
+  position: relative;
+  overflow: hidden;
+}
+
+
+.gadda-menu-image-frame img {
+  width: 100%;
+  height: 100%;
+  min-height: 58vh;
+  object-fit: cover;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1);
+}
+
+
+.gadda-menu-page:hover .gadda-menu-image-frame img {
+  transform: scale(1.025);
+}
+
+
+.gadda-menu-image-label {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  border: 2px solid #111;
+  background: #F3ECDD;
+  padding: .7rem .9rem;
+  font-size: .65rem;
+  font-weight: 950;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  transform: rotate(3deg);
+}
+
+
+.gadda-menu-art-placeholder {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  border-top: 1px solid #111;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 12px,
+      rgba(0,0,0,.05) 12px,
+      rgba(0,0,0,.05) 13px
+    ),
+    #FF6500;
+  padding: clamp(1.5rem, 4vw, 4rem);
+}
+
+
+.gadda-menu-art-placeholder span {
+  font-size: clamp(2rem, 4.5vw, 5rem);
+  font-weight: 950;
+  line-height: .8;
+  letter-spacing: -.065em;
+}
+
+
+.gadda-menu-art-placeholder small {
+  max-width: 11rem;
+  font-size: .58rem;
+  font-weight: 950;
+  letter-spacing: .1em;
+  text-align: right;
+}
+
+
+.gadda-menu-back-cover {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+  background: #171717;
+  color: #F3ECDD;
+  padding: clamp(2rem, 6vw, 6rem);
+}
+
+
+.gadda-menu-back-cover > p {
+  color: #FF6500;
+  font-size: 1rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+
+
+.gadda-menu-back-cover h2 {
+  margin-top: 1rem;
+  font-size: clamp(5rem, 11vw, 12rem);
+  font-weight: 950;
+  line-height: .72;
+  letter-spacing: -.09em;
+}
+
+
+.gadda-menu-back-cover > div {
+  display: flex;
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+
+.gadda-menu-back-cover a {
+  border-bottom: 1px solid currentColor;
+  padding-bottom: .3rem;
+  font-size: .75rem;
+  font-weight: 950;
+  letter-spacing: .08em;
+}
+
+
+.gadda-menu-back-cover a:hover {
+  color: #FF6500;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+  .gadda-menu-shell {
+    display: block;
+    overflow-y: auto;
+    background: #F3ECDD;
+  }
+
+  .gadda-menu-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+    padding: .9rem 1rem;
+  }
+
+  .gadda-menu-sidebar-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .gadda-menu-close {
+    width: 2.7rem;
+    height: 2.7rem;
+    font-size: 1.5rem;
+  }
+
+  .gadda-menu-side-brand {
+    font-size: 2.2rem;
+  }
+
+  .gadda-menu-side-line,
+  .gadda-menu-nav,
+  .gadda-menu-side-actions {
+    display: none;
+  }
+
+  .gadda-menu-book {
+    height: auto;
+    overflow: visible;
+  }
+
+  .gadda-menu-cover {
+    min-height: 82svh;
+  }
+
+  .gadda-menu-page,
+  .gadda-menu-page-reverse {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .gadda-menu-page-reverse .gadda-menu-page-copy,
+  .gadda-menu-page-reverse .gadda-menu-page-visual {
+    order: initial;
+  }
+
+  .gadda-menu-page-copy {
+    padding: 2rem 1.2rem 3rem;
+  }
+
+  .gadda-menu-page-number {
+    margin-bottom: 3rem;
+  }
+
+  .gadda-menu-page-copy h3 {
+    font-size: clamp(4rem, 19vw, 7rem);
+  }
+
+  .gadda-menu-spec-row {
+    grid-template-columns: 1fr;
+  }
+
+  .gadda-menu-spec-row > div {
+    border-bottom: 1px solid rgba(0,0,0,.1);
+  }
+
+  .gadda-menu-page-visual {
+    min-height: 0;
+    border-left: 0;
+    border-top: 1px solid #111;
+  }
+
+  .gadda-menu-image-frame img {
+    min-height: 52svh;
+  }
+
+  .gadda-menu-art-placeholder {
+    min-height: 18rem;
+  }
+
+  .gadda-menu-price {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .gadda-menu-back-cover > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+}
+
+
+/* GADDA GLOBAL PALETTE */
+
+:root {
+  --gadda-black: #111111;
+  --gadda-orange: #FF6500;
+  --gadda-paper: #F3ECDD;
+  --gadda-light: #F8F4E9;
+  --gadda-white: #FFFFFF;
+
+  --gadda-muted:
+    rgba(17, 17, 17, .55);
+
+  --gadda-muted-dark:
+    rgba(255, 255, 255, .60);
+}
+
+
+html {
+  background: var(--gadda-paper);
+}
+
+
+body {
+  background: var(--gadda-paper);
+  color: var(--gadda-black);
+}
+
+
+/* SELECTION */
+
+::selection {
+  background: var(--gadda-orange);
+  color: var(--gadda-black);
+}
+
+
+/* LINKS */
+
+a {
+  text-decoration-color:
+    var(--gadda-orange);
+}
+
+
+/* FORM CONTROLS */
+
+input,
+textarea,
+select {
+  border-color:
+    rgba(17, 17, 17, .22);
+  background:
+    var(--gadda-white);
+  color:
+    var(--gadda-black);
+}
+
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color:
+    var(--gadda-orange) !important;
+}
+
+
+/* BUTTON LANGUAGE */
+
+button,
+a {
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+
+/* GADDA GENERIC CARD */
+
+.gadda-card {
+  border: 1px solid
+    var(--gadda-black);
+  background:
+    var(--gadda-paper);
+}
+
+
+/* DARK SECTIONS */
+
+.gadda-dark {
+  background:
+    var(--gadda-black);
+  color:
+    var(--gadda-white);
+}
+
+
+/* ORANGE SECTIONS */
+
+.gadda-orange {
+  background:
+    var(--gadda-orange);
+  color:
+    var(--gadda-black);
+}
+
+
+/* PAPER SECTIONS */
+
+.gadda-paper {
+  background:
+    var(--gadda-paper);
+  color:
+    var(--gadda-black);
+}
+
+
+/* PRIMARY CTA */
+
+.gadda-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    var(--gadda-black);
+
+  color:
+    var(--gadda-white);
+
+  border:
+    2px solid var(--gadda-black);
+
+  transition:
+    background .18s ease,
+    color .18s ease,
+    transform .18s ease;
+}
+
+
+.gadda-button-primary:hover {
+  background:
+    var(--gadda-orange);
+
+  color:
+    var(--gadda-black);
+
+  transform:
+    translateY(-2px);
+}
+
+
+/* ORANGE CTA */
+
+.gadda-button-orange {
+  background:
+    var(--gadda-orange);
+
+  color:
+    var(--gadda-black);
+
+  border:
+    2px solid var(--gadda-black);
+}
+
+
+/* RULES / DIVIDERS */
+
+.gadda-rule {
+  border-color:
+    var(--gadda-black);
+}
+
+
+/* SCROLLBAR — DESKTOP */
+
+@media (pointer: fine) {
+
+  * {
+    scrollbar-color:
+      var(--gadda-orange)
+      var(--gadda-black);
+  }
+
+}
+
+
+/* REMOVE OLD PASTEL FEEL FROM COMMON SURFACES */
+
+.bg-white {
+  background-color:
+    var(--gadda-white);
+}
+
+
+/*
+  DESIGN PRINCIPLE:
+
+  BLACK  = structure
+  ORANGE = punctuation
+  PAPER  = breathing room
+
+  Don't turn every surface orange.
+*/
+
+
+/* GADDA REFINED TYPE SYSTEM */
+
+/*
+  This assumes you already have:
+  public/fonts/YatraOne.ttf
+
+  If later you add a licensed Samarkan font,
+  you can swap the URL and keep the same class system.
+*/
+
+@font-face {
+  font-family: "GaddaHindiLatin";
+  src: url("/fonts/YatraOne.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --gadda-ui-font:
+    "GaddaHindiLatin",
+    "Samarkan",
+    sans-serif;
+
+  --gadda-body-font:
+    var(--font-sans),
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  --gadda-black: #111111;
+  --gadda-orange: #FF6500;
+  --gadda-paper: #F3ECDD;
+}
+
+
+/* =========================================================
+   DEFAULT BODY COPY = CLEAN / READABLE
+   ========================================================= */
+
+html,
+body,
+p,
+li,
+small,
+label,
+input,
+textarea,
+select,
+option,
+blockquote,
+figcaption {
+  font-family:
+    var(--gadda-body-font) !important;
+}
+
+
+/* =========================================================
+   DEVANAGARI-STYLE DISPLAY SYSTEM
+   Use only where it matters.
+   ========================================================= */
+
+.gadda-wordmark,
+.gadda-hero-word,
+.gadda-final-word,
+.gadda-menu-side-brand,
+.gadda-nav-link,
+.gadda-match-button,
+.social-micro,
+.social-eyebrow,
+.social-section-label,
+.gadda-menu-attitude,
+.gadda-menu-page-number,
+.gadda-menu-cover-meta,
+.gadda-menu-image-label,
+header nav a,
+header nav button,
+button,
+[role="button"],
+h1,
+h2,
+h3,
+h4 {
+  font-family:
+    var(--gadda-ui-font) !important;
+
+  font-weight:
+    400 !important;
+}
+
+
+/* =========================================================
+   WORDMARK
+   More like your reference: smaller, sharper, cleaner.
+   ========================================================= */
+
+.gadda-wordmark {
+  position: relative;
+  display: inline-block;
+  padding-top: .11em;
+  font-size: clamp(2.25rem, 2.8vw, 3.9rem) !important;
+  line-height: .82 !important;
+  letter-spacing: -.03em !important;
+  color: var(--gadda-black);
+}
+
+.gadda-wordmark::before {
+  content: "";
+  position: absolute;
+  left: -.02em;
+  right: -.02em;
+  top: 0;
+  height: .07em;
+  background: var(--gadda-orange) !important;
+}
+
+
+/* =========================================================
+   HEADER / NAV
+   ========================================================= */
+
+.gadda-nav-link,
+header nav a,
+header nav button {
+  font-size: .95rem !important;
+  letter-spacing: .02em !important;
+  line-height: 1.1 !important;
+}
+
+.gadda-match-button {
+  font-size: 1rem !important;
+  letter-spacing: .02em !important;
+}
+
+.gadda-header-tools a,
+.gadda-header-tools button,
+.gadda-header-tools span {
+  font-family: var(--gadda-body-font) !important;
+}
+
+.gadda-header-tools a span:first-child,
+.gadda-header-tools button span:first-child {
+  font-family: var(--gadda-ui-font) !important;
+}
+
+
+/* =========================================================
+   BIG HERO / DISPLAY TYPE
+   Tone it down.
+   ========================================================= */
+
+.gadda-hero-word {
+  position: relative;
+  display: inline-block;
+  padding-top: .07em;
+  font-size: clamp(4.3rem, 11vw, 9.5rem) !important;
+  line-height: .84 !important;
+  letter-spacing: -.035em !important;
+}
+
+.gadda-hero-word::before {
+  content: "";
+  position: absolute;
+  left: -.02em;
+  right: -.02em;
+  top: 0;
+  height: .045em;
+  background: rgba(255,255,255,.95);
+}
+
+
+/* =========================================================
+   SECTION HEADINGS
+   SOCIAL-like: bold but not screaming everywhere
+   ========================================================= */
+
+.social-story h2,
+.social-section-head h2,
+.social-inside h2,
+.social-gallery h2,
+.social-match h2,
+.gadda-menu-cover-title h2,
+.gadda-menu-page-copy h3,
+.gadda-menu-back-cover h2 {
+  font-size: clamp(3.6rem, 8vw, 7.5rem) !important;
+  line-height: .88 !important;
+  letter-spacing: -.03em !important;
+}
+
+
+/* =========================================================
+   BODY TEXT UNDER DISPLAY HEADINGS
+   readable again
+   ========================================================= */
+
+.social-hero-bottom > p,
+.social-story-copy,
+.social-section-intro,
+.social-inside-sticky > p:last-child,
+.social-layer-card > div:last-child > p:last-child,
+.social-match-inner > p:not(.social-micro),
+.gadda-menu-description,
+.gadda-menu-kicker,
+.gadda-menu-feature-list p,
+.gadda-menu-spec-row strong,
+.gadda-menu-price small,
+.gadda-menu-side-line {
+  font-family: var(--gadda-body-font) !important;
+}
+
+
+/* =========================================================
+   SMALL LABELS / SECTION TAGS
+   Keep Hindi-style flavor
+   ========================================================= */
+
+.social-micro,
+.social-eyebrow,
+.social-section-label,
+.gadda-menu-attitude {
+  position: relative;
+  width: max-content;
+  padding-top: .58rem;
+  font-size: .82rem !important;
+  letter-spacing: .04em !important;
+}
+
+.social-micro::before,
+.social-eyebrow::before,
+.social-section-label::before,
+.gadda-menu-attitude::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.6rem;
+  height: 4px;
+  background: var(--gadda-orange);
+}
+
+.social-inside .social-micro::before,
+.social-inside .social-eyebrow::before {
+  background: var(--gadda-black);
+}
+
+
+/* =========================================================
+   PRODUCT TITLES / MENU TITLES
+   ========================================================= */
+
+.social-product-copy h3,
+.gadda-menu-page-copy h3 {
+  font-size: clamp(2.8rem, 5vw, 5.4rem) !important;
+  line-height: .9 !important;
+}
+
+.gadda-menu-price strong {
+  font-family: var(--gadda-ui-font) !important;
+  font-size: clamp(1.7rem, 3vw, 3rem) !important;
+}
+
+.social-product-kicker,
+.social-product-copy > p:not(.social-eyebrow):not(.social-product-kicker),
+.social-product-meta span,
+.social-product-footer {
+  font-family: var(--gadda-body-font) !important;
+}
+
+
+/* =========================================================
+   FORMS / ACCOUNT / WISHLIST / REVIEWS
+   readable body font, branded headings
+   ========================================================= */
+
+form,
+form input,
+form textarea,
+form select,
+form label,
+input,
+textarea,
+select {
+  font-family: var(--gadda-body-font) !important;
+}
+
+form h1,
+form h2,
+form h3,
+.font-display {
+  font-family: var(--gadda-ui-font) !important;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer p,
+footer span,
+footer div,
+footer small,
+footer a {
+  font-family: var(--gadda-body-font) !important;
+}
+
+footer h1,
+footer h2,
+footer h3,
+footer .gadda-wordmark,
+.social-final-word {
+  font-family: var(--gadda-ui-font) !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .gadda-wordmark {
+    font-size: 2.4rem !important;
+  }
+
+  .gadda-nav-link,
+  .gadda-match-button,
+  header nav a,
+  header nav button {
+    font-size: .9rem !important;
+  }
+
+  .gadda-hero-word {
+    font-size: clamp(3.8rem, 18vw, 6.4rem) !important;
+  }
+
+  .social-story h2,
+  .social-section-head h2,
+  .social-inside h2,
+  .social-gallery h2,
+  .social-match h2,
+  .gadda-menu-cover-title h2,
+  .gadda-menu-page-copy h3,
+  .gadda-menu-back-cover h2 {
+    font-size: clamp(3rem, 14vw, 5.5rem) !important;
+  }
+}
+
+
+
+/* GADDA CRITICAL PSEUDO-DEVANAGARI OVERRIDE */
+
+:root {
+  --gadda-indic-ui:
+    "Yatra One",
+    serif;
+
+  --gadda-indic-display:
+    "Shrikhand",
+    "Yatra One",
+    serif;
+
+  --gadda-black:
+    #111111;
+
+  --gadda-orange:
+    #FF6500;
+
+  --gadda-paper:
+    #F3ECDD;
+
+  --gadda-light:
+    #F8F4E9;
+}
+
+
+/* =========================================================
+   ZERO WESTERN SANS FALLBACK
+   Entire website uses Indic-influenced Latin typography
+   ========================================================= */
+
+html,
+body,
+body *,
+main,
+section,
+article,
+aside,
+header,
+footer,
+nav,
+div,
+span,
+p,
+a,
+button,
+label,
+input,
+textarea,
+select,
+option,
+small,
+strong,
+b,
+em,
+blockquote,
+figcaption,
+table,
+thead,
+tbody,
+tr,
+td,
+th {
+  font-family:
+    var(--gadda-indic-ui) !important;
+
+  font-synthesis:
+    none;
+
+  -webkit-font-smoothing:
+    antialiased;
+
+  -moz-osx-font-smoothing:
+    grayscale;
+}
+
+
+/* =========================================================
+   DISPLAY TYPOGRAPHY
+   Shrikhand = heavier / more ceremonial
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-display,
+.gadda-wordmark,
+.gadda-hero-word,
+.gadda-final-word,
+.gadda-menu-side-brand,
+.gadda-menu-cover-title,
+.gadda-menu-page-copy h3,
+.gadda-menu-back-cover h2 {
+  font-family:
+    var(--gadda-indic-display) !important;
+
+  font-weight:
+    400 !important;
+
+  letter-spacing:
+    -.018em !important;
+
+  line-height:
+    .9 !important;
+
+  text-rendering:
+    geometricPrecision;
+
+  -webkit-text-stroke:
+    .18px currentColor;
+}
+
+
+/* =========================================================
+   HEAVIER UI FEEL
+   Yatra and Shrikhand are single-weight display faces,
+   so add a very small stroke instead of ugly fake bolding.
+   ========================================================= */
+
+nav,
+nav *,
+button,
+[role="button"],
+strong,
+b,
+.gadda-nav-link,
+.gadda-match-button,
+.social-micro,
+.social-eyebrow,
+.social-section-label,
+.gadda-menu-attitude {
+  -webkit-text-stroke:
+    .12px currentColor;
+}
+
+
+/* =========================================================
+   SHIROREKHA SIMULATION
+   Continuous top horizontal bar
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.gadda-wordmark,
+.gadda-hero-word,
+.gadda-final-word,
+.gadda-menu-side-brand,
+.gadda-nav-link,
+.gadda-match-button,
+.social-micro,
+.social-eyebrow,
+.social-section-label,
+.gadda-menu-attitude,
+header nav a,
+header nav button {
+  text-decoration-line:
+    overline;
+
+  text-decoration-color:
+    var(--gadda-orange);
+
+  text-decoration-thickness:
+    .075em;
+
+  text-decoration-skip-ink:
+    none;
+}
+
+
+/* Orange section = use black shirorekha */
+
+.social-inside h1,
+.social-inside h2,
+.social-inside h3,
+.social-inside h4,
+.social-inside .social-micro,
+.social-inside .social-eyebrow,
+.gadda-orange h1,
+.gadda-orange h2,
+.gadda-orange h3,
+.gadda-orange h4 {
+  text-decoration-color:
+    var(--gadda-black);
+}
+
+
+/* Dark section = orange shirorekha */
+
+.gadda-dark h1,
+.gadda-dark h2,
+.gadda-dark h3,
+.gadda-dark h4,
+.social-collection h1,
+.social-collection h2,
+.social-collection h3,
+.social-final h1,
+.social-final h2,
+.social-final h3 {
+  text-decoration-color:
+    var(--gadda-orange);
+}
+
+
+/* =========================================================
+   BODY COPY
+   Still Indic, but restrained enough to read
+   ========================================================= */
+
+p,
+li,
+label,
+input,
+textarea,
+select,
+option,
+blockquote,
+figcaption,
+td,
+th {
+  font-family:
+    var(--gadda-indic-ui) !important;
+
+  font-weight:
+    400 !important;
+
+  letter-spacing:
+    .018em !important;
+
+  line-height:
+    1.55 !important;
+
+  -webkit-text-stroke:
+    0 transparent;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header {
+  background:
+    var(--gadda-paper) !important;
+
+  border-color:
+    rgba(17,17,17,.18) !important;
+}
+
+
+.gadda-wordmark {
+  font-family:
+    var(--gadda-indic-display) !important;
+
+  font-size:
+    clamp(2.3rem, 3vw, 3.7rem) !important;
+
+  line-height:
+    .82 !important;
+
+  letter-spacing:
+    -.025em !important;
+
+  color:
+    var(--gadda-black) !important;
+}
+
+
+.gadda-nav-link,
+header nav a,
+header nav button {
+  font-family:
+    var(--gadda-indic-ui) !important;
+
+  font-size:
+    .98rem !important;
+
+  letter-spacing:
+    .018em !important;
+
+  line-height:
+    1.05 !important;
+}
+
+
+.gadda-match-button {
+  font-family:
+    var(--gadda-indic-ui) !important;
+
+  font-size:
+    1rem !important;
+
+  letter-spacing:
+    .012em !important;
+
+  border:
+    2px solid
+    var(--gadda-orange) !important;
+}
+
+
+/* utility UI also stays Indic */
+
+.gadda-header-tools,
+.gadda-header-tools *,
+header input,
+header select {
+  font-family:
+    var(--gadda-indic-ui) !important;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.gadda-hero-word {
+  font-family:
+    var(--gadda-indic-display) !important;
+
+  font-size:
+    clamp(4.8rem, 10vw, 9rem) !important;
+
+  letter-spacing:
+    -.025em !important;
+
+  line-height:
+    .82 !important;
+}
+
+
+/* =========================================================
+   LARGE EDITORIAL HEADINGS
+   ========================================================= */
+
+.social-story h2,
+.social-section-head h2,
+.social-inside h2,
+.social-gallery h2,
+.social-match h2,
+.gadda-menu-cover-title h2,
+.gadda-menu-page-copy h3,
+.gadda-menu-back-cover h2 {
+  font-family:
+    var(--gadda-indic-display) !important;
+
+  font-size:
+    clamp(3.8rem, 7.5vw, 7.3rem) !important;
+
+  font-weight:
+    400 !important;
+
+  letter-spacing:
+    -.018em !important;
+
+  line-height:
+    .88 !important;
+}
+
+
+/* =========================================================
+   SECTION LABELS
+   ========================================================= */
+
+.social-micro,
+.social-eyebrow,
+.social-section-label,
+.gadda-menu-attitude,
+.gadda-menu-page-number,
+.gadda-menu-cover-meta,
+.gadda-menu-image-label {
+  font-family:
+    var(--gadda-indic-ui) !important;
+
+  font-weight:
+    400 !important;
+
+  font-size:
+    .86rem !important;
+
+  letter-spacing:
+    .035em !important;
+
+  line-height:
+    1 !important;
+}
+
+
+/* =========================================================
+   PRODUCTS / PRICES
+   ========================================================= */
+
+.social-product-copy h3,
+.gadda-menu-page-copy h3 {
+  font-family:
+    var(--gadda-indic-display) !important;
+
+  font-size:
+    clamp(3rem, 5vw, 5.5rem) !important;
+
+  line-height:
+    .88 !important;
+}
+
+
+.social-product-kicker,
+.social-product-meta span,
+.social-product-footer,
+.gadda-menu-description,
+.gadda-menu-kicker,
+.gadda-menu-feature-list p,
+.gadda-menu-spec-row strong {
+  font-family:
+    var(--gadda-indic-ui) !important;
+}
+
+
+.gadda-menu-price strong {
+  font-family:
+    var(--gadda-indic-display) !important;
+
+  font-size:
+    clamp(2rem, 3.5vw, 3.6rem) !important;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+button,
+[role="button"],
+.social-solid-button,
+.social-outline-button,
+.gadda-button-primary,
+.gadda-button-orange {
+  font-family:
+    var(--gadda-indic-ui) !important;
+
+  font-weight:
+    400 !important;
+
+  letter-spacing:
+    .02em !important;
+}
+
+
+/* =========================================================
+   FORMS / LOGIN / ACCOUNT / CHECKOUT
+   ========================================================= */
+
+input,
+textarea,
+select,
+option {
+  font-family:
+    var(--gadda-indic-ui) !important;
+
+  font-size:
+    1rem !important;
+
+  letter-spacing:
+    .018em !important;
+}
+
+
+input::placeholder,
+textarea::placeholder {
+  font-family:
+    var(--gadda-indic-ui) !important;
+
+  opacity:
+    .55;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer,
+footer * {
+  font-family:
+    var(--gadda-indic-ui) !important;
+}
+
+
+footer h1,
+footer h2,
+footer h3,
+.social-final-word {
+  font-family:
+    var(--gadda-indic-display) !important;
+}
+
+
+/* =========================================================
+   GLOBAL ORANGE / BLACK / PAPER LANGUAGE
+   ========================================================= */
+
+::selection {
+  background:
+    var(--gadda-orange);
+
+  color:
+    var(--gadda-black);
+}
+
+
+a:hover,
+button:hover {
+  color:
+    var(--gadda-orange);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .gadda-wordmark {
+    font-size:
+      2.35rem !important;
+  }
+
+  .gadda-hero-word {
+    font-size:
+      clamp(4rem, 18vw, 6.6rem) !important;
+  }
+
+  .social-story h2,
+  .social-section-head h2,
+  .social-inside h2,
+  .social-gallery h2,
+  .social-match h2,
+  .gadda-menu-cover-title h2,
+  .gadda-menu-page-copy h3,
+  .gadda-menu-back-cover h2 {
+    font-size:
+      clamp(3.1rem, 14vw, 5.8rem) !important;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size:
+      16px !important;
+  }
+
+}
+
+
+/* =========================================================
+   IMPORTANT:
+   No Arial / Inter / Manrope / system sans is allowed to
+   visually win after this block.
+   ========================================================= */
+
+
+/* GADDA LEGIBILITY + SHIROREKHA FIX */
+
+/*
+  The previous version used text-decoration: overline.
+  On Shrikhand/Yatra that intersects with the glyphs.
+  We now draw the line independently ABOVE the heading.
+*/
+
+
+/* =========================================================
+   REMOVE DANGEROUS BUILT-IN OVERLINES
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.gadda-hero-word,
+.gadda-final-word,
+.gadda-menu-side-brand,
+.gadda-menu-cover-title h2,
+.gadda-menu-page-copy h3,
+.gadda-menu-back-cover h2,
+.social-story h2,
+.social-section-head h2,
+.social-inside h2,
+.social-gallery h2,
+.social-match h2 {
+  text-decoration:
+    none !important;
+}
+
+
+/* =========================================================
+   LARGE HEADINGS — BREATHING ROOM
+   ========================================================= */
+
+.social-story h2,
+.social-section-head h2,
+.social-inside h2,
+.social-gallery h2,
+.social-match h2,
+.gadda-menu-cover-title h2,
+.gadda-menu-page-copy h3,
+.gadda-menu-back-cover h2 {
+
+  position:
+    relative;
+
+  overflow:
+    visible !important;
+
+  padding-top:
+    .28em;
+
+  font-size:
+    clamp(3.2rem, 6.7vw, 6.6rem) !important;
+
+  line-height:
+    .98 !important;
+
+  letter-spacing:
+    -.012em !important;
+
+  text-wrap:
+    balance;
+}
+
+
+/* =========================================================
+   SAFE SHIROREKHA
+   ========================================================= */
+
+.social-story h2::before,
+.social-section-head h2::before,
+.social-inside h2::before,
+.social-gallery h2::before,
+.social-match h2::before,
+.gadda-menu-cover-title h2::before,
+.gadda-menu-page-copy h3::before,
+.gadda-menu-back-cover h2::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    .05em;
+
+  width:
+    min(70%, 14rem);
+
+  height:
+    5px;
+
+  background:
+    #FF6500;
+
+  pointer-events:
+    none;
+}
+
+
+/* On orange backgrounds use black */
+
+.social-inside h2::before,
+.gadda-orange h2::before {
+  background:
+    #111111;
+}
+
+
+/* On black backgrounds use orange */
+
+.social-collection h2::before,
+.social-final h2::before,
+.gadda-dark h2::before {
+  background:
+    #FF6500;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.gadda-hero-word {
+
+  position:
+    relative;
+
+  overflow:
+    visible !important;
+
+  padding-top:
+    .18em;
+
+  font-size:
+    clamp(4.5rem, 9vw, 8rem) !important;
+
+  line-height:
+    .92 !important;
+
+  letter-spacing:
+    -.018em !important;
+
+  text-decoration:
+    none !important;
+}
+
+
+.gadda-hero-word::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    min(58%, 14rem);
+
+  height:
+    6px;
+
+  background:
+    #FF6500 !important;
+}
+
+
+/* =========================================================
+   GADDA WORDMARK
+   ========================================================= */
+
+.gadda-wordmark {
+
+  position:
+    relative;
+
+  overflow:
+    visible !important;
+
+  padding-top:
+    .18em;
+
+  font-size:
+    clamp(2.25rem, 2.8vw, 3.5rem) !important;
+
+  line-height:
+    .95 !important;
+
+  letter-spacing:
+    -.01em !important;
+
+  text-decoration:
+    none !important;
+}
+
+
+.gadda-wordmark::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    100%;
+
+  height:
+    4px;
+
+  background:
+    #FF6500 !important;
+}
+
+
+/* =========================================================
+   SMALL LABELS CAN KEEP STRONGER SHIROREKHA
+   ========================================================= */
+
+.social-micro,
+.social-eyebrow,
+.social-section-label,
+.gadda-menu-attitude {
+
+  position:
+    relative;
+
+  overflow:
+    visible !important;
+
+  padding-top:
+    .7rem;
+
+  text-decoration:
+    none !important;
+}
+
+
+.social-micro::before,
+.social-eyebrow::before,
+.social-section-label::before,
+.gadda-menu-attitude::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    2.8rem;
+
+  height:
+    4px;
+
+  background:
+    #FF6500;
+}
+
+
+.social-inside .social-micro::before,
+.social-inside .social-eyebrow::before {
+  background:
+    #111111;
+}
+
+
+/* =========================================================
+   MATCH SECTION
+   Fix giant text collision
+   ========================================================= */
+
+.social-match-inner {
+
+  width:
+    min(100%, 78rem);
+
+  padding-inline:
+    clamp(1.25rem, 4vw, 4rem);
+}
+
+
+.social-match h2 {
+
+  max-width:
+    13ch;
+
+  margin-inline:
+    auto;
+
+  font-size:
+    clamp(3rem, 6.4vw, 6.2rem) !important;
+
+  line-height:
+    1.02 !important;
+}
+
+
+.social-match-inner > p:not(.social-micro) {
+
+  max-width:
+    48rem;
+
+  margin-inline:
+    auto;
+
+  margin-top:
+    2.2rem;
+
+  font-size:
+    clamp(1rem, 1.3vw, 1.2rem);
+
+  line-height:
+    1.65 !important;
+}
+
+
+/* =========================================================
+   GALLERY HEADING
+   ========================================================= */
+
+.social-gallery-copy {
+
+  overflow:
+    visible !important;
+}
+
+
+.social-gallery h2 {
+
+  max-width:
+    15ch;
+
+  font-size:
+    clamp(3.3rem, 6.3vw, 6.4rem) !important;
+
+  line-height:
+    1 !important;
+}
+
+
+/* =========================================================
+   INSIDE / NO BLACK BOX
+   ========================================================= */
+
+.social-inside-sticky {
+
+  overflow:
+    visible !important;
+}
+
+
+.social-inside h2 {
+
+  max-width:
+    7ch;
+
+  font-size:
+    clamp(3.4rem, 6.5vw, 6.5rem) !important;
+
+  line-height:
+    .94 !important;
+}
+
+
+/* =========================================================
+   BODY COPY
+   Keep readable, don't force Shrikhand everywhere
+   ========================================================= */
+
+p,
+li,
+blockquote,
+figcaption,
+input,
+textarea,
+select {
+
+  letter-spacing:
+    .01em !important;
+
+  line-height:
+    1.6 !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .social-story h2,
+  .social-section-head h2,
+  .social-inside h2,
+  .social-gallery h2,
+  .social-match h2,
+  .gadda-menu-cover-title h2,
+  .gadda-menu-page-copy h3,
+  .gadda-menu-back-cover h2 {
+
+    font-size:
+      clamp(2.8rem, 12vw, 5rem) !important;
+
+    line-height:
+      1 !important;
+
+    padding-top:
+      .35em;
+  }
+
+
+  .gadda-hero-word {
+
+    font-size:
+      clamp(4rem, 17vw, 6.5rem) !important;
+
+    line-height:
+      .95 !important;
+  }
+
+
+  .gadda-wordmark {
+
+    font-size:
+      2.35rem !important;
+  }
+
+}
+
+
+/* GADDA EXPLODED MATTRESS V2 */
+
+
+/* =========================================================
+   OUTER SCROLL TRACK
+   Long section creates the animation timeline.
+   ========================================================= */
+
+.gadda-explode {
+  position: relative;
+
+  min-height:
+    260svh;
+
+  background:
+    #FF6500;
+
+  color:
+    #111111;
+}
+
+
+/* =========================================================
+   PINNED SCENE
+   ========================================================= */
+
+.gadda-explode-sticky {
+  position: sticky;
+
+  top: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(15rem, .75fr)
+    minmax(25rem, 1.15fr)
+    minmax(18rem, .8fr);
+
+  gap:
+    clamp(2rem, 4vw, 5rem);
+
+  align-items:
+    center;
+
+  height:
+    100svh;
+
+  overflow:
+    hidden;
+
+  padding:
+    clamp(2rem, 4vw, 4.5rem);
+}
+
+
+/* =========================================================
+   LEFT
+   ========================================================= */
+
+.gadda-explode-copy {
+  align-self:
+    center;
+}
+
+
+.gadda-explode-label {
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  padding-top:
+    .8rem;
+
+  font-size:
+    .8rem !important;
+
+  letter-spacing:
+    .05em !important;
+}
+
+
+.gadda-explode-label::before {
+  content: "";
+
+  position:
+    absolute;
+
+  left: 0;
+  top: 0;
+
+  width:
+    3rem;
+
+  height:
+    4px;
+
+  background:
+    #111111;
+}
+
+
+.gadda-explode-copy h2 {
+  position:
+    relative;
+
+  margin-top:
+    1.5rem;
+
+  padding-top:
+    .25em;
+
+  font-size:
+    clamp(4.2rem, 7.7vw, 8rem) !important;
+
+  line-height:
+    .88 !important;
+
+  letter-spacing:
+    -.025em !important;
+
+  text-decoration:
+    none !important;
+}
+
+
+.gadda-explode-copy h2::before {
+  content: "";
+
+  position:
+    absolute;
+
+  left: 0;
+  top: 0;
+
+  width:
+    min(65%, 11rem);
+
+  height:
+    5px;
+
+  background:
+    #111111;
+}
+
+
+.gadda-explode-intro {
+  max-width:
+    25rem;
+
+  margin-top:
+    2rem;
+
+  font-size:
+    clamp(.95rem, 1.15vw, 1.15rem);
+
+  line-height:
+    1.55 !important;
+}
+
+
+.gadda-explode-scroll {
+  margin-top:
+    3.2rem;
+}
+
+
+.gadda-explode-scroll > span {
+  font-size:
+    .64rem;
+
+  letter-spacing:
+    .12em;
+}
+
+
+.gadda-explode-scroll > div {
+  width:
+    100%;
+
+  max-width:
+    15rem;
+
+  height:
+    3px;
+
+  margin-top:
+    .8rem;
+
+  overflow:
+    hidden;
+
+  background:
+    rgba(17,17,17,.2);
+}
+
+
+.gadda-explode-scroll i {
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  background:
+    #111111;
+
+  transform-origin:
+    left center;
+}
+
+
+/* =========================================================
+   CENTRE STAGE
+   ========================================================= */
+
+.gadda-explode-stage {
+  position:
+    relative;
+
+  height:
+    min(76svh, 48rem);
+
+  border-top:
+    2px solid #111111;
+
+  border-bottom:
+    2px solid #111111;
+
+  padding:
+    1.2rem 0;
+}
+
+
+.gadda-explode-stage-top {
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+
+  font-size:
+    .63rem;
+
+  letter-spacing:
+    .12em;
+}
+
+
+.gadda-layer-stack {
+  position:
+    absolute;
+
+  inset:
+    4.8rem 0 4rem;
+
+  perspective:
+    1000px;
+}
+
+
+.gadda-layer-axis {
+  position:
+    absolute;
+
+  left:
+    50%;
+
+  top:
+    8%;
+
+  bottom:
+    6%;
+
+  width:
+    1px;
+
+  border-left:
+    1px dashed
+    rgba(17,17,17,.28);
+}
+
+
+/* =========================================================
+   ACTUAL MATTRESS LAYERS
+   ========================================================= */
+
+.gadda-layer {
+  position:
+    absolute;
+
+  left:
+    50%;
+
+  bottom:
+    6.5rem;
+
+  width:
+    min(88%, 30rem);
+
+  border:
+    0;
+
+  background:
+    transparent;
+
+  cursor:
+    pointer;
+
+  transform-origin:
+    center;
+
+  transition:
+    transform
+      650ms
+      cubic-bezier(.16,1,.3,1),
+
+    filter
+      300ms
+      ease,
+
+    opacity
+      300ms
+      ease;
+}
+
+
+.gadda-layer img {
+  display:
+    block;
+
+  width:
+    100%;
+
+  max-height:
+    8rem;
+
+  object-fit:
+    contain;
+
+  pointer-events:
+    none;
+
+  user-select:
+    none;
+
+  filter:
+    drop-shadow(
+      0 14px 11px
+      rgba(0,0,0,.16)
+    );
+}
+
+
+.gadda-layer:hover,
+.gadda-layer.is-active {
+  filter:
+    brightness(1.035);
+}
+
+
+.gadda-layer-dot {
+  position:
+    absolute;
+
+  right:
+    4%;
+
+  top:
+    50%;
+
+  width:
+    13px;
+
+  height:
+    13px;
+
+  border:
+    3px solid #111111;
+
+  border-radius:
+    50%;
+
+  background:
+    #FF6500;
+
+  opacity:
+    0;
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    opacity 220ms ease;
+}
+
+
+.gadda-layer.is-active
+.gadda-layer-dot {
+  opacity:
+    1;
+}
+
+
+.gadda-layer-caption {
+  position:
+    absolute;
+
+  left:
+    0;
+
+  right:
+    0;
+
+  bottom:
+    1rem;
+
+  display:
+    flex;
+
+  align-items:
+    end;
+
+  justify-content:
+    space-between;
+
+  font-size:
+    .63rem;
+
+  letter-spacing:
+    .1em;
+}
+
+
+.gadda-layer-caption strong {
+  font-size:
+    2rem;
+
+  line-height:
+    1;
+}
+
+
+/* =========================================================
+   RIGHT INFORMATION PANEL
+   ========================================================= */
+
+.gadda-explode-info {
+  align-self:
+    center;
+}
+
+
+.gadda-explode-number {
+  border-top:
+    2px solid #111111;
+
+  padding-top:
+    1rem;
+
+  font-size:
+    2rem;
+
+  font-style:
+    italic;
+}
+
+
+.gadda-explode-active {
+  min-height:
+    16rem;
+
+  padding-top:
+    3rem;
+
+  animation:
+    gadda-layer-copy-in
+    460ms
+    cubic-bezier(.16,1,.3,1)
+    both;
+}
+
+
+@keyframes gadda-layer-copy-in {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+.gadda-explode-active > p:first-child {
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  padding-top:
+    .65rem;
+
+  font-size:
+    .72rem;
+
+  letter-spacing:
+    .09em;
+}
+
+
+.gadda-explode-active >
+p:first-child::before {
+  content: "";
+
+  position:
+    absolute;
+
+  left: 0;
+  top: 0;
+
+  width:
+    3rem;
+
+  height:
+    4px;
+
+  background:
+    #111111;
+}
+
+
+.gadda-explode-active h3 {
+  margin-top:
+    .8rem;
+
+  font-size:
+    clamp(2.7rem, 4.6vw, 5rem) !important;
+
+  line-height:
+    .9 !important;
+
+  letter-spacing:
+    -.025em !important;
+}
+
+
+.gadda-explode-callout {
+  display:
+    grid;
+
+  grid-template-columns:
+    4rem 1fr;
+
+  gap:
+    1rem;
+
+  align-items:
+    start;
+
+  margin-top:
+    2rem;
+}
+
+
+.gadda-explode-callout span {
+  height:
+    2px;
+
+  margin-top:
+    .7rem;
+
+  background:
+    #111111;
+}
+
+
+.gadda-explode-callout p {
+  max-width:
+    18rem;
+
+  font-size:
+    1rem;
+
+  line-height:
+    1.5 !important;
+}
+
+
+/* =========================================================
+   LAYER PICKER
+   ========================================================= */
+
+.gadda-layer-picker {
+  display:
+    grid;
+
+  margin-top:
+    2.5rem;
+
+  border-top:
+    1px solid #111111;
+}
+
+
+.gadda-layer-picker button {
+  display:
+    grid;
+
+  grid-template-columns:
+    2.5rem 1fr;
+
+  gap:
+    1rem;
+
+  width:
+    100%;
+
+  border:
+    0;
+
+  border-bottom:
+    1px solid
+    rgba(17,17,17,.25);
+
+  background:
+    transparent;
+
+  padding:
+    .75rem 0;
+
+  color:
+    #111111;
+
+  text-align:
+    left;
+
+  cursor:
+    pointer;
+
+  opacity:
+    .48;
+
+  transition:
+    opacity 220ms ease,
+    padding-left 320ms
+    cubic-bezier(.16,1,.3,1);
+}
+
+
+.gadda-layer-picker button:hover,
+.gadda-layer-picker button.is-active {
+  opacity:
+    1;
+
+  padding-left:
+    .45rem;
+}
+
+
+.gadda-layer-picker span {
+  font-size:
+    .65rem;
+}
+
+
+.gadda-layer-picker strong {
+  font-size:
+    .85rem;
+
+  font-weight:
+    400;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .gadda-explode {
+    min-height:
+      220svh;
+  }
+
+
+  .gadda-explode-sticky {
+    grid-template-columns:
+      .7fr 1.3fr;
+
+    gap:
+      2rem;
+  }
+
+
+  .gadda-explode-info {
+    grid-column:
+      1 / -1;
+
+    display:
+      none;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 720px) {
+
+  .gadda-explode {
+    min-height:
+      210svh;
+  }
+
+
+  .gadda-explode-sticky {
+    display:
+      grid;
+
+    grid-template-columns:
+      1fr;
+
+    align-content:
+      start;
+
+    height:
+      100svh;
+
+    padding:
+      1.3rem;
+  }
+
+
+  .gadda-explode-copy h2 {
+    font-size:
+      clamp(3.3rem, 18vw, 5rem) !important;
+  }
+
+
+  .gadda-explode-intro {
+    display:
+      none;
+  }
+
+
+  .gadda-explode-scroll {
+    margin-top:
+      1.4rem;
+  }
+
+
+  .gadda-explode-stage {
+    height:
+      49svh;
+
+    margin-top:
+      .6rem;
+  }
+
+
+  .gadda-layer {
+    width:
+      min(86vw, 24rem);
+  }
+
+
+  .gadda-layer img {
+    max-height:
+      5.5rem;
+  }
+
+
+  .gadda-explode-info {
+    display:
+      none;
+  }
+
+}
+
+
+/* GADDA ANIMATED COLLECTION */
+
+
+/* =========================================================
+   SCROLL TRACK
+   ========================================================= */
+
+.gadda-collection-motion {
+
+  position:
+    relative;
+
+  min-height:
+    270svh;
+
+  background:
+    #111111;
+
+  color:
+    #F3ECDD;
+
+}
+
+
+/* =========================================================
+   PINNED SCENE
+   ========================================================= */
+
+.gadda-collection-sticky {
+
+  position:
+    sticky;
+
+  top:
+    0;
+
+  height:
+    100svh;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    minmax(15rem, .72fr)
+    minmax(25rem, 1.25fr)
+    minmax(18rem, .78fr);
+
+  gap:
+    clamp(2rem, 4vw, 5rem);
+
+  align-items:
+    center;
+
+  overflow:
+    hidden;
+
+  padding:
+    clamp(2rem, 4vw, 4.5rem);
+
+}
+
+
+
+/* =========================================================
+   LEFT
+   ========================================================= */
+
+.gadda-collection-copy {
+
+  align-self:
+    center;
+
+}
+
+
+.gadda-collection-label {
+
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  padding-top:
+    .75rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .8rem !important;
+
+  letter-spacing:
+    .06em !important;
+
+}
+
+
+.gadda-collection-label::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    3rem;
+
+  height:
+    5px;
+
+  background:
+    #FF6500;
+
+}
+
+
+.gadda-collection-copy h2 {
+
+  position:
+    relative;
+
+  margin-top:
+    1.7rem;
+
+  padding-top:
+    .25em;
+
+  color:
+    #F3ECDD;
+
+  font-size:
+    clamp(
+      4rem,
+      7.3vw,
+      7.6rem
+    ) !important;
+
+  line-height:
+    .88 !important;
+
+  letter-spacing:
+    -.025em !important;
+
+  text-decoration:
+    none !important;
+
+}
+
+
+.gadda-collection-copy h2::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    min(
+      70%,
+      12rem
+    );
+
+  height:
+    5px;
+
+  background:
+    #FF6500;
+
+}
+
+
+.gadda-collection-intro {
+
+  max-width:
+    23rem;
+
+  margin-top:
+    2rem;
+
+  color:
+    rgba(
+      243,
+      236,
+      221,
+      .58
+    );
+
+  font-size:
+    1rem;
+
+  line-height:
+    1.6 !important;
+
+}
+
+
+.gadda-collection-progress {
+
+  margin-top:
+    3rem;
+
+}
+
+
+.gadda-collection-progress span {
+
+  color:
+    #FF6500;
+
+  font-size:
+    .64rem;
+
+  letter-spacing:
+    .11em;
+
+}
+
+
+.gadda-collection-progress > div {
+
+  width:
+    100%;
+
+  max-width:
+    15rem;
+
+  height:
+    3px;
+
+  margin-top:
+    .8rem;
+
+  overflow:
+    hidden;
+
+  background:
+    rgba(
+      255,
+      101,
+      0,
+      .22
+    );
+
+}
+
+
+.gadda-collection-progress i {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  background:
+    #FF6500;
+
+  transform-origin:
+    left center;
+
+}
+
+
+
+/* =========================================================
+   CENTRE STAGE
+   ========================================================= */
+
+.gadda-collection-stage {
+
+  position:
+    relative;
+
+  height:
+    min(
+      76svh,
+      48rem
+    );
+
+  border-top:
+    2px solid
+    rgba(
+      243,
+      236,
+      221,
+      .75
+    );
+
+  border-bottom:
+    2px solid
+    rgba(
+      243,
+      236,
+      221,
+      .75
+    );
+
+}
+
+
+.gadda-collection-stage-head {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+
+  padding-top:
+    1.1rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .63rem;
+
+  letter-spacing:
+    .11em;
+
+}
+
+
+.gadda-product-deck {
+
+  position:
+    absolute;
+
+  inset:
+    3.8rem 0 3.8rem;
+
+  perspective:
+    1200px;
+
+}
+
+
+
+/* =========================================================
+   PRODUCT CARDS
+   ========================================================= */
+
+.gadda-product-card {
+
+  position:
+    absolute;
+
+  left:
+    50%;
+
+  top:
+    50%;
+
+  width:
+    min(
+      78%,
+      25rem
+    );
+
+  overflow:
+    hidden;
+
+  border:
+    2px solid
+    #FF6500;
+
+  background:
+    #F3ECDD;
+
+  color:
+    #111111;
+
+  cursor:
+    pointer;
+
+  box-shadow:
+    0 18px 45px
+    rgba(
+      0,
+      0,
+      0,
+      .38
+    );
+
+  transform-origin:
+    center;
+
+  transition:
+    transform
+      650ms
+      cubic-bezier(
+        .16,
+        1,
+        .3,
+        1
+      ),
+
+    box-shadow
+      320ms ease,
+
+    filter
+      320ms ease,
+
+    opacity
+      320ms ease;
+
+}
+
+
+.gadda-product-card:not(
+  .is-active
+) {
+
+  opacity:
+    .72;
+
+  filter:
+    saturate(.65)
+    brightness(.8);
+
+}
+
+
+.gadda-product-card.is-active {
+
+  opacity:
+    1;
+
+  filter:
+    none;
+
+  box-shadow:
+    14px 14px 0
+      #FF6500,
+
+    0 30px 70px
+      rgba(
+        0,
+        0,
+        0,
+        .45
+      );
+
+}
+
+
+.gadda-product-card-image {
+
+  height:
+    17rem;
+
+  overflow:
+    hidden;
+
+  background:
+    #222222;
+
+}
+
+
+.gadda-product-card-image img {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+
+  transition:
+    transform
+    900ms
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    );
+
+}
+
+
+.gadda-product-card.is-active
+.gadda-product-card-image img {
+
+  transform:
+    scale(1.035);
+
+}
+
+
+.gadda-product-card-bottom {
+
+  display:
+    flex;
+
+  align-items:
+    end;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+
+  padding:
+    1.3rem;
+
+  text-align:
+    left;
+
+}
+
+
+.gadda-product-card-bottom > div {
+
+  display:
+    grid;
+
+}
+
+
+.gadda-product-card-bottom small {
+
+  margin-bottom:
+    .4rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .63rem;
+
+}
+
+
+.gadda-product-card-bottom strong {
+
+  font-size:
+    clamp(
+      1.7rem,
+      2.5vw,
+      2.7rem
+    );
+
+  font-weight:
+    400;
+
+  line-height:
+    .9;
+
+}
+
+
+.gadda-product-card-bottom > span {
+
+  font-size:
+    .58rem;
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+
+}
+
+
+.gadda-collection-click {
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  right:
+    0;
+
+  bottom:
+    .9rem;
+
+  display:
+    flex;
+
+  align-items:
+    end;
+
+  justify-content:
+    space-between;
+
+  color:
+    rgba(
+      243,
+      236,
+      221,
+      .65
+    );
+
+  font-size:
+    .62rem;
+
+  letter-spacing:
+    .1em;
+
+}
+
+
+.gadda-collection-click strong {
+
+  color:
+    #FF6500;
+
+  font-size:
+    2rem;
+
+  line-height:
+    1;
+
+}
+
+
+
+/* =========================================================
+   RIGHT PRODUCT INFORMATION
+   ========================================================= */
+
+.gadda-collection-info {
+
+  align-self:
+    center;
+
+}
+
+
+.gadda-collection-info-number {
+
+  border-top:
+    2px solid
+    rgba(
+      243,
+      236,
+      221,
+      .7
+    );
+
+  padding-top:
+    1rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    2rem;
+
+}
+
+
+.gadda-collection-active {
+
+  min-height:
+    22rem;
+
+  padding-top:
+    2.7rem;
+
+  animation:
+    gadda-product-copy-in
+    460ms
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    )
+    both;
+
+}
+
+
+@keyframes
+gadda-product-copy-in {
+
+  from {
+
+    opacity:
+      0;
+
+    transform:
+      translateY(
+        22px
+      );
+
+  }
+
+  to {
+
+    opacity:
+      1;
+
+    transform:
+      translateY(
+        0
+      );
+
+  }
+
+}
+
+
+.gadda-collection-active
+> p:first-child {
+
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  padding-top:
+    .7rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .7rem;
+
+  letter-spacing:
+    .1em;
+
+  text-transform:
+    uppercase;
+
+}
+
+
+.gadda-collection-active
+> p:first-child::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  top:
+    0;
+
+  left:
+    0;
+
+  width:
+    3rem;
+
+  height:
+    4px;
+
+  background:
+    #FF6500;
+
+}
+
+
+.gadda-collection-active h3 {
+
+  margin-top:
+    .8rem;
+
+  color:
+    #F3ECDD;
+
+  font-size:
+    clamp(
+      2.8rem,
+      4.5vw,
+      4.8rem
+    ) !important;
+
+  line-height:
+    .9 !important;
+
+  letter-spacing:
+    -.02em !important;
+
+}
+
+
+.gadda-collection-active h4 {
+
+  margin-top:
+    1rem;
+
+  color:
+    #F3ECDD;
+
+  font-size:
+    1.1rem;
+
+}
+
+
+.gadda-collection-description {
+
+  max-width:
+    22rem;
+
+  margin-top:
+    .8rem;
+
+  color:
+    rgba(
+      243,
+      236,
+      221,
+      .55
+    );
+
+  font-size:
+    .95rem;
+
+  line-height:
+    1.55 !important;
+
+}
+
+
+
+/* =========================================================
+   SPECS
+   ========================================================= */
+
+.gadda-collection-specs {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      1fr
+    );
+
+  margin-top:
+    1.8rem;
+
+  border-top:
+    1px solid
+    rgba(
+      243,
+      236,
+      221,
+      .35
+    );
+
+  border-bottom:
+    1px solid
+    rgba(
+      243,
+      236,
+      221,
+      .35
+    );
+
+}
+
+
+.gadda-collection-specs
+> div {
+
+  padding:
+    .9rem
+    .5rem
+    .9rem
+    0;
+
+}
+
+
+.gadda-collection-specs small,
+.gadda-collection-price small {
+
+  display:
+    block;
+
+  margin-bottom:
+    .3rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .55rem;
+
+  letter-spacing:
+    .1em;
+
+}
+
+
+.gadda-collection-specs strong {
+
+  color:
+    #F3ECDD;
+
+  font-size:
+    .72rem;
+
+  font-weight:
+    400;
+
+}
+
+
+
+/* =========================================================
+   PRICE
+   ========================================================= */
+
+.gadda-collection-price {
+
+  display:
+    flex;
+
+  align-items:
+    end;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+
+  margin-top:
+    1.7rem;
+
+}
+
+
+.gadda-collection-price strong {
+
+  color:
+    #F3ECDD;
+
+  font-size:
+    clamp(
+      1.8rem,
+      3vw,
+      3rem
+    );
+
+  font-weight:
+    400;
+
+  line-height:
+    .95;
+
+}
+
+
+.gadda-collection-price a {
+
+  border-bottom:
+    2px solid
+    #FF6500;
+
+  padding-bottom:
+    .25rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .72rem;
+
+  letter-spacing:
+    .08em;
+
+}
+
+
+
+/* =========================================================
+   PRODUCT PICKER
+   ========================================================= */
+
+.gadda-collection-picker {
+
+  display:
+    grid;
+
+  margin-top:
+    2.2rem;
+
+  border-top:
+    1px solid
+    rgba(
+      243,
+      236,
+      221,
+      .3
+    );
+
+}
+
+
+.gadda-collection-picker button {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    2.5rem 1fr;
+
+  gap:
+    .7rem;
+
+  width:
+    100%;
+
+  border:
+    0;
+
+  border-bottom:
+    1px solid
+    rgba(
+      243,
+      236,
+      221,
+      .2
+    );
+
+  background:
+    transparent;
+
+  padding:
+    .65rem 0;
+
+  color:
+    #F3ECDD;
+
+  text-align:
+    left;
+
+  cursor:
+    pointer;
+
+  opacity:
+    .38;
+
+  transition:
+    opacity 220ms ease,
+    padding-left 320ms
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    );
+
+}
+
+
+.gadda-collection-picker
+button:hover,
+
+.gadda-collection-picker
+button.is-active {
+
+  opacity:
+    1;
+
+  padding-left:
+    .4rem;
+
+  color:
+    #FF6500;
+
+}
+
+
+.gadda-collection-picker span {
+
+  font-size:
+    .62rem;
+
+}
+
+
+.gadda-collection-picker strong {
+
+  font-size:
+    .8rem;
+
+  font-weight:
+    400;
+
+}
+
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (
+  max-width: 1100px
+) {
+
+  .gadda-collection-motion {
+
+    min-height:
+      230svh;
+
+  }
+
+
+  .gadda-collection-sticky {
+
+    grid-template-columns:
+      .72fr
+      1.28fr;
+
+    gap:
+      2rem;
+
+  }
+
+
+  .gadda-collection-info {
+
+    display:
+      none;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (
+  max-width: 720px
+) {
+
+  .gadda-collection-motion {
+
+    min-height:
+      220svh;
+
+  }
+
+
+  .gadda-collection-sticky {
+
+    display:
+      grid;
+
+    grid-template-columns:
+      1fr;
+
+    align-content:
+      start;
+
+    height:
+      100svh;
+
+    padding:
+      1.3rem;
+
+  }
+
+
+  .gadda-collection-copy h2 {
+
+    font-size:
+      clamp(
+        3.1rem,
+        16vw,
+        4.8rem
+      ) !important;
+
+  }
+
+
+  .gadda-collection-intro {
+
+    display:
+      none;
+
+  }
+
+
+  .gadda-collection-progress {
+
+    margin-top:
+      1.3rem;
+
+  }
+
+
+  .gadda-collection-stage {
+
+    height:
+      50svh;
+
+    margin-top:
+      .8rem;
+
+  }
+
+
+  .gadda-product-card {
+
+    width:
+      min(
+        72vw,
+        19rem
+      );
+
+  }
+
+
+  .gadda-product-card-image {
+
+    height:
+      12rem;
+
+  }
+
+
+  .gadda-collection-info {
+
+    display:
+      none;
+
+  }
+
+}
+
+
+/* GADDA CAMPAIGN BILLBOARD */
+
+
+/* =========================================================
+   MAIN HERO
+   Shorter than the old cinematic homepage.
+   ========================================================= */
+
+.gadda-campaign {
+
+  --campaign-bg:
+    #FF6500;
+
+  --campaign-paper:
+    #F3ECDD;
+
+  position:
+    relative;
+
+  min-height:
+    min(78svh, 52rem);
+
+  overflow:
+    hidden;
+
+  background:
+    var(--campaign-bg);
+
+  color:
+    #111111;
+
+  border-bottom:
+    5px solid #111111;
+
+}
+
+
+/* =========================================================
+   TOP META
+   ========================================================= */
+
+.gadda-campaign-top {
+
+  position:
+    relative;
+
+  z-index:
+    5;
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    2rem;
+
+  padding:
+    1rem
+    clamp(1.4rem, 4vw, 4rem);
+
+  border-bottom:
+    2px solid #111111;
+
+  font-size:
+    .66rem;
+
+  letter-spacing:
+    .12em;
+
+  text-transform:
+    uppercase;
+
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.gadda-campaign-grid {
+
+  position:
+    relative;
+
+  z-index:
+    2;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    minmax(20rem, .82fr)
+    minmax(30rem, 1.18fr);
+
+  min-height:
+    58svh;
+
+}
+
+
+/* =========================================================
+   COPY
+   ========================================================= */
+
+.gadda-campaign-copy {
+
+  position:
+    relative;
+
+  z-index:
+    4;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  justify-content:
+    center;
+
+  padding:
+    clamp(2rem, 5vw, 5rem);
+
+}
+
+
+.gadda-campaign-mini {
+
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  padding-top:
+    .8rem;
+
+  font-size:
+    .72rem;
+
+  letter-spacing:
+    .1em;
+
+}
+
+
+.gadda-campaign-mini::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    3.2rem;
+
+  height:
+    5px;
+
+  background:
+    #111111;
+
+}
+
+
+.gadda-campaign-headline {
+
+  margin-top:
+    1.4rem;
+
+  text-decoration:
+    none !important;
+
+}
+
+
+.gadda-campaign-headline::before {
+
+  content:
+    none !important;
+
+}
+
+
+.gadda-campaign-headline span,
+.gadda-campaign-headline strong {
+
+  display:
+    block;
+
+  font-family:
+    var(
+      --gadda-indic-display,
+      "Shrikhand",
+      serif
+    ) !important;
+
+  font-weight:
+    400 !important;
+
+  line-height:
+    .82;
+
+  letter-spacing:
+    -.025em;
+
+}
+
+
+.gadda-campaign-headline span {
+
+  font-size:
+    clamp(
+      4rem,
+      7.4vw,
+      8rem
+    );
+
+}
+
+
+.gadda-campaign-headline strong {
+
+  width:
+    max-content;
+
+  max-width:
+    100%;
+
+  margin-top:
+    .2rem;
+
+  padding:
+    .11em .13em;
+
+  background:
+    #111111;
+
+  color:
+    var(--campaign-paper);
+
+  font-size:
+    clamp(
+      3.2rem,
+      6vw,
+      6.6rem
+    );
+
+  transform:
+    rotate(-1.8deg);
+
+  box-shadow:
+    .11em .11em 0
+    var(--campaign-paper);
+
+}
+
+
+.gadda-campaign-body {
+
+  max-width:
+    30rem;
+
+  margin-top:
+    2rem;
+
+  font-size:
+    clamp(
+      1rem,
+      1.35vw,
+      1.25rem
+    );
+
+  line-height:
+    1.55 !important;
+
+}
+
+
+.gadda-campaign-cta {
+
+  width:
+    max-content;
+
+  margin-top:
+    1.8rem;
+
+  border:
+    2px solid #111111;
+
+  background:
+    var(--campaign-paper);
+
+  padding:
+    .9rem 1.2rem;
+
+  color:
+    #111111;
+
+  font-size:
+    .82rem;
+
+  letter-spacing:
+    .04em;
+
+  box-shadow:
+    6px 6px 0
+    #111111;
+
+  transform:
+    rotate(.8deg);
+
+  transition:
+    transform
+    260ms
+    cubic-bezier(.16,1,.3,1),
+
+    background
+    220ms ease;
+
+}
+
+
+.gadda-campaign-cta:hover {
+
+  background:
+    #111111;
+
+  color:
+    var(--campaign-paper);
+
+  transform:
+    rotate(-1deg)
+    translate(
+      5px,
+      5px
+    );
+
+  box-shadow:
+    1px 1px 0
+    #111111;
+
+}
+
+
+
+/* =========================================================
+   VISUAL SIDE
+   ========================================================= */
+
+.gadda-campaign-visual {
+
+  position:
+    relative;
+
+  min-height:
+    34rem;
+
+  overflow:
+    hidden;
+
+  border-left:
+    2px solid #111111;
+
+  background:
+    var(--campaign-paper);
+
+}
+
+
+.gadda-campaign-big-word {
+
+  position:
+    absolute;
+
+  left:
+    -2%;
+
+  top:
+    6%;
+
+  color:
+    transparent;
+
+  -webkit-text-stroke:
+    2px #111111;
+
+  font-family:
+    var(
+      --gadda-indic-display,
+      "Shrikhand",
+      serif
+    );
+
+  font-size:
+    clamp(
+      7rem,
+      14vw,
+      14rem
+    );
+
+  line-height:
+    .7;
+
+  opacity:
+    .13;
+
+  transform:
+    rotate(-4deg);
+
+}
+
+
+.gadda-campaign-sun {
+
+  position:
+    absolute;
+
+  right:
+    -8%;
+
+  top:
+    10%;
+
+  width:
+    clamp(
+      15rem,
+      28vw,
+      27rem
+    );
+
+  aspect-ratio:
+    1;
+
+  border:
+    4px solid #111111;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--campaign-bg);
+
+  box-shadow:
+    18px 18px 0
+    #111111;
+
+  animation:
+    gadda-campaign-pulse
+    5s ease-in-out
+    infinite;
+
+}
+
+
+@keyframes
+gadda-campaign-pulse {
+
+  0%,
+  100% {
+
+    transform:
+      scale(1)
+      rotate(0deg);
+
+  }
+
+  50% {
+
+    transform:
+      scale(1.035)
+      rotate(2deg);
+
+  }
+
+}
+
+
+/* =========================================================
+   PRODUCT CUTOUT
+   ========================================================= */
+
+.gadda-campaign-product {
+
+  position:
+    absolute;
+
+  z-index:
+    3;
+
+  left:
+    8%;
+
+  right:
+    4%;
+
+  top:
+    16%;
+
+  bottom:
+    13%;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  transform:
+    translate3d(
+      var(--campaign-x),
+      var(--campaign-y),
+      0
+    )
+    rotate(-2deg);
+
+  transition:
+    transform
+    320ms
+    cubic-bezier(.16,1,.3,1);
+
+}
+
+
+.gadda-campaign-product img {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    contain;
+
+  filter:
+    drop-shadow(
+      0 32px 20px
+      rgba(0,0,0,.28)
+    );
+
+  animation:
+    gadda-product-float
+    4.8s
+    ease-in-out
+    infinite;
+
+}
+
+
+@keyframes
+gadda-product-float {
+
+  0%,
+  100% {
+
+    transform:
+      translateY(0)
+      rotate(-1deg);
+
+  }
+
+  50% {
+
+    transform:
+      translateY(-12px)
+      rotate(1deg);
+
+  }
+
+}
+
+
+.gadda-campaign-placeholder {
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  width:
+    70%;
+
+  aspect-ratio:
+    16/9;
+
+  border:
+    3px dashed #111111;
+
+  text-align:
+    center;
+
+  font-size:
+    2rem;
+
+}
+
+
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+.gadda-campaign-arrow {
+
+  position:
+    absolute;
+
+  z-index:
+    4;
+
+  right:
+    10%;
+
+  top:
+    10%;
+
+  font-size:
+    4rem;
+
+  animation:
+    gadda-arrow-wiggle
+    1.8s ease-in-out
+    infinite;
+
+}
+
+
+@keyframes
+gadda-arrow-wiggle {
+
+  0%,
+  100% {
+
+    transform:
+      rotate(-8deg);
+
+  }
+
+  50% {
+
+    transform:
+      rotate(8deg)
+      translateY(7px);
+
+  }
+
+}
+
+
+
+/* =========================================================
+   PRODUCT NAME
+   ========================================================= */
+
+.gadda-campaign-product-name {
+
+  position:
+    absolute;
+
+  z-index:
+    5;
+
+  right:
+    5%;
+
+  bottom:
+    5%;
+
+  border:
+    2px solid #111111;
+
+  background:
+    var(--campaign-bg);
+
+  padding:
+    .8rem 1rem;
+
+  transform:
+    rotate(2deg);
+
+  box-shadow:
+    6px 6px 0
+    #111111;
+
+}
+
+
+.gadda-campaign-product-name small {
+
+  display:
+    block;
+
+  font-size:
+    .55rem;
+
+  letter-spacing:
+    .11em;
+
+}
+
+
+.gadda-campaign-product-name strong {
+
+  display:
+    block;
+
+  margin-top:
+    .2rem;
+
+  font-size:
+    1.5rem;
+
+  font-weight:
+    400;
+
+}
+
+
+
+/* =========================================================
+   STICKERS
+   ========================================================= */
+
+.gadda-sticker {
+
+  position:
+    absolute;
+
+  z-index:
+    6;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  min-width:
+    8rem;
+
+  min-height:
+    3.4rem;
+
+  border:
+    2px solid #111111;
+
+  background:
+    var(--campaign-paper);
+
+  padding:
+    .65rem 1rem;
+
+  font-size:
+    .68rem;
+
+  letter-spacing:
+    .06em;
+
+  text-align:
+    center;
+
+  box-shadow:
+    5px 5px 0
+    #111111;
+
+}
+
+
+.gadda-sticker-1 {
+
+  left:
+    4%;
+
+  top:
+    7%;
+
+  transform:
+    rotate(-8deg);
+
+}
+
+
+.gadda-sticker-2 {
+
+  left:
+    6%;
+
+  bottom:
+    8%;
+
+  transform:
+    rotate(6deg);
+
+}
+
+
+.gadda-sticker-3 {
+
+  right:
+    4%;
+
+  top:
+    38%;
+
+  background:
+    #111111;
+
+  color:
+    var(--campaign-paper);
+
+  transform:
+    rotate(8deg);
+
+}
+
+
+.gadda-sticker-4 {
+
+  right:
+    22%;
+
+  bottom:
+    3%;
+
+  transform:
+    rotate(-5deg);
+
+}
+
+
+
+/* =========================================================
+   STARBURST
+   ========================================================= */
+
+.gadda-campaign-starburst {
+
+  position:
+    absolute;
+
+  z-index:
+    7;
+
+  right:
+    8%;
+
+  bottom:
+    18%;
+
+  display:
+    grid;
+
+  width:
+    8.5rem;
+
+  aspect-ratio:
+    1;
+
+  place-items:
+    center;
+
+  background:
+    #111111;
+
+  color:
+    var(--campaign-paper);
+
+  clip-path:
+    polygon(
+      50% 0%,
+      60% 20%,
+      79% 7%,
+      78% 30%,
+      100% 28%,
+      82% 46%,
+      100% 60%,
+      76% 63%,
+      83% 88%,
+      60% 77%,
+      50% 100%,
+      40% 77%,
+      17% 88%,
+      24% 63%,
+      0% 60%,
+      18% 46%,
+      0% 28%,
+      22% 30%,
+      21% 7%,
+      40% 20%
+    );
+
+  animation:
+    gadda-star-spin
+    16s linear
+    infinite;
+
+}
+
+
+.gadda-campaign-starburst span {
+
+  width:
+    6rem;
+
+  text-align:
+    center;
+
+  font-size:
+    .7rem;
+
+  letter-spacing:
+    .05em;
+
+  animation:
+    gadda-star-unspin
+    16s linear
+    infinite;
+
+}
+
+
+@keyframes
+gadda-star-spin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
+
+
+@keyframes
+gadda-star-unspin {
+
+  to {
+    transform:
+      rotate(-360deg);
+  }
+
+}
+
+
+
+/* =========================================================
+   PROOF BAR
+   ========================================================= */
+
+.gadda-campaign-proof {
+
+  position:
+    relative;
+
+  z-index:
+    8;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  border-top:
+    2px solid #111111;
+
+  background:
+    #111111;
+
+  color:
+    var(--campaign-paper);
+
+}
+
+
+.gadda-campaign-proof > div {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    .75rem;
+
+  padding:
+    .9rem
+    clamp(
+      .8rem,
+      2vw,
+      1.5rem
+    );
+
+  border-right:
+    1px solid
+    rgba(
+      243,
+      236,
+      221,
+      .25
+    );
+
+}
+
+
+.gadda-campaign-proof > div:last-child {
+
+  border-right:
+    0;
+
+}
+
+
+.gadda-campaign-proof span {
+
+  color:
+    #FF6500;
+
+  font-size:
+    .6rem;
+
+}
+
+
+.gadda-campaign-proof strong {
+
+  font-size:
+    .7rem;
+
+  font-weight:
+    400;
+
+  letter-spacing:
+    .05em;
+
+}
+
+
+
+/* =========================================================
+   CORNER NOTE
+   ========================================================= */
+
+.gadda-campaign-corner {
+
+  position:
+    absolute;
+
+  z-index:
+    10;
+
+  right:
+    1rem;
+
+  top:
+    50%;
+
+  writing-mode:
+    vertical-rl;
+
+  color:
+    rgba(
+      17,
+      17,
+      17,
+      .45
+    );
+
+  font-size:
+    .55rem;
+
+  letter-spacing:
+    .08em;
+
+}
+
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (
+  max-width: 1000px
+) {
+
+  .gadda-campaign-grid {
+
+    grid-template-columns:
+      .9fr 1.1fr;
+
+  }
+
+
+  .gadda-sticker-3,
+  .gadda-sticker-4 {
+
+    display:
+      none;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (
+  max-width: 720px
+) {
+
+  .gadda-campaign {
+
+    min-height:
+      auto;
+
+  }
+
+
+  .gadda-campaign-top {
+
+    padding:
+      .75rem 1rem;
+
+  }
+
+
+  .gadda-campaign-grid {
+
+    display:
+      flex;
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .gadda-campaign-copy {
+
+    min-height:
+      57svh;
+
+    padding:
+      2rem 1.2rem;
+
+  }
+
+
+  .gadda-campaign-headline span {
+
+    font-size:
+      clamp(
+        3.8rem,
+        17vw,
+        5.7rem
+      );
+
+  }
+
+
+  .gadda-campaign-headline strong {
+
+    font-size:
+      clamp(
+        2.8rem,
+        13vw,
+        4.5rem
+      );
+
+  }
+
+
+  .gadda-campaign-visual {
+
+    min-height:
+      30rem;
+
+    border-top:
+      2px solid
+      #111111;
+
+    border-left:
+      0;
+
+  }
+
+
+  .gadda-sticker {
+
+    min-width:
+      6rem;
+
+    min-height:
+      2.7rem;
+
+    font-size:
+      .58rem;
+
+  }
+
+
+  .gadda-campaign-starburst {
+
+    width:
+      6.5rem;
+
+  }
+
+
+  .gadda-campaign-proof {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+  }
+
+
+  .gadda-campaign-proof >
+  div:nth-child(-n+2) {
+
+    border-bottom:
+      1px solid
+      rgba(
+        243,
+        236,
+        221,
+        .25
+      );
+
+  }
+
+
+  .gadda-campaign-corner {
+
+    display:
+      none;
+
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+
+  .gadda-campaign-product img,
+  .gadda-campaign-sun,
+  .gadda-campaign-arrow,
+  .gadda-campaign-starburst,
+  .gadda-campaign-starburst span {
+
+    animation:
+      none !important;
+
+  }
+
+}
+
+
+/* GADDA ROOM TOUR */
+
+
+/* =========================================================
+   LONG SCROLL TIMELINE
+   ========================================================= */
+
+.gadda-room-tour {
+
+  position:
+    relative;
+
+  min-height:
+    260svh;
+
+  background:
+    #F3ECDD;
+
+  color:
+    #111111;
+
+}
+
+
+/* =========================================================
+   PINNED LAYOUT
+   ========================================================= */
+
+.gadda-room-sticky {
+
+  position:
+    sticky;
+
+  top:
+    0;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    minmax(17rem, .68fr)
+    minmax(0, 1.32fr);
+
+  height:
+    100svh;
+
+  overflow:
+    hidden;
+
+}
+
+
+/* =========================================================
+   LEFT COPY
+   ========================================================= */
+
+.gadda-room-copy {
+
+  position:
+    relative;
+
+  z-index:
+    5;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  justify-content:
+    center;
+
+  border-right:
+    2px solid #111111;
+
+  background:
+    #F3ECDD;
+
+  padding:
+    clamp(
+      2rem,
+      4vw,
+      4.5rem
+    );
+
+}
+
+
+.gadda-room-label {
+
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  padding-top:
+    .8rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .78rem !important;
+
+  letter-spacing:
+    .07em !important;
+
+}
+
+
+.gadda-room-label::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    3rem;
+
+  height:
+    5px;
+
+  background:
+    #FF6500;
+
+}
+
+
+.gadda-room-copy h2 {
+
+  position:
+    relative;
+
+  margin-top:
+    1.6rem;
+
+  padding-top:
+    .25em;
+
+  font-size:
+    clamp(
+      3.7rem,
+      6.4vw,
+      6.7rem
+    ) !important;
+
+  line-height:
+    .91 !important;
+
+  letter-spacing:
+    -.022em !important;
+
+  text-decoration:
+    none !important;
+
+}
+
+
+.gadda-room-copy h2::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    min(
+      72%,
+      11rem
+    );
+
+  height:
+    5px;
+
+  background:
+    #FF6500;
+
+}
+
+
+.gadda-room-intro {
+
+  margin-top:
+    2rem;
+
+  color:
+    rgba(
+      17,
+      17,
+      17,
+      .56
+    );
+
+  font-size:
+    1rem;
+
+  line-height:
+    1.55 !important;
+
+}
+
+
+.gadda-room-progress {
+
+  margin-top:
+    3rem;
+
+}
+
+
+.gadda-room-progress span {
+
+  color:
+    #FF6500;
+
+  font-size:
+    .62rem;
+
+  letter-spacing:
+    .12em;
+
+}
+
+
+.gadda-room-progress > div {
+
+  width:
+    100%;
+
+  max-width:
+    14rem;
+
+  height:
+    3px;
+
+  margin-top:
+    .8rem;
+
+  overflow:
+    hidden;
+
+  background:
+    rgba(
+      255,
+      101,
+      0,
+      .18
+    );
+
+}
+
+
+.gadda-room-progress i {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  background:
+    #FF6500;
+
+  transform-origin:
+    left;
+
+}
+
+
+
+/* =========================================================
+   HORIZONTAL WINDOW
+   ========================================================= */
+
+.gadda-room-window {
+
+  position:
+    relative;
+
+  overflow:
+    hidden;
+
+  background:
+    #111111;
+
+}
+
+
+.gadda-room-track {
+
+  position:
+    absolute;
+
+  left:
+    5vw;
+
+  top:
+    50%;
+
+  display:
+    flex;
+
+  gap:
+    2rem;
+
+  width:
+    max-content;
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    transform
+    90ms linear;
+
+  will-change:
+    transform;
+
+}
+
+
+
+/* =========================================================
+   ROOM CARDS
+   ========================================================= */
+
+.gadda-room-card {
+
+  flex:
+    0 0
+    clamp(
+      27rem,
+      39vw,
+      39rem
+    );
+
+  overflow:
+    hidden;
+
+  border:
+    2px solid
+    #F3ECDD;
+
+  background:
+    #F3ECDD;
+
+  color:
+    #111111;
+
+  text-align:
+    left;
+
+  cursor:
+    pointer;
+
+  transform:
+    rotate(-1deg)
+    scale(.93);
+
+  opacity:
+    .62;
+
+  box-shadow:
+    14px 14px 0
+    #FF6500;
+
+  transition:
+    transform
+    650ms
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    ),
+
+    opacity
+    320ms ease,
+
+    filter
+    320ms ease;
+
+}
+
+
+.gadda-room-card:nth-child(
+  even
+) {
+
+  transform:
+    rotate(1.4deg)
+    scale(.93);
+
+}
+
+
+.gadda-room-card.is-active {
+
+  opacity:
+    1;
+
+  transform:
+    rotate(0deg)
+    scale(1);
+
+  filter:
+    none;
+
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.gadda-room-card-top {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+
+  border-bottom:
+    2px solid
+    #111111;
+
+  padding:
+    .8rem 1rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .62rem;
+
+  letter-spacing:
+    .1em;
+
+}
+
+
+
+/* =========================================================
+   MEDIA
+   ========================================================= */
+
+.gadda-room-media {
+
+  position:
+    relative;
+
+  height:
+    clamp(
+      20rem,
+      48vh,
+      31rem
+    );
+
+  overflow:
+    hidden;
+
+  background:
+    #DDD5C6;
+
+}
+
+
+.gadda-room-media img {
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+
+  transition:
+    transform
+    950ms
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    ),
+
+    filter
+    450ms ease;
+
+}
+
+
+.gadda-room-card:not(
+  .is-active
+)
+.gadda-room-media img {
+
+  filter:
+    saturate(.65)
+    contrast(.9);
+
+}
+
+
+.gadda-room-card.is-active
+.gadda-room-media img {
+
+  transform:
+    scale(1.045);
+
+}
+
+
+/* =========================================================
+   ARTWORK PLACEHOLDER
+   ========================================================= */
+
+.gadda-room-placeholder {
+
+  display:
+    grid;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  place-content:
+    center;
+
+  gap:
+    1rem;
+
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #F3ECDD 0px,
+      #F3ECDD 18px,
+      #E8DFCD 18px,
+      #E8DFCD 20px
+    );
+
+  text-align:
+    center;
+
+}
+
+
+.gadda-room-placeholder strong {
+
+  font-size:
+    clamp(
+      2.2rem,
+      4vw,
+      4.5rem
+    );
+
+  font-weight:
+    400;
+
+  line-height:
+    .85;
+
+}
+
+
+.gadda-room-placeholder span {
+
+  font-size:
+    .6rem;
+
+  letter-spacing:
+    .12em;
+
+}
+
+
+
+/* =========================================================
+   BIG STICKER NUMBER
+   ========================================================= */
+
+.gadda-room-sticker {
+
+  position:
+    absolute;
+
+  right:
+    1rem;
+
+  top:
+    1rem;
+
+  display:
+    grid;
+
+  width:
+    5.8rem;
+
+  aspect-ratio:
+    1;
+
+  place-items:
+    center;
+
+  border:
+    2px solid
+    #111111;
+
+  border-radius:
+    50%;
+
+  background:
+    #FF6500;
+
+  color:
+    #111111;
+
+  font-size:
+    2rem;
+
+  transform:
+    rotate(8deg);
+
+  box-shadow:
+    5px 5px 0
+    #111111;
+
+}
+
+
+
+/* =========================================================
+   CARD COPY
+   ========================================================= */
+
+.gadda-room-card-copy {
+
+  min-height:
+    10rem;
+
+  padding:
+    1.2rem;
+
+}
+
+
+.gadda-room-card-copy > p {
+
+  color:
+    #FF6500;
+
+  font-size:
+    .64rem;
+
+  letter-spacing:
+    .1em;
+
+}
+
+
+.gadda-room-card-copy h3 {
+
+  margin-top:
+    .55rem;
+
+  font-size:
+    clamp(
+      2rem,
+      3vw,
+      3.3rem
+    ) !important;
+
+  line-height:
+    .92 !important;
+
+  letter-spacing:
+    -.02em !important;
+
+}
+
+
+.gadda-room-card-copy > span {
+
+  display:
+    block;
+
+  margin-top:
+    .8rem;
+
+  color:
+    rgba(
+      17,
+      17,
+      17,
+      .55
+    );
+
+  font-size:
+    .9rem;
+
+}
+
+
+
+/* =========================================================
+   CURRENT ROOM
+   ========================================================= */
+
+.gadda-room-index {
+
+  position:
+    absolute;
+
+  z-index:
+    8;
+
+  right:
+    1.5rem;
+
+  bottom:
+    1.5rem;
+
+  display:
+    flex;
+
+  align-items:
+    end;
+
+  gap:
+    1rem;
+
+  border:
+    2px solid
+    #111111;
+
+  background:
+    #FF6500;
+
+  padding:
+    .7rem 1rem;
+
+  box-shadow:
+    5px 5px 0
+    #F3ECDD;
+
+}
+
+
+.gadda-room-index span {
+
+  font-size:
+    .58rem;
+
+  letter-spacing:
+    .1em;
+
+}
+
+
+.gadda-room-index strong {
+
+  font-size:
+    2rem;
+
+  font-weight:
+    400;
+
+  line-height:
+    1;
+
+}
+
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (
+  max-width: 800px
+) {
+
+  .gadda-room-tour {
+
+    min-height:
+      220svh;
+
+  }
+
+
+  .gadda-room-sticky {
+
+    display:
+      block;
+
+  }
+
+
+  .gadda-room-copy {
+
+    position:
+      absolute;
+
+    z-index:
+      10;
+
+    left:
+      0;
+
+    right:
+      0;
+
+    top:
+      0;
+
+    height:
+      auto;
+
+    border-right:
+      0;
+
+    border-bottom:
+      2px solid
+      #111111;
+
+    padding:
+      1.2rem;
+
+  }
+
+
+  .gadda-room-copy h2 {
+
+    margin-top:
+      .8rem;
+
+    font-size:
+      clamp(
+        2.8rem,
+        12vw,
+        4rem
+      ) !important;
+
+  }
+
+
+  .gadda-room-intro,
+  .gadda-room-progress {
+
+    display:
+      none;
+
+  }
+
+
+  .gadda-room-window {
+
+    height:
+      100%;
+
+  }
+
+
+  .gadda-room-track {
+
+    top:
+      59%;
+
+    left:
+      1.2rem;
+
+  }
+
+
+  .gadda-room-card {
+
+    flex-basis:
+      min(
+        78vw,
+        25rem
+      );
+
+  }
+
+
+  .gadda-room-media {
+
+    height:
+      42vh;
+
+  }
+
+
+  .gadda-room-index {
+
+    right:
+      1rem;
+
+    bottom:
+      1rem;
+
+  }
+
+}
+
+
+/* GADDA ROOM TOUR PROPORTION FIX */
+
+
+/* =========================================================
+   30 / 70 COMPOSITION
+   ========================================================= */
+
+.gadda-room-sticky {
+  grid-template-columns:
+    minmax(18rem, 30vw)
+    minmax(0, 70vw) !important;
+}
+
+
+/* =========================================================
+   LEFT PANEL — SMALLER + CLEANER
+   ========================================================= */
+
+.gadda-room-copy {
+  padding:
+    clamp(1.8rem, 3vw, 3.5rem) !important;
+
+  overflow:
+    hidden !important;
+}
+
+
+.gadda-room-copy h2 {
+  max-width:
+    7.6ch;
+
+  font-size:
+    clamp(
+      3.2rem,
+      5vw,
+      5.5rem
+    ) !important;
+
+  line-height:
+    .91 !important;
+
+  letter-spacing:
+    -.018em !important;
+}
+
+
+.gadda-room-copy h2::before {
+  width:
+    min(58%, 8rem) !important;
+}
+
+
+.gadda-room-intro {
+  max-width:
+    18rem !important;
+
+  margin-top:
+    1.6rem !important;
+}
+
+
+.gadda-room-progress {
+  margin-top:
+    2rem !important;
+}
+
+
+/* =========================================================
+   RIGHT WINDOW
+   More deliberate black breathing space
+   ========================================================= */
+
+.gadda-room-window {
+  position:
+    relative;
+
+  overflow:
+    hidden;
+
+  background:
+    #111111;
+}
+
+
+/* =========================================================
+   TRACK POSITION
+   ========================================================= */
+
+.gadda-room-track {
+  left:
+    clamp(
+      2rem,
+      3.5vw,
+      4rem
+    ) !important;
+
+  top:
+    51% !important;
+
+  gap:
+    clamp(
+      1.25rem,
+      2vw,
+      2rem
+    ) !important;
+}
+
+
+/* =========================================================
+   CARDS
+   Slightly smaller and more editorial
+   ========================================================= */
+
+.gadda-room-card {
+  flex:
+    0 0
+    clamp(
+      23rem,
+      31vw,
+      31rem
+    ) !important;
+
+  box-shadow:
+    10px 10px 0
+    #FF6500 !important;
+}
+
+
+/* active card gets emphasis without becoming huge */
+
+.gadda-room-card.is-active {
+  transform:
+    rotate(0deg)
+    scale(1.025) !important;
+}
+
+
+/* inactive cards stay visible */
+
+.gadda-room-card:not(.is-active) {
+  opacity:
+    .7 !important;
+
+  transform:
+    rotate(-1deg)
+    scale(.94);
+}
+
+
+.gadda-room-card:nth-child(even):not(.is-active) {
+  transform:
+    rotate(1.2deg)
+    scale(.94);
+}
+
+
+/* =========================================================
+   IMAGE HEIGHT
+   ========================================================= */
+
+.gadda-room-media {
+  height:
+    clamp(
+      18rem,
+      40vh,
+      25rem
+    ) !important;
+}
+
+
+/* =========================================================
+   CARD COPY
+   ========================================================= */
+
+.gadda-room-card-copy {
+  min-height:
+    8.5rem !important;
+
+  padding:
+    1rem 1.1rem !important;
+}
+
+
+.gadda-room-card-copy h3 {
+  font-size:
+    clamp(
+      1.8rem,
+      2.4vw,
+      2.7rem
+    ) !important;
+}
+
+
+/* =========================================================
+   ROOM NUMBER
+   smaller so it stops fighting the photo
+   ========================================================= */
+
+.gadda-room-sticker {
+  width:
+    4.6rem !important;
+
+  font-size:
+    1.55rem !important;
+
+  box-shadow:
+    4px 4px 0
+    #111111 !important;
+}
+
+
+/* =========================================================
+   CURRENT ROOM BADGE
+   ========================================================= */
+
+.gadda-room-index {
+  right:
+    1.2rem !important;
+
+  bottom:
+    1.2rem !important;
+
+  padding:
+    .6rem .8rem !important;
+}
+
+
+.gadda-room-index strong {
+  font-size:
+    1.6rem !important;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1500px) {
+
+  .gadda-room-sticky {
+    grid-template-columns:
+      28vw
+      72vw !important;
+  }
+
+  .gadda-room-copy h2 {
+    font-size:
+      clamp(
+        3.6rem,
+        4.7vw,
+        5.8rem
+      ) !important;
+  }
+
+  .gadda-room-card {
+    flex-basis:
+      clamp(
+        25rem,
+        29vw,
+        32rem
+      ) !important;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (
+  min-width: 801px
+)
+and (
+  max-width: 1100px
+) {
+
+  .gadda-room-sticky {
+    grid-template-columns:
+      34vw
+      66vw !important;
+  }
+
+  .gadda-room-copy h2 {
+    font-size:
+      clamp(
+        3rem,
+        5.5vw,
+        4.6rem
+      ) !important;
+  }
+
+  .gadda-room-card {
+    flex-basis:
+      clamp(
+        21rem,
+        40vw,
+        26rem
+      ) !important;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE stays stacked
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .gadda-room-sticky {
+    display:
+      block !important;
+  }
+
+  .gadda-room-copy {
+    overflow:
+      visible !important;
+  }
+
+  .gadda-room-copy h2 {
+    max-width:
+      9ch;
+
+    font-size:
+      clamp(
+        2.7rem,
+        12vw,
+        4rem
+      ) !important;
+  }
+
+  .gadda-room-card {
+    flex-basis:
+      min(
+        78vw,
+        23rem
+      ) !important;
+  }
+
+}
+
+
+/* GADDA ROOM TOUR GEOMETRY V3 */
+
+
+/* =========================================================
+   MASTER COMPOSITION
+   27% editorial copy / 73% gallery
+   ========================================================= */
+
+.gadda-room-sticky {
+
+  grid-template-columns:
+    minmax(17rem, 27vw)
+    minmax(0, 73vw) !important;
+
+}
+
+
+/* =========================================================
+   LEFT PANEL
+   ========================================================= */
+
+.gadda-room-copy {
+
+  padding:
+    clamp(
+      1.8rem,
+      3.1vw,
+      3.6rem
+    ) !important;
+
+  overflow:
+    hidden !important;
+
+}
+
+
+.gadda-room-copy h2 {
+
+  max-width:
+    7.2ch !important;
+
+  font-size:
+    clamp(
+      3rem,
+      4.55vw,
+      5rem
+    ) !important;
+
+  line-height:
+    .94 !important;
+
+  letter-spacing:
+    -.015em !important;
+
+}
+
+
+.gadda-room-copy h2::before {
+
+  width:
+    7.5rem !important;
+
+}
+
+
+.gadda-room-intro {
+
+  max-width:
+    17rem !important;
+
+  margin-top:
+    1.6rem !important;
+
+}
+
+
+.gadda-room-progress {
+
+  margin-top:
+    2.3rem !important;
+
+}
+
+
+
+/* =========================================================
+   BLACK GALLERY STAGE
+   ========================================================= */
+
+.gadda-room-window {
+
+  position:
+    relative;
+
+  height:
+    100%;
+
+  overflow:
+    hidden;
+
+  background:
+    #111111;
+
+}
+
+
+/*
+  The track's TOP is the exact viewport middle.
+  JavaScript supplies translateY(-50%).
+*/
+
+.gadda-room-track {
+
+  position:
+    absolute;
+
+  left:
+    clamp(
+      1.5rem,
+      2.6vw,
+      3rem
+    ) !important;
+
+  top:
+    50% !important;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    clamp(
+      1.2rem,
+      1.8vw,
+      1.8rem
+    ) !important;
+
+  width:
+    max-content;
+
+  will-change:
+    transform;
+
+  transition:
+    none !important;
+
+}
+
+
+
+/* =========================================================
+   LANDSCAPE EDITORIAL CARDS
+   ========================================================= */
+
+.gadda-room-card {
+
+  flex:
+    0 0
+    clamp(
+      24rem,
+      32vw,
+      34rem
+    ) !important;
+
+  width:
+    clamp(
+      24rem,
+      32vw,
+      34rem
+    ) !important;
+
+  overflow:
+    hidden;
+
+  border:
+    2px solid
+    #F3ECDD;
+
+  background:
+    #F3ECDD;
+
+  box-shadow:
+    9px 9px 0
+    #FF6500 !important;
+
+  opacity:
+    .72;
+
+  transform:
+    rotate(-.8deg)
+    scale(.955) !important;
+
+  transform-origin:
+    center;
+
+}
+
+
+/* alternate rotation is now subtle */
+
+.gadda-room-card:nth-child(even) {
+
+  transform:
+    rotate(.8deg)
+    scale(.955) !important;
+
+}
+
+
+/* active card — emphasis, not cartoonishly huge */
+
+.gadda-room-card.is-active {
+
+  opacity:
+    1 !important;
+
+  transform:
+    rotate(0deg)
+    scale(1.015) !important;
+
+  z-index:
+    10;
+
+  box-shadow:
+    10px 10px 0
+    #FF6500,
+
+    0 24px 60px
+    rgba(
+      0,
+      0,
+      0,
+      .28
+    ) !important;
+
+}
+
+
+
+/* =========================================================
+   IMAGE PROPORTION
+   16:10 editorial photograph
+   ========================================================= */
+
+.gadda-room-media {
+
+  width:
+    100%;
+
+  height:
+    auto !important;
+
+  aspect-ratio:
+    16 / 10;
+
+  overflow:
+    hidden;
+
+}
+
+
+.gadda-room-media img {
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+
+}
+
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.gadda-room-card-top {
+
+  min-height:
+    2.8rem;
+
+  align-items:
+    center;
+
+  padding:
+    .65rem
+    .9rem !important;
+
+}
+
+
+
+/* =========================================================
+   COPY — MUCH MORE COMPACT
+   ========================================================= */
+
+.gadda-room-card-copy {
+
+  min-height:
+    7.25rem !important;
+
+  padding:
+    .9rem
+    1rem
+    1rem !important;
+
+}
+
+
+.gadda-room-card-copy h3 {
+
+  margin-top:
+    .4rem !important;
+
+  font-size:
+    clamp(
+      1.65rem,
+      2.1vw,
+      2.35rem
+    ) !important;
+
+  line-height:
+    .94 !important;
+
+}
+
+
+.gadda-room-card-copy > span {
+
+  margin-top:
+    .55rem !important;
+
+  font-size:
+    .78rem !important;
+
+}
+
+
+
+/* =========================================================
+   NUMBER STICKER
+   ========================================================= */
+
+.gadda-room-sticker {
+
+  top:
+    .8rem !important;
+
+  right:
+    .8rem !important;
+
+  width:
+    4rem !important;
+
+  font-size:
+    1.35rem !important;
+
+  box-shadow:
+    3px 3px 0
+    #111111 !important;
+
+}
+
+
+
+/* =========================================================
+   CURRENT ROOM BADGE
+   ========================================================= */
+
+.gadda-room-index {
+
+  right:
+    1rem !important;
+
+  bottom:
+    1rem !important;
+
+  padding:
+    .55rem
+    .75rem !important;
+
+  box-shadow:
+    4px 4px 0
+    #F3ECDD !important;
+
+}
+
+
+.gadda-room-index strong {
+
+  font-size:
+    1.45rem !important;
+
+}
+
+
+
+/* =========================================================
+   DESKTOP: KEEP WHOLE CARD VISUALLY CENTERED
+   ========================================================= */
+
+@media (
+  min-width: 1200px
+) {
+
+  .gadda-room-card {
+
+    flex-basis:
+      clamp(
+        25rem,
+        30vw,
+        33rem
+      ) !important;
+
+    width:
+      clamp(
+        25rem,
+        30vw,
+        33rem
+      ) !important;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   VERY LARGE SCREEN
+   ========================================================= */
+
+@media (
+  min-width: 1700px
+) {
+
+  .gadda-room-sticky {
+
+    grid-template-columns:
+      25vw
+      75vw !important;
+
+  }
+
+
+  .gadda-room-copy h2 {
+
+    font-size:
+      clamp(
+        3.5rem,
+        4.1vw,
+        5.1rem
+      ) !important;
+
+  }
+
+
+  .gadda-room-card {
+
+    flex-basis:
+      clamp(
+        27rem,
+        28vw,
+        35rem
+      ) !important;
+
+    width:
+      clamp(
+        27rem,
+        28vw,
+        35rem
+      ) !important;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (
+  min-width: 801px
+)
+and (
+  max-width: 1199px
+) {
+
+  .gadda-room-sticky {
+
+    grid-template-columns:
+      31vw
+      69vw !important;
+
+  }
+
+
+  .gadda-room-copy h2 {
+
+    font-size:
+      clamp(
+        2.9rem,
+        5vw,
+        4.2rem
+      ) !important;
+
+  }
+
+
+  .gadda-room-card {
+
+    flex-basis:
+      clamp(
+        22rem,
+        39vw,
+        27rem
+      ) !important;
+
+    width:
+      clamp(
+        22rem,
+        39vw,
+        27rem
+      ) !important;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (
+  max-width: 800px
+) {
+
+  .gadda-room-sticky {
+
+    display:
+      block !important;
+
+  }
+
+
+  .gadda-room-copy {
+
+    overflow:
+      visible !important;
+
+  }
+
+
+  .gadda-room-track {
+
+    left:
+      1rem !important;
+
+    top:
+      62% !important;
+
+  }
+
+
+  .gadda-room-card {
+
+    flex-basis:
+      min(
+        79vw,
+        23rem
+      ) !important;
+
+    width:
+      min(
+        79vw,
+        23rem
+      ) !important;
+
+  }
+
+
+  .gadda-room-media {
+
+    aspect-ratio:
+      4 / 3;
+
+  }
+
+}
+
+
+/* GADDA MATTRESS CATALOGUE */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.gadda-shop-page {
+  background:
+    #F3ECDD;
+
+  color:
+    #111111;
+}
+
+
+/* =========================================================
+   SHORT HERO
+   ========================================================= */
+
+.gadda-shop-hero {
+
+  min-height:
+    62svh;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  justify-content:
+    space-between;
+
+  background:
+    #111111;
+
+  color:
+    #F3ECDD;
+
+  padding:
+    clamp(
+      1.5rem,
+      4vw,
+      4rem
+    );
+
+}
+
+
+.gadda-shop-hero-top {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    2rem;
+
+  border-bottom:
+    2px solid
+    rgba(
+      243,
+      236,
+      221,
+      .35
+    );
+
+  padding-bottom:
+    .9rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .66rem;
+
+  letter-spacing:
+    .11em;
+
+}
+
+
+.gadda-shop-hero-grid {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    minmax(0, 1.2fr)
+    minmax(18rem, .8fr);
+
+  gap:
+    4rem;
+
+  align-items:
+    end;
+
+  padding:
+    3rem 0;
+
+}
+
+
+.gadda-shop-kicker {
+
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  padding-top:
+    .7rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .8rem;
+
+  letter-spacing:
+    .08em;
+
+}
+
+
+.gadda-shop-kicker::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    3rem;
+
+  height:
+    5px;
+
+  background:
+    #FF6500;
+
+}
+
+
+.gadda-shop-hero h1 {
+
+  position:
+    relative;
+
+  margin-top:
+    1.3rem;
+
+  padding-top:
+    .2em;
+
+  max-width:
+    8ch;
+
+  font-size:
+    clamp(
+      5rem,
+      11vw,
+      11rem
+    ) !important;
+
+  line-height:
+    .79 !important;
+
+  letter-spacing:
+    -.03em !important;
+
+  text-decoration:
+    none !important;
+
+}
+
+
+.gadda-shop-hero h1::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    9rem;
+
+  height:
+    6px;
+
+  background:
+    #FF6500;
+
+}
+
+
+.gadda-shop-hero-side {
+
+  position:
+    relative;
+
+  display:
+    flex;
+
+  align-items:
+    end;
+
+  justify-content:
+    space-between;
+
+  gap:
+    2rem;
+
+}
+
+
+.gadda-shop-hero-side > p {
+
+  max-width:
+    16rem;
+
+  color:
+    rgba(
+      243,
+      236,
+      221,
+      .58
+    );
+
+  font-size:
+    clamp(
+      1.1rem,
+      1.6vw,
+      1.5rem
+    );
+
+  line-height:
+    1.5 !important;
+
+}
+
+
+.gadda-shop-hero-sticker {
+
+  display:
+    grid;
+
+  width:
+    clamp(
+      8rem,
+      11vw,
+      11rem
+    );
+
+  aspect-ratio:
+    1;
+
+  place-items:
+    center;
+
+  border:
+    2px solid
+    #F3ECDD;
+
+  border-radius:
+    50%;
+
+  background:
+    #FF6500;
+
+  color:
+    #111111;
+
+  text-align:
+    center;
+
+  font-size:
+    .72rem;
+
+  letter-spacing:
+    .04em;
+
+  transform:
+    rotate(7deg);
+
+  box-shadow:
+    8px 8px 0
+    #F3ECDD;
+
+}
+
+
+.gadda-shop-rule {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    2rem;
+
+  border-top:
+    2px solid
+    rgba(
+      243,
+      236,
+      221,
+      .35
+    );
+
+  padding-top:
+    .9rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .62rem;
+
+  letter-spacing:
+    .1em;
+
+}
+
+
+/* =========================================================
+   LIST
+   ========================================================= */
+
+.gadda-shop-list {
+
+  padding:
+    clamp(
+      1.5rem,
+      4vw,
+      4rem
+    );
+
+}
+
+
+.gadda-shop-list-head {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    2rem;
+
+  border-bottom:
+    2px solid
+    #111111;
+
+  padding:
+    1rem 0;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .67rem;
+
+  letter-spacing:
+    .11em;
+
+}
+
+
+/* =========================================================
+   PRODUCT POSTER
+   ========================================================= */
+
+.gadda-shop-card {
+
+  position:
+    relative;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    minmax(0, 1.12fr)
+    minmax(21rem, .88fr);
+
+  min-height:
+    42rem;
+
+  border-bottom:
+    2px solid
+    #111111;
+
+  background:
+    #F3ECDD;
+
+}
+
+
+.gadda-shop-card-reverse {
+
+  grid-template-columns:
+    minmax(21rem, .88fr)
+    minmax(0, 1.12fr);
+
+}
+
+
+.gadda-shop-card-reverse
+.gadda-shop-card-visual {
+
+  order:
+    2;
+
+}
+
+
+.gadda-shop-card-reverse
+.gadda-shop-card-copy {
+
+  order:
+    1;
+
+}
+
+
+/* =========================================================
+   GIANT NUMBER
+   ========================================================= */
+
+.gadda-shop-card-number {
+
+  position:
+    absolute;
+
+  z-index:
+    8;
+
+  left:
+    .5rem;
+
+  top:
+    .25rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    clamp(
+      5rem,
+      10vw,
+      10rem
+    );
+
+  line-height:
+    1;
+
+  opacity:
+    .85;
+
+  pointer-events:
+    none;
+
+}
+
+
+/* =========================================================
+   VISUAL
+   ========================================================= */
+
+.gadda-shop-card-visual {
+
+  position:
+    relative;
+
+  min-height:
+    42rem;
+
+  overflow:
+    hidden;
+
+  background:
+    #111111;
+
+}
+
+
+.gadda-shop-image-link {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+}
+
+
+.gadda-shop-card-visual img {
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+
+  transition:
+    transform
+    950ms
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    );
+
+}
+
+
+.gadda-shop-card:hover
+.gadda-shop-card-visual img {
+
+  transform:
+    scale(1.035);
+
+}
+
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+
+.gadda-shop-badge {
+
+  position:
+    absolute;
+
+  left:
+    1.3rem;
+
+  bottom:
+    1.3rem;
+
+  border:
+    2px solid
+    #111111;
+
+  background:
+    #FF6500;
+
+  padding:
+    .65rem .9rem;
+
+  color:
+    #111111;
+
+  font-size:
+    .62rem;
+
+  letter-spacing:
+    .1em;
+
+  text-transform:
+    uppercase;
+
+  transform:
+    rotate(-3deg);
+
+  box-shadow:
+    4px 4px 0
+    #111111;
+
+}
+
+
+/* =========================================================
+   DISCOUNT STICKER
+   ========================================================= */
+
+.gadda-shop-discount {
+
+  position:
+    absolute;
+
+  right:
+    1.2rem;
+
+  top:
+    1.2rem;
+
+  display:
+    grid;
+
+  width:
+    6rem;
+
+  aspect-ratio:
+    1;
+
+  place-items:
+    center;
+
+  border:
+    2px solid
+    #111111;
+
+  border-radius:
+    50%;
+
+  background:
+    #F3ECDD;
+
+  color:
+    #111111;
+
+  text-align:
+    center;
+
+  font-size:
+    .8rem;
+
+  line-height:
+    1.05;
+
+  transform:
+    rotate(8deg);
+
+  box-shadow:
+    5px 5px 0
+    #FF6500;
+
+}
+
+
+/* =========================================================
+   PRODUCT COPY
+   ========================================================= */
+
+.gadda-shop-card-copy {
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  justify-content:
+    center;
+
+  padding:
+    clamp(
+      2rem,
+      5vw,
+      5rem
+    );
+
+}
+
+
+.gadda-shop-attitude {
+
+  position:
+    relative;
+
+  width:
+    max-content;
+
+  padding-top:
+    .7rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .75rem;
+
+  letter-spacing:
+    .08em;
+
+}
+
+
+.gadda-shop-attitude::before {
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  left:
+    0;
+
+  top:
+    0;
+
+  width:
+    3rem;
+
+  height:
+    5px;
+
+  background:
+    #FF6500;
+
+}
+
+
+.gadda-shop-card-copy h2 {
+
+  margin-top:
+    .9rem;
+
+  font-size:
+    clamp(
+      4rem,
+      7vw,
+      7rem
+    ) !important;
+
+  line-height:
+    .84 !important;
+
+  letter-spacing:
+    -.025em !important;
+
+  text-decoration:
+    none !important;
+
+}
+
+
+.gadda-shop-kicker-copy {
+
+  margin-top:
+    1.4rem;
+
+  font-size:
+    1.1rem;
+
+}
+
+
+.gadda-shop-description {
+
+  max-width:
+    31rem;
+
+  margin-top:
+    1rem;
+
+  color:
+    rgba(
+      17,
+      17,
+      17,
+      .58
+    );
+
+  font-size:
+    .95rem;
+
+  line-height:
+    1.6 !important;
+
+}
+
+
+/* =========================================================
+   SPECS
+   ========================================================= */
+
+.gadda-shop-specs {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  margin-top:
+    2rem;
+
+  border-top:
+    2px solid
+    #111111;
+
+  border-bottom:
+    2px solid
+    #111111;
+
+}
+
+
+.gadda-shop-specs > div {
+
+  padding:
+    1rem
+    .7rem
+    1rem
+    0;
+
+}
+
+
+.gadda-shop-specs small,
+.gadda-shop-price small {
+
+  display:
+    block;
+
+  margin-bottom:
+    .35rem;
+
+  color:
+    #FF6500;
+
+  font-size:
+    .55rem;
+
+  letter-spacing:
+    .1em;
+
+}
+
+
+.gadda-shop-specs strong {
+
+  font-size:
+    .76rem;
+
+  font-weight:
+    400;
+
+}
+
+
+/* =========================================================
+   PRICE
+   ========================================================= */
+
+.gadda-shop-price {
+
+  display:
+    flex;
+
+  align-items:
+    end;
+
+  justify-content:
+    space-between;
+
+  gap:
+    1rem;
+
+  margin-top:
+    2rem;
+
+}
+
+
+.gadda-shop-old-price {
+
+  font-size:
+    .78rem;
+
+  opacity:
+    .4;
+
+  text-decoration:
+    line-through;
+
+}
+
+
+.gadda-shop-price strong {
+
+  display:
+    block;
+
+  margin-top:
+    .15rem;
+
+  font-size:
+    clamp(
+      2.2rem,
+      4vw,
+      4rem
+    );
+
+  font-weight:
+    400;
+
+  line-height:
+    1;
+
+}
+
+
+.gadda-shop-cta {
+
+  border:
+    2px solid
+    #111111;
+
+  background:
+    #111111;
+
+  padding:
+    .8rem 1rem;
+
+  color:
+    #F3ECDD;
+
+  font-size:
+    .72rem;
+
+  letter-spacing:
+    .07em;
+
+  box-shadow:
+    5px 5px 0
+    #FF6500;
+
+  transition:
+    transform
+    220ms ease;
+
+}
+
+
+.gadda-shop-cta:hover {
+
+  color:
+    #111111;
+
+  background:
+    #FF6500;
+
+  transform:
+    translate(
+      4px,
+      4px
+    );
+
+  box-shadow:
+    1px 1px 0
+    #111111;
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (
+  max-width: 1000px
+) {
+
+  .gadda-shop-hero-grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .gadda-shop-card,
+  .gadda-shop-card-reverse {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .gadda-shop-card-reverse
+  .gadda-shop-card-visual,
+  .gadda-shop-card-reverse
+  .gadda-shop-card-copy {
+
+    order:
+      initial;
+
+  }
+
+
+  .gadda-shop-card-visual {
+
+    min-height:
+      32rem;
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (
+  max-width: 700px
+) {
+
+  .gadda-shop-hero {
+
+    min-height:
+      70svh;
+
+    padding:
+      1.2rem;
+
+  }
+
+
+  .gadda-shop-hero h1 {
+
+    font-size:
+      clamp(
+        4rem,
+        21vw,
+        7rem
+      ) !important;
+
+  }
+
+
+  .gadda-shop-hero-side {
+
+    align-items:
+      start;
+
+  }
+
+
+  .gadda-shop-hero-sticker {
+
+    width:
+      7rem;
+
+  }
+
+
+  .gadda-shop-rule {
+
+    flex-direction:
+      column;
+
+    gap:
+      .5rem;
+
+  }
+
+
+  .gadda-shop-list {
+
+    padding:
+      1rem;
+
+  }
+
+
+  .gadda-shop-card {
+
+    min-height:
+      0;
+
+  }
+
+
+  .gadda-shop-card-visual {
+
+    min-height:
+      26rem;
+
+  }
+
+
+  .gadda-shop-card-copy {
+
+    padding:
+      2rem 1.2rem
+      3rem;
+
+  }
+
+
+  .gadda-shop-card-copy h2 {
+
+    font-size:
+      clamp(
+        3rem,
+        15vw,
+        4.8rem
+      ) !important;
+
+  }
+
+
+  .gadda-shop-specs {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .gadda-shop-specs > div {
+
+    border-bottom:
+      1px solid
+      rgba(
+        17,
+        17,
+        17,
+        .18
+      );
+
+  }
+
+
+  .gadda-shop-price {
+
+    align-items:
+      start;
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .gadda-shop-card-number {
+
+    font-size:
+      5rem;
+
+  }
+
+}
+
+
+/* GADDA SHOP PROFESSIONAL QUIRKY V2 */
+
+
+/* =========================================================
+   HERO — SHORTER, CLEANER
+   ========================================================= */
+
+.gadda-shop-hero {
+
+  min-height:
+    clamp(
+      27rem,
+      50svh,
+      36rem
+    ) !important;
+
+  padding:
+    clamp(
+      1.5rem,
+      3vw,
+      3rem
+    )
+    clamp(
+      1.5rem,
+      5vw,
+      5rem
+    ) !important;
+
+}
+
+
+.gadda-shop-hero-top,
+.gadda-shop-hero-grid,
+.gadda-shop-rule {
+
+  width:
+    100%;
+
+  max-width:
+    1440px;
+
+  margin-left:
+    auto;
+
+  margin-right:
+    auto;
+
+}
+
+
+.gadda-shop-hero-grid {
+
+  grid-template-columns:
+    minmax(0, 1.15fr)
+    minmax(19rem, .85fr) !important;
+
+  gap:
+    clamp(
+      2rem,
+      5vw,
+      6rem
+    ) !important;
+
+  padding:
+    2rem 0 !important;
+
+}
+
+
+/* Headline stops screaming */
+
+.gadda-shop-hero h1 {
+
+  max-width:
+    7ch !important;
+
+  margin-top:
+    1rem !important;
+
+  font-size:
+    clamp(
+      4.3rem,
+      7vw,
+      7.4rem
+    ) !important;
+
+  line-height:
+    .84 !important;
+
+}
+
+
+.gadda-shop-hero h1::before {
+
+  width:
+    6rem !important;
+
+  height:
+    5px !important;
+
+}
+
+
+/* Right side becomes supporting information */
+
+.gadda-shop-hero-side {
+
+  justify-content:
+    flex-start !important;
+
+  gap:
+    clamp(
+      2rem,
+      4vw,
+      4rem
+    ) !important;
+
+}
+
+
+.gadda-shop-hero-side > p {
+
+  max-width:
+    14rem !important;
+
+  font-size:
+    clamp(
+      .95rem,
+      1.25vw,
+      1.2rem
+    ) !important;
+
+}
+
+
+/* Sticker stays quirky, but doesn't dominate */
+
+.gadda-shop-hero-sticker {
+
+  width:
+    clamp(
+      6.5rem,
+      8vw,
+      8.5rem
+    ) !important;
+
+  font-size:
+    .62rem !important;
+
+  box-shadow:
+    5px 5px 0
+    #F3ECDD !important;
+
+}
+
+
+
+/* =========================================================
+   PRODUCT AREA
+   Now behaves like an actual catalogue
+   ========================================================= */
+
+.gadda-shop-list {
+
+  width:
+    100%;
+
+  max-width:
+    1440px;
+
+  margin:
+    0 auto;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(
+      1.4rem,
+      2.4vw,
+      2.2rem
+    );
+
+  padding:
+    clamp(
+      2rem,
+      4vw,
+      4rem
+    ) !important;
+
+}
+
+
+/* Header spans the catalogue */
+
+.gadda-shop-list-head {
+
+  grid-column:
+    1 / -1;
+
+  margin-bottom:
+    .25rem;
+
+  padding:
+    .8rem 0 !important;
+
+}
+
+
+
+/* =========================================================
+   PRODUCT CARD
+   Compact editorial menu card
+   ========================================================= */
+
+.gadda-shop-card,
+.gadda-shop-card-reverse {
+
+  position:
+    relative;
+
+  display:
+    flex !important;
+
+  flex-direction:
+    column;
+
+  grid-template-columns:
+    none !important;
+
+  min-height:
+    0 !important;
+
+  overflow:
+    hidden;
+
+  border:
+    2px solid
+    #111111 !important;
+
+  background:
+    #F3ECDD;
+
+  box-shadow:
+    7px 7px 0
+    #FF6500;
+
+  transition:
+    transform
+    320ms
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    ),
+
+    box-shadow
+    320ms ease;
+
+}
+
+
+.gadda-shop-card:hover {
+
+  transform:
+    translate(
+      -3px,
+      -3px
+    );
+
+  box-shadow:
+    11px 11px 0
+    #FF6500;
+
+}
+
+
+/* Remove alternating full-page ordering */
+
+.gadda-shop-card-reverse
+.gadda-shop-card-visual,
+
+.gadda-shop-card-reverse
+.gadda-shop-card-copy {
+
+  order:
+    initial !important;
+
+}
+
+
+
+/* =========================================================
+   NUMBER
+   Tiny catalogue marker instead of giant 01
+   ========================================================= */
+
+.gadda-shop-card-number {
+
+  z-index:
+    12 !important;
+
+  left:
+    1rem !important;
+
+  top:
+    1rem !important;
+
+  width:
+    auto !important;
+
+  padding:
+    .38rem .55rem;
+
+  border:
+    2px solid
+    #111111;
+
+  background:
+    #FF6500;
+
+  color:
+    #111111 !important;
+
+  font-size:
+    .82rem !important;
+
+  line-height:
+    1 !important;
+
+  opacity:
+    1 !important;
+
+  box-shadow:
+    3px 3px 0
+    #111111;
+
+}
+
+
+
+/* =========================================================
+   PRODUCT IMAGE
+   ========================================================= */
+
+.gadda-shop-card-visual {
+
+  position:
+    relative;
+
+  width:
+    100%;
+
+  min-height:
+    0 !important;
+
+  aspect-ratio:
+    16 / 10;
+
+  border-bottom:
+    2px solid
+    #111111;
+
+}
+
+
+.gadda-shop-image-link {
+
+  height:
+    100% !important;
+
+}
+
+
+.gadda-shop-card-visual img {
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+
+}
+
+
+
+/* Badge smaller */
+
+.gadda-shop-badge {
+
+  left:
+    auto !important;
+
+  right:
+    1rem !important;
+
+  bottom:
+    1rem !important;
+
+  padding:
+    .5rem .7rem !important;
+
+  font-size:
+    .56rem !important;
+
+  box-shadow:
+    3px 3px 0
+    #111111 !important;
+
+}
+
+
+
+/* Discount bubble smaller */
+
+.gadda-shop-discount {
+
+  width:
+    4.5rem !important;
+
+  right:
+    1rem !important;
+
+  top:
+    3.7rem !important;
+
+  font-size:
+    .66rem !important;
+
+  box-shadow:
+    3px 3px 0
+    #FF6500 !important;
+
+}
+
+
+
+/* =========================================================
+   PRODUCT COPY
+   ========================================================= */
+
+.gadda-shop-card-copy {
+
+  flex:
+    1;
+
+  justify-content:
+    flex-start !important;
+
+  padding:
+    clamp(
+      1.3rem,
+      2.3vw,
+      2rem
+    ) !important;
+
+}
+
+
+.gadda-shop-attitude {
+
+  padding-top:
+    .55rem !important;
+
+  font-size:
+    .64rem !important;
+
+}
+
+
+.gadda-shop-attitude::before {
+
+  width:
+    2.4rem !important;
+
+  height:
+    4px !important;
+
+}
+
+
+.gadda-shop-card-copy h2 {
+
+  margin-top:
+    .65rem !important;
+
+  font-size:
+    clamp(
+      2.5rem,
+      3.8vw,
+      4rem
+    ) !important;
+
+  line-height:
+    .9 !important;
+
+  letter-spacing:
+    -.018em !important;
+
+}
+
+
+.gadda-shop-kicker-copy {
+
+  margin-top:
+    .8rem !important;
+
+  font-size:
+    .9rem !important;
+
+}
+
+
+.gadda-shop-description {
+
+  min-height:
+    3.1rem;
+
+  margin-top:
+    .6rem !important;
+
+  font-size:
+    .86rem !important;
+
+  line-height:
+    1.5 !important;
+
+}
+
+
+
+/* =========================================================
+   SPECS
+   ========================================================= */
+
+.gadda-shop-specs {
+
+  margin-top:
+    1.3rem !important;
+
+  border-top:
+    1px solid
+    #111111 !important;
+
+  border-bottom:
+    1px solid
+    #111111 !important;
+
+}
+
+
+.gadda-shop-specs > div {
+
+  padding:
+    .75rem
+    .4rem
+    .75rem
+    0 !important;
+
+}
+
+
+.gadda-shop-specs small {
+
+  font-size:
+    .5rem !important;
+
+}
+
+
+.gadda-shop-specs strong {
+
+  font-size:
+    .68rem !important;
+
+}
+
+
+
+/* =========================================================
+   PRICE + CTA
+   ========================================================= */
+
+.gadda-shop-price {
+
+  margin-top:
+    auto !important;
+
+  padding-top:
+    1.4rem;
+
+}
+
+
+.gadda-shop-old-price {
+
+  font-size:
+    .7rem !important;
+
+}
+
+
+.gadda-shop-price strong {
+
+  font-size:
+    clamp(
+      1.8rem,
+      2.5vw,
+      2.7rem
+    ) !important;
+
+}
+
+
+.gadda-shop-cta {
+
+  padding:
+    .7rem .85rem !important;
+
+  font-size:
+    .62rem !important;
+
+  box-shadow:
+    4px 4px 0
+    #FF6500 !important;
+
+}
+
+
+
+/* =========================================================
+   LARGE SCREEN
+   ========================================================= */
+
+@media (min-width: 1500px) {
+
+  .gadda-shop-list {
+
+    max-width:
+      1500px;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (
+  min-width: 721px
+)
+and (
+  max-width: 1000px
+) {
+
+  .gadda-shop-list {
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      ) !important;
+
+  }
+
+
+  .gadda-shop-card-visual {
+
+    aspect-ratio:
+      4 / 3;
+
+  }
+
+
+  .gadda-shop-card-copy h2 {
+
+    font-size:
+      clamp(
+        2.3rem,
+        4.5vw,
+        3.3rem
+      ) !important;
+
+  }
+
+}
+
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 720px) {
+
+  .gadda-shop-hero {
+
+    min-height:
+      auto !important;
+
+  }
+
+
+  .gadda-shop-hero-grid {
+
+    grid-template-columns:
+      1fr !important;
+
+  }
+
+
+  .gadda-shop-hero h1 {
+
+    font-size:
+      clamp(
+        3.8rem,
+        17vw,
+        5.7rem
+      ) !important;
+
+  }
+
+
+  .gadda-shop-list {
+
+    grid-template-columns:
+      1fr !important;
+
+    padding:
+      1.1rem !important;
+
+  }
+
+
+  .gadda-shop-card-visual {
+
+    aspect-ratio:
+      4 / 3;
+
+  }
+
+
+  .gadda-shop-card-copy {
+
+    padding:
+      1.3rem !important;
+
+  }
+
+
+  .gadda-shop-card-copy h2 {
+
+    font-size:
+      clamp(
+        2.7rem,
+        13vw,
+        4rem
+      ) !important;
+
+  }
+
+
+  .gadda-shop-specs {
+
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      ) !important;
+
+  }
+
+
+  .gadda-shop-specs > div {
+
+    border-bottom:
+      0 !important;
+
+  }
+
+
+  .gadda-shop-price {
+
+    flex-direction:
+      row !important;
+
+    align-items:
+      end !important;
+
+  }
+
+}
+
+
+/* GADDA FLOATING PILLS */
+
+.gadda-illustration-stage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.gadda-floating-pills {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gadda-floating-pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 11rem;
+  min-height: 4.8rem;
+  padding: 1rem 1.7rem;
+
+  border: 3px solid #111111;
+  border-radius: 999px;
+
+  color: #111111;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  box-shadow: 10px 10px 0 #111111;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.gadda-floating-pill--lime {
+  background: #d8ff37;
+}
+
+.gadda-floating-pill--blue {
+  background: #73b9ea;
+}
+
+.gadda-floating-pill--pink {
+  background: #f57aa7;
+}
+
+.gadda-floating-pill--white {
+  background: #f7f7f7;
+}
+
+.gadda-floating-pill--orange {
+  background: #ff6500;
+  color: #fff6eb;
+}
+
+@media (max-width: 900px) {
+  .gadda-floating-pill {
+    min-width: 8.3rem;
+    min-height: 3.7rem;
+    padding: .8rem 1.1rem;
+    font-size: .58rem;
+    box-shadow: 7px 7px 0 #111111;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gadda-floating-pill {
+    transform: none !important;
+  }
+}
+
+
+/* =========================================================
+   GADDA SELLING UPGRADE V1
+   Website 1 brand system + Website 2 conversion mechanics
+   ========================================================= */
+
+.gs-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .7rem;
+  margin-top: 2rem;
+}
+
+.gs-commerce-primary,
+.gs-commerce-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 3.6rem;
+  padding: .9rem 1.15rem;
+  border: 1px solid rgba(255,255,255,.65);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  transition:
+    transform 220ms ease,
+    background 220ms ease,
+    color 220ms ease;
+}
+
+.gs-commerce-primary {
+  min-width: 12.5rem;
+  border-color: #FF6500;
+  background: #FF6500;
+  color: #111111;
+}
+
+.gs-commerce-secondary {
+  min-width: 12rem;
+  background: transparent;
+  color: #FFFFFF;
+}
+
+.gs-commerce-primary:hover,
+.gs-commerce-secondary:hover {
+  transform: translateY(-2px);
+}
+
+.gs-commerce-secondary:hover {
+  background: #FFFFFF;
+  color: #111111;
+}
+
+.gs-story-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3.6rem;
+  padding: .8rem .5rem;
+  color: rgba(255,255,255,.58);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.gs-story-link:hover {
+  color: #FF6500;
+}
+
+.gs-hero-trust {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.gs-product-socialproof {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  margin-top: .85rem;
+  color: rgba(17,17,17,.55);
+  font-size: .72rem;
+}
+
+.gs-product-socialproof span:first-child {
+  color: #FF6500;
+  font-weight: 900;
+}
+
+.gs-product-price {
+  align-items: end !important;
+}
+
+.gs-product-price-stack {
+  display: grid;
+  gap: .2rem;
+}
+
+.gs-product-price-stack > small {
+  color: rgba(17,17,17,.45);
+  font-size: .55rem;
+  letter-spacing: .11em;
+}
+
+.gs-product-saving {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin-top: .25rem;
+}
+
+.gs-product-saving del {
+  color: rgba(17,17,17,.42);
+  font-size: .68rem;
+}
+
+.gs-product-saving span {
+  display: inline-flex;
+  padding: .22rem .42rem;
+  background: #FF6500;
+  color: #111111;
+  font-size: .55rem;
+  font-weight: 900;
+  letter-spacing: .05em;
+}
+
+.gs-product-end-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.gs-product-end-actions a {
+  border-bottom: 1px solid currentColor;
+}
+
+.gs-buy-confidence-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid rgba(17,17,17,.2);
+  border-bottom: 1px solid rgba(17,17,17,.2);
+}
+
+.gs-buy-confidence-strip > div {
+  min-height: 11rem;
+  padding: 1.5rem;
+  border-right: 1px solid rgba(17,17,17,.14);
+}
+
+.gs-buy-confidence-strip > div:last-child {
+  border-right: 0;
+}
+
+.gs-buy-confidence-strip span {
+  color: #FF6500;
+  font-size: .62rem;
+  letter-spacing: .1em;
+}
+
+.gs-buy-confidence-strip strong {
+  display: block;
+  margin-top: 2rem;
+  font-size: .78rem;
+  letter-spacing: .04em;
+}
+
+.gs-buy-confidence-strip p {
+  max-width: 15rem;
+  margin-top: .45rem;
+  color: rgba(17,17,17,.55);
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+.gs-home-faq {
+  display: grid;
+  grid-template-columns: minmax(18rem, .7fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 7vw, 8rem);
+  padding:
+    clamp(4rem, 8vw, 8rem)
+    clamp(1.5rem, 5vw, 5rem);
+  background: #F3ECDD;
+  color: #111111;
+}
+
+.gs-home-faq-head h2 {
+  margin-top: 1rem;
+  font-size: clamp(4rem, 7vw, 7.5rem);
+  line-height: .83;
+  letter-spacing: -.03em;
+}
+
+.gs-home-faq-head > p:last-child {
+  max-width: 23rem;
+  margin-top: 1.4rem;
+  color: rgba(17,17,17,.55);
+  line-height: 1.55;
+}
+
+.gs-home-faq-list {
+  border-top: 1px solid rgba(17,17,17,.28);
+}
+
+.gs-home-faq-list details {
+  border-bottom: 1px solid rgba(17,17,17,.28);
+}
+
+.gs-home-faq-list summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.35rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  font-weight: 750;
+}
+
+.gs-home-faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.gs-home-faq-list summary span {
+  color: #FF6500;
+  font-size: 1.4rem;
+}
+
+.gs-home-faq-list details[open] summary span {
+  transform: rotate(45deg);
+}
+
+.gs-home-faq-list details p {
+  max-width: 38rem;
+  padding: 0 0 1.4rem;
+  color: rgba(17,17,17,.58);
+  line-height: 1.6;
+}
+
+.pro-buy-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(9rem, .65fr);
+  gap: .7rem;
+  margin-top: .85rem;
+}
+
+.pro-buy-actions .pro-add {
+  margin-top: 0 !important;
+}
+
+.pro-buy-now {
+  min-height: 3.7rem;
+  border: 1px solid #111111;
+  background: transparent;
+  color: #111111;
+  padding: .9rem 1rem;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .05em;
+  cursor: pointer;
+  transition:
+    background 220ms ease,
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.pro-buy-now:hover {
+  background: #111111;
+  color: #F3ECDD;
+  transform: translateY(-2px);
+}
+
+.pro-buy-confidence {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.pro-quick-specs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid rgba(17,17,17,.2);
+  border-bottom: 1px solid rgba(17,17,17,.2);
+  background: #F3ECDD;
+  color: #111111;
+}
+
+.pro-quick-specs > div {
+  min-height: 8.5rem;
+  padding: 1.35rem;
+  border-right: 1px solid rgba(17,17,17,.14);
+}
+
+.pro-quick-specs > div:last-child {
+  border-right: 0;
+}
+
+.pro-quick-specs small {
+  display: block;
+  color: #FF6500;
+  font-size: .55rem;
+  letter-spacing: .1em;
+}
+
+.pro-quick-specs strong {
+  display: block;
+  margin-top: 1.5rem;
+  font-size: .8rem;
+  line-height: 1.4;
+}
+
+.pro-proof-reviews {
+  display: grid;
+  grid-template-columns: minmax(18rem, .7fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  padding:
+    clamp(4rem, 7vw, 7rem)
+    clamp(1.5rem, 5vw, 5rem);
+  background: #111111;
+  color: #F3ECDD;
+}
+
+.pro-proof-reviews-head > p {
+  color: #FF6500;
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+}
+
+.pro-proof-reviews-head h2 {
+  margin-top: 1rem;
+  font-size: clamp(3rem, 5.5vw, 6rem);
+  line-height: .88;
+  letter-spacing: -.03em;
+}
+
+.pro-proof-review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .8rem;
+}
+
+.pro-proof-review {
+  min-height: 18rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem;
+  border: 1px solid rgba(243,236,221,.24);
+}
+
+.pro-proof-review > div {
+  color: #FF6500;
+  letter-spacing: .08em;
+}
+
+.pro-proof-review blockquote {
+  margin: 1.6rem 0;
+  color: rgba(243,236,221,.78);
+  font-size: .98rem;
+  line-height: 1.55;
+}
+
+.pro-proof-review footer {
+  display: grid;
+  gap: .2rem;
+  margin-top: auto;
+}
+
+.pro-proof-review footer strong {
+  font-size: .72rem;
+}
+
+.pro-proof-review footer span {
+  color: rgba(243,236,221,.42);
+  font-size: .65rem;
+}
+
+.pro-faq {
+  display: grid;
+  grid-template-columns: minmax(17rem, .65fr) minmax(0, 1.35fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  padding:
+    clamp(4rem, 7vw, 7rem)
+    clamp(1.5rem, 5vw, 5rem);
+  background: #F3ECDD;
+  color: #111111;
+}
+
+.pro-faq-head > p {
+  color: #FF6500;
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+}
+
+.pro-faq-head h2 {
+  margin-top: 1rem;
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  line-height: .9;
+  letter-spacing: -.03em;
+}
+
+.pro-faq-list {
+  border-top: 1px solid rgba(17,17,17,.28);
+}
+
+.pro-faq-list details {
+  border-bottom: 1px solid rgba(17,17,17,.28);
+}
+
+.pro-faq-list summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 750;
+}
+
+.pro-faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.pro-faq-list summary span {
+  color: #FF6500;
+  font-size: 1.35rem;
+}
+
+.pro-faq-list details[open] summary span {
+  transform: rotate(45deg);
+}
+
+.pro-faq-list details p {
+  max-width: 40rem;
+  padding: 0 0 1.25rem;
+  color: rgba(17,17,17,.58);
+  line-height: 1.6;
+}
+
+.pro-pdp-final-cta {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding:
+    clamp(3rem, 6vw, 6rem)
+    clamp(1.5rem, 5vw, 5rem);
+  background: #FF6500;
+  color: #111111;
+}
+
+.pro-pdp-final-cta p {
+  font-size: .64rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+}
+
+.pro-pdp-final-cta h2 {
+  margin-top: .8rem;
+  font-size: clamp(3.5rem, 6vw, 7rem);
+  line-height: .84;
+  letter-spacing: -.03em;
+}
+
+.pro-pdp-final-button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: 3.8rem;
+  padding: .9rem 1.2rem;
+  border: 2px solid #111111;
+  background: #111111;
+  color: #F3ECDD;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+  transition: transform 220ms ease;
+}
+
+.pro-pdp-final-button:hover {
+  transform: translateY(-3px);
+}
+
+@media (min-width: 1100px) {
+  .pro-product-column .pro-buybox {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .gs-hero-trust {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .gs-buy-confidence-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gs-home-faq,
+  .pro-proof-reviews,
+  .pro-faq {
+    grid-template-columns: 1fr;
+  }
+
+  .pro-quick-specs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pro-proof-review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pro-buy-confidence {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .gs-hero-actions {
+    align-items: stretch;
+  }
+
+  .gs-commerce-primary,
+  .gs-commerce-secondary {
+    width: 100%;
+  }
+
+  .gs-story-link {
+    min-height: auto;
+    padding-left: 0;
+  }
+
+  .gs-hero-trust,
+  .gs-buy-confidence-strip {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gs-buy-confidence-strip > div {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(17,17,17,.14);
+  }
+
+  .gs-home-faq-head h2 {
+    font-size: clamp(3.4rem, 16vw, 5rem);
+  }
+
+  .pro-buy-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .pro-buy-confidence,
+  .pro-quick-specs {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pro-pdp-final-cta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pro-pdp-final-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
+/* =========================================================
+   GADDA ALL-PAGES V2
+   ========================================================= */
+:root {
+  --gv2-black:#0b0b0b;
+  --gv2-ink:#111111;
+  --gv2-orange:#ff6500;
+  --gv2-paper:#f3ecdd;
+  --gv2-cream:#f8f4e9;
+  --gv2-white:#ffffff;
+  --gv2-muted-dark:rgba(255,255,255,.58);
+  --gv2-muted-light:rgba(17,17,17,.55);
+  --gv2-rule-dark:rgba(255,255,255,.18);
+  --gv2-rule-light:rgba(17,17,17,.18);
+}
+html{scroll-behavior:smooth}
+.site-public-v2{overflow:clip}
+.site-page-meta{display:flex;justify-content:space-between;gap:2rem;padding-bottom:.95rem;border-bottom:1px solid currentColor;font-size:.62rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+.site-page-meta-dark{color:rgba(255,255,255,.55)}
+
+/* shared endcap */
+.site-commerce-endcap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(17rem,.75fr);gap:3rem;padding:clamp(3.5rem,7vw,7rem) clamp(1.4rem,5vw,5rem) 0;background:var(--gv2-orange);color:var(--gv2-ink)}
+.site-commerce-endcap-copy>p{font-size:.65rem;font-weight:900;letter-spacing:.1em}
+.site-commerce-endcap-copy h2{max-width:10ch;margin-top:1rem;font-size:clamp(3.8rem,7vw,8rem)!important;line-height:.82!important;letter-spacing:-.04em!important}
+.site-commerce-endcap-actions{display:flex;flex-direction:column;justify-content:center;gap:.65rem}
+.site-commerce-endcap-primary,.site-commerce-endcap-secondary{display:flex;align-items:center;justify-content:space-between;min-height:3.7rem;padding:.9rem 1rem;border:2px solid var(--gv2-ink);font-size:.72rem;font-weight:900;letter-spacing:.05em}
+.site-commerce-endcap-primary{background:var(--gv2-ink);color:var(--gv2-paper)}
+.site-commerce-endcap-secondary{background:transparent;color:var(--gv2-ink)}
+.site-commerce-endcap-text{width:max-content;margin-top:.45rem;border-bottom:1px solid currentColor;padding-bottom:.15rem;font-size:.65rem;font-weight:800;letter-spacing:.05em}
+.site-commerce-endcap-proof{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);margin-top:2rem;border-top:1px solid rgba(17,17,17,.45)}
+.site-commerce-endcap-proof span{padding:1.15rem 1rem 1.15rem 0;border-right:1px solid rgba(17,17,17,.35);font-size:.58rem;font-weight:900;letter-spacing:.08em}
+.site-commerce-endcap-proof span:last-child{border-right:0}
+
+/* quiz */
+.site-quiz-page{background:var(--gv2-black)!important;color:var(--gv2-white)!important}
+.site-quiz-intro{min-height:72svh!important;padding:clamp(1.5rem,3vw,3rem) clamp(1.4rem,5vw,5rem) clamp(3rem,7vw,7rem)!important;background:var(--gv2-black)!important}
+.site-quiz-intro-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(19rem,.8fr);gap:clamp(2rem,7vw,8rem);align-items:end;min-height:57svh;padding-top:clamp(3rem,7vw,7rem)}
+.site-quiz-intro h1{max-width:8ch;margin-top:1rem!important;color:var(--gv2-white)!important;font-size:clamp(4.4rem,8.2vw,9.2rem)!important;line-height:.79!important;letter-spacing:-.045em!important}
+.site-quiz-intro h1 em{color:var(--gv2-orange);font-style:normal}
+.site-quiz-intro-side>p{max-width:30rem;color:var(--gv2-muted-dark);font-size:clamp(1rem,1.35vw,1.22rem);line-height:1.6}
+.site-quiz-principles{display:grid;margin-top:2.2rem;border-top:1px solid var(--gv2-rule-dark)}
+.site-quiz-principles>div{display:grid;grid-template-columns:2.6rem 1fr;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--gv2-rule-dark)}
+.site-quiz-principles span{color:var(--gv2-orange);font-size:.62rem}.site-quiz-principles strong{font-size:.7rem;letter-spacing:.05em}
+.site-quiz-workbench{display:grid;grid-template-columns:minmax(17rem,.58fr) minmax(0,1.42fr);gap:clamp(2rem,6vw,7rem);padding:clamp(4rem,7vw,7rem) clamp(1.4rem,5vw,5rem);background:var(--gv2-paper);color:var(--gv2-ink)}
+.site-quiz-workbench-copy{align-self:start;position:sticky;top:7rem}.site-quiz-workbench-copy h2{margin-top:1rem;font-size:clamp(3.2rem,5vw,5.7rem)!important;line-height:.86!important;letter-spacing:-.035em!important}.site-quiz-workbench-copy>p:last-child{max-width:21rem;margin-top:1.5rem;color:var(--gv2-muted-light);line-height:1.55}
+.site-quiz-machine{width:100%;max-width:none!important;margin:0!important}.site-quiz-card{min-height:39rem;padding:clamp(1.4rem,3vw,2.5rem)!important;border:1px solid var(--gv2-ink)!important;border-radius:0!important;background:var(--gv2-cream)!important;color:var(--gv2-ink)!important;box-shadow:10px 10px 0 var(--gv2-orange)}
+.site-quiz-progress-head,.site-quiz-result-meta{display:flex;justify-content:space-between;gap:1rem;color:var(--gv2-muted-light);font-size:.61rem;font-weight:900;letter-spacing:.09em}.site-quiz-progress{height:3px!important;margin-top:.85rem!important;background:rgba(17,17,17,.12)!important}.site-quiz-progress i{display:block;height:100%;background:var(--gv2-orange)!important;transition:width 420ms cubic-bezier(.16,1,.3,1)}
+.site-quiz-question{max-width:44rem;margin-top:clamp(2rem,5vw,4.5rem)}.site-quiz-question h2,.site-quiz-card>h2{margin-top:0!important;color:var(--gv2-ink)!important;font-size:clamp(2.4rem,4.2vw,4.7rem)!important;line-height:.92!important;letter-spacing:-.035em!important}.site-quiz-question>p{max-width:34rem;margin-top:.9rem;color:var(--gv2-muted-light);line-height:1.55}
+.site-quiz-options{display:grid!important;grid-template-columns:1fr!important;gap:0!important;margin-top:clamp(2rem,4vw,3rem)!important;border-top:1px solid var(--gv2-rule-light)}
+.site-quiz-options>button{display:grid!important;grid-template-columns:3rem 1fr auto!important;gap:1rem!important;align-items:center!important;width:100%!important;min-height:5.25rem!important;margin:0!important;border:0!important;border-bottom:1px solid var(--gv2-rule-light)!important;border-radius:0!important;background:transparent!important;padding:.9rem .2rem!important;color:var(--gv2-ink)!important;text-align:left!important;cursor:pointer;transition:background 180ms ease,padding 240ms cubic-bezier(.16,1,.3,1)}
+.site-quiz-options>button:hover{background:rgba(255,101,0,.08)!important;padding-left:.7rem!important;padding-right:.7rem!important}.site-quiz-option-number{color:var(--gv2-orange);font-size:.68rem;font-weight:900}.site-quiz-option-copy{display:grid;gap:.28rem}.site-quiz-option-copy strong{font-size:clamp(1rem,1.35vw,1.2rem)}.site-quiz-option-copy small{color:var(--gv2-muted-light);font-size:.75rem;line-height:1.35}.site-quiz-options>button>b{color:var(--gv2-orange);font-size:1.25rem}
+.site-quiz-card-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.5rem;color:var(--gv2-muted-light);font-size:.62rem;letter-spacing:.05em}.site-quiz-card-foot button,.site-quiz-card-foot a{border:0;border-bottom:1px solid currentColor;background:none;padding:.2rem 0;color:var(--gv2-ink);font:inherit;font-weight:900;cursor:pointer}
+.site-quiz-result{min-height:0}.site-quiz-result-grid{display:grid;grid-template-columns:minmax(15rem,.8fr) minmax(0,1.2fr);gap:clamp(1.4rem,4vw,4rem);margin-top:1.4rem}.site-quiz-result-media{position:relative;min-height:31rem;overflow:hidden;background:#d9d4ca}.site-quiz-result-media img{width:100%;height:100%;object-fit:cover}.site-quiz-result-media>span{position:absolute;left:1rem;top:1rem;padding:.55rem .7rem;background:var(--gv2-orange);color:var(--gv2-ink);font-size:.58rem;font-weight:900;letter-spacing:.07em}
+.site-quiz-result-copy{display:flex;flex-direction:column;justify-content:center}.site-quiz-result-copy h2{margin-top:.55rem!important;color:var(--gv2-ink)!important;font-size:clamp(3.2rem,5vw,5.7rem)!important;line-height:.86!important}.site-quiz-result-reason{max-width:36rem;margin-top:1rem;color:var(--gv2-muted-light);line-height:1.55}
+.site-quiz-result-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1.6rem;border-top:1px solid var(--gv2-rule-light);border-left:1px solid var(--gv2-rule-light)}.site-quiz-result-facts>div{min-height:5.6rem;padding:.85rem;border-right:1px solid var(--gv2-rule-light);border-bottom:1px solid var(--gv2-rule-light)}.site-quiz-result-facts small{display:block;color:var(--gv2-orange);font-size:.55rem;font-weight:900;letter-spacing:.08em}.site-quiz-result-facts strong{display:block;margin-top:.65rem;font-size:.78rem;line-height:1.35}.site-quiz-result-rating{display:flex;gap:.75rem;align-items:center;margin-top:1rem;font-size:.72rem}.site-quiz-result-rating strong{color:var(--gv2-orange)}
+.site-quiz-actions{display:flex!important;flex-wrap:wrap;gap:.55rem!important;margin-top:1.5rem!important}.site-quiz-actions a,.site-quiz-actions button{display:inline-flex!important;align-items:center;justify-content:center;min-height:3.3rem;border:1px solid var(--gv2-ink)!important;border-radius:0!important;padding:.75rem .9rem!important;background:transparent!important;color:var(--gv2-ink)!important;font-size:.65rem;font-weight:900;letter-spacing:.05em;cursor:pointer}.site-quiz-actions .site-quiz-primary{background:var(--gv2-orange)!important}.site-quiz-alternative{display:flex;justify-content:space-between;gap:1rem;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--gv2-rule-light);font-size:.63rem;font-weight:800;letter-spacing:.05em}.site-quiz-alternative span{color:var(--gv2-muted-light)}.site-quiz-disclaimer{display:block;margin-top:1.2rem;color:rgba(17,17,17,.42);line-height:1.45}
+
+/* shop */
+.site-shop{background:var(--gv2-paper)!important;color:var(--gv2-ink)}.site-shop-hero{min-height:67svh!important;padding:clamp(1.5rem,3vw,3rem) clamp(1.4rem,5vw,5rem) clamp(3rem,6vw,6rem)!important;background:var(--gv2-black)!important;color:var(--gv2-white)!important}.site-shop-title{max-width:1500px;margin:0 auto;padding-top:clamp(3rem,7vw,7rem)!important}.site-shop-title h1{max-width:8ch;font-size:clamp(4.8rem,8.5vw,9.5rem)!important;line-height:.79!important;letter-spacing:-.045em!important}.site-shop-title h1 em{color:var(--gv2-orange);font-style:normal}.site-shop-side{color:var(--gv2-muted-dark)}.site-shop-side strong{color:var(--gv2-white)}.site-shop-guide{max-width:none!important;margin:0!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;border:0!important;background:var(--gv2-cream)!important}.site-shop-guide>div{min-height:11rem;padding:1.45rem!important;border-right:1px solid var(--gv2-rule-light);border-bottom:1px solid var(--gv2-rule-light)}.site-shop-guide span{color:var(--gv2-orange)}.site-shop-guide strong{display:block;margin-top:2rem}.site-shop-guide p{margin-top:.5rem;color:var(--gv2-muted-light)}
+.site-shop-decision{display:flex;align-items:end;justify-content:space-between;gap:2rem;padding:clamp(3rem,6vw,6rem) clamp(1.4rem,5vw,5rem);background:var(--gv2-orange);color:var(--gv2-ink)}.site-shop-decision h2{margin-top:.8rem;font-size:clamp(3rem,5vw,5.5rem)!important;line-height:.86!important;letter-spacing:-.035em!important}.site-shop-decision-actions{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem}.site-shop-decision-actions a{border-bottom:1px solid currentColor;padding-bottom:.2rem;font-size:.68rem;font-weight:900;letter-spacing:.05em}
+
+/* compare */
+.site-compare{background:var(--gv2-paper)!important;color:var(--gv2-ink)}.site-compare-head{min-height:66svh!important;padding:clamp(1.5rem,3vw,3rem) clamp(1.4rem,5vw,5rem) clamp(3rem,6vw,6rem)!important;background:var(--gv2-black)!important;color:var(--gv2-white)!important}.site-compare-head-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(18rem,.85fr);gap:clamp(2rem,7vw,8rem);align-items:end;min-height:51svh;padding-top:clamp(3rem,6vw,6rem)}.site-compare-head h1{margin-top:1rem!important;font-size:clamp(4.7rem,8.5vw,9.5rem)!important;line-height:.79!important;letter-spacing:-.045em!important}.site-compare-head h1 em{color:var(--gv2-orange);font-style:normal}.site-compare-head-side{max-width:28rem;color:var(--gv2-muted-dark);line-height:1.6}.site-compare-head-side a{display:inline-block;margin-top:1.5rem;border-bottom:1px solid var(--gv2-orange);padding-bottom:.2rem;color:var(--gv2-orange);font-size:.7rem;font-weight:900;letter-spacing:.05em}.site-compare-table-wrap{overflow-x:auto;padding:clamp(2rem,5vw,5rem) clamp(1rem,3vw,3rem)!important;background:var(--gv2-paper)}.site-compare-table{width:max(100%,1050px);max-width:1500px;margin:0 auto;border-collapse:collapse}.site-compare-table th,.site-compare-table td{border-color:rgba(17,17,17,.18)!important}.site-compare-table thead th{vertical-align:top;padding:1rem!important}.site-compare-product{display:grid;gap:.45rem;text-align:left}.site-compare-product img{width:100%;aspect-ratio:4/3;margin-bottom:.7rem;object-fit:cover;background:#ddd}.site-compare-product small{color:var(--gv2-orange);font-size:.55rem;letter-spacing:.08em}.site-compare-product strong{font-size:clamp(1.25rem,2vw,2rem)}.site-compare-product span{color:var(--gv2-muted-light);font-size:.66rem}.site-compare-buy-row a{display:inline-flex;min-height:3.1rem;align-items:center;padding:.7rem .8rem;background:var(--gv2-orange);color:var(--gv2-ink);font-size:.62rem;font-weight:900}
+
+/* reviews */
+.pro-reviews{background:var(--gv2-black)!important;color:var(--gv2-white)!important}.pro-reviews-wrap{max-width:none!important;padding:clamp(3rem,6vw,6rem) clamp(1.4rem,5vw,5rem)!important}.pro-reviews-head{max-width:1500px;margin:0 auto}.pro-reviews-head>p{color:var(--gv2-orange)!important}.pro-reviews-head h1{max-width:9ch;margin-top:1rem!important;font-size:clamp(4.7rem,8vw,9rem)!important;line-height:.8!important;letter-spacing:-.045em!important}.pro-review-intro{max-width:46rem;margin-top:2rem!important;color:var(--gv2-muted-dark)}.pro-review-grid{max-width:1500px;margin:clamp(3rem,6vw,6rem) auto 0!important;gap:.8rem!important}.pro-review-card{min-height:24rem!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:0!important;background:rgba(255,255,255,.035)!important;padding:1.4rem!important}.pro-review-card blockquote{font-size:clamp(1rem,1.35vw,1.25rem)!important;line-height:1.55!important}.pro-review-top span:last-child{color:var(--gv2-orange)}.pro-reviews-end{max-width:1500px;margin-left:auto!important;margin-right:auto!important}
+
+/* why */
+.site-why{background:var(--gv2-paper)!important;color:var(--gv2-ink)}.site-why-hero{min-height:78svh!important;background:var(--gv2-black)!important;color:var(--gv2-white)!important;padding:clamp(3rem,6vw,6rem) clamp(1.4rem,5vw,5rem)!important}.site-why-hero h1{max-width:10ch;margin-top:1rem!important;font-size:clamp(4.5rem,8vw,9rem)!important;line-height:.79!important;letter-spacing:-.045em!important}.site-why-hero h1 em{color:var(--gv2-orange);font-style:normal}.site-why-lead{color:var(--gv2-muted-dark)}.site-why-lead strong{color:var(--gv2-white)}.site-why-problem,.site-why-pillars{background:var(--gv2-cream)!important}.site-why-belief{background:var(--gv2-orange)!important;color:var(--gv2-ink)!important}.site-why-final{background:var(--gv2-black)!important;color:var(--gv2-white)!important}.site-why-final-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.5rem}.site-why-final-actions a{display:inline-flex!important;margin-top:0!important;padding:.9rem 1.1rem;background:var(--gv2-orange)!important;color:var(--gv2-ink)!important;font-size:.7rem;font-weight:900}.site-why-final-actions a:nth-child(2){border:1px solid rgba(255,255,255,.65);background:transparent!important;color:var(--gv2-white)!important}.site-why-final-actions a:nth-child(3){border-bottom:1px solid var(--gv2-orange);background:transparent!important;color:var(--gv2-orange)!important}
+
+/* utility pages */
+.site-utility-page{min-height:75svh;background:var(--gv2-paper)!important;color:var(--gv2-ink)}.site-cart,.site-wishlist,.site-account,.site-account-auth{max-width:1500px!important;margin:0 auto!important;padding:clamp(3rem,6vw,6rem) clamp(1.4rem,5vw,5rem)!important}.site-utility-heading{padding-bottom:clamp(2rem,5vw,5rem)}.site-utility-heading h1{margin-top:.7rem!important;font-size:clamp(4.3rem,7.5vw,8rem)!important;line-height:.8!important;letter-spacing:-.04em!important}.site-empty{border:1px solid var(--gv2-ink)!important;border-radius:0!important;background:var(--gv2-cream)!important;box-shadow:9px 9px 0 var(--gv2-orange)}.site-cart-item,.site-wishlist-card,.site-account-card,.site-account-links>a,.site-account-form{border-radius:0!important;border-color:rgba(17,17,17,.22)!important;background:var(--gv2-cream)!important}.site-cart-summary{position:sticky;top:7rem;border-radius:0!important;border:1px solid var(--gv2-ink)!important;background:var(--gv2-cream)!important}.site-cart-summary>button,.site-account-submit{border-radius:0!important;background:var(--gv2-orange)!important;color:var(--gv2-ink)!important;font-weight:900!important}.site-account-auth{display:grid!important;grid-template-columns:minmax(18rem,.8fr) minmax(0,1.2fr)!important;gap:clamp(2rem,7vw,8rem)!important;align-items:center}.site-account-auth-copy h1{margin-top:.8rem!important;font-size:clamp(4.2rem,7vw,8rem)!important;line-height:.8!important;letter-spacing:-.04em!important}.site-account-form input{border-radius:0!important}
+.site-cart-trust{display:grid;gap:.55rem;margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(17,17,17,.18)}.site-cart-trust span{font-size:.55rem;font-weight:800;letter-spacing:.06em}.site-cart-continue{display:inline-block;margin-top:1rem;border-bottom:1px solid currentColor;padding-bottom:.15rem;font-size:.62rem;font-weight:800}.site-wishlist-tools{display:flex;align-items:center;justify-content:space-between;gap:2rem;margin-bottom:1.2rem;padding:1rem 0;border-top:1px solid rgba(17,17,17,.2);border-bottom:1px solid rgba(17,17,17,.2)}.site-wishlist-tools p{color:var(--gv2-muted-light);font-size:.82rem}.site-wishlist-tools a{flex:0 0 auto;border-bottom:1px solid currentColor;color:var(--gv2-orange);font-size:.65rem;font-weight:900}
+
+/* business */
+.site-business{background:var(--gv2-paper)!important;color:var(--gv2-ink)}.site-business-head{min-height:61svh!important;background:var(--gv2-black)!important;color:var(--gv2-white)!important;padding:clamp(3rem,6vw,6rem) clamp(1.4rem,5vw,5rem)!important}.site-business-head h1{max-width:9ch;margin-top:1rem!important;font-size:clamp(4.2rem,7.5vw,8rem)!important;line-height:.8!important;letter-spacing:-.04em!important}.site-business-head>p:last-child{max-width:34rem;margin-top:1.5rem;color:var(--gv2-muted-dark);line-height:1.55}.site-business-sheet{max-width:1200px!important;margin:0 auto!important;padding:clamp(3rem,6vw,6rem) clamp(1.4rem,4vw,4rem)!important}.site-business-row,.site-business-block{border-color:rgba(17,17,17,.22)!important}
+
+@media(max-width:1000px){.site-quiz-intro-grid,.site-quiz-workbench,.site-compare-head-grid,.site-commerce-endcap,.site-account-auth{grid-template-columns:1fr!important}.site-quiz-workbench-copy{position:static}.site-quiz-result-grid{grid-template-columns:1fr}.site-quiz-result-media{min-height:24rem}.site-shop-guide{grid-template-columns:repeat(2,minmax(0,1fr))!important}.site-commerce-endcap-proof{grid-template-columns:1fr}.site-commerce-endcap-proof span{border-right:0;border-bottom:1px solid rgba(17,17,17,.35)}.site-commerce-endcap-proof span:last-child{border-bottom:0}}
+@media(max-width:700px){.site-page-meta{align-items:flex-start;flex-direction:column;gap:.45rem}.site-quiz-intro{min-height:auto!important}.site-quiz-intro-grid{min-height:0}.site-quiz-intro h1,.site-shop-title h1,.site-compare-head h1,.pro-reviews-head h1,.site-why-hero h1,.site-business-head h1,.site-utility-heading h1,.site-account-auth-copy h1{font-size:clamp(3.5rem,17vw,5.7rem)!important}.site-quiz-card{min-height:0;box-shadow:6px 6px 0 var(--gv2-orange)}.site-quiz-options>button{grid-template-columns:2.3rem 1fr auto!important}.site-quiz-option-copy small{font-size:.68rem}.site-quiz-result-media{min-height:19rem}.site-quiz-result-facts{grid-template-columns:1fr}.site-quiz-actions{flex-direction:column;align-items:stretch}.site-quiz-actions a,.site-quiz-actions button{width:100%}.site-shop-guide{grid-template-columns:1fr!important}.site-shop-decision,.site-wishlist-tools{align-items:flex-start;flex-direction:column}.site-commerce-endcap-copy h2{font-size:clamp(3.3rem,15vw,5rem)!important}.site-cart,.site-wishlist,.site-account,.site-account-auth{padding-left:1.1rem!important;padding-right:1.1rem!important}}

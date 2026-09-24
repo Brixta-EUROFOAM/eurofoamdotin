@@ -1,5 +1,7 @@
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SiteCommerceEndcap from "@/components/SiteCommerceEndcap";
 import ProductCard from "@/components/ProductCard";
 import { getStoreData } from "@/lib/store";
 
@@ -84,6 +86,19 @@ export default async function MattressesPage() {
         </section>
 
 
+        <section className="site-shop-decision">
+          <div>
+            <p className="site-orange">DON&apos;T KNOW YOUR JOB YET?</p>
+            <h2>THAT&apos;S WHAT<br />THE MATCH IS FOR.</h2>
+          </div>
+
+          <div className="site-shop-decision-actions">
+            <Link href="/sleep-quiz">FIND MY MATCH →</Link>
+            <Link href="/compare">COMPARE ALL GADDAS →</Link>
+          </div>
+        </section>
+
+
         <section className="gadda-shop-list">
 
           <div className="gadda-shop-list-head">
@@ -100,6 +115,11 @@ export default async function MattressesPage() {
           ))}
 
         </section>
+
+        <SiteCommerceEndcap
+          eyebrow="FOUND THE JOB?"
+          title="NOW PICK THE GADDA."
+        />
 
       </main>
 

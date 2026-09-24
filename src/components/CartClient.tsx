@@ -166,6 +166,16 @@ export default function CartClient() {
               Checkout is currently a demo.
             </small>
 
+            <div className="site-cart-trust">
+              <span>STANDARD SHIPPING INCLUDED</span>
+              <span>TRIAL TERMS SHOWN BY PRODUCT</span>
+              <span>WARRANTY SHOWN BY PRODUCT</span>
+            </div>
+
+            <Link href="/mattresses" className="site-cart-continue">
+              ← CONTINUE SHOPPING
+            </Link>
+
           </aside>
 
         </div>

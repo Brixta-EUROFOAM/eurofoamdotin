@@ -292,7 +292,7 @@ export const defaultStoreData: StoreData = {
     {
       slug: "euro-align",
       name: "Euro Align",
-      kicker: "Everyday orthopedic support",
+      kicker: "Everyday structured support",
       badge: "BESTSELLER",
       category: "Ortho",
       shortDescription:

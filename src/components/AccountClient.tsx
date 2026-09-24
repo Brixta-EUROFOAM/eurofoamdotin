@@ -246,8 +246,8 @@ export default function AccountClient() {
         </h1>
 
         <p>
-          Sign in for your account.
-          Or make one. No ceremony.
+          Save your shortlist, come back to your cart,
+          and keep the buying process in one place.
         </p>
 
       </div>

@@ -19,6 +19,22 @@ function money(value: number) {
 }
 
 
+function productSavingPercent(product: Mattress) {
+  if (
+    !product.compareAt ||
+    product.compareAt <= product.basePrice
+  ) {
+    return 0;
+  }
+
+  return Math.round(
+    ((product.compareAt - product.basePrice) /
+      product.compareAt) *
+      100
+  );
+}
+
+
 function productJob(product: Mattress) {
   const category = product.category.toLowerCase();
 
@@ -98,20 +114,47 @@ export default function SocialInspiredHome({
             <strong> will I sleep well on this?</strong>
           </p>
 
-          <a href="#problem" className="gs-story-cta">
-            SEE WHAT WE MEAN
-            <span>↓</span>
-          </a>
+          <div className="gs-hero-actions">
+
+            <Link
+              href="/mattresses"
+              className="gs-commerce-primary"
+            >
+              SHOP GADDAS
+              <span>→</span>
+            </Link>
+
+            <Link
+              href="/sleep-quiz"
+              className="gs-commerce-secondary"
+            >
+              FIND MY MATCH
+              <span>→</span>
+            </Link>
+
+            <a
+              href="#problem"
+              className="gs-story-link"
+            >
+              OR SEE WHY ↓
+            </a>
+
+          </div>
 
           <div className="gs-hero-trust">
             <div>
               <strong>TRY AT HOME</strong>
-              <span>No showroom pressure.</span>
+              <span>Trial terms shown on every Gadda.</span>
             </div>
 
             <div>
-              <strong>CLEAR CONSTRUCTION</strong>
-              <span>Know what you sleep on.</span>
+              <strong>DELIVERY INCLUDED</strong>
+              <span>Standard shipping included.</span>
+            </div>
+
+            <div>
+              <strong>WARRANTY INCLUDED</strong>
+              <span>Coverage shown clearly by model.</span>
             </div>
 
             <div>
@@ -237,109 +280,13 @@ export default function SocialInspiredHome({
 
 
 
-      {/* =====================================================
-          ACT 3
-          THE GADDA THESIS
-      ====================================================== */}
-
-      <section className="gs-belief">
-
-        <div className="gs-belief-head">
-
-          <p className="gs-dark-label">
-            SO WE STARTED SOMEWHERE ELSE
-          </p>
-
-          <h2>
-            BUILD THE
-            <br />
-            MATTRESS.
-            <br />
-            EXPLAIN IT
-            <br />
-            LIKE A HUMAN.
-          </h2>
-
-        </div>
-
-
-        <div className="gs-belief-copy">
-
-          <p>
-            GADDA is built around a boring idea:
-            a mattress should be easy to understand.
-          </p>
-
-          <p>
-            Tell people how it feels.
-            Tell them what it&apos;s made of.
-            Tell them what each part is doing.
-            Tell them what it costs.
-          </p>
-
-          <div className="gs-belief-big">
-            THAT&apos;S IT.
-          </div>
-
-        </div>
-
-      </section>
-
-
-
-      {/* =====================================================
-          ACT 4
-          THE CLAIM NEEDS PROOF
-      ====================================================== */}
-
-      <section className="gs-proof-intro">
-
-        <div>
-          <p className="gs-orange-label">
-            BUT HOLD ON.
-          </p>
-
-          <h2>
-            “NO MYSTERY”
-            <br />
-            IS EASY
-            <br />
-            TO SAY.
-          </h2>
-        </div>
-
-
-        <div>
-          <p className="gs-proof-small">
-            SO LET&apos;S PROVE IT.
-          </p>
-
-          <h3>
-            What exactly are you sleeping on?
-          </h3>
-
-          <p>
-            If a layer is important enough to charge you for,
-            it should be important enough to explain.
-          </p>
-
-          <div className="gs-scroll-note">
-            NO BLACK BOX.
-            <br />
-            PULL IT APART ↓
-          </div>
-        </div>
-
-      </section>
-
-
 
       {/* =====================================================
           EXISTING QUIRK / ANIMATION
           This is now the ANSWER to the previous section.
       ====================================================== */}
 
-      <ExplodedLayers />
+      <ExplodedLayers products={products} />
 
 
 
@@ -428,6 +375,16 @@ export default function SocialInspiredHome({
                   {product.shortDescription}
                 </p>
 
+                <div className="gs-product-socialproof">
+                  <span>
+                    ★ {product.rating}
+                  </span>
+
+                  <span>
+                    {product.reviews.toLocaleString("en-IN")} reviews
+                  </span>
+                </div>
+
 
                 <div className="gs-product-points">
 
@@ -444,12 +401,33 @@ export default function SocialInspiredHome({
 
                 <div className="gs-product-price">
 
-                  <strong>
-                    From {money(product.basePrice)}
-                  </strong>
+                  <div className="gs-product-price-stack">
+
+                    <small>
+                      FROM
+                    </small>
+
+                    <strong>
+                      {money(product.basePrice)}
+                    </strong>
+
+                    {product.compareAt >
+                    product.basePrice ? (
+                      <div className="gs-product-saving">
+                        <del>
+                          {money(product.compareAt)}
+                        </del>
+
+                        <span>
+                          SAVE {productSavingPercent(product)}%
+                        </span>
+                      </div>
+                    ) : null}
+
+                  </div>
 
                   <b>
-                    VIEW GADDA →
+                    VIEW + CHOOSE SIZE →
                   </b>
 
                 </div>
@@ -469,9 +447,44 @@ export default function SocialInspiredHome({
             Still torn between two?
           </p>
 
-          <Link href="/compare">
-            COMPARE THEM →
-          </Link>
+          <div className="gs-product-end-actions">
+            <Link href="/compare">
+              COMPARE THEM →
+            </Link>
+
+            <Link href="/sleep-quiz">
+              LET GADDA PICK →
+            </Link>
+          </div>
+
+        </div>
+
+
+        <div className="gs-buy-confidence-strip">
+
+          <div>
+            <span>01</span>
+            <strong>TRY IT AT HOME</strong>
+            <p>Trial terms are visible before you buy.</p>
+          </div>
+
+          <div>
+            <span>02</span>
+            <strong>DELIVERY INCLUDED</strong>
+            <p>Standard shipping is included in the selected price.</p>
+          </div>
+
+          <div>
+            <span>03</span>
+            <strong>WARRANTY, IN WRITING</strong>
+            <p>Coverage is shown clearly for every model.</p>
+          </div>
+
+          <div>
+            <span>04</span>
+            <strong>NO BLACK BOX</strong>
+            <p>Feel, layers, price and purpose are explained.</p>
+          </div>
 
         </div>
 
@@ -567,6 +580,88 @@ export default function SocialInspiredHome({
 
       ) : null}
 
+
+
+      {/* =====================================================
+          ACT 6.5
+          REMOVE THE LAST BUYING FRICTION
+      ====================================================== */}
+
+      <section className="gs-home-faq">
+
+        <div className="gs-home-faq-head">
+          <p className="gs-orange-label">
+            BEFORE YOU ASK.
+          </p>
+
+          <h2>
+            THE USEFUL
+            <br />
+            QUESTIONS.
+          </h2>
+
+          <p>
+            No encyclopaedia. Just the things that usually
+            stop someone from placing the order.
+          </p>
+        </div>
+
+        <div className="gs-home-faq-list">
+
+          <details>
+            <summary>
+              How do I know which Gadda is for me?
+              <span>+</span>
+            </summary>
+
+            <p>
+              Use Find My Match if you want a guided answer,
+              or compare the mattresses side by side if you
+              already know what you care about.
+            </p>
+          </details>
+
+          <details>
+            <summary>
+              Can I try it at home?
+              <span>+</span>
+            </summary>
+
+            <p>
+              Yes. Trial terms vary by mattress and are shown
+              clearly on each product page before you buy.
+            </p>
+          </details>
+
+          <details>
+            <summary>
+              What exactly am I paying for?
+              <span>+</span>
+            </summary>
+
+            <p>
+              Every product page shows the selected price,
+              available sizes and heights, the layer stack,
+              feel reference, trial and warranty.
+            </p>
+          </details>
+
+          <details>
+            <summary>
+              What if I am choosing between two?
+              <span>+</span>
+            </summary>
+
+            <p>
+              Use Compare. The point is to pick the job you
+              need done, not the mattress with the longest
+              feature list.
+            </p>
+          </details>
+
+        </div>
+
+      </section>
 
 
       {/* =====================================================

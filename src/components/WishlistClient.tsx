@@ -120,6 +120,11 @@ export default function WishlistClient() {
       </div>
 
 
+      <div className="site-wishlist-tools">
+        <p>Saved is not decided. Compare them before you buy.</p>
+        <Link href="/compare">COMPARE GADDAS →</Link>
+      </div>
+
       <div className="site-wishlist-grid">
 
         {items.map((item, index) => (

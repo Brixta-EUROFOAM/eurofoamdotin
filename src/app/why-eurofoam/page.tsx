@@ -181,9 +181,11 @@ export default function WhyGaddaPage() {
             GADDAS.
           </h2>
 
-          <Link href="/mattresses">
-            SHOP THE RANGE →
-          </Link>
+          <div className="site-why-final-actions">
+            <Link href="/mattresses">SHOP THE RANGE →</Link>
+            <Link href="/sleep-quiz">FIND MY MATCH →</Link>
+            <Link href="/compare">COMPARE GADDAS</Link>
+          </div>
 
         </section>
 

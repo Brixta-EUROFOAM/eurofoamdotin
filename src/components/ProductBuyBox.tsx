@@ -1,112 +1,184 @@
 "use client";
 
 import { useMemo, useState } from "react";
+
 import { useCart } from "@/components/CartProvider";
 import type { Mattress } from "@/lib/catalog";
 import { money } from "@/lib/catalog";
+
 
 export default function ProductBuyBox({
   mattress,
 }: {
   mattress: Mattress;
 }) {
-  const [size, setSize] = useState(
-    mattress.sizes[2]?.label ||
-    mattress.sizes[0]?.label ||
-    ""
-  );
 
-  const [height, setHeight] = useState(
-    mattress.heights[0]?.label || ""
-  );
+  const [size, setSize] =
+    useState(
+      mattress.sizes[2]?.label ||
+      mattress.sizes[0]?.label ||
+      ""
+    );
 
-  const [added, setAdded] = useState(false);
+  const [height, setHeight] =
+    useState(
+      mattress.heights[0]?.label ||
+      ""
+    );
 
-  const { addItem } = useCart();
+  const [added, setAdded] =
+    useState(false);
 
-  const pricing = useMemo(() => {
-    const sizeAdd =
-      mattress.sizes.find(
-        (entry) => entry.label === size
-      )?.priceAdd || 0;
+  const { addItem } =
+    useCart();
 
-    const heightAdd =
-      mattress.heights.find(
-        (entry) => entry.label === height
-      )?.priceAdd || 0;
 
-    const extras = sizeAdd + heightAdd;
+  const pricing =
+    useMemo(() => {
 
-    const price =
-      mattress.basePrice + extras;
+      const sizeAdd =
+        mattress.sizes.find(
+          (entry) =>
+            entry.label === size
+        )?.priceAdd || 0;
 
-    const comparePrice =
-      mattress.compareAt + extras;
+      const heightAdd =
+        mattress.heights.find(
+          (entry) =>
+            entry.label === height
+        )?.priceAdd || 0;
 
-    const saving =
-      Math.max(
-        0,
-        comparePrice - price
-      );
+      const extras =
+        sizeAdd + heightAdd;
 
-    return {
-      price,
-      comparePrice,
-      saving,
-    };
-  }, [
-    mattress,
-    size,
-    height,
-  ]);
+      const price =
+        mattress.basePrice + extras;
+
+      const comparePrice =
+        mattress.compareAt + extras;
+
+      const saving =
+        Math.max(
+          0,
+          comparePrice - price
+        );
+
+      const savingPercent =
+        comparePrice > 0
+          ? Math.round(
+              (saving / comparePrice) *
+              100
+            )
+          : 0;
+
+      return {
+        price,
+        comparePrice,
+        saving,
+        savingPercent,
+      };
+
+    }, [
+      mattress,
+      size,
+      height,
+    ]);
+
+
+  function addCurrentSelection() {
+
+    addItem({
+      id:
+        `${mattress.slug}-${size}-${height}`,
+      slug:
+        mattress.slug,
+      name:
+        mattress.name,
+      image:
+        mattress.image,
+      size,
+      height,
+      price:
+        pricing.price,
+      quantity:
+        1,
+    });
+
+    setAdded(true);
+
+    window.setTimeout(
+      () => setAdded(false),
+      1400
+    );
+  }
+
+
+  function buyNow() {
+
+    addCurrentSelection();
+
+    window.setTimeout(
+      () => {
+        window.location.assign("/cart");
+      },
+      80
+    );
+  }
+
 
   return (
-    <section className="pro-buybox">
+    <section
+      id="buy-console"
+      className="sell-buybox"
+    >
 
-      <div className="pro-buybox-overline">
-        <span>{mattress.category}</span>
-        <i />
-        <span>{mattress.kicker}</span>
+      <div className="sell-buybox-overline">
+
+        <span>
+          {mattress.category}
+        </span>
+
+        <span>
+          {mattress.badge ||
+            mattress.kicker}
+        </span>
+
       </div>
+
 
       <h1>
         {mattress.name}
       </h1>
 
-      <p className="pro-buybox-description">
-        {mattress.longDescription}
+
+      <p className="sell-buybox-kicker">
+        {mattress.kicker}
       </p>
 
 
-      <div className="pro-buybox-meta">
+      <p className="sell-buybox-description">
+        {mattress.shortDescription}
+      </p>
 
-        <div>
-          <strong>
-            ★ {mattress.rating}
-          </strong>
 
-          <span>
-            {mattress.reviews.toLocaleString("en-IN")}
-            {" "}reviews
-          </span>
-        </div>
+      <div className="sell-buybox-rating">
 
-        <div>
-          <strong>
-            {mattress.firmness}
-          </strong>
+        <strong>
+          ★ {mattress.rating}
+        </strong>
 
-          <span>
-            Mattress feel
-          </span>
-        </div>
+        <span>
+          {mattress.reviews
+            .toLocaleString("en-IN")} reviews
+        </span>
 
       </div>
 
 
-      <div className="pro-price">
+      <div className="sell-buybox-price">
 
         <div>
+
           <small>
             SELECTED PRICE
           </small>
@@ -114,36 +186,52 @@ export default function ProductBuyBox({
           <strong>
             {money(pricing.price)}
           </strong>
+
         </div>
 
+
         {pricing.saving > 0 ? (
-          <div className="pro-price-saving">
+
+          <div className="sell-buybox-saving">
+
             <del>
-              {money(pricing.comparePrice)}
+              {money(
+                pricing.comparePrice
+              )}
             </del>
 
             <span>
-              Save {money(pricing.saving)}
+              SAVE{" "}
+              {money(
+                pricing.saving
+              )}
+              {" · "}
+              {pricing.savingPercent}%
             </span>
+
           </div>
+
         ) : null}
 
       </div>
 
 
-      <div className="pro-selector">
+      <div className="sell-buybox-selector">
 
-        <div className="pro-selector-heading">
+        <div className="sell-buybox-selector-head">
+
           <strong>
-            Choose size
+            SIZE
           </strong>
 
           <span>
             Price updates automatically
           </span>
+
         </div>
 
-        <div className="pro-size-grid">
+
+        <div className="sell-buybox-size-grid">
 
           {mattress.sizes.map(
             (entry) => (
@@ -171,19 +259,22 @@ export default function ProductBuyBox({
       </div>
 
 
-      <div className="pro-selector">
+      <div className="sell-buybox-selector">
 
-        <div className="pro-selector-heading">
+        <div className="sell-buybox-selector-head">
+
           <strong>
-            Choose height
+            HEIGHT
           </strong>
 
           <span>
-            Select your preferred profile
+            Pick the profile you want
           </span>
+
         </div>
 
-        <div className="pro-height-row">
+
+        <div className="sell-buybox-height-grid">
 
           {mattress.heights.map(
             (entry) => (
@@ -211,16 +302,18 @@ export default function ProductBuyBox({
       </div>
 
 
-      <div className="pro-selected">
+      <div className="sell-buybox-selected">
 
         <div>
+
           <small>
-            YOUR CONFIGURATION
+            YOUR GADDA
           </small>
 
           <strong>
             {size} · {height}
           </strong>
+
         </div>
 
         <span>
@@ -232,45 +325,43 @@ export default function ProductBuyBox({
       </div>
 
 
-      <button
-        type="button"
-        className="pro-add"
-        onClick={() => {
+      <div className="sell-buybox-actions">
 
-          addItem({
-            id:
-              `${mattress.slug}-${size}-${height}`,
-            slug:
-              mattress.slug,
-            name:
-              mattress.name,
-            image:
-              mattress.image,
-            size,
-            height,
-            price:
-              pricing.price,
-            quantity:
-              1,
-          });
-
-          setAdded(true);
-
-          setTimeout(
-            () => setAdded(false),
-            1400
-          );
-
-        }}
-      >
-        {added
-          ? "ADDED TO CART ✓"
-          : `ADD TO CART · ${money(pricing.price)}`
-        }
-      </button>
+        <button
+          type="button"
+          className="sell-buybox-add"
+          onClick={addCurrentSelection}
+        >
+          {added
+            ? "ADDED TO CART ✓"
+            : `ADD TO CART · ${money(pricing.price)}`
+          }
+        </button>
 
 
-      <div className="pro-buy-confidence">
+        <button
+          type="button"
+          className="sell-buybox-now"
+          onClick={buyNow}
+        >
+          BUY NOW →
+        </button>
+
+      </div>
+
+
+      <div className="sell-buybox-trust">
+
+        <div>
+          <small>
+            DELIVERY
+          </small>
+
+          <strong>
+            Standard shipping included
+          </strong>
+        </div>
+
 
         <div>
           <small>
@@ -282,13 +373,25 @@ export default function ProductBuyBox({
           </strong>
         </div>
 
+
         <div>
           <small>
-            PRODUCT COVERAGE
+            WARRANTY
           </small>
 
           <strong>
             {mattress.warranty}
+          </strong>
+        </div>
+
+
+        <div>
+          <small>
+            RETURNS
+          </small>
+
+          <strong>
+            See applicable trial / return terms
           </strong>
         </div>
 

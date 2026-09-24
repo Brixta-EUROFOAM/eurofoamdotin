@@ -1,11 +1,15 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
+
+import type { Mattress } from "@/lib/catalog";
 
 const layers = [
   {
@@ -34,6 +38,12 @@ const layers = [
   },
 ];
 
+const tierNames = ["REGULAR", "PRO", "ULTIMATE"];
+
+function money(value: number) {
+  return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value);
+}
+
 function clamp(n: number) {
   return Math.max(0, Math.min(1, n));
 }
@@ -42,12 +52,18 @@ function easeOutCubic(n: number) {
   return 1 - Math.pow(1 - n, 3);
 }
 
-export default function ExplodedLayers() {
-  const sectionRef = useRef<HTMLElement>(null);
+export default function ExplodedLayers({
+  products = [],
+}: {
+  products?: Mattress[];
+}) {
+  const sectionRef = useRef<HTMLDivElement>(null);
   const manualUntil = useRef(0);
 
   const [progress, setProgress] = useState(0);
   const [active, setActive] = useState(0);
+
+  const showcase = products.slice(0, 3);
 
   const focusLayer = useCallback((index: number) => {
     manualUntil.current = Date.now() + 1800;
@@ -136,10 +152,52 @@ export default function ExplodedLayers() {
 
   return (
     <section
-      ref={sectionRef}
       id="inside"
       className="gadda-explode"
     >
+
+      <div className="gadda-tier-showcase">
+        <div className="gadda-tier-head">
+          <div>
+            <p>THE SHORTLIST / 03</p>
+            <h2>REGULAR.<br />PRO.<br />ULTIMATE.</h2>
+          </div>
+          <div className="gadda-tier-head-copy">
+            <strong>THREE OPTIONS.<br />NO CATALOGUE MAZE.</strong>
+            <p>Pick one and go straight to the product. We can remap the tiers later.</p>
+          </div>
+        </div>
+
+        <div className="gadda-tier-grid">
+          {showcase.map((product, index) => (
+            <Link href={`/mattresses/${product.slug}`} key={product.slug} className="gadda-tier-card">
+              <div className="gadda-tier-card-top">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <small>{product.badge || product.category}</small>
+              </div>
+              <div className="gadda-tier-image">
+                <img src={product.image} alt={product.name} />
+              </div>
+              <div className="gadda-tier-copy">
+                <p>{tierNames[index]}</p>
+                <h3>{tierNames[index]}</h3>
+                <span>{product.name}</span>
+                <div className="gadda-tier-bottom">
+                  <strong>From {money(product.basePrice)}</strong>
+                  <b>VIEW PRODUCT →</b>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div className="gadda-tier-divider">
+          <span>PRODUCT CHOICE</span>
+          <span>NOW SEE WHAT&apos;S INSIDE ↓</span>
+        </div>
+      </div>
+
+      <div ref={sectionRef} className="gadda-explode-track">
 
       <div className="gadda-explode-sticky">
 
@@ -365,6 +423,8 @@ export default function ExplodedLayers() {
           </div>
 
         </div>
+
+      </div>
 
       </div>
 

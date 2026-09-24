@@ -4,7 +4,7 @@
     "brandSuffix": "",
     "tagline": "Gadda hi hai yaar.",
     "logoUrl": "/eurofoam-logo-v2.png",
-    "announcement": "FREE MATTRESS · EASY TRIALS · WARRANTY INCLUDED",
+    "announcement": "FREE SHIPPING · EASY TRIALS · WARRANTY INCLUDED",
     "heroEyebrow": "GADDA",
     "heroTitle": "Gadda hi hai yaar.",
     "heroBody": "Clear comfort choices, transparent construction and direct-to-your-door convenience. Choose the feel that fits you and try it where sleep actually happens: at home.",
@@ -143,7 +143,7 @@
     {
       "slug": "euro-align",
       "name": "Euro Align",
-      "kicker": "Everyday orthopedic support",
+      "kicker": "Everyday structured support",
       "badge": "BESTSELLER",
       "category": "Ortho",
       "shortDescription": "Balanced pressure relief and structured support for everyday sleep.",
