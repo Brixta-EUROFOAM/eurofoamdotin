@@ -1,4 +1,3 @@
-
 /*
 ==============================================================
 GADDA — STORY-LED BRAND HOMEPAGE
@@ -504,6 +503,15 @@ problem → belief → proof → range → people → sale
   position:
     relative;
 
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    1px;
+
   overflow:
     hidden;
 
@@ -512,174 +520,172 @@ problem → belief → proof → range → people → sale
     rgba(255,255,255,.1);
 
   background:
-    var(--gs-paper);
+    var(--gs-dark-line);
 
   color:
     #111;
 }
 
 
-.gs-jargon-stack {
+.gs-problem-stack,
+.gs-problem-single {
+  position:
+    relative;
+
+  overflow:
+    hidden;
+
+  background:
+    var(--gs-paper);
+}
+
+
+.gs-problem-stack {
+  flex:
+    1.35;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    2.4rem 2.4rem 1.2rem;
+}
+
+
+.gs-problem-stack img {
+  width:
+    100%;
+
+  max-width:
+    34rem;
+
+  height:
+    auto;
+
+  object-fit:
+    contain;
+}
+
+
+.gs-problem-single {
+  flex:
+    1;
+
+  min-height:
+    16rem;
+}
+
+
+.gs-problem-single img {
+  position:
+    absolute;
+
+  inset:
+    0;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+}
+
+
+.gs-problem-badge {
   position:
     absolute;
 
   left:
-    8%;
-
-  top:
-    9%;
-
-  display:
-    grid;
-
-  gap:
-    .6rem;
-
-  transform:
-    rotate(-2.5deg);
-}
-
-
-.gs-jargon-stack span {
-  width:
-    max-content;
-
-  border:
-    2px solid
-    #111;
-
-  background:
-    #fff;
-
-  padding:
-    .62rem .82rem;
-
-  color:
-    #111 !important;
-
-  font-size:
-    .64rem;
-
-  font-weight:
-    900;
-
-  box-shadow:
-    4px 4px 0
-    #111;
-}
-
-
-.gs-jargon-stack
-span:nth-child(2),
-.gs-jargon-stack
-span:nth-child(5) {
-  margin-left:
-    2rem;
-
-  background:
-    #dedad1;
-}
-
-
-.gs-jargon-stack
-span:nth-child(7) {
-  background:
-    var(--gs-orange);
-}
-
-
-.gs-clean-answer {
-  position:
-    absolute;
-
-  right:
-    7%;
+    1.6rem;
 
   bottom:
-    12%;
+    1.6rem;
 
-  max-width:
-    24rem;
-}
+  z-index:
+    2;
 
+  border:
+    1.5px solid
+    rgba(255,255,255,.7);
 
-.gs-clean-answer small {
-  color:
-    var(--gs-orange);
+  border-radius:
+    999px;
 
-  font-size:
-    .61rem;
+  background:
+    rgba(9,9,9,.35);
 
-  font-weight:
-    900;
+  backdrop-filter:
+    blur(6px);
 
-  letter-spacing:
-    .1em;
-}
-
-
-.gs-clean-answer strong {
-  display:
-    block;
-
-  margin-top:
-    .7rem;
+  padding:
+    .5rem 1.1rem;
 
   color:
-    #111;
+    #fff !important;
 
   font-family:
     var(--font-manrope),
     sans-serif !important;
 
   font-size:
-    clamp(1.8rem,3.3vw,3.5rem);
+    .85rem;
 
   font-weight:
     900 !important;
 
   letter-spacing:
-    -.06em;
-
-  line-height:
-    .92;
+    -.02em;
 }
 
 
-.gs-arrow-note {
-  position:
-    absolute;
-
+.gs-problem-note-a {
   right:
-    7%;
+    6%;
 
-  top:
-    10%;
+  bottom:
+    6%;
 
   color:
-    #111;
-
-  font-family:
-    var(--font-manrope),
-    sans-serif !important;
+    var(--gs-orange);
 
   font-size:
-    1rem;
-
-  font-weight:
-    900;
-
-  font-style:
-    italic;
-
-  line-height:
-    1;
+    clamp(1rem,2vw,1.6rem);
 
   text-align:
     right;
 
   transform:
-    rotate(4deg);
+    rotate(-4deg);
+}
+
+
+.gs-problem-note-b {
+  right:
+    1.6rem;
+
+  top:
+    1.4rem;
+
+  color:
+    #fff;
+
+  font-size:
+    clamp(1rem,2vw,1.5rem);
+
+  text-align:
+    right;
+
+  transform:
+    rotate(3deg);
 }
 
 
@@ -1009,14 +1015,17 @@ button:hover {
 }
 
 
+
 /* =========================================================
-   PRODUCTS
+   REVIEWS
 ========================================================= */
 
-.gs-products {
-  padding:
-    clamp(5rem,9vw,9rem)
-    clamp(1.25rem,4vw,4rem);
+.gs-help {
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr 1fr;
 
   background:
     var(--gs-paper);
@@ -1026,25 +1035,23 @@ button:hover {
 }
 
 
-.gs-product-story {
-  display:
-    grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:
-    clamp(3rem,8vw,10rem);
-
-  max-width:
-    1500px;
-
-  margin:
-    0 auto;
+.gs-help-faq,
+.gs-help-reviews {
+  padding:
+    clamp(4rem,7vw,6.5rem)
+    clamp(1.5rem,4vw,4rem);
 }
 
 
-.gs-product-story h2 {
+.gs-help-faq {
+  border-right:
+    1px solid
+    rgba(17,17,17,.14);
+}
+
+
+.gs-help-faq h2,
+.gs-help-reviews h2 {
   margin-top:
     .8rem !important;
 
@@ -1056,477 +1063,116 @@ button:hover {
     sans-serif !important;
 
   font-size:
-    clamp(3.8rem,6.7vw,6.8rem) !important;
+    clamp(2.8rem,4.4vw,4.4rem) !important;
 
   font-weight:
     900 !important;
 
   letter-spacing:
-    -.075em !important;
+    -.06em !important;
 
   line-height:
-    .8 !important;
+    .84 !important;
 }
 
 
-.gs-product-story h3 {
+.gs-help-faq-intro {
   max-width:
-    16ch;
-
-  color:
-    #111 !important;
-
-  font-family:
-    var(--font-manrope),
-    sans-serif !important;
-
-  font-size:
-    clamp(2.2rem,3.6vw,3.6rem) !important;
-
-  font-weight:
-    800 !important;
-
-  letter-spacing:
-    -.055em !important;
-
-  line-height:
-    .98 !important;
-}
-
-
-.gs-product-story
-> div:last-child
-> p {
-  max-width:
-    30rem;
+    28rem;
 
   margin-top:
     1.2rem;
 
   color:
-    rgba(17,17,17,.57) !important;
+    rgba(17,17,17,.55);
 
   line-height:
-    1.6 !important;
+    1.6;
 }
 
 
-.gs-product-grid {
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:
-    1rem;
-
-  max-width:
-    1500px;
-
-  margin:
-    4rem auto 0;
-}
-
-
-.gs-product-card {
-  position:
-    relative;
-
-  overflow:
-    hidden;
-
-  border:
-    1px solid
-    var(--gs-light-line);
-
-  border-radius:
-    .9rem;
-
-  background:
-    var(--gs-paper-bright);
-
-  color:
-    #111 !important;
-
-  transition:
-    transform .22s
-    cubic-bezier(.16,1,.3,1),
-    box-shadow .22s ease;
-}
-
-
-.gs-product-card:hover {
-  transform:
-    translateY(-5px);
-
-  box-shadow:
-    0 24px 48px
-    rgba(0,0,0,.08);
-}
-
-
-.gs-product-count {
-  padding:
-    .8rem 1rem;
-
-  color:
-    var(--gs-orange);
-
-  font-size:
-    .6rem;
-
-  font-weight:
-    900;
-}
-
-
-.gs-product-image {
-  position:
-    relative;
-
-  overflow:
-    hidden;
-
-  aspect-ratio:
-    4/3;
-
-  background:
-    #ddd;
-}
-
-
-.gs-product-image img {
-  width:
-    100%;
-
-  height:
-    100%;
-
-  object-fit:
-    cover;
-
-  transition:
-    transform .7s
-    cubic-bezier(.16,1,.3,1);
-}
-
-
-.gs-product-card:hover
-.gs-product-image img {
-  transform:
-    scale(1.035);
-}
-
-
-.gs-product-image span {
-  position:
-    absolute;
-
-  left:
-    .8rem;
-
-  top:
-    .8rem;
-
-  border-radius:
-    .45rem;
-
-  background:
-    var(--gs-orange);
-
-  padding:
-    .45rem .65rem;
-
-  color:
-    #111 !important;
-
-  font-size:
-    .55rem;
-
-  font-weight:
-    900;
-
-  transform:
-    rotate(-2deg);
-}
-
-
-.gs-product-copy {
-  padding:
-    1rem;
-}
-
-
-.gs-product-job {
-  color:
-    var(--gs-orange) !important;
-
-  font-size:
-    .59rem;
-
-  font-weight:
-    850;
-
-  letter-spacing:
-    .04em !important;
-}
-
-
-.gs-product-copy h3 {
+.gs-help-faq .gs-home-faq-list {
   margin-top:
-    .45rem !important;
-
-  color:
-    #111 !important;
-
-  font-family:
-    var(--font-manrope),
-    sans-serif !important;
-
-  font-size:
-    clamp(1.8rem,2.8vw,2.5rem) !important;
-
-  font-weight:
-    900 !important;
-
-  letter-spacing:
-    -.055em !important;
-
-  line-height:
-    .95 !important;
-}
-
-
-.gs-product-copy
-> p:not(.gs-product-job) {
-  min-height:
-    4.3rem;
-
-  margin-top:
-    .65rem;
-
-  color:
-    rgba(17,17,17,.55) !important;
-
-  font-size:
-    .79rem;
-
-  line-height:
-    1.5 !important;
-}
-
-
-.gs-product-points {
-  display:
-    flex;
-
-  flex-wrap:
-    wrap;
-
-  gap:
-    .4rem;
-
-  margin-top:
-    .9rem;
-}
-
-
-.gs-product-points span {
-  border:
-    1px solid
-    var(--gs-light-line);
-
-  border-radius:
-    999px;
-
-  padding:
-    .4rem .55rem;
-
-  color:
-    rgba(17,17,17,.6) !important;
-
-  font-size:
-    .54rem;
-
-  font-weight:
-    700;
-}
-
-
-.gs-product-price {
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    space-between;
-
-  gap:
-    .8rem;
-
-  margin-top:
-    1rem;
-
-  padding-top:
-    .9rem;
+    2.4rem;
 
   border-top:
     1px solid
-    var(--gs-light-line);
+    rgba(17,17,17,.14);
 }
 
 
-.gs-product-price strong {
+.gs-help-faq .gs-home-faq-list details {
+  border-bottom:
+    1px solid
+    rgba(17,17,17,.14);
+}
+
+
+.gs-help-faq .gs-home-faq-list summary {
   color:
     #111;
-
-  font-size:
-    .94rem;
-
-  font-weight:
-    900 !important;
 }
 
 
-.gs-product-price b {
+.gs-help-faq .gs-home-faq-list details p {
   color:
-    var(--gs-orange);
-
-  font-size:
-    .56rem;
-
-  font-weight:
-    900;
+    rgba(17,17,17,.55);
 }
 
 
-.gs-product-end {
+.gs-help-reviews {
   display:
     flex;
 
-  align-items:
-    center;
+  flex-direction:
+    column;
 
-  justify-content:
-    space-between;
-
-  gap:
-    2rem;
-
-  max-width:
-    1500px;
-
-  margin:
-    2rem auto 0;
-
-  padding-top:
-    1.2rem;
-
-  border-top:
-    1px solid
-    var(--gs-light-line);
+  min-width:
+    0;
 }
 
 
-.gs-product-end p {
-  color:
-    rgba(17,17,17,.55) !important;
-
-  font-size:
-    .8rem;
-}
-
-
-.gs-product-end a {
-  color:
-    var(--gs-orange) !important;
-
-  font-size:
-    .66rem;
-
-  font-weight:
-    900;
-}
-
-
-/* =========================================================
-   REVIEWS
-========================================================= */
-
-.gs-reviews {
-  display:
-    grid;
-
-  grid-template-columns:
-    minmax(18rem,.55fr)
-    minmax(0,1.45fr);
-
-  gap:
-    clamp(3rem,7vw,8rem);
-
-  padding:
-    clamp(5rem,8vw,8rem)
-    clamp(1.25rem,5vw,6rem);
-
-  background:
-    var(--gs-black-2);
-
-  color:
-    white;
-}
-
-
-.gs-reviews-head h2 {
-  margin-top:
-    .8rem !important;
-
-  color:
-    white !important;
-
-  font-family:
-    var(--font-manrope),
-    sans-serif !important;
-
-  font-size:
-    clamp(3.7rem,6vw,6.2rem) !important;
-
-  font-weight:
-    900 !important;
-
-  letter-spacing:
-    -.07em !important;
-
-  line-height:
-    .8 !important;
-}
-
-
-.gs-review-side
+.gs-help-reviews
 .gs-proof-small {
+  margin-top:
+    1.4rem;
+
   color:
     var(--gs-orange) !important;
 }
 
 
-.gs-review-grid {
+.gs-help-reviews-track {
   display:
-    grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
+    flex;
 
   gap:
     .8rem;
 
   margin-top:
     1.5rem;
+
+  padding-bottom:
+    .5rem;
+
+  overflow-x:
+    auto;
+
+  scroll-snap-type:
+    x mandatory;
+
+  scrollbar-width:
+    thin;
 }
 
 
 .gs-review {
+  scroll-snap-align:
+    start;
+
+  flex:
+    0 0 clamp(15rem,26vw,18.5rem);
+
   min-height:
     18rem;
 
@@ -1538,13 +1184,13 @@ button:hover {
 
   border:
     1px solid
-    var(--gs-dark-line);
+    rgba(17,17,17,.14);
 
   border-radius:
     .8rem;
 
   background:
-    var(--gs-black-3);
+    var(--gs-paper-bright);
 
   padding:
     1.2rem;
@@ -1568,7 +1214,7 @@ button:hover {
     1.3rem;
 
   color:
-    rgba(255,255,255,.78);
+    rgba(17,17,17,.7);
 
   font-size:
     .9rem;
@@ -1592,7 +1238,7 @@ button:hover {
     block;
 
   color:
-    white;
+    #111;
 
   font-size:
     .68rem;
@@ -1610,7 +1256,7 @@ button:hover {
     .2rem;
 
   color:
-    rgba(255,255,255,.38) !important;
+    rgba(17,17,17,.45) !important;
 
   font-size:
     .61rem;
@@ -1876,16 +1522,6 @@ button:hover {
 
 @media (max-width:1100px) {
 
-  .gs-product-grid {
-    grid-template-columns:
-      repeat(2,1fr);
-  }
-
-  .gs-review-grid {
-    grid-template-columns:
-      1fr;
-  }
-
 }
 
 
@@ -1895,7 +1531,6 @@ button:hover {
   .gs-problem,
   .gs-belief,
   .gs-proof-intro,
-  .gs-product-story,
   .gs-reviews {
     grid-template-columns:
       1fr;
@@ -1954,12 +1589,6 @@ button:hover {
   }
 
 
-  .gs-product-story {
-    gap:
-      3rem;
-  }
-
-
   .gs-reviews {
     gap:
       3rem;
@@ -1988,56 +1617,15 @@ button:hover {
   }
 
 
-  .gs-jargon-stack {
-    left:
-      6%;
-
-    transform:
-      scale(.85)
-      rotate(-2deg);
-
-    transform-origin:
-      left top;
-  }
-
-
-  .gs-clean-answer {
-    right:
-      6%;
-
-    left:
-      6%;
-
-    bottom:
-      8%;
-  }
-
-
-  .gs-arrow-note {
+  .gs-problem-note-b {
     display:
       none;
   }
 
 
-  .gs-product-grid {
-    grid-template-columns:
-      1fr;
-  }
-
-
-  .gs-product-copy
-  > p:not(.gs-product-job) {
-    min-height:
-      0;
-  }
-
-
-  .gs-product-end {
-    align-items:
-      flex-start;
-
-    flex-direction:
-      column;
+  .gs-problem-badge {
+    font-size:
+      .72rem;
   }
 
 

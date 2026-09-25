@@ -10,54 +10,6 @@ import type {
 } from "@/lib/catalog";
 
 
-function money(value: number) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-
-function productSavingPercent(product: Mattress) {
-  if (
-    !product.compareAt ||
-    product.compareAt <= product.basePrice
-  ) {
-    return 0;
-  }
-
-  return Math.round(
-    ((product.compareAt - product.basePrice) /
-      product.compareAt) *
-      100
-  );
-}
-
-
-function productJob(product: Mattress) {
-  const category = product.category.toLowerCase();
-
-  if (category.includes("ortho")) {
-    return "FOR STEADY, EVERYDAY SUPPORT";
-  }
-
-  if (category.includes("cool")) {
-    return "FOR PEOPLE WHO SLEEP WARM";
-  }
-
-  if (category.includes("hybrid")) {
-    return "FOR BOUNCE + EASIER MOVEMENT";
-  }
-
-  if (category.includes("essential")) {
-    return "FOR SIMPLE, PRACTICAL SLEEP";
-  }
-
-  return product.kicker.toUpperCase();
-}
-
-
 export default function SocialInspiredHome({
   site,
   products,
@@ -74,8 +26,6 @@ export default function SocialInspiredHome({
     )?.image ||
     site.heroImage ||
     products[0]?.image;
-
-  const collection = products.slice(0, 4);
 
   return (
     <main className="gs-home">
@@ -238,40 +188,37 @@ export default function SocialInspiredHome({
 
         <div className="gs-problem-visual">
 
-          <div className="gs-jargon-stack">
-            <span>AI SLEEP TECH</span>
-            <span>15 LAYERS</span>
-            <span>ORTHO SUPPORT SYSTEM</span>
-            <span>COOLING GEL MATRIX</span>
-            <span>SPINAL ALIGNMENT ZONE</span>
-            <span>PREMIUM NASA FOAM</span>
-            <span>MAX PRO ULTRA+</span>
+          <div className="gs-problem-stack">
+
+            <img
+              src="/home/mattress-jargon.png"
+              alt="A stack of mattresses labelled with sleep-tech marketing jargon: AI sleep tech, 15 layers, ortho support system, cooling gel matrix, spinal alignment zone, premium NASA foam, max pro ultra+"
+            />
+
+            <div className="gs-note gs-problem-note-a">
+              YOU DON&apos;T NEED
+              <br />
+              ANY OF THIS.
+            </div>
+
           </div>
 
 
-          <div className="gs-clean-answer">
-            <small>
-              WHAT YOU ACTUALLY NEED
-            </small>
+          <div className="gs-problem-single">
 
-            <strong>
-              FEELS GOOD.
-              <br />
-              SUPPORTS YOU.
-              <br />
-              DOESN&apos;T COOK YOU.
-              <br />
-              DOESN&apos;T SHAKE THE BED.
-            </strong>
-          </div>
+            <img
+              src="/media/1789122018422-a-mattress-on-a-wooden-floor-in-a-bedroom-photo.jpg"
+              alt="A single, honestly built Gadda mattress, made up and ready to sleep on"
+            />
 
+            <span className="gs-problem-badge">GADDA.</span>
 
-          <div className="gs-arrow-note">
-            THIS.
-            <br />
-            NOT ALL
-            <br />
-            THAT.
+            <div className="gs-note gs-problem-note-b">
+              YOU JUST
+              <br />
+              NEED THIS.
+            </div>
+
           </div>
 
         </div>
@@ -290,218 +237,92 @@ export default function SocialInspiredHome({
 
 
 
-      {/* =====================================================
-          ACT 5
-          NOW THE RANGE MAKES SENSE
-      ====================================================== */}
-
-      <section className="gs-products">
-
-        <div className="gs-product-story">
-
-          <div>
-            <p className="gs-orange-label">
-              NOW WE CAN TALK GADDAS
-            </p>
-
-            <h2>
-              DIFFERENT
-              <br />
-              PEOPLE.
-              <br />
-              DIFFERENT
-              <br />
-              JOBS.
-            </h2>
-          </div>
-
-
-          <div>
-            <h3>
-              Don&apos;t choose the fanciest mattress.
-            </h3>
-
-            <p>
-              Choose the one built around what you actually care about
-              when you sleep.
-            </p>
-          </div>
-
-        </div>
-
-
-        <div className="gs-product-grid">
-
-          {collection.map((product, index) => (
-
-            <Link
-              href={`/mattresses/${product.slug}`}
-              key={product.slug}
-              className="gs-product-card"
-            >
-
-              <div className="gs-product-count">
-                {String(index + 1).padStart(2, "0")}
-              </div>
-
-
-              <div className="gs-product-image">
-
-                <img
-                  src={product.image}
-                  alt={product.name}
-                />
-
-                {product.badge ? (
-                  <span>
-                    {product.badge}
-                  </span>
-                ) : null}
-
-              </div>
-
-
-              <div className="gs-product-copy">
-
-                <p className="gs-product-job">
-                  {productJob(product)}
-                </p>
-
-                <h3>
-                  {product.name}
-                </h3>
-
-                <p>
-                  {product.shortDescription}
-                </p>
-
-                <div className="gs-product-socialproof">
-                  <span>
-                    ★ {product.rating}
-                  </span>
-
-                  <span>
-                    {product.reviews.toLocaleString("en-IN")} reviews
-                  </span>
-                </div>
-
-
-                <div className="gs-product-points">
-
-                  <span>
-                    {product.firmness}
-                  </span>
-
-                  <span>
-                    {product.layers.length} layers
-                  </span>
-
-                </div>
-
-
-                <div className="gs-product-price">
-
-                  <div className="gs-product-price-stack">
-
-                    <small>
-                      FROM
-                    </small>
-
-                    <strong>
-                      {money(product.basePrice)}
-                    </strong>
-
-                    {product.compareAt >
-                    product.basePrice ? (
-                      <div className="gs-product-saving">
-                        <del>
-                          {money(product.compareAt)}
-                        </del>
-
-                        <span>
-                          SAVE {productSavingPercent(product)}%
-                        </span>
-                      </div>
-                    ) : null}
-
-                  </div>
-
-                  <b>
-                    VIEW + CHOOSE SIZE →
-                  </b>
-
-                </div>
-
-              </div>
-
-            </Link>
-
-          ))}
-
-        </div>
-
-
-        <div className="gs-product-end">
-
-          <p>
-            Still torn between two?
-          </p>
-
-          <div className="gs-product-end-actions">
-            <Link href="/compare">
-              COMPARE THEM →
-            </Link>
-
-            <Link href="/sleep-quiz">
-              LET GADDA PICK →
-            </Link>
-          </div>
-
-        </div>
-
-
-        <div className="gs-buy-confidence-strip">
-
-          <div>
-            <span>01</span>
-            <strong>TRY IT AT HOME</strong>
-            <p>Trial terms are visible before you buy.</p>
-          </div>
-
-          <div>
-            <span>02</span>
-            <strong>DELIVERY INCLUDED</strong>
-            <p>Standard shipping is included in the selected price.</p>
-          </div>
-
-          <div>
-            <span>03</span>
-            <strong>WARRANTY, IN WRITING</strong>
-            <p>Coverage is shown clearly for every model.</p>
-          </div>
-
-          <div>
-            <span>04</span>
-            <strong>NO BLACK BOX</strong>
-            <p>Feel, layers, price and purpose are explained.</p>
-          </div>
-
-        </div>
-
-      </section>
-
-
 
       {/* =====================================================
           ACT 6
           DON'T TRUST THE BRAND
       ====================================================== */}
 
-      {reviews.length ? (
+      <section className="gs-help">
 
-        <section className="gs-reviews">
+        <div className="gs-help-faq">
 
-          <div className="gs-reviews-head">
+          <p className="gs-orange-label">
+            BEFORE YOU ASK.
+          </p>
+
+          <h2>
+            THE USEFUL
+            <br />
+            QUESTIONS.
+          </h2>
+
+          <p className="gs-help-faq-intro">
+            No encyclopaedia. Just the things that usually
+            stop someone from placing the order.
+          </p>
+
+          <div className="gs-home-faq-list">
+
+            <details>
+              <summary>
+                How do I know which Gadda is for me?
+                <span>+</span>
+              </summary>
+
+              <p>
+                Use Find My Match if you want a guided answer,
+                or compare the mattresses side by side if you
+                already know what you care about.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                Can I try it at home?
+                <span>+</span>
+              </summary>
+
+              <p>
+                Yes. Trial terms vary by mattress and are shown
+                clearly on each product page before you buy.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                What exactly am I paying for?
+                <span>+</span>
+              </summary>
+
+              <p>
+                Every product page shows the selected price,
+                available sizes and heights, the layer stack,
+                feel reference, trial and warranty.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                What if I am choosing between two?
+                <span>+</span>
+              </summary>
+
+              <p>
+                Use Compare. The point is to pick the job you
+                need done, not the mattress with the longest
+                feature list.
+              </p>
+            </details>
+
+          </div>
+
+        </div>
+
+
+        {reviews.length ? (
+
+          <div className="gs-help-reviews">
 
             <p className="gs-orange-label">
               AND NO,
@@ -518,19 +339,14 @@ export default function SocialInspiredHome({
               BEDS.
             </h2>
 
-          </div>
-
-
-          <div className="gs-review-side">
-
             <p className="gs-proof-small">
-              PEOPLE WHO ACTUALLY SLEEP ON THEM
+              PEOPLE WHO ACTUALLY SLEEP ON THEM →
             </p>
 
 
-            <div className="gs-review-grid">
+            <div className="gs-help-reviews-track">
 
-              {reviews.slice(0, 3).map((review) => (
+              {reviews.map((review) => (
 
                 <article
                   key={review.id}
@@ -576,90 +392,7 @@ export default function SocialInspiredHome({
 
           </div>
 
-        </section>
-
-      ) : null}
-
-
-
-      {/* =====================================================
-          ACT 6.5
-          REMOVE THE LAST BUYING FRICTION
-      ====================================================== */}
-
-      <section className="gs-home-faq">
-
-        <div className="gs-home-faq-head">
-          <p className="gs-orange-label">
-            BEFORE YOU ASK.
-          </p>
-
-          <h2>
-            THE USEFUL
-            <br />
-            QUESTIONS.
-          </h2>
-
-          <p>
-            No encyclopaedia. Just the things that usually
-            stop someone from placing the order.
-          </p>
-        </div>
-
-        <div className="gs-home-faq-list">
-
-          <details>
-            <summary>
-              How do I know which Gadda is for me?
-              <span>+</span>
-            </summary>
-
-            <p>
-              Use Find My Match if you want a guided answer,
-              or compare the mattresses side by side if you
-              already know what you care about.
-            </p>
-          </details>
-
-          <details>
-            <summary>
-              Can I try it at home?
-              <span>+</span>
-            </summary>
-
-            <p>
-              Yes. Trial terms vary by mattress and are shown
-              clearly on each product page before you buy.
-            </p>
-          </details>
-
-          <details>
-            <summary>
-              What exactly am I paying for?
-              <span>+</span>
-            </summary>
-
-            <p>
-              Every product page shows the selected price,
-              available sizes and heights, the layer stack,
-              feel reference, trial and warranty.
-            </p>
-          </details>
-
-          <details>
-            <summary>
-              What if I am choosing between two?
-              <span>+</span>
-            </summary>
-
-            <p>
-              Use Compare. The point is to pick the job you
-              need done, not the mattress with the longest
-              feature list.
-            </p>
-          </details>
-
-        </div>
+        ) : null}
 
       </section>
 

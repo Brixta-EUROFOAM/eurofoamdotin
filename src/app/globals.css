@@ -10600,69 +10600,6 @@ and (
   border-bottom: 1px solid currentColor;
 }
 
-.gs-buy-confidence-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid rgba(17,17,17,.2);
-  border-bottom: 1px solid rgba(17,17,17,.2);
-}
-
-.gs-buy-confidence-strip > div {
-  min-height: 11rem;
-  padding: 1.5rem;
-  border-right: 1px solid rgba(17,17,17,.14);
-}
-
-.gs-buy-confidence-strip > div:last-child {
-  border-right: 0;
-}
-
-.gs-buy-confidence-strip span {
-  color: #FF6500;
-  font-size: .62rem;
-  letter-spacing: .1em;
-}
-
-.gs-buy-confidence-strip strong {
-  display: block;
-  margin-top: 2rem;
-  font-size: .78rem;
-  letter-spacing: .04em;
-}
-
-.gs-buy-confidence-strip p {
-  max-width: 15rem;
-  margin-top: .45rem;
-  color: rgba(17,17,17,.55);
-  font-size: .78rem;
-  line-height: 1.45;
-}
-
-.gs-home-faq {
-  display: grid;
-  grid-template-columns: minmax(18rem, .7fr) minmax(0, 1.3fr);
-  gap: clamp(2rem, 7vw, 8rem);
-  padding:
-    clamp(4rem, 8vw, 8rem)
-    clamp(1.5rem, 5vw, 5rem);
-  background: #F3ECDD;
-  color: #111111;
-}
-
-.gs-home-faq-head h2 {
-  margin-top: 1rem;
-  font-size: clamp(4rem, 7vw, 7.5rem);
-  line-height: .83;
-  letter-spacing: -.03em;
-}
-
-.gs-home-faq-head > p:last-child {
-  max-width: 23rem;
-  margin-top: 1.4rem;
-  color: rgba(17,17,17,.55);
-  line-height: 1.55;
-}
-
 .gs-home-faq-list {
   border-top: 1px solid rgba(17,17,17,.28);
 }
@@ -10959,11 +10896,10 @@ and (
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
-  .gs-buy-confidence-strip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .gs-help {
+    grid-template-columns: 1fr;
   }
 
-  .gs-home-faq,
   .pro-proof-reviews,
   .pro-faq {
     grid-template-columns: 1fr;
@@ -10997,19 +10933,18 @@ and (
     padding-left: 0;
   }
 
-  .gs-hero-trust,
-  .gs-buy-confidence-strip {
+  .gs-hero-trust {
     grid-template-columns: 1fr !important;
   }
 
-  .gs-buy-confidence-strip > div {
-    min-height: 0;
-    border-right: 0;
-    border-bottom: 1px solid rgba(17,17,17,.14);
+  .gs-help-faq h2,
+  .gs-help-reviews h2 {
+    font-size: clamp(2.2rem, 11vw, 3rem) !important;
   }
 
-  .gs-home-faq-head h2 {
-    font-size: clamp(3.4rem, 16vw, 5rem);
+  .gs-help-faq {
+    border-right: 0;
+    border-bottom: 1px solid rgba(17,17,17,.14);
   }
 
   .pro-buy-actions {
