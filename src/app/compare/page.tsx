@@ -57,7 +57,11 @@ export default async function ComparePage() {
                       <img src={product.image} alt="" />
                       <small>{product.category}</small>
                       <strong>{product.name}</strong>
-                      <span>★ {product.rating} · {product.reviews.toLocaleString("en-IN")} reviews</span>
+                      {product.reviews > 0 ? (
+                        <span>★ {product.rating} · {product.reviews.toLocaleString("en-IN")} reviews</span>
+                      ) : (
+                        <span>{product.firmness}</span>
+                      )}
                     </Link>
                   </th>
                 ))}

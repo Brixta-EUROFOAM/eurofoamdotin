@@ -66,7 +66,10 @@ const questions: QuizQuestion[] = [
 ];
 
 function categoryKey(product: Mattress): MatchKey {
-  const value = `${product.category} ${product.kicker} ${product.name}`.toLowerCase();
+  const value = `${product.slug} ${product.category} ${product.kicker} ${product.name}`.toLowerCase();
+  if (value.includes("ultimate")) return "cooling";
+  if (value.includes("regular")) return "essential";
+  if (value.includes("gadda-pro")) return "ortho";
   if (value.includes("cool") || value.includes("air")) return "cooling";
   if (value.includes("hybrid") || value.includes("float") || value.includes("spring")) return "hybrid";
   if (value.includes("essential") || value.includes("easy") || value.includes("basic")) return "essential";
@@ -100,6 +103,15 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
       Object.entries(answer.score).forEach(([key, value]) => {
         score[key as MatchKey] += value || 0;
       });
+    });
+
+    /* A job with no matching mattress counts toward the all-rounder. */
+    const covered = new Set(products.map(categoryKey));
+    (["cooling", "hybrid", "essential"] as MatchKey[]).forEach((key) => {
+      if (!covered.has(key)) {
+        score.ortho += score[key];
+        score[key] = 0;
+      }
     });
 
     return [...products]
@@ -149,10 +161,12 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
               <div><small>WARRANTY</small><strong>{recommendation.product.warranty}</strong></div>
             </div>
 
-            <div className="site-quiz-result-rating">
-              <strong>★ {recommendation.product.rating}</strong>
-              <span>{recommendation.product.reviews.toLocaleString("en-IN")} reviews</span>
-            </div>
+            {recommendation.product.reviews > 0 ? (
+              <div className="site-quiz-result-rating">
+                <strong>★ {recommendation.product.rating}</strong>
+                <span>{recommendation.product.reviews.toLocaleString("en-IN")} reviews</span>
+              </div>
+            ) : null}
 
             <div className="site-quiz-actions">
               <Link href={`/mattresses/${recommendation.product.slug}`} className="site-quiz-primary">SEE THIS GADDA →</Link>

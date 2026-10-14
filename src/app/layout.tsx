@@ -5,6 +5,7 @@ import "./dark-minimal.css";
 import "./gadda-story.css";
 import "./gadda-site.css";
 import "./gadda-professional.css";
+import "./gadda-polish.css";
 import CartProvider from "@/components/CartProvider";
 import TelemetryTracker from "@/components/TelemetryTracker";
 

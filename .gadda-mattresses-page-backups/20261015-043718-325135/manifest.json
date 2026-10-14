@@ -1,0 +1,6 @@
+{
+  "existed": {
+    "src/app/mattresses/page.tsx": true,
+    "src/app/mattresses/page.module.css": false
+  }
+}

@@ -16,6 +16,8 @@ export type CartItem = {
   image: string;
   size: string;
   height: string;
+  /* Chosen upgrades, e.g. "Pocket springs". */
+  variant?: string;
   price: number;
   quantity: number;
 };
@@ -25,6 +27,7 @@ type CartContextValue = {
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
   changeQty: (id: string, quantity: number) => void;
+  clearCart: () => void;
   count: number;
   subtotal: number;
 };
@@ -79,6 +82,7 @@ export default function CartProvider({ children }: { children: ReactNode }) {
       addItem,
       removeItem,
       changeQty,
+      clearCart: () => setItems([]),
       count: items.reduce((sum, item) => sum + item.quantity, 0),
       subtotal: items.reduce((sum, item) => sum + item.price * item.quantity, 0)
     }),

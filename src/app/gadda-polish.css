@@ -1,0 +1,1012 @@
+/* =====================================================================
+   GADDA POLISH — small, additive fixes on top of the existing design.
+   Loaded last. Same fonts, colours and shapes; just readable, fitted
+   and ready to sell.
+   ===================================================================== */
+
+/* ---------- Hindi-style flavour: stickers + wordmark only ---------- */
+.gs-hero .gs-note,
+.gs-problem .gs-note,
+.gs-final .gs-final-note,
+.gadda-wordmark {
+  font-family: "GaddaHindiLatin", "Yatra One", serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.12 !important;
+  /* the shirorekha: one bar across the top of the capitals */
+  text-decoration-line: overline !important;
+  text-decoration-thickness: 0.09em !important;
+  text-decoration-skip-ink: none !important;
+}
+
+/* ---------- Hero ---------- */
+
+/* Headline fits the phone instead of running off the edge */
+@media (max-width: 560px) {
+  .gs-hero h1 {
+    font-size: clamp(2.9rem, 14.6vw, 5.4rem) !important;
+    line-height: 0.82 !important;
+  }
+}
+
+/* Both buttons sit together */
+.gs-hero-actions .gs-commerce-primary,
+.gs-hero-actions .gs-commerce-secondary {
+  min-width: 0;
+  font-size: 0.8rem;
+}
+
+/* Trust row you can actually read */
+.gs-hero .gs-hero-trust strong {
+  font-size: 0.82rem !important;
+  letter-spacing: 0.02em;
+}
+
+.gs-hero .gs-hero-trust span {
+  font-size: 0.8rem !important;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62) !important;
+}
+
+/* Price sticker, same tilt as the others */
+.gs-hero .gs-note-price {
+  left: 6%;
+  bottom: 9%;
+  top: auto;
+  padding: 0.55rem 0.8rem 0.45rem;
+  background: #ff6500;
+  color: #111;
+  font-size: clamp(1.15rem, 2.1vw, 1.9rem);
+  transform: rotate(-4deg);
+  box-shadow: 6px 6px 0 #111;
+}
+
+.gs-hero .gs-note-price small {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.5em;
+  text-decoration: none !important;
+}
+
+/* ---------- Tier cards: real buy cards ---------- */
+.gp-tier {
+  position: relative;
+  overflow: visible !important;
+}
+
+.gp-tier.is-pick {
+  box-shadow: 9px 9px 0 #111;
+}
+
+.gp-pick {
+  position: absolute;
+  top: -0.9rem;
+  left: 2.6rem;
+  z-index: 2;
+  padding: 0.45rem 0.7rem 0.35rem;
+  background: #111;
+  color: #ff6500;
+  font-family: "GaddaHindiLatin", "Yatra One", serif !important;
+  font-size: 0.95rem;
+  text-decoration: overline;
+  text-decoration-thickness: 0.09em;
+  transform: rotate(3deg);
+}
+
+.gp-tier .gadda-tier-card-top small {
+  font-size: 0.62rem;
+}
+
+.gp-tier .gadda-tier-copy h3 a {
+  color: inherit;
+}
+
+.gp-recipe {
+  margin-top: 0.7rem !important;
+  color: #111 !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.35;
+}
+
+.gp-upgrade {
+  margin-top: 0.35rem !important;
+  color: #c24f00 !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+
+.gp-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1.1rem;
+  border: 1px solid #111;
+}
+
+.gp-sizes button {
+  padding: 0.6rem 0.2rem;
+  border: 0;
+  border-left: 1px solid #111;
+  background: transparent;
+  color: #111;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gp-sizes button:first-child {
+  border-left: 0;
+}
+
+.gp-sizes button.is-on {
+  background: #111;
+  color: #f4eddf;
+}
+
+.gp-price {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(17, 17, 17, 0.2);
+}
+
+.gp-price strong {
+  display: block;
+  font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.gp-price span {
+  display: block;
+  margin-top: 0.4rem;
+  color: rgba(17, 17, 17, 0.6);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.gp-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.gp-add {
+  min-height: 3.2rem;
+  border: 0;
+  background: #111;
+  color: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.gp-add:hover {
+  background: #ff6500;
+  color: #111;
+}
+
+.gp-details,
+.gp-details:visited {
+  color: #111 !important;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.gadda-tier-head-copy p {
+  font-size: 0.98rem !important;
+}
+
+@media (max-width: 900px) {
+  .gp-tier {
+    display: flex !important;
+  }
+
+  .gp-tier .gadda-tier-image {
+    aspect-ratio: 16 / 10;
+    min-height: 0;
+  }
+}
+
+/* Phones: photo fills its box (no empty black band), sticker sits on it */
+@media (max-width: 900px) {
+  .gs-hero .gs-hero-visual img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+}
+
+/* ---------- No Black Box: tier switch, upgrades, specs ---------- */
+.gp-nbb-tabs {
+  display: inline-flex;
+  margin-top: 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.gp-nbb-tabs button,
+.gp-nbb-option button {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.7rem 0.95rem;
+  cursor: pointer;
+}
+
+.gp-nbb-tabs button + button {
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.gp-nbb-tabs button.is-on {
+  background: #ff6500;
+  color: #111;
+}
+
+.gp-nbb-option {
+  margin-top: 1rem;
+}
+
+.gp-nbb-option > span {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.gp-nbb-option > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.gp-nbb-option button {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 0.78rem;
+}
+
+.gp-nbb-option button.is-on {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+.gp-spring {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.gp-spec {
+  margin: 1.2rem 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.gp-spec div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.82rem;
+}
+
+.gp-spec dt {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gp-spec dd {
+  margin: 0;
+  color: #fff;
+  font-weight: 800;
+  text-align: right;
+}
+
+.gp-pick-density {
+  margin-left: auto;
+  padding-left: 0.6rem;
+  color: #ff6500;
+  font-style: normal;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+/* ---------- Buy box upgrade options (product page) ---------- */
+.g6-option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0;
+  border: 1px solid #111;
+}
+
+.g6-option-grid button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.85rem 0.9rem;
+  border: 0;
+  background: transparent;
+  color: #111;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.g6-option-grid button + button {
+  border-left: 1px solid #111;
+}
+
+.g6-option-grid button b {
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.g6-option-grid button small {
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+.g6-option-grid button.is-active {
+  background: #111;
+  color: #f4eddf;
+}
+
+/* ---------- FAQ + reviews: stack on phones (was one word per line) ---------- */
+@media (max-width: 900px) {
+  section.gs-help {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Final headline fits phones */
+@media (max-width: 560px) {
+  .gs-final h2,
+  .gs-final-copy h2 {
+    font-size: clamp(2.6rem, 13vw, 4.6rem) !important;
+  }
+}
+
+/* Honest "no reviews yet" block */
+.gp-noreviews h2 {
+  margin-top: 0.9rem;
+}
+
+.gp-noreviews-copy {
+  max-width: 28rem;
+  margin-top: 1.4rem !important;
+  color: #111 !important;
+  font-size: 1.05rem !important;
+  line-height: 1.5 !important;
+}
+
+.gp-noreviews-small {
+  max-width: 26rem;
+  margin-top: 0.8rem !important;
+  color: rgba(17, 17, 17, 0.6) !important;
+  font-size: 0.86rem !important;
+}
+
+/* ---------- Showroom vs GADDA ---------- */
+.gp-versus {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: clamp(4rem, 8vw, 8rem) clamp(1.25rem, 5vw, 5rem);
+  background: #f4eddf;
+  color: #111;
+}
+
+.gp-versus-head p,
+.gp-how-head p {
+  color: #ff6500;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.gp-versus-head h2,
+.gp-how-head h2 {
+  margin-top: 0.9rem;
+  font-family: var(--font-manrope), sans-serif !important;
+  font-size: clamp(2.8rem, 5.4vw, 6.4rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.065em !important;
+  line-height: 0.82 !important;
+}
+
+.gp-versus-head {
+  min-width: 0;
+}
+
+.gp-versus-head h2 span,
+.gp-how-head h2 span {
+  color: #ff6500;
+}
+
+.gp-versus-table {
+  border-top: 2px solid #111;
+}
+
+.gp-versus-row {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.2rem;
+  padding: 1.05rem 0;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.2);
+  align-items: baseline;
+}
+
+.gp-versus-top {
+  padding: 0.8rem 0;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.gp-versus-top span:last-child {
+  color: #ff6500;
+}
+
+.gp-versus-row b {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.gp-them {
+  color: rgba(17, 17, 17, 0.5);
+  font-size: 0.98rem;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 101, 0, 0.75);
+  text-decoration-thickness: 2px;
+}
+
+.gp-us {
+  font-size: 1.02rem;
+  font-weight: 800;
+}
+
+/* ---------- How it works ---------- */
+.gp-how {
+  padding: clamp(4rem, 8vw, 8rem) clamp(1.25rem, 5vw, 5rem);
+  background: #111;
+  color: #fff;
+}
+
+.gp-how-head h2 {
+  color: #fff !important;
+}
+
+.gp-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(2.5rem, 5vw, 4.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.gp-steps li {
+  padding: 1.6rem 1.4rem 0 0;
+}
+
+.gp-steps li + li {
+  padding-left: 1.4rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.gp-steps span {
+  color: #ff6500;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: clamp(2.6rem, 4vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.gp-steps strong {
+  display: block;
+  margin-top: 1rem;
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.gp-steps p {
+  margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.gp-how-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.gp-how-link {
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------- Sticky phone buy bar ---------- */
+.gp-buybar {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .gp-buybar {
+    position: fixed;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
+    background: #111;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    transform: translateY(140%);
+    transition: transform 0.3s ease;
+  }
+
+  .gp-buybar.is-on {
+    transform: none;
+  }
+
+  .gp-buybar small {
+    display: block;
+    color: #ff6500;
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+
+  .gp-buybar strong {
+    font-size: 1.05rem;
+    font-weight: 900;
+  }
+
+  .gp-buybar a {
+    padding: 0.85rem 1rem;
+    background: #ff6500;
+    color: #111;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  /* keep the WhatsApp bubble clear of the bar */
+  .gp-wa-float {
+    bottom: 5.4rem !important;
+  }
+}
+
+/* ---------- Floating WhatsApp ---------- */
+.gp-wa-float {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 55;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem 0.7rem 0.75rem;
+  background: #25d366;
+  color: #0b2e17 !important;
+  font-size: 0.8rem;
+  font-weight: 900;
+  box-shadow: 4px 4px 0 #111;
+  transition: transform 0.2s ease;
+}
+
+.gp-wa-float:hover {
+  transform: translateY(-2px);
+}
+
+.gp-wa-float svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+@media (max-width: 560px) {
+  .gp-wa-float span {
+    display: none;
+  }
+
+  .gp-wa-float {
+    padding: 0.75rem;
+  }
+}
+
+/* ---------- Checkout ---------- */
+.gp-checkout-open {
+  width: 100%;
+  min-height: 3.4rem;
+  margin-top: 1rem;
+  border: 0;
+  background: #ff6500;
+  color: #111;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+.gp-checkout-open:disabled {
+  opacity: 0.6;
+}
+
+.gp-checkout {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(17, 17, 17, 0.2);
+}
+
+.gp-checkout label {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.gp-checkout label > span,
+.gp-pay legend {
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.gp-checkout input,
+.gp-checkout textarea {
+  width: 100%;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #111;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.gp-checkout input:focus,
+.gp-checkout textarea:focus {
+  outline: 2px solid #ff6500;
+  outline-offset: 0;
+}
+
+.gp-checkout-row {
+  display: grid;
+  grid-template-columns: 1fr 8rem;
+  gap: 0.75rem;
+}
+
+.gp-hp {
+  position: absolute;
+  left: -9999px;
+}
+
+.gp-pay {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.gp-pay legend {
+  margin-bottom: 0.4rem;
+}
+
+.gp-pay button {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.8rem;
+  border: 1px solid #111;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gp-pay button + button {
+  border-left: 0;
+}
+
+.gp-pay button b {
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.gp-pay button small {
+  font-size: 0.72rem;
+  opacity: 0.65;
+}
+
+.gp-pay button.is-on {
+  background: #111;
+  color: #f4eddf;
+}
+
+.gp-checkout-error {
+  padding: 0.7rem 0.8rem;
+  border-left: 3px solid #d12;
+  background: #fde8e8;
+  color: #8a0f0f !important;
+  font-size: 0.85rem;
+}
+
+.gp-checkout-note {
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.gp-checkout-done {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 1.2rem;
+  background: #111;
+  color: #fff;
+}
+
+.gp-checkout-done strong {
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.gp-checkout-done span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.gp-wa {
+  margin-top: 0.4rem;
+  padding: 0.8rem 1rem;
+  background: #25d366;
+  color: #0b2e17 !important;
+  font-weight: 900;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+/* ---------- Admin orders page ---------- */
+.gp-orders {
+  min-height: 100vh;
+  padding: 2.5rem clamp(1rem, 4vw, 3rem);
+  background: #f4eddf;
+  color: #111;
+}
+
+.gp-orders header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 2px solid #111;
+}
+
+.gp-orders header p {
+  color: #ff6500;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.gp-orders h1 {
+  font-size: clamp(2.6rem, 5vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+
+.gp-orders header span {
+  font-weight: 700;
+  opacity: 0.65;
+}
+
+.gp-orders nav {
+  display: flex;
+  gap: 1.2rem;
+  font-weight: 900;
+  font-size: 0.85rem;
+}
+
+.gp-orders nav a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.gp-orders-table {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.gp-orders table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.gp-orders th {
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid #111;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.gp-orders td {
+  padding: 0.85rem 0.7rem;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.15);
+  vertical-align: top;
+}
+
+.gp-orders td a {
+  text-decoration: underline;
+}
+
+.gp-orders .num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.gp-orders-empty {
+  margin-top: 2rem;
+  font-size: 1.05rem;
+}
+
+/* ---------- Phones: new sections stack ---------- */
+@media (max-width: 900px) {
+  .gp-versus {
+    grid-template-columns: 1fr;
+  }
+
+  .gp-steps {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 1.6rem;
+  }
+
+  .gp-steps li:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .gp-versus-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .gp-versus-row b {
+    grid-column: 1 / -1;
+  }
+
+  .gp-versus-top span:first-child {
+    display: none;
+  }
+
+  .gp-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .gp-steps li,
+  .gp-steps li + li {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .gp-checkout-row,
+  .gp-pay {
+    grid-template-columns: 1fr;
+  }
+
+  .gp-pay button + button {
+    border-left: 1px solid #111;
+    border-top: 0;
+  }
+}
+
+/* Order placed — confirmation replaces the cart */
+.site-empty.gp-placed { text-align: left; }
+.site-empty.gp-placed .gp-checkout-done { margin: 0 auto 1.6rem; max-width: 34rem; }
+
+/* Cart summary: older dark-theme rules leave white text on the cream card */
+.site-utility-page .site-cart-summary,
+.site-utility-page .site-cart-summary > div,
+.site-utility-page .site-cart-summary span,
+.site-utility-page .site-cart-summary strong,
+.site-utility-page .site-cart-summary small,
+.site-utility-page .site-cart-summary legend,
+.site-utility-page .site-cart-trust span {
+  color: #111 !important;
+}
+.site-utility-page .site-cart-summary .site-orange { color: #ff6500 !important; }
+.site-utility-page .site-cart-summary .gp-checkout-done,
+.site-utility-page .site-cart-summary .gp-checkout-done strong { color: #fff !important; }
+.site-utility-page .site-cart-summary .gp-checkout-done span { color: rgba(255,255,255,.75) !important; }
+.site-utility-page .gp-pay button.is-on,
+.site-utility-page .gp-pay button.is-on * { color: #fff !important; }
+.site-utility-page .site-cart-summary .gp-checkout-error { color: #b42318 !important; }
+
+/* Checkout fields: light, boxed, never wider than the card */
+.site-utility-page .gp-checkout input,
+.site-utility-page .gp-checkout textarea {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  background: #fff !important;
+  color: #111 !important;
+  border: 1px solid #111 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+}
+.site-utility-page .gp-checkout textarea::placeholder,
+.site-utility-page .gp-checkout input::placeholder { color: rgba(17,17,17,.45) !important; }
+.site-utility-page .gp-checkout label,
+.site-utility-page .gp-checkout-row > * { min-width: 0; }
+.site-cart-summary { min-width: 0; overflow-wrap: anywhere; }
+
+/* WhatsApp button — beat the global underlined-link style */
+a.gp-wa,
+.site-empty a.gp-wa {
+  display: block !important;
+  margin-top: .6rem !important;
+  padding: .85rem 1rem !important;
+  background: #25d366 !important;
+  color: #0b2e17 !important;
+  border: 0 !important;
+  text-decoration: none !important;
+  text-align: center !important;
+  font-weight: 900 !important;
+  font-size: .82rem !important;
+}
+.site-empty.gp-placed .gp-checkout-done strong { color: #fff !important; }

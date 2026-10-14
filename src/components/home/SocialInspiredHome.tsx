@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import ExplodedLayers from "@/components/home/ExplodedLayers";
+import HomeExtras from "@/components/home/HomeExtras";
+import MobileBuyBar from "@/components/MobileBuyBar";
 
+import { money } from "@/lib/catalog";
 import type {
   Mattress,
   Review,
@@ -93,23 +96,23 @@ export default function SocialInspiredHome({
 
           <div className="gs-hero-trust">
             <div>
-              <strong>TRY AT HOME</strong>
-              <span>Trial terms shown on every Gadda.</span>
+              <strong>100 NIGHTS</strong>
+              <span>Sleep on it at home before you decide.</span>
             </div>
 
             <div>
-              <strong>DELIVERY INCLUDED</strong>
-              <span>Standard shipping included.</span>
+              <strong>FREE DELIVERY</strong>
+              <span>To your door. No lift charges.</span>
             </div>
 
             <div>
-              <strong>WARRANTY INCLUDED</strong>
-              <span>Coverage shown clearly by model.</span>
+              <strong>PAY ON DELIVERY</strong>
+              <span>Or by UPI link. We call to confirm first.</span>
             </div>
 
             <div>
-              <strong>DIRECT PRICING</strong>
-              <span>No mystery maths.</span>
+              <strong>NO FAKE MRP</strong>
+              <span>One honest price, every day.</span>
             </div>
           </div>
 
@@ -132,6 +135,13 @@ export default function SocialInspiredHome({
             <br />
             LESS GYAAN.
           </div>
+
+          {products.length ? (
+            <div className="gs-note gs-note-price">
+              FROM {money(Math.min(...products.map((p) => p.basePrice)))}
+              <small>NO FAKE MRP. EVER.</small>
+            </div>
+          ) : null}
 
           <div className="gs-note gs-note-b">
             GOOD SLEEP
@@ -235,6 +245,8 @@ export default function SocialInspiredHome({
 
       <ExplodedLayers products={products} />
 
+      <HomeExtras />
+
 
 
 
@@ -266,52 +278,71 @@ export default function SocialInspiredHome({
 
             <details>
               <summary>
-                How do I know which Gadda is for me?
+                Which Gadda should I buy?
                 <span>+</span>
               </summary>
-
               <p>
-                Use Find My Match if you want a guided answer,
-                or compare the mattresses side by side if you
-                already know what you care about.
+                Most people should buy Pro. If you sleep hot or sleep on your side, Ultimate. For a guest room, a first home or a tight budget, Regular. Still stuck? Find My Match takes about a minute.
               </p>
             </details>
 
             <details>
               <summary>
-                Can I try it at home?
+                What&apos;s the difference between HD and HR foam?
                 <span>+</span>
               </summary>
-
               <p>
-                Yes. Trial terms vary by mattress and are shown
-                clearly on each product page before you buy.
+                Both are support foams. HD (high-density) foam is firm and steady. HR (high-resilience) foam springs back faster and holds its shape longer. The number is the density: 40D is denser and more supportive than 32D.
               </p>
             </details>
 
             <details>
               <summary>
-                What exactly am I paying for?
+                Foam or pocket springs?
                 <span>+</span>
               </summary>
-
               <p>
-                Every product page shows the selected price,
-                available sizes and heights, the layer stack,
-                feel reference, trial and warranty.
+                Foam is quiet and solid. Pocket springs are bouncier and let more air through. Gadda Pro comes with either; springs cost a little extra.
               </p>
             </details>
 
             <details>
               <summary>
-                What if I am choosing between two?
+                Memory foam or latex?
                 <span>+</span>
               </summary>
-
               <p>
-                Use Compare. The point is to pick the job you
-                need done, not the mattress with the longest
-                feature list.
+                Memory foam slowly moulds to you and feels hugging. Latex is bouncier and breathes better. Gadda Ultimate comes with cool memory foam, or upgrade the top layer to latex.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                How does the 100-night trial work?
+                <span>+</span>
+              </summary>
+              <p>
+                Sleep on it at home. Give it a few weeks, because every new mattress takes some getting used to. If it isn&apos;t right, tell us within the trial and we sort it out.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                How do I pay?
+                <span>+</span>
+              </summary>
+              <p>
+                Place your order online, and we call to confirm your address and delivery day. Pay on delivery, or ask for a UPI link and pay before it ships. Nothing is charged on the website.
+              </p>
+            </details>
+
+            <details>
+              <summary>
+                How long does delivery take?
+                <span>+</span>
+              </summary>
+              <p>
+                We confirm your delivery date on the call after you order. Delivery is free, to your door.
               </p>
             </details>
 
@@ -392,7 +423,25 @@ export default function SocialInspiredHome({
 
           </div>
 
-        ) : null}
+        ) : (
+          <div className="gs-help-reviews gp-noreviews">
+            <p className="gs-orange-label">
+              AND THE REVIEWS?
+            </p>
+            <h2>
+              ABHI
+              <br />
+              NAHI.
+            </h2>
+            <p className="gp-noreviews-copy">
+              We&apos;re new. We could have written a hundred five-star reviews ourselves. Plenty of
+              brands do. We&apos;d rather wait for yours.
+            </p>
+            <p className="gp-noreviews-small">
+              Sleep on it for 100 nights, then tell everyone the truth. Good or bad, it goes up here.
+            </p>
+          </div>
+        )}
 
       </section>
 
@@ -446,7 +495,7 @@ export default function SocialInspiredHome({
 
             <Link
               href="/sleep-quiz"
-              className="gs-help"
+              className="gs-commerce-secondary"
             >
               I STILL NEED HELP →
             </Link>
@@ -464,6 +513,7 @@ export default function SocialInspiredHome({
 
       </section>
 
+      <MobileBuyBar product={products.find((p) => p.slug === "gadda-pro") || products[1] || products[0]} />
     </main>
   );
 }

@@ -9,9 +9,11 @@ import {
   useState,
 } from "react";
 
-import type { Mattress } from "@/lib/catalog";
+import type { Mattress, MattressLayer } from "@/lib/catalog";
+import { layersWithChoices } from "@/lib/catalog";
+import { useCart } from "@/components/CartProvider";
 
-const layers = [
+const fallbackLayers: StageLayer[] = [
   {
     number: "01",
     name: "AirKnit Cover",
@@ -40,6 +42,173 @@ const layers = [
 
 const tierNames = ["REGULAR", "PRO", "ULTIMATE"];
 
+type StageLayer = {
+  number: string;
+  name: string;
+  description: string;
+  asset: string;
+  filter?: string;
+  spring?: boolean;
+  material?: string;
+  density?: string;
+  thickness?: string;
+};
+
+/* The four existing layer renders, re-tinted per material. */
+const LAYER_ART: Record<string, { asset: string; filter?: string }> = {
+  fabric: { asset: "/layers/euro-align/layer-1.png" },
+  foam: { asset: "/layers/euro-align/layer-2.png" },
+  memory: { asset: "/layers/euro-align/layer-2.png", filter: "sepia(.35) saturate(1.5) hue-rotate(-14deg) brightness(.9)" },
+  cool: { asset: "/layers/euro-align/layer-2.png", filter: "hue-rotate(165deg) saturate(.75) brightness(1.06)" },
+  latex: { asset: "/layers/euro-align/layer-2.png", filter: "saturate(.45) brightness(1.14)" },
+  adaptive: { asset: "/layers/euro-align/layer-3.png" },
+  zoned: { asset: "/layers/euro-align/layer-3.png" },
+  hd: { asset: "/layers/euro-align/layer-4.png", filter: "brightness(2.4) contrast(.85)" },
+  hr: { asset: "/layers/euro-align/layer-4.png" },
+  core: { asset: "/layers/euro-align/layer-4.png" },
+};
+
+function kindOf(layer: MattressLayer) {
+  if (layer.visualKind && layer.visualKind !== "auto") return layer.visualKind;
+  const n = layer.name.toLowerCase();
+  if (n.includes("spring")) return "spring";
+  if (n.includes("latex")) return "latex";
+  if (n.includes("cool")) return "cool";
+  if (n.includes("memory")) return "memory";
+  if (n.includes("cover") || n.includes("fabric")) return "fabric";
+  if (n.includes("hr")) return "hr";
+  if (n.includes("hd")) return "hd";
+  return "foam";
+}
+
+function toStage(list: MattressLayer[]): StageLayer[] {
+  return list.map((layer, i) => {
+    const kind = kindOf(layer);
+    const art = LAYER_ART[kind] || LAYER_ART.foam;
+    return {
+      number: String(i + 1).padStart(2, "0"),
+      name: layer.name,
+      description: layer.description,
+      asset: layer.visualAsset || art.asset,
+      filter: art.filter,
+      spring: kind === "spring",
+      material: layer.material,
+      density: layer.density,
+      thickness: layer.thickness,
+    };
+  });
+}
+
+function SpringArt() {
+  return (
+    <svg viewBox="0 0 540 120" className="gp-spring" aria-hidden="true">
+      <rect x="6" y="10" width="528" height="100" rx="22" fill="#1d1d1d" stroke="#3a3a3a" />
+      {Array.from({ length: 13 }).map((_, i) => {
+        const x = 34 + i * 39;
+        return (
+          <path
+            key={i}
+            d={`M${x} 22 q14 6 0 12 q-14 6 0 12 q14 6 0 12 q-14 6 0 12 q14 6 0 12 q-14 6 0 12 q14 6 0 12`}
+            fill="none"
+            stroke="#FF6500"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+/* The layer recipe in plain words, e.g. "Memory foam + Soft foam + 32D HR foam". */
+function recipe(product: Mattress) {
+  return product.layers
+    .filter((l) => l.visualKind !== "fabric" && !/cover/i.test(l.name))
+    .map((l) => l.name)
+    .join(" + ");
+}
+
+function TierCard({ product, index }: { product: Mattress; index: number }) {
+  const { addItem } = useCart();
+  const sizes = product.sizes || [];
+  const [size, setSize] = useState(sizes[1]?.label || sizes[0]?.label || "");
+  const [added, setAdded] = useState(false);
+  const height = product.heights?.[0]?.label || "";
+  const price =
+    product.basePrice + (sizes.find((s) => s.label === size)?.priceAdd || 0);
+  const upgrade = product.options?.[0]?.choices.find((c) => c.priceAdd > 0);
+
+  function add() {
+    addItem({
+      id: `${product.slug}-${size}-${height}`,
+      slug: product.slug,
+      name: product.name,
+      image: product.image,
+      size,
+      height,
+      price,
+      quantity: 1,
+    });
+    setAdded(true);
+    window.setTimeout(() => setAdded(false), 1600);
+  }
+
+  return (
+    <article className={index === 1 ? "gadda-tier-card gp-tier is-pick" : "gadda-tier-card gp-tier"}>
+      {index === 1 ? <span className="gp-pick">Most people pick this</span> : null}
+      <div className="gadda-tier-card-top">
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <small>{product.kicker}</small>
+      </div>
+      <Link href={`/mattresses/${product.slug}`} className="gadda-tier-image">
+        <img src={product.image} alt={product.name} />
+      </Link>
+      <div className="gadda-tier-copy">
+        <h3>
+          <Link href={`/mattresses/${product.slug}`}>{product.badge || tierNames[index]}</Link>
+        </h3>
+        <p className="gp-recipe">{recipe(product)}</p>
+        {upgrade ? (
+          <p className="gp-upgrade">
+            or {upgrade.label.toLowerCase()} · +{money(upgrade.priceAdd)}
+          </p>
+        ) : (
+          <p className="gp-upgrade">No upgrades needed. That&apos;s the point.</p>
+        )}
+
+        <div className="gp-sizes" role="group" aria-label={`${product.name} size`}>
+          {sizes.map((s) => (
+            <button
+              key={s.label}
+              type="button"
+              className={s.label === size ? "is-on" : ""}
+              onClick={() => setSize(s.label)}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="gp-price">
+          <strong>{money(price)}</strong>
+          <span>
+            {size} · {height} · about ₹{Math.round(price / 1000)} a night for your first 1,000 nights
+          </span>
+        </div>
+
+        <div className="gp-actions">
+          <button type="button" className="gp-add" onClick={add}>
+            {added ? "Added ✓" : "Add to cart"}
+          </button>
+          <Link href={`/mattresses/${product.slug}`} className="gp-details">
+            Details →
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function money(value: number) {
   return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value);
 }
@@ -64,6 +233,15 @@ export default function ExplodedLayers({
   const [active, setActive] = useState(0);
 
   const showcase = products.slice(0, 3);
+  const [tier, setTier] = useState(Math.min(1, Math.max(0, showcase.length - 1)));
+  const [picked, setPicked] = useState<Record<string, Record<string, string>>>({});
+  const current = showcase[tier];
+  const choices = (current && picked[current.slug]) || {};
+  const layers: StageLayer[] = current
+    ? toStage(layersWithChoices(current, choices))
+    : fallbackLayers;
+  const layerCount = useRef(layers.length);
+  layerCount.current = layers.length;
 
   const focusLayer = useCallback((index: number) => {
     manualUntil.current = Date.now() + 1800;
@@ -94,10 +272,10 @@ export default function ExplodedLayers({
 
       if (Date.now() > manualUntil.current) {
         const index = Math.min(
-          layers.length - 1,
+          layerCount.current - 1,
           Math.floor(
             clamp(raw * 1.04) *
-              layers.length
+              layerCount.current
           )
         );
 
@@ -150,6 +328,8 @@ export default function ExplodedLayers({
   const spread =
     10 + progress * 116;
 
+  const act = Math.min(active, layers.length - 1);
+
   return (
     <section
       id="inside"
@@ -164,30 +344,13 @@ export default function ExplodedLayers({
           </div>
           <div className="gadda-tier-head-copy">
             <strong>THREE OPTIONS.<br />NO CATALOGUE MAZE.</strong>
-            <p>Pick one and go straight to the product. We can remap the tiers later.</p>
+            <p>Three mattresses. Real materials, written in plain words. Pick the one that fits the job.</p>
           </div>
         </div>
 
         <div className="gadda-tier-grid">
           {showcase.map((product, index) => (
-            <Link href={`/mattresses/${product.slug}`} key={product.slug} className="gadda-tier-card">
-              <div className="gadda-tier-card-top">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <small>{product.badge || product.category}</small>
-              </div>
-              <div className="gadda-tier-image">
-                <img src={product.image} alt={product.name} />
-              </div>
-              <div className="gadda-tier-copy">
-                <p>{tierNames[index]}</p>
-                <h3>{tierNames[index]}</h3>
-                <span>{product.name}</span>
-                <div className="gadda-tier-bottom">
-                  <strong>From {money(product.basePrice)}</strong>
-                  <b>VIEW PRODUCT →</b>
-                </div>
-              </div>
-            </Link>
+            <TierCard key={product.slug} product={product} index={index} />
           ))}
         </div>
 
@@ -223,8 +386,56 @@ export default function ExplodedLayers({
             Mattress layers should not be
             mystery ingredients.
             <br /><br />
-            Here&apos;s the whole thing.
+            Pick a Gadda. Here&apos;s the whole thing.
           </p>
+
+          {showcase.length ? (
+            <div className="gp-nbb-tabs" role="tablist" aria-label="Choose a mattress">
+              {showcase.map((p, i) => (
+                <button
+                  key={p.slug}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === tier}
+                  className={i === tier ? "is-on" : ""}
+                  onClick={() => {
+                    setTier(i);
+                    focusLayer(0);
+                  }}
+                >
+                  {p.badge || tierNames[i]}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          {(current?.options || []).map((option) => (
+            <div className="gp-nbb-option" key={option.id}>
+              <span>{option.label}</span>
+              <div>
+                {option.choices.map((c) => {
+                  const on = (choices[option.id] || option.choices[0]?.label) === c.label;
+                  return (
+                    <button
+                      key={c.label}
+                      type="button"
+                      className={on ? "is-on" : ""}
+                      onClick={() =>
+                        current &&
+                        setPicked((prev) => ({
+                          ...prev,
+                          [current.slug]: { ...(prev[current.slug] || {}), [option.id]: c.label },
+                        }))
+                      }
+                    >
+                      {c.label}
+                      {c.priceAdd > 0 ? ` +${money(c.priceAdd)}` : ""}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
 
           <div className="gadda-explode-scroll">
             <span>
@@ -253,7 +464,7 @@ export default function ExplodedLayers({
           <div className="gadda-explode-stage-top">
 
             <span>
-              MATTRESS / 01
+              {current ? current.name.toUpperCase() : "MATTRESS / 01"}
             </span>
 
             <span>
@@ -287,7 +498,7 @@ export default function ExplodedLayers({
                   spread;
 
                 const isActive =
-                  index === active;
+                  index === act;
 
                 const x =
                   isActive
@@ -325,11 +536,16 @@ export default function ExplodedLayers({
                     }
                   >
 
-                    <img
-                      src={layer.asset}
-                      alt={layer.name}
-                      draggable={false}
-                    />
+                    {layer.spring ? (
+                      <SpringArt />
+                    ) : (
+                      <img
+                        src={layer.asset}
+                        alt={layer.name}
+                        draggable={false}
+                        style={layer.filter ? { filter: layer.filter } : undefined}
+                      />
+                    )}
 
                     <span className="gadda-layer-dot" />
 
@@ -347,7 +563,7 @@ export default function ExplodedLayers({
             </span>
 
             <strong>
-              {layers[active].number}
+              {layers[act].number}
             </strong>
           </div>
 
@@ -361,12 +577,12 @@ export default function ExplodedLayers({
         <div className="gadda-explode-info">
 
           <div className="gadda-explode-number">
-            {layers[active].number}
+            {layers[act].number}
           </div>
 
 
           <div
-            key={active}
+            key={`${current?.slug}-${act}`}
             className="gadda-explode-active"
           >
 
@@ -375,7 +591,7 @@ export default function ExplodedLayers({
             </p>
 
             <h3>
-              {layers[active].name}
+              {layers[act].name}
             </h3>
 
             <div className="gadda-explode-callout">
@@ -383,10 +599,33 @@ export default function ExplodedLayers({
               <span />
 
               <p>
-                {layers[active].description}
+                {layers[act].description}
               </p>
 
             </div>
+
+            {layers[act].material || layers[act].density || layers[act].thickness ? (
+              <dl className="gp-spec">
+                {layers[act].material ? (
+                  <div>
+                    <dt>Material</dt>
+                    <dd>{layers[act].material}</dd>
+                  </div>
+                ) : null}
+                {layers[act].density ? (
+                  <div>
+                    <dt>Density</dt>
+                    <dd>{layers[act].density}</dd>
+                  </div>
+                ) : null}
+                {layers[act].thickness ? (
+                  <div>
+                    <dt>Thickness</dt>
+                    <dd>{layers[act].thickness}</dd>
+                  </div>
+                ) : null}
+              </dl>
+            ) : null}
 
           </div>
 
@@ -402,7 +641,7 @@ export default function ExplodedLayers({
                     focusLayer(index)
                   }
                   className={
-                    index === active
+                    index === act
                       ? "is-active"
                       : ""
                   }
@@ -415,6 +654,8 @@ export default function ExplodedLayers({
                   <strong>
                     {layer.name}
                   </strong>
+
+                  {layer.density ? <em className="gp-pick-density">{layer.density}</em> : null}
 
                 </button>
               )

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import GaddaMenu from "@/components/GaddaMenu";
 import {
   useEffect,
   useMemo,
@@ -103,7 +102,6 @@ export default function HeaderClient({
   site: SiteSettings;
   products: Mattress[];
 }) {
-  const [catalogOpen, setCatalogOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const [pinOpen, setPinOpen] = useState(false);
@@ -299,9 +297,6 @@ export default function HeaderClient({
 
       <header
         className="relative sticky top-0 z-50 border-b border-ink/10 bg-[#F3ECDD]"
-        onMouseLeave={() =>
-          setCatalogOpen(false)
-        }
       >
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-5 px-5 py-3 lg:px-8">
           <Link
@@ -319,18 +314,26 @@ export default function HeaderClient({
           </Link>
 
           <nav className="gadda-main-nav hidden items-center gap-7 lg:flex">
-            <button
-              type="button"
-              onClick={() =>
-                setCatalogOpen((v) => !v)
-              }
-              className="gadda-nav-link flex items-center gap-2 text-sm font-bold text-ink/75"
+            <Link
+              href="/mattresses"
+              className="gadda-nav-link text-sm font-bold text-ink/75"
             >
-              Gadda Menu
-              <span className="text-[9px]">
-                ▼
-              </span>
-            </button>
+              Mattresses
+            </Link>
+
+            <Link
+              href="/compare"
+              className="gadda-nav-link text-sm font-bold text-ink/75"
+            >
+              Compare
+            </Link>
+
+            <Link
+              href="/why-eurofoam"
+              className="gadda-nav-link text-sm font-bold text-ink/75"
+            >
+              Why GADDA
+            </Link>
 
             <Link
               href="/reviews"
@@ -553,14 +556,7 @@ export default function HeaderClient({
           </div>
         </div>
 
-        {catalogOpen ? (
-          <GaddaMenu
-            products={products}
-            onClose={() =>
-              setCatalogOpen(false)
-            }
-          />
-        ) : null}
+
       </header>
 
       {mobileOpen ? (
@@ -667,16 +663,21 @@ export default function HeaderClient({
             </div>
 
             <div className="p-5">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false);
-                  setCatalogOpen(true);
-                }}
+              <Link
+                href="/mattresses"
+                onClick={() => setMobileOpen(false)}
                 className="block w-full py-4 text-left text-lg font-black"
               >
-                Gadda Menu
-              </button>
+                All mattresses
+              </Link>
+
+              <Link
+                href="/compare"
+                onClick={() => setMobileOpen(false)}
+                className="block w-full py-3 text-left text-base font-bold"
+              >
+                Compare
+              </Link>
 
               {groups.map(
                 ([category, items]) => (

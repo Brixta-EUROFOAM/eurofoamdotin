@@ -4,7 +4,7 @@
     "brandSuffix": "",
     "tagline": "Gadda hi hai yaar.",
     "logoUrl": "/eurofoam-logo-v2.png",
-    "announcement": "FREE SHIPPING · EASY TRIALS · WARRANTY INCLUDED",
+    "announcement": "100 NIGHTS TO DECIDE · DELIVERY INCLUDED · NO FAKE MRP",
     "heroEyebrow": "GADDA",
     "heroTitle": "Gadda hi hai yaar.",
     "heroBody": "Clear comfort choices, transparent construction and direct-to-your-door convenience. Choose the feel that fits you and try it where sleep actually happens: at home.",
@@ -63,13 +63,13 @@
         "enabled": true
       }
     ],
-    "homeStoryProductSlug": "euro-align",
+    "homeStoryProductSlug": "gadda-pro",
     "heroSlides": [
       {
         "id": "hero-brand",
         "image": "/media/1789122018422-a-mattress-on-a-wooden-floor-in-a-bedroom-photo.jpg",
         "imageAlt": "GADDA mattress",
-        "href": "/mattresses/euro-align",
+        "href": "/mattresses/gadda-pro",
         "eyebrow": "GADDA",
         "title": "Gadda hi hai yaar.",
         "body": "Clear comfort choices, transparent construction and direct-to-your-door convenience. Choose the feel that fits you and try it where sleep actually happens: at home.",
@@ -82,25 +82,11 @@
       {
         "id": "hero-euro-align",
         "image": "/media/1789122036701-brixta-work-hero.jpg",
-        "imageAlt": "Euro Align",
-        "href": "/mattresses/euro-align",
+        "imageAlt": "Gadda Pro",
+        "href": "/mattresses/gadda-pro",
         "eyebrow": "BESTSELLER",
-        "title": "Euro Align",
+        "title": "Gadda Pro",
         "body": "Balanced pressure relief and structured support for everyday sleep.",
-        "ctaLabel": "Discover",
-        "textTone": "light",
-        "contentAlign": "left",
-        "imagePosition": "50% 50%",
-        "enabled": true
-      },
-      {
-        "id": "hero-euro-air",
-        "image": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=85",
-        "imageAlt": "Euro Air",
-        "href": "/mattresses/euro-air",
-        "eyebrow": "COOLEST",
-        "title": "Euro Air",
-        "body": "A cooler-feel mattress built around ventilation and fast heat release.",
         "ctaLabel": "Discover",
         "textTone": "light",
         "contentAlign": "left",
@@ -114,12 +100,12 @@
     "homeForeground": "#FFFFFF",
     "campaignHero": {
       "enabled": true,
-      "kicker": "GADDA / EURO AIR",
+      "kicker": "GADDA / ULTIMATE",
       "headlineTop": "GARMI MEIN?",
       "headlineBottom": "THANDA GADDA.",
-      "body": "Euro Air. Cooling comfort without the showroom gyaan.",
+      "body": "Gadda Ultimate. Cool memory foam, without the showroom gyaan.",
       "ctaLabel": "THANDA WALA DEKHO ↗",
-      "ctaHref": "/mattresses",
+      "ctaHref": "/mattresses/gadda-ultimate",
       "productSlug": "",
       "background": "#FF6500",
       "paper": "#F3ECDD",
@@ -133,76 +119,63 @@
       ],
       "proof": [
         "100 NIGHT TRIAL",
-        "10 YEAR WARRANTY",
-        "FREE SHIPPING",
+        "WARRANTY INCLUDED",
+        "FREE DELIVERY",
         "EASY RETURNS"
       ]
     }
   },
   "products": [
     {
-      "slug": "euro-align",
-      "name": "Euro Align",
-      "kicker": "Everyday structured support",
-      "badge": "BESTSELLER",
-      "category": "Ortho",
-      "shortDescription": "Balanced pressure relief and structured support for everyday sleep.",
-      "longDescription": "Euro Align is the medium-firm all-rounder: responsive comfort on top, stable support below and enough airflow to keep the surface from feeling stuffy.",
-      "basePrice": 11990,
-      "compareAt": 17990,
-      "firmness": "Medium Firm · 7/10",
-      "rating": 4.8,
-      "reviews": 2841,
+      "slug": "gadda-regular",
+      "name": "Gadda Regular",
+      "kicker": "The honest basic",
+      "badge": "REGULAR",
+      "category": "Regular",
+      "shortDescription": "Soft on top, firm underneath. Everything a good mattress needs, nothing it doesn't.",
+      "longDescription": "Two foams, one job. A soft comfort layer so it doesn't feel like sleeping on a table, on top of a high-density foam base that keeps you supported night after night. For guest rooms, first homes, hostels, and anyone who just wants a proper gadda.",
+      "basePrice": 6990,
+      "compareAt": 6990,
+      "firmness": "Firm-ish",
+      "rating": 0,
+      "reviews": 0,
       "trial": "100-night trial",
-      "warranty": "10-year warranty",
-      "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",
+      "warranty": "Warranty included",
+      "image": "/media/1789122018422-a-mattress-on-a-wooden-floor-in-a-bedroom-photo.jpg",
       "accent": "from-[#F3ECDD] to-[#FF6500]",
       "features": [
-        "Zoned support architecture",
-        "Pressure-relieving comfort foam",
-        "Motion isolation for couples",
-        "Breathable knitted cover"
+        "HD foam support base",
+        "Soft foam comfort layer",
+        "Firm, steady feel",
+        "Best value in the line-up"
       ],
       "layers": [
         {
-          "name": "AirKnit Cover",
-          "description": "Soft-touch breathable top fabric.",
-          "material": "",
+          "name": "Fabric cover",
+          "description": "Stitched fabric outer. Keeps everything inside where it belongs.",
+          "material": "Quilted fabric",
           "thickness": "",
           "density": "",
           "technicalNote": "",
-          "visualKind": "fabric",
-          "visualAsset": "/layers/euro-align/layer-1.png"
+          "visualKind": "fabric"
         },
         {
-          "name": "Relief Foam",
-          "description": "Contours without a deep sink.",
-          "material": "",
+          "name": "Soft foam",
+          "description": "The comfortable bit on top. Takes the hard edge off.",
+          "material": "Soft PU foam",
           "thickness": "",
           "density": "",
           "technicalNote": "",
-          "visualKind": "foam",
-          "visualAsset": "/layers/euro-align/layer-2.png"
+          "visualKind": "foam"
         },
         {
-          "name": "Support Grid Foam",
-          "description": "Zoned response through the torso and hips.",
-          "material": "",
+          "name": "HD foam",
+          "description": "High-density foam base. Firm and steady, so you don't sink.",
+          "material": "High-density foam",
           "thickness": "",
-          "density": "",
+          "density": "HD",
           "technicalNote": "",
-          "visualKind": "zoned",
-          "visualAsset": "/layers/euro-align/layer-3.png"
-        },
-        {
-          "name": "Stability Core",
-          "description": "Dense base foam for edge-to-edge support.",
-          "material": "",
-          "thickness": "",
-          "density": "",
-          "technicalNote": "",
-          "visualKind": "core",
-          "visualAsset": "/layers/euro-align/layer-4.png"
+          "visualKind": "hd"
         }
       ],
       "sizes": [
@@ -212,15 +185,135 @@
         },
         {
           "label": "Double",
-          "priceAdd": 2500
+          "priceAdd": 2000
         },
         {
           "label": "Queen",
-          "priceAdd": 4500
+          "priceAdd": 3600
         },
         {
           "label": "King",
-          "priceAdd": 6500
+          "priceAdd": 5200
+        }
+      ],
+      "heights": [
+        {
+          "label": "6 inch",
+          "priceAdd": 0
+        },
+        {
+          "label": "8 inch",
+          "priceAdd": 1800
+        }
+      ]
+    },
+    {
+      "slug": "gadda-pro",
+      "name": "Gadda Pro",
+      "kicker": "The one most people should buy",
+      "badge": "PRO",
+      "category": "Pro",
+      "shortDescription": "Memory foam comfort on a 32-density HR foam base. Or swap the base for pocket springs.",
+      "longDescription": "Memory foam moulds to you and takes pressure off shoulders and hips. Soft foam sits between it and a 32-density high-resilience (HR) foam base that springs back fast and holds you level. Prefer bounce? Choose pocket springs instead of the HR base.",
+      "basePrice": 11990,
+      "compareAt": 11990,
+      "firmness": "Balanced",
+      "rating": 0,
+      "reviews": 0,
+      "trial": "100-night trial",
+      "warranty": "Warranty included",
+      "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",
+      "accent": "from-[#F3ECDD] to-[#FF6500]",
+      "features": [
+        "Memory foam pressure relief",
+        "32D HR foam base",
+        "Pocket-spring option",
+        "Balanced feel for most sleepers"
+      ],
+      "layers": [
+        {
+          "name": "Fabric cover",
+          "description": "Stitched fabric outer. Keeps everything inside where it belongs.",
+          "material": "Quilted fabric",
+          "thickness": "",
+          "density": "",
+          "technicalNote": "",
+          "visualKind": "fabric"
+        },
+        {
+          "name": "Memory foam",
+          "description": "Moulds to your shape. Takes pressure off shoulders and hips.",
+          "material": "Memory foam",
+          "thickness": "",
+          "density": "",
+          "technicalNote": "",
+          "visualKind": "memory"
+        },
+        {
+          "name": "Soft foam",
+          "description": "Transition layer, so you settle in without sinking through.",
+          "material": "Soft PU foam",
+          "thickness": "",
+          "density": "",
+          "technicalNote": "",
+          "visualKind": "foam"
+        },
+        {
+          "name": "32D HR foam",
+          "description": "High-resilience foam, 32 density. Springs back fast and keeps your spine level.",
+          "material": "High-resilience (HR) foam",
+          "thickness": "",
+          "density": "32D",
+          "technicalNote": "",
+          "visualKind": "hr"
+        }
+      ],
+      "options": [
+        {
+          "id": "core",
+          "label": "Support base",
+          "choices": [
+            {
+              "label": "32D HR foam",
+              "priceAdd": 0,
+              "note": "Quiet, solid, no bounce."
+            },
+            {
+              "label": "Pocket springs",
+              "priceAdd": 1500,
+              "note": "Bouncier and airier.",
+              "swap": {
+                "index": 3,
+                "layer": {
+                  "name": "Pocket springs",
+                  "description": "Individually wrapped springs. More bounce, more airflow, less partner disturbance.",
+                  "material": "Pocket spring unit",
+                  "thickness": "",
+                  "density": "",
+                  "technicalNote": "",
+                  "visualKind": "spring"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "sizes": [
+        {
+          "label": "Single",
+          "priceAdd": 0
+        },
+        {
+          "label": "Double",
+          "priceAdd": 2600
+        },
+        {
+          "label": "Queen",
+          "priceAdd": 4680
+        },
+        {
+          "label": "King",
+          "priceAdd": 6760
         }
       ],
       "heights": [
@@ -231,166 +324,98 @@
         {
           "label": "8 inch",
           "priceAdd": 2400
-        },
-        {
-          "label": "10 inch",
-          "priceAdd": 4800
         }
       ]
     },
     {
-      "slug": "euro-air",
-      "name": "Euro Air",
-      "kicker": "Cooling comfort",
-      "badge": "COOLEST",
-      "category": "Cooling",
-      "shortDescription": "A cooler-feel mattress built around ventilation and fast heat release.",
-      "longDescription": "Euro Air uses an open-cell comfort layer and ventilated transition layer to reduce heat build-up while preserving a supportive, medium-firm feel.",
-      "basePrice": 15490,
-      "compareAt": 22990,
-      "firmness": "Medium Firm · 6.5/10",
-      "rating": 4.7,
-      "reviews": 1736,
-      "trial": "100-night trial",
-      "warranty": "10-year warranty",
-      "image": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=85",
-      "accent": "from-[#F8F4E9] to-[#FF6500]",
-      "features": [
-        "Cool-touch top fabric",
-        "Open-cell comfort layer",
-        "Ventilated transition foam",
-        "Low-motion transfer"
-      ],
-      "layers": [
-        {
-          "name": "CoolTouch Cover",
-          "description": "Smooth surface engineered for a cooler first touch.",
-          "material": "",
-          "thickness": "",
-          "density": "",
-          "technicalNote": "",
-          "visualKind": "fabric"
-        },
-        {
-          "name": "AirCell Foam",
-          "description": "Open-cell comfort with faster heat dispersion.",
-          "material": "",
-          "thickness": "",
-          "density": "",
-          "technicalNote": "",
-          "visualKind": "foam"
-        },
-        {
-          "name": "Vent Layer",
-          "description": "Channelled transition foam for airflow.",
-          "material": "",
-          "thickness": "",
-          "density": "",
-          "technicalNote": "",
-          "visualKind": "foam"
-        },
-        {
-          "name": "Stability Core",
-          "description": "Firm base layer for long-term structure.",
-          "material": "",
-          "thickness": "",
-          "density": "",
-          "technicalNote": "",
-          "visualKind": "core"
-        }
-      ],
-      "sizes": [
-        {
-          "label": "Single",
-          "priceAdd": 0
-        },
-        {
-          "label": "Double",
-          "priceAdd": 2900
-        },
-        {
-          "label": "Queen",
-          "priceAdd": 5100
-        },
-        {
-          "label": "King",
-          "priceAdd": 7300
-        }
-      ],
-      "heights": [
-        {
-          "label": "6 inch",
-          "priceAdd": 0
-        },
-        {
-          "label": "8 inch",
-          "priceAdd": 2800
-        },
-        {
-          "label": "10 inch",
-          "priceAdd": 5200
-        }
-      ]
-    },
-    {
-      "slug": "euro-float",
-      "name": "Euro Float",
-      "kicker": "Hybrid bounce + support",
-      "badge": "HOTEL FEEL",
-      "category": "Hybrid",
-      "shortDescription": "Pocket springs, responsive foam and reinforced edges for a buoyant sleep feel.",
-      "longDescription": "Euro Float is designed for sleepers who dislike the stuck-in-foam feeling. Individually wrapped springs deliver bounce and separation, while foam layers soften pressure points.",
+      "slug": "gadda-ultimate",
+      "name": "Gadda Ultimate",
+      "kicker": "Every upgrade, no gimmicks",
+      "badge": "ULTIMATE",
+      "category": "Ultimate",
+      "shortDescription": "Cool memory foam and adaptive foam on our densest 40D HR base. Latex upgrade available.",
+      "longDescription": "Cool memory foam on top so you don't wake up warm. Adaptive foam underneath responds as you move, so you never feel stuck. All of it on a 40-density HR foam base, the most supportive core we make. Prefer natural bounce? Upgrade the top layer to latex.",
       "basePrice": 18990,
-      "compareAt": 27990,
-      "firmness": "Balanced · 6/10",
-      "rating": 4.9,
-      "reviews": 1244,
+      "compareAt": 18990,
+      "firmness": "Plush-supportive",
+      "rating": 0,
+      "reviews": 0,
       "trial": "100-night trial",
-      "warranty": "12-year warranty",
-      "image": "https://images.unsplash.com/photo-1616627981212-9d22b0fd8d2e?auto=format&fit=crop&w=1200&q=85",
-      "accent": "from-[#F3ECDD] to-[#F8F4E9]",
+      "warranty": "Warranty included",
+      "image": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=85",
+      "accent": "from-[#F3ECDD] to-[#FF6500]",
       "features": [
-        "Individually wrapped pocket springs",
-        "Reinforced perimeter support",
-        "Responsive comfort foam",
-        "Reduced partner disturbance"
+        "Cool memory foam top",
+        "Adaptive foam layer",
+        "40D HR foam base",
+        "Latex upgrade option"
       ],
       "layers": [
         {
-          "name": "CloudWeave Cover",
-          "description": "Plush woven top for a hotel-inspired finish.",
-          "material": "",
+          "name": "Fabric cover",
+          "description": "Stitched fabric outer. Keeps everything inside where it belongs.",
+          "material": "Quilted fabric",
           "thickness": "",
           "density": "",
           "technicalNote": "",
           "visualKind": "fabric"
         },
         {
-          "name": "Responsive Foam",
-          "description": "Fast response without excessive sink.",
-          "material": "",
+          "name": "Cool memory foam",
+          "description": "Memory foam made to sleep cooler. For the Garmi-mein-bhi crowd.",
+          "material": "Cooling memory foam",
           "thickness": "",
           "density": "",
           "technicalNote": "",
-          "visualKind": "foam"
+          "visualKind": "cool"
         },
         {
-          "name": "Micro-Transition Layer",
-          "description": "Buffers pressure above the spring unit.",
-          "material": "",
+          "name": "Adaptive foam",
+          "description": "Reacts as you move, so you never feel stuck in one spot.",
+          "material": "Adaptive foam",
           "thickness": "",
           "density": "",
           "technicalNote": "",
-          "visualKind": "spring"
+          "visualKind": "adaptive"
         },
         {
-          "name": "Pocket Spring Core",
-          "description": "Independent movement and buoyant support.",
-          "material": "",
+          "name": "40D HR foam",
+          "description": "High-resilience foam, 40 density. Our densest, most supportive base.",
+          "material": "High-resilience (HR) foam",
           "thickness": "",
-          "density": "",
+          "density": "40D",
           "technicalNote": "",
-          "visualKind": "spring"
+          "visualKind": "hr"
+        }
+      ],
+      "options": [
+        {
+          "id": "comfort",
+          "label": "Top layer",
+          "choices": [
+            {
+              "label": "Cool memory foam",
+              "priceAdd": 0,
+              "note": "Slow, hugging, sleeps cool."
+            },
+            {
+              "label": "Latex",
+              "priceAdd": 4000,
+              "note": "Bouncy, breathable, long-lasting.",
+              "swap": {
+                "index": 1,
+                "layer": {
+                  "name": "Latex",
+                  "description": "Latex instead of memory foam. More bounce, breathes better.",
+                  "material": "Latex",
+                  "thickness": "",
+                  "density": "",
+                  "technicalNote": "",
+                  "visualKind": "latex"
+                }
+              }
+            }
+          ]
         }
       ],
       "sizes": [
@@ -400,109 +425,21 @@
         },
         {
           "label": "Double",
-          "priceAdd": 3500
+          "priceAdd": 3400
         },
         {
           "label": "Queen",
-          "priceAdd": 6000
+          "priceAdd": 6120
         },
         {
           "label": "King",
-          "priceAdd": 8500
+          "priceAdd": 8840
         }
       ],
       "heights": [
-        {
-          "label": "8 inch",
-          "priceAdd": 0
-        },
-        {
-          "label": "10 inch",
-          "priceAdd": 3500
-        },
-        {
-          "label": "12 inch",
-          "priceAdd": 6500
-        }
-      ]
-    },
-    {
-      "slug": "euro-easy",
-      "name": "Euro Easy",
-      "kicker": "Simple. Supportive. Affordable.",
-      "category": "Essential",
-      "shortDescription": "A clean two-layer foam mattress for guest rooms, rentals and first homes.",
-      "longDescription": "Euro Easy keeps the build straightforward: a comfort layer for surface softness and a dense support base underneath.",
-      "basePrice": 6990,
-      "compareAt": 9990,
-      "firmness": "Medium Firm · 7/10",
-      "rating": 4.6,
-      "reviews": 908,
-      "trial": "30-night trial",
-      "warranty": "7-year warranty",
-      "image": "https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?auto=format&fit=crop&w=1200&q=85",
-      "accent": "from-[#FF6500] to-[#F3ECDD]",
-      "features": [
-        "Two-layer construction",
-        "Removable knitted cover",
-        "Firm support base",
-        "Roll-packed delivery"
-      ],
-      "layers": [
-        {
-          "name": "SoftKnit Cover",
-          "description": "Simple washable outer cover.",
-          "material": "",
-          "thickness": "",
-          "density": "",
-          "technicalNote": "",
-          "visualKind": "fabric"
-        },
-        {
-          "name": "Comfort Foam",
-          "description": "Moderate cushioning for everyday use.",
-          "material": "",
-          "thickness": "",
-          "density": "",
-          "technicalNote": "",
-          "visualKind": "foam"
-        },
-        {
-          "name": "Support Base",
-          "description": "Dense base foam for structure.",
-          "material": "",
-          "thickness": "",
-          "density": "",
-          "technicalNote": "",
-          "visualKind": "core"
-        }
-      ],
-      "sizes": [
-        {
-          "label": "Single",
-          "priceAdd": 0
-        },
-        {
-          "label": "Double",
-          "priceAdd": 1600
-        },
-        {
-          "label": "Queen",
-          "priceAdd": 2900
-        },
-        {
-          "label": "King",
-          "priceAdd": 4400
-        }
-      ],
-      "heights": [
-        {
-          "label": "5 inch",
-          "priceAdd": 0
-        },
         {
           "label": "6 inch",
-          "priceAdd": 1200
+          "priceAdd": 0
         },
         {
           "label": "8 inch",
@@ -511,27 +448,5 @@
       ]
     }
   ],
-  "reviews": [
-    {
-      "id": "review-1",
-      "stars": 5,
-      "quote": "I wanted support without the rock-hard orthopedic feel. The medium-firm balance is exactly what I was looking for.",
-      "name": "Bittu Pehelwan",
-      "product": "Euro Align"
-    },
-    {
-      "id": "review-2",
-      "stars": 5,
-      "quote": "The buying process was cleaner than a showroom. Picked size, understood the layers and ordered in minutes.",
-      "name": "Bitwa Badmash!· Mumbai",
-      "product": "Euro Air"
-    },
-    {
-      "id": "review-3",
-      "stars": 5,
-      "quote": "The hybrid has proper bounce without waking my partner every time I turn.",
-      "name": "Billu Singh Lassi · Gurugram",
-      "product": "Euro Float"
-    }
-  ]
+  "reviews": []
 }

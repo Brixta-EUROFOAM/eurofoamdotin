@@ -177,9 +177,11 @@ export default function ProductCard({
               STARTS AT
             </small>
 
-            <div className="gadda-shop-old-price">
-              {money(mattress.compareAt)}
-            </div>
+            {mattress.compareAt > mattress.basePrice ? (
+              <div className="gadda-shop-old-price">
+                {money(mattress.compareAt)}
+              </div>
+            ) : null}
 
             <strong>
               {money(mattress.basePrice)}

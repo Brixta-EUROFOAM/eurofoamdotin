@@ -29,6 +29,29 @@ export default function ProductBuyBox({
   const [added, setAdded] =
     useState(false);
 
+  /* Upgrades (e.g. pocket springs, latex): first choice is the default. */
+  const [picked, setPicked] =
+    useState<Record<string, string>>(() =>
+      Object.fromEntries(
+        (mattress.options || []).map((option) => [
+          option.id,
+          option.choices[0]?.label || "",
+        ])
+      )
+    );
+
+  const optionAdd = (mattress.options || []).reduce(
+    (sum, option) =>
+      sum +
+      (option.choices.find((c) => c.label === picked[option.id])?.priceAdd || 0),
+    0
+  );
+
+  const variant = (mattress.options || [])
+    .map((option) => picked[option.id])
+    .filter(Boolean)
+    .join(" · ");
+
   const { addItem } =
     useCart();
 
@@ -49,7 +72,7 @@ export default function ProductBuyBox({
         )?.priceAdd || 0;
 
       const extras =
-        sizeAdd + heightAdd;
+        sizeAdd + heightAdd + optionAdd;
 
       const price =
         mattress.basePrice + extras;
@@ -82,6 +105,7 @@ export default function ProductBuyBox({
       mattress,
       size,
       height,
+      optionAdd,
     ]);
 
 
@@ -89,7 +113,7 @@ export default function ProductBuyBox({
 
     addItem({
       id:
-        `${mattress.slug}-${size}-${height}`,
+        `${mattress.slug}-${size}-${height}${variant ? `-${variant}` : ""}`,
       slug:
         mattress.slug,
       name:
@@ -98,6 +122,7 @@ export default function ProductBuyBox({
         mattress.image,
       size,
       height,
+      variant: variant || undefined,
       price:
         pricing.price,
       quantity:
@@ -161,6 +186,7 @@ export default function ProductBuyBox({
       </p>
 
 
+      {mattress.reviews > 0 ? (
       <div className="sell-buybox-rating">
 
         <strong>
@@ -173,6 +199,7 @@ export default function ProductBuyBox({
         </span>
 
       </div>
+      ) : null}
 
 
       <div className="sell-buybox-price">
@@ -302,6 +329,33 @@ export default function ProductBuyBox({
       </div>
 
 
+      {(mattress.options || []).map((option) => (
+        <div className="sell-buybox-selector g6-options" key={option.id}>
+          <div className="sell-buybox-selector-head">
+            <strong>{option.label.toUpperCase()}</strong>
+            <span>Optional upgrade</span>
+          </div>
+          <div className="g6-option-grid">
+            {option.choices.map((choice) => (
+              <button
+                key={choice.label}
+                type="button"
+                onClick={() =>
+                  setPicked((p) => ({ ...p, [option.id]: choice.label }))
+                }
+                className={picked[option.id] === choice.label ? "is-active" : ""}
+              >
+                <b>{choice.label}</b>
+                <small>
+                  {choice.priceAdd > 0 ? `+ ${money(choice.priceAdd)}` : "Included"}
+                  {choice.note ? ` · ${choice.note}` : ""}
+                </small>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+
       <div className="sell-buybox-selected">
 
         <div>
@@ -312,6 +366,7 @@ export default function ProductBuyBox({
 
           <strong>
             {size} · {height}
+            {variant ? ` · ${variant}` : ""}
           </strong>
 
         </div>

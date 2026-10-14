@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
 import { money } from "@/lib/catalog";
+import { useState } from "react";
+import CheckoutPanel, { OrderDone, type Done } from "@/components/CheckoutPanel";
 
 export default function CartClient() {
 
@@ -12,6 +14,7 @@ export default function CartClient() {
     changeQty,
     subtotal,
   } = useCart();
+  const [placed, setPlaced] = useState<Done | null>(null);
 
   return (
     <section className="site-cart">
@@ -29,7 +32,14 @@ export default function CartClient() {
       </div>
 
 
-      {!items.length ? (
+      {placed ? (
+
+        <div className="site-empty gp-placed">
+          <OrderDone done={placed} />
+          <Link href="/">BACK TO HOME →</Link>
+        </div>
+
+      ) : !items.length ? (
 
         <div className="site-empty">
 
@@ -83,6 +93,7 @@ export default function CartClient() {
 
                     <p>
                       {item.size} · {item.height}
+                      {item.variant ? ` · ${item.variant}` : ""}
                     </p>
 
                   </div>
@@ -154,22 +165,12 @@ export default function CartClient() {
               <strong>{money(subtotal)}</strong>
             </div>
 
-            <button
-              onClick={() =>
-                alert("Demo only — connect the live payment checkout here.")
-              }
-            >
-              CHECKOUT →
-            </button>
-
-            <small>
-              Checkout is currently a demo.
-            </small>
+            <CheckoutPanel onPlaced={setPlaced} />
 
             <div className="site-cart-trust">
-              <span>STANDARD SHIPPING INCLUDED</span>
-              <span>TRIAL TERMS SHOWN BY PRODUCT</span>
-              <span>WARRANTY SHOWN BY PRODUCT</span>
+              <span>FREE DELIVERY TO YOUR DOOR</span>
+              <span>100 NIGHTS TO DECIDE</span>
+              <span>WE CALL TO CONFIRM BEFORE ANYTHING SHIPS</span>
             </div>
 
             <Link href="/mattresses" className="site-cart-continue">
