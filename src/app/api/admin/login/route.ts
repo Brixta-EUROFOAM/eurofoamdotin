@@ -53,7 +53,7 @@ export async function POST(request: Request) {
   const response = NextResponse.redirect(publicUrl(request, "/admin"), 303);
   response.cookies.set(adminCookie.name, createSessionToken(username), {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
     path: "/",
     maxAge: adminCookie.maxAge

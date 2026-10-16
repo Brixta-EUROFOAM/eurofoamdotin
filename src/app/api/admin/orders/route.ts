@@ -9,7 +9,9 @@ export async function GET() {
   if (!(await isAdminAuthenticated())) return new Response("Unauthorized", { status: 401 });
   const orders = await listOrders();
   const esc = (v: unknown) => {
-    const s = v == null ? "" : String(v);
+    let s = v == null ? "" : String(v);
+    // Block spreadsheet formula injection from customer-typed fields.
+    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
   const head = ["order", "date", "status", "name", "phone", "email", "address", "city", "pincode", "payment", "items", "total", "notes"];

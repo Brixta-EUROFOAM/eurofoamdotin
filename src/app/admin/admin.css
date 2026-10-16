@@ -1,0 +1,15 @@
+/* Admin-only styles (the rest of admin uses Tailwind utilities). */
+.gp-orders { min-height: 100vh; padding: 2.5rem clamp(1rem, 4vw, 3rem); background: var(--g-cream); color: var(--g-ink); }
+.gp-orders header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem; padding-bottom: 1.4rem; border-bottom: 2px solid var(--g-ink); }
+.gp-orders header p { color: var(--g-orange); font-size: 0.75rem; font-weight: 800; }
+.gp-orders h1 { font-family: var(--font-display); font-size: clamp(2.6rem, 5vw, 4.5rem); font-weight: 800; letter-spacing: -0.05em; line-height: 0.9; margin: 0; }
+.gp-orders header span { font-weight: 700; opacity: 0.65; }
+.gp-orders nav { display: flex; flex-wrap: wrap; gap: 1.2rem; font-weight: 700; font-size: 0.9rem; }
+.gp-orders nav a { text-decoration: underline; text-underline-offset: 4px; }
+.gp-orders-table { overflow-x: auto; margin-top: 1.5rem; }
+.gp-orders table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.gp-orders th { padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--g-ink); font-size: 0.78rem; text-align: left; }
+.gp-orders td { padding: 0.85rem 0.7rem; border-bottom: 1px solid var(--g-line); vertical-align: top; }
+.gp-orders td a { text-decoration: underline; }
+.gp-orders .num { text-align: right; white-space: nowrap; }
+.gp-orders-empty { margin-top: 2rem; font-size: 1.05rem; }

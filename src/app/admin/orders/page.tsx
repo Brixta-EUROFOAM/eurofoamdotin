@@ -3,6 +3,7 @@ import Link from "next/link";
 import { hasAdminAccount, isAdminAuthenticated } from "@/lib/admin-auth";
 import { listOrders } from "@/lib/orders";
 import { money } from "@/lib/catalog";
+import { missingBusinessFields } from "@/lib/business";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,7 @@ export default async function AdminOrdersPage() {
 
   const orders = await listOrders();
   const total = orders.reduce((sum, o) => sum + o.total, 0);
+  const missing = missingBusinessFields();
 
   return (
     <main className="gp-orders">
@@ -26,10 +28,24 @@ export default async function AdminOrdersPage() {
         <nav>
           <Link href="/admin">← Back to admin</Link>
           <a href="/api/admin/orders" download>
-            Download CSV ↓
+            Orders CSV
+          </a>
+          <a href="/api/admin/leads?type=callbacks" download>
+            Call-back requests CSV
+          </a>
+          <a href="/api/admin/leads?type=subscribers" download>
+            Newsletter sign-ups CSV
+          </a>
+          <a href="/api/admin/leads?type=consent" download>
+            Consent receipts CSV
           </a>
         </nav>
       </header>
+      {missing.length ? (
+        <p style={{ marginTop: 16, padding: "12px 16px", borderRadius: 10, background: "#fff4e5", color: "#8a3b00", fontWeight: 600 }}>
+          Legal details still missing on the website: {missing.join(", ")}. Add them in src/lib/business.ts.
+        </p>
+      ) : null}
 
       {orders.length ? (
         <div className="gp-orders-table">

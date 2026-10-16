@@ -1,38 +1,29 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { createOrder, OrderError, whatsappFor } from "@/lib/orders";
 import { getStoreData } from "@/lib/store";
+import { CUSTOMER_COOKIE, customerFromSession } from "@/lib/customerAuth";
+import { clientIp, forbidden, rateLimit, readJson, sameOrigin, tooMany } from "@/lib/security";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/* Light spam guard: max 5 orders per IP per 10 minutes. */
-const recent = new Map<string, number[]>();
-
 export async function POST(request: Request) {
-  const ip =
-    request.headers.get("cf-connecting-ip") ||
-    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
-    "unknown";
-  const now = Date.now();
-  const hits = (recent.get(ip) || []).filter((t) => now - t < 10 * 60 * 1000);
-  if (hits.length >= 5) {
-    return NextResponse.json({ error: "Too many orders in a short time. Please call us instead." }, { status: 429 });
+  if (!sameOrigin(request)) return forbidden();
+  if (!rateLimit(`order:${clientIp(request)}`, 5, 10 * 60_000)) {
+    return tooMany("Too many orders in a short time. Please call us instead.");
   }
 
-  let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
-  }
+  const body = await readJson<Record<string, unknown>>(request, 32_768);
+  if (!body) return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   if (typeof body.website === "string" && body.website.trim()) {
     return NextResponse.json({ ok: true, id: "OK" }); // honeypot
   }
 
   try {
-    const order = await createOrder(body);
-    hits.push(now);
-    recent.set(ip, hits);
+    const jar = await cookies();
+    const customer = await customerFromSession(jar.get(CUSTOMER_COOKIE)?.value);
+    const order = await createOrder(body, { customerId: customer?.id });
     const { site } = await getStoreData();
     return NextResponse.json({
       ok: true,

@@ -65,3 +65,13 @@ export function publicUrl(
     request.url
   );
 }
+
+/* Canonical site origin (e.g. https://eurofoam.in) for SEO + CSRF checks. */
+export function publicOrigin() {
+  return (process.env.PUBLIC_SITE_URL || "").trim().replace(/\/+$/, "");
+}
+
+export function siteUrl(pathname = "/") {
+  const origin = publicOrigin() || "https://eurofoam.in";
+  return new URL(pathname, `${origin}/`).toString();
+}

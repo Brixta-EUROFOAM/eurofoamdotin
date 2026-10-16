@@ -36,6 +36,14 @@ export type Order = {
   };
   payment: "pay_on_delivery" | "upi_link";
   notes?: string;
+  /* signed-in customer, if any */
+  customerId?: string;
+  /* when the buyer ticked "I agree to the Terms of Sale" */
+  termsAcceptedAt?: string;
+  /* opted in to order updates on WhatsApp (separate, optional consent) */
+  whatsappUpdates?: boolean;
+  /* client-generated key so a double-click can't create two orders */
+  idempotencyKey?: string;
   lines: OrderLine[];
   total: number;
 };
@@ -68,23 +76,10 @@ function priceFor(product: Mattress, size: string, height: string, variant: stri
 
 export class OrderError extends Error {}
 
-export async function createOrder(body: Record<string, unknown>): Promise<Order> {
+/* Re-price cart lines from the live catalogue. Unknown/stale lines are dropped. */
+export async function priceLines(input: unknown): Promise<OrderLine[]> {
   const { products } = await getStoreData();
-
-  const name = clip(body.name, 80);
-  const phone = clip(body.phone, 20).replace(/[^\d+]/g, "");
-  const address = clip(body.address, 300);
-  const city = clip(body.city, 80);
-  const pincode = clip(body.pincode, 6).replace(/\D/g, "");
-  const email = clip(body.email, 120);
-  const notes = clip(body.notes, 500);
-  const payment = body.payment === "upi_link" ? "upi_link" : "pay_on_delivery";
-
-  if (!name || !address || !city) throw new OrderError("Please fill in your name, address and city.");
-  if (phone.replace(/\D/g, "").length < 10) throw new OrderError("Please enter a valid 10-digit phone number.");
-  if (!/^\d{6}$/.test(pincode)) throw new OrderError("Please enter a valid 6-digit PIN code.");
-
-  const raw = Array.isArray(body.items) ? (body.items as InLine[]).slice(0, 20) : [];
+  const raw = Array.isArray(input) ? (input as InLine[]).slice(0, 20) : [];
   const lines: OrderLine[] = [];
   for (const item of raw) {
     const product = products.find((p) => p.slug === item.slug);
@@ -105,6 +100,33 @@ export async function createOrder(body: Record<string, unknown>): Promise<Order>
       lineTotal: priced.unit * quantity,
     });
   }
+  return lines;
+}
+
+export async function createOrder(
+  body: Record<string, unknown>,
+  meta: { customerId?: string } = {}
+): Promise<Order> {
+  const name = clip(body.name, 80);
+  const phone = clip(body.phone, 20).replace(/[^\d+]/g, "");
+  const address = clip(body.address, 300);
+  const city = clip(body.city, 80);
+  const pincode = clip(body.pincode, 6).replace(/\D/g, "");
+  const email = clip(body.email, 120);
+  const notes = clip(body.notes, 500);
+  const payment = body.payment === "upi_link" ? "upi_link" : "pay_on_delivery";
+
+  if (!name || !address || !city) throw new OrderError("Please fill in your name, address and city.");
+  if (phone.replace(/\D/g, "").length < 10) throw new OrderError("Please enter a valid 10-digit phone number.");
+  if (!/^[1-9]\d{5}$/.test(pincode)) throw new OrderError("Please enter a valid 6-digit PIN code.");
+  if (body.acceptTerms !== true) throw new OrderError("Please accept the Terms of Sale to place the order.");
+  const idempotencyKey = clip(body.idempotencyKey, 64).replace(/[^a-zA-Z0-9-]/g, "");
+  if (idempotencyKey) {
+    const existing = (await listOrders()).find((o) => o.idempotencyKey === idempotencyKey);
+    if (existing) return existing;
+  }
+
+  const lines = await priceLines(body.items);
   if (!lines.length) throw new OrderError("Your cart is empty or out of date. Please add the mattress again.");
 
   const d = new Date();
@@ -117,6 +139,10 @@ export async function createOrder(body: Record<string, unknown>): Promise<Order>
     customer: { name, phone, email: email || undefined, address, city, pincode },
     payment,
     notes: notes || undefined,
+    customerId: meta.customerId,
+    termsAcceptedAt: d.toISOString(),
+    whatsappUpdates: body.whatsappUpdates === true,
+    idempotencyKey: idempotencyKey || undefined,
     lines,
     total: lines.reduce((sum, l) => sum + l.lineTotal, 0),
   };
@@ -144,6 +170,20 @@ export async function listOrders(): Promise<Order[]> {
   } catch {
     return [];
   }
+}
+
+/* Public order lookup: needs the order id AND the phone it was placed with. */
+export async function findOrderForTracking(id: string, phone: string) {
+  const cleanId = id.trim().toUpperCase().slice(0, 30);
+  const digits = phone.replace(/\D/g, "").slice(-10);
+  if (!cleanId || digits.length !== 10) return null;
+  const order = (await listOrders()).find((o) => o.id === cleanId);
+  if (!order || order.customer.phone.replace(/\D/g, "").slice(-10) !== digits) return null;
+  return order;
+}
+
+export async function ordersForCustomer(customerId: string) {
+  return (await listOrders()).filter((o) => o.customerId === customerId);
 }
 
 /* WhatsApp link to the business with the order summary, if a real number is set. */

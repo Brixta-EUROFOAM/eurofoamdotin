@@ -1,756 +1,427 @@
 "use client";
 
 import Link from "next/link";
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useCart } from "@/components/CartProvider";
-import type {
-  Mattress,
-  SiteSettings
-} from "@/lib/catalog";
+import { useLocation } from "@/components/store/LocationProvider";
+import MattressStack from "@/components/store/MattressStack";
+import MegaMenu from "@/components/store/MegaMenu";
+import {
+  IconCart,
+  IconChevron,
+  IconClose,
+  IconGrid,
+  IconHeart,
+  IconMenu,
+  IconPhone,
+  IconPin,
+  IconQuiz,
+  IconSearch,
+  IconUser,
+} from "@/components/store/Icons";
+import { money, type MattressLayer } from "@/lib/catalog";
+import { trackEvent } from "@/lib/telemetry-client";
 
-type HeaderAction = {
-  id: string;
-  label: string;
-  href: string;
-  icon: string;
-  presentation: "text" | "icon";
-  enabled: boolean;
-};
-
-type Customer = {
-  id: string;
+type NavProduct = {
+  slug: string;
   name: string;
-  email: string;
-  mobile: string;
+  kicker: string;
+  firmness: string;
+  basePrice: number;
+  layers: Pick<MattressLayer, "name" | "visualKind" | "description">[];
 };
 
-function Icon({
-  name,
-  className = "h-5 w-5"
-}: {
-  name:
-    | "phone"
-    | "heart"
-    | "account"
-    | "pin"
-    | "cart";
-  className?: string;
-}) {
-  const common = {
-    className,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.8,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true
-  };
+type Props = {
+  messages: string[];
+  announcementHref: string;
+  phone: { href: string; label: string } | null;
+  products: NavProduct[];
+  pick?: string;
+  trialNights: number;
+};
 
-  if (name === "phone") {
-    return (
-      <svg {...common}>
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z" />
-      </svg>
-    );
-  }
+export default function HeaderClient({ messages, announcementHref, phone, products, pick, trialNights }: Props) {
+  const pathname = usePathname();
+  const [mega, setMega] = useState(false);
+  const [search, setSearch] = useState(false);
+  const [drawer, setDrawer] = useState(false);
+  const { count, openDrawer, bump } = useCart();
+  const { pin, info, openPicker } = useLocation();
+  const headerRef = useRef<HTMLElement>(null);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  if (name === "heart") {
-    return (
-      <svg {...common}>
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
-      </svg>
-    );
-  }
-
-  if (name === "account") {
-    return (
-      <svg {...common}>
-        <circle cx="12" cy="8" r="4" />
-        <path d="M4.5 21a7.5 7.5 0 0 1 15 0" />
-      </svg>
-    );
-  }
-
-  if (name === "pin") {
-    return (
-      <svg {...common}>
-        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
-        <circle cx="12" cy="10" r="2.5" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg {...common}>
-      <path d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20 8H6.2" />
-      <circle cx="9" cy="20" r="1" />
-      <circle cx="18" cy="20" r="1" />
-    </svg>
-  );
-}
-
-export default function HeaderClient({
-  site,
-  products
-}: {
-  site: SiteSettings;
-  products: Mattress[];
-}) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const [pinOpen, setPinOpen] = useState(false);
-  const [pincode, setPincode] = useState("");
-  const [pinDraft, setPinDraft] = useState("");
-  const [pinError, setPinError] = useState("");
-  const pinWrapRef = useRef<HTMLDivElement>(null);
-
-  const [customer, setCustomer] =
-    useState<Customer | null>(null);
-
-  const [wishlistCount, setWishlistCount] =
-    useState(0);
-
-  const { count } = useCart();
-
-  const siteWithActions = site as SiteSettings & {
-    headerUtilities?: HeaderAction[];
-  };
-
-  const extraActions = (
-    siteWithActions.headerUtilities || []
-  ).filter(
-    (action) =>
-      action.enabled &&
-      !["phone", "wishlist", "account"].includes(
-        action.id
-      )
-  );
-
-  const groups = useMemo(() => {
-    const grouped = new Map<string, Mattress[]>();
-
-    for (const product of products) {
-      const category =
-        product.category?.trim() || "Other";
-
-      grouped.set(category, [
-        ...(grouped.get(category) || []),
-        product
-      ]);
-    }
-
-    return Array.from(grouped.entries());
-  }, [products]);
-
-  const featured =
-    products.find((item) => item.badge) ||
-    products[0];
-
-  function refreshAccount() {
-    fetch("/api/customer/me")
-      .then((response) => response.json())
-      .then((body) =>
-        setCustomer(body.customer || null)
-      )
-      .catch(() => setCustomer(null));
-  }
-
-  function refreshWishlist() {
-    try {
-      const saved = JSON.parse(
-        localStorage.getItem(
-          "eurofoam-wishlist"
-        ) || "[]"
-      );
-
-      setWishlistCount(
-        Array.isArray(saved) ? saved.length : 0
-      );
-    } catch {
-      setWishlistCount(0);
-    }
-  }
+  // Close everything on navigation.
+  useEffect(() => {
+    setMega(false);
+    setSearch(false);
+    setDrawer(false);
+  }, [pathname]);
 
   useEffect(() => {
-    const stored =
-      localStorage.getItem("eurofoam-pincode") || "";
-
-    setPincode(stored);
-    setPinDraft(stored);
-
-    refreshAccount();
-    refreshWishlist();
-
-    window.addEventListener(
-      "eurofoam:account",
-      refreshAccount
-    );
-
-    window.addEventListener(
-      "eurofoam:wishlist",
-      refreshWishlist
-    );
-
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMega(false);
+        setSearch(false);
+        setDrawer(false);
+      }
+      if (e.key === "/" && !/input|textarea|select/i.test((e.target as HTMLElement)?.tagName || "")) {
+        e.preventDefault();
+        setSearch(true);
+      }
+    };
+    const onClick = (e: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setMega(false);
+        setSearch(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClick);
     return () => {
-      window.removeEventListener(
-        "eurofoam:account",
-        refreshAccount
-      );
-
-      window.removeEventListener(
-        "eurofoam:wishlist",
-        refreshWishlist
-      );
+      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClick);
     };
   }, []);
 
   useEffect(() => {
-    if (!pinOpen) return;
-
-    function handleOutside(event: MouseEvent | TouchEvent) {
-      const target = event.target as Node;
-
-      if (
-        pinWrapRef.current &&
-        !pinWrapRef.current.contains(target)
-      ) {
-        setPinOpen(false);
-        setPinError("");
-      }
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setPinOpen(false);
-        setPinError("");
-      }
-    }
-
-    document.addEventListener("mousedown", handleOutside);
-    document.addEventListener("touchstart", handleOutside);
-    document.addEventListener("keydown", handleEscape);
-
+    document.body.style.overflow = drawer ? "hidden" : "";
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
-      document.removeEventListener("touchstart", handleOutside);
-      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
     };
-  }, [pinOpen]);
+  }, [drawer]);
 
-  function savePincode() {
-    const value = pinDraft.trim();
+  const openMegaSoon = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => setMega(true), 120);
+  };
+  const closeMegaSoon = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => setMega(false), 220);
+  };
 
-    if (!/^\d{6}$/.test(value)) {
-      setPinError(
-        "Enter a valid 6-digit PIN code."
-      );
-      return;
-    }
+  const place = info?.ok ? info.place?.city || info.pin : pin;
 
-    localStorage.setItem(
-      "eurofoam-pincode",
-      value
-    );
-
-    setPincode(value);
-    setPinError("");
-    setPinOpen(false);
-  }
-
-  const phoneHref = `tel:${site.phone.replace(
-    /[^\d+]/g,
-    ""
-  )}`;
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <>
-      {site.announcementEnabled !== false && site.announcement ? (
-        site.announcementHref ? (
-          <a
-            href={site.announcementHref}
-            className="block px-4 py-2 text-center text-xs font-semibold tracking-wide"
-            style={{
-              backgroundColor: site.announcementBackground || "#FF6500",
-              color: site.announcementForeground || "#FFFFFF"
-            }}
-          >
-            {site.announcement}
-          </a>
-        ) : (
-          <div
-            className="px-4 py-2 text-center text-xs font-semibold tracking-wide"
-            style={{
-              backgroundColor: site.announcementBackground || "#FF6500",
-              color: site.announcementForeground || "#FFFFFF"
-            }}
-          >
-            {site.announcement}
+      {messages.length ? <Announcement messages={messages} href={announcementHref} /> : null}
+
+      <header className="g-header" ref={headerRef}>
+        <div className="g-utility">
+          <div className="g-wrap">
+            <button type="button" className="g-deliver" onClick={openPicker}>
+              <IconPin width={16} height={16} />
+              {place ? (
+                <>
+                  Delivering to <b>{place}</b>
+                </>
+              ) : (
+                <>
+                  <span>Check delivery to</span> <b>your PIN code</b>
+                </>
+              )}
+            </button>
+            <nav aria-label="Help">
+              <Link href="/track-order">Track order</Link>
+              <Link href="/contact">Help &amp; contact</Link>
+              {phone ? <a href={phone.href}>{phone.label}</a> : null}
+            </nav>
           </div>
-        )
-      ) : null}
+        </div>
 
-      <header
-        className="relative sticky top-0 z-50 border-b border-ink/10 bg-[#F3ECDD]"
-      >
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-5 px-5 py-3 lg:px-8">
-          <Link
-            href="/"
-            className="flex shrink-0 items-center gap-4"
+        <div className="g-wrap g-bar">
+          <button
+            type="button"
+            className="g-icon-btn g-menu-btn"
+            aria-label="Open menu"
+            aria-expanded={drawer}
+            onClick={() => setDrawer(true)}
           >
-            <span
-              className="gadda-wordmark"
-              aria-label="GADDA"
-            >
-              GADDA
-            </span>
+            <IconMenu />
+          </button>
 
-            
+          <Link href="/" className="g-logo" aria-label="GADDA home">
+            <span className="g-logo-latin">GADDA</span>
+            <span className="g-logo-deva" aria-hidden="true">
+              गद्दा
+            </span>
           </Link>
 
-          <nav className="gadda-main-nav hidden items-center gap-7 lg:flex">
-            <Link
-              href="/mattresses"
-              className="gadda-nav-link text-sm font-bold text-ink/75"
-            >
-              Mattresses
-            </Link>
-
-            <Link
-              href="/compare"
-              className="gadda-nav-link text-sm font-bold text-ink/75"
-            >
+          <nav className="g-nav" aria-label="Main">
+            <div onMouseEnter={openMegaSoon} onMouseLeave={closeMegaSoon}>
+              <button
+                type="button"
+                aria-expanded={mega}
+                aria-controls="mega-mattresses"
+                onClick={() => setMega((v) => !v)}
+              >
+                Mattresses <IconChevron width={16} height={16} />
+              </button>
+            </div>
+            <Link href="/compare" aria-current={pathname === "/compare" ? "page" : undefined}>
               Compare
             </Link>
-
-            <Link
-              href="/why-eurofoam"
-              className="gadda-nav-link text-sm font-bold text-ink/75"
-            >
+            <Link href="/sleep-quiz" aria-current={pathname === "/sleep-quiz" ? "page" : undefined}>
+              Find my match
+            </Link>
+            <Link href="/why-gadda" aria-current={pathname === "/why-gadda" ? "page" : undefined}>
               Why GADDA
             </Link>
-
-            <Link
-              href="/reviews"
-              className="gadda-nav-link text-sm font-bold text-ink/75"
-            >
+            <Link href="/reviews" aria-current={pathname === "/reviews" ? "page" : undefined}>
               Reviews
-            </Link>
-
-            <Link
-              href="/sleep-quiz"
-              className="gadda-match-button px-5 py-2.5 text-sm font-bold"
-            >
-              Find My Match
             </Link>
           </nav>
 
-          <div className="gadda-header-tools flex shrink-0 items-center gap-1 xl:gap-2">
-            {extraActions.length ? (
-              <div className="hidden items-center gap-1 2xl:flex">
-                {extraActions.map((action) => (
-                  <a
-                    key={action.id}
-                    href={action.href}
-                    className="rounded-full px-3 py-2 text-sm font-semibold text-ink/65 hover:bg-white/70"
-                  >
-                    {action.label}
-                  </a>
-                ))}
-              </div>
-            ) : null}
-
-            <a
-              href={phoneHref}
-              className="hidden items-center gap-2 rounded-xl px-2.5 py-2 hover:bg-white/70 2xl:flex"
-            >
-              <Icon
-                name="phone"
-                className="h-6 w-6"
-              />
-
-              <span className="leading-tight">
-                <span className="block text-xs font-bold">
-                  Call
-                </span>
-
-                <span className="block text-[10px] text-ink/45">
-                  GADDA
-                </span>
-              </span>
-            </a>
-
-            <Link
-              href="/wishlist"
-              className="hidden items-center gap-2 rounded-xl px-2.5 py-2 hover:bg-white/70 xl:flex"
-            >
-              <Icon
-                name="heart"
-                className="h-6 w-6"
-              />
-
-              <span className="leading-tight">
-                <span className="block text-xs font-bold">
-                  Saved
-                </span>
-
-                <span className="block text-[10px] text-ink/45">
-                  {wishlistCount
-                    ? `${wishlistCount} item${
-                        wishlistCount === 1
-                          ? ""
-                          : "s"
-                      }`
-                    : "Wishlist"}
-                </span>
-              </span>
-            </Link>
-
-            <Link
-              href="/account"
-              className="hidden items-center gap-2 rounded-xl px-2.5 py-2 hover:bg-white/70 xl:flex"
-            >
-              <Icon
-                name="account"
-                className="h-6 w-6"
-              />
-
-              <span className="leading-tight">
-                <span className="block max-w-[110px] truncate text-xs font-bold">
-                  {customer
-                    ? `Hi, ${
-                        customer.name.split(
-                          " "
-                        )[0]
-                      }`
-                    : "My Account"}
-                </span>
-
-                <span className="block text-[10px] text-ink/45">
-                  {customer
-                    ? "Account"
-                    : "Sign in / Sign up"}
-                </span>
-              </span>
-            </Link>
-
-            <div
-              ref={pinWrapRef}
-              className="relative hidden xl:block"
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  setPinDraft(pincode);
-                  setPinError("");
-                  setPinOpen((v) => !v);
-                }}
-                className="flex items-center gap-2 rounded-xl px-2.5 py-2 text-left hover:bg-white/70"
-              >
-                <Icon
-                  name="pin"
-                  className="h-6 w-6"
-                />
-
-                <span className="leading-tight">
-                  <span className="block text-xs font-bold">
-                    Deliver to
-                  </span>
-
-                  <span className="block text-[10px] text-ink/45">
-                    {pincode ||
-                      "Enter PIN"}
-                  </span>
-                </span>
-              </button>
-
-              {pinOpen ? (
-                <div className="absolute right-0 top-[calc(100%+12px)] w-72 rounded-[1.4rem] border border-ink/10 bg-white p-5 shadow-[0_20px_60px_rgba(24,24,24,.16)]">
-                  <p className="text-xs font-black uppercase tracking-[.12em] text-[#FF6500]">
-                    Delivery location
-                  </p>
-
-                  <p className="mt-2 text-sm text-ink/55">
-                    Enter your 6-digit PIN code.
-                  </p>
-
-                  <input
-                    value={pinDraft}
-                    onChange={(e) =>
-                      setPinDraft(
-                        e.target.value
-                          .replace(/\D/g, "")
-                          .slice(0, 6)
-                      )
-                    }
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        savePincode();
-                      }
-                    }}
-                    inputMode="numeric"
-                    placeholder="781001"
-                    className="mt-4 w-full rounded-xl border border-ink/15 px-4 py-3 text-lg font-bold tracking-[.15em] outline-none focus:border-[#FF6500]"
-                  />
-
-                  {pinError ? (
-                    <p className="mt-2 text-xs font-semibold text-red-600">
-                      {pinError}
-                    </p>
-                  ) : null}
-
-                  <button
-                    type="button"
-                    onClick={savePincode}
-                    className="mt-4 w-full rounded-full bg-ink px-4 py-3 text-xs font-black text-white"
-                  >
-                    USE THIS PIN
-                  </button>
-                </div>
-              ) : null}
-            </div>
-
-            <Link
-              href="/cart"
-              title="Cart"
-              aria-label={
-                count
-                  ? `Cart with ${count} items`
-                  : "Cart"
-              }
-              className="relative flex h-12 w-12 items-center justify-center rounded-full hover:bg-white"
-            >
-              <Icon
-                name="cart"
-                className="h-7 w-7"
-              />
-
-              {count ? (
-                <span className="absolute right-0 top-0 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#FF6500] px-1 text-[10px] font-black text-white">
-                  {count > 99
-                    ? "99+"
-                    : count}
-                </span>
-              ) : null}
-            </Link>
-
+          <div className="g-actions">
             <button
               type="button"
-              onClick={() =>
-                setMobileOpen(true)
-              }
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/60 lg:hidden"
-              aria-label="Open menu"
+              className="g-icon-btn"
+              aria-label="Search"
+              aria-expanded={search}
+              onClick={() => {
+                setMega(false);
+                setSearch((v) => !v);
+              }}
             >
-              <span className="space-y-1">
-                <span className="block h-[2px] w-5 bg-ink" />
-                <span className="block h-[2px] w-5 bg-ink" />
-                <span className="block h-[2px] w-5 bg-ink" />
-              </span>
+              <IconSearch />
+            </button>
+            <Link href="/wishlist" className="g-icon-btn g-hide-md" aria-label="Saved mattresses">
+              <IconHeart />
+            </Link>
+            <Link href="/account" className="g-icon-btn" aria-label="Account">
+              <IconUser />
+            </Link>
+            <button type="button" className="g-icon-btn" aria-label={`Cart, ${count} items`} onClick={openDrawer}>
+              <IconCart />
+              {count ? (
+                <span key={bump} className="g-badge g-badge--pop" aria-hidden="true">
+                  {count}
+                </span>
+              ) : null}
             </button>
           </div>
         </div>
 
+        {mega ? (
+          <div className="g-mega" id="mega-mattresses" onMouseEnter={openMegaSoon} onMouseLeave={closeMegaSoon}>
+            <MegaMenu products={products} pick={pick} trialNights={trialNights} onNavigate={() => setMega(false)} />
+          </div>
+        ) : null}
 
+        {search ? <SearchPanel products={products} onClose={() => setSearch(false)} /> : null}
       </header>
 
-      {mobileOpen ? (
-        <div className="fixed inset-0 z-[100] lg:hidden">
-          <button
-            type="button"
-            className="absolute inset-0 bg-black/40"
-            onClick={() =>
-              setMobileOpen(false)
-            }
-            aria-label="Close menu"
-          />
-
-          <aside className="absolute right-0 top-0 h-full w-[min(92vw,430px)] overflow-y-auto bg-white shadow-2xl">
-            <div className="border-b border-ink/10 bg-[#F3ECDD] p-5">
-              <div className="flex items-center justify-between">
-                <img
-                  src={site.logoUrl}
-                  alt={site.brandName}
-                  className="h-14 w-auto"
-                />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setMobileOpen(false)
-                  }
-                  className="h-10 w-10 rounded-full bg-white text-xl"
-                >
-                  ×
-                </button>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <Link
-                  href="/account"
-                  onClick={() =>
-                    setMobileOpen(false)
-                  }
-                  className="rounded-[1.2rem] bg-white p-4"
-                >
-                  <Icon
-                    name="account"
-                    className="h-6 w-6"
-                  />
-
-                  <div className="mt-3 text-sm font-black">
-                    {customer
-                      ? customer.name
-                      : "My Account"}
-                  </div>
-
-                  <div className="mt-1 text-xs text-ink/45">
-                    {customer
-                      ? "View account"
-                      : "Sign in / Sign up"}
-                  </div>
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    const entered =
-                      window.prompt(
-                        "Enter your 6-digit delivery PIN",
-                        pincode
-                      );
-
-                    if (
-                      entered &&
-                      /^\d{6}$/.test(
-                        entered.trim()
-                      )
-                    ) {
-                      const value =
-                        entered.trim();
-
-                      localStorage.setItem(
-                        "eurofoam-pincode",
-                        value
-                      );
-
-                      setPincode(value);
-                      setPinDraft(value);
-                    }
-                  }}
-                  className="rounded-[1.2rem] bg-white p-4 text-left"
-                >
-                  <Icon
-                    name="pin"
-                    className="h-6 w-6"
-                  />
-
-                  <div className="mt-3 text-sm font-black">
-                    Deliver to
-                  </div>
-
-                  <div className="mt-1 text-xs text-ink/45">
-                    {pincode ||
-                      "Enter PIN"}
-                  </div>
-                </button>
+      {drawer ? (
+        <>
+          <div className="g-drawer-backdrop" onClick={() => setDrawer(false)} />
+          <aside className="g-drawer g-drawer--left" role="dialog" aria-modal="true" aria-label="Menu">
+            <div className="g-drawer-head">
+              <Link href="/" className="g-logo" onClick={() => setDrawer(false)}>
+                <span className="g-logo-latin">GADDA</span>
+                <span className="g-logo-deva" aria-hidden="true">
+                  गद्दा
+                </span>
+              </Link>
+              <button type="button" className="g-icon-btn" aria-label="Close menu" onClick={() => setDrawer(false)}>
+                <IconClose />
+              </button>
+            </div>
+            <div className="g-drawer-body">
+              <nav className="g-mnav" aria-label="Mobile">
+                {products.map((p) => (
+                  <Link key={p.slug} href={`/mattresses/${p.slug}`}>
+                    {p.name}
+                    <span style={{ fontFamily: "var(--font-body)", fontSize: ".9rem", fontWeight: 500, color: "var(--g-ink-3)" }}>
+                      from {money(p.basePrice)}
+                    </span>
+                  </Link>
+                ))}
+                <Link href="/compare">Compare</Link>
+                <Link href="/sleep-quiz">Find my match</Link>
+                <Link href="/why-gadda">Why GADDA</Link>
+                <Link href="/reviews">Reviews</Link>
+              </nav>
+              <div className="g-mnav-small">
+                <Link href="/wishlist">Saved mattresses</Link>
+                <Link href="/account">Account &amp; orders</Link>
+                <Link href="/track-order">Track order</Link>
+                <Link href="/contact">Help &amp; contact</Link>
+                <Link href="/policies/trial">100-night trial</Link>
+                <Link href="/policies/shipping">Delivery</Link>
+                <Link href="/policies/warranty">Warranty</Link>
               </div>
             </div>
-
-            <div className="p-5">
-              <Link
-                href="/mattresses"
-                onClick={() => setMobileOpen(false)}
-                className="block w-full py-4 text-left text-lg font-black"
-              >
-                All mattresses
-              </Link>
-
-              <Link
-                href="/compare"
-                onClick={() => setMobileOpen(false)}
-                className="block w-full py-3 text-left text-base font-bold"
-              >
-                Compare
-              </Link>
-
-              {groups.map(
-                ([category, items]) => (
-                  <div
-                    key={category}
-                    className="border-t border-ink/10 py-4"
-                  >
-                    <div className="text-xs font-black uppercase tracking-[.12em] text-ink/40">
-                      {category}
-                    </div>
-
-                    {items.map(
-                      (product) => (
-                        <Link
-                          key={product.slug}
-                          href={`/mattresses/${product.slug}`}
-                          onClick={() =>
-                            setMobileOpen(
-                              false
-                            )
-                          }
-                          className="block py-2.5 font-bold"
-                        >
-                          {product.name}
-                        </Link>
-                      )
-                    )}
-                  </div>
-                )
-              )}
-
-              <div className="border-t border-ink/10 py-3">
-                <Link
-                  href="/wishlist"
-                  onClick={() =>
-                    setMobileOpen(false)
-                  }
-                  className="flex items-center gap-3 py-4 font-bold"
-                >
-                  <Icon
-                    name="heart"
-                    className="h-5 w-5"
-                  />
-                  Saved mattresses
-                </Link>
-
-                <a
-                  href={phoneHref}
-                  className="flex items-center gap-3 py-4 font-bold"
-                >
-                  <Icon
-                    name="phone"
-                    className="h-5 w-5"
-                  />
-                  Call GADDA
+            {phone ? (
+              <div className="g-drawer-foot">
+                <a className="g-btn g-btn--ghost g-btn--block" href={phone.href}>
+                  <IconPhone width={18} height={18} /> Call {phone.label}
                 </a>
-
-                {extraActions.map(
-                  (action) => (
-                    <a
-                      key={action.id}
-                      href={action.href}
-                      className="block py-4 font-bold"
-                    >
-                      {action.label}
-                    </a>
-                  )
-                )}
               </div>
-            </div>
+            ) : null}
           </aside>
-        </div>
+        </>
       ) : null}
+
+      <MobileDock pathname={pathname} count={count} onCart={openDrawer} />
     </>
+  );
+}
+
+function Announcement({ messages, href }: { messages: string[]; href: string }) {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (messages.length < 2 || paused) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setI((n) => (n + 1) % messages.length), 4500);
+    return () => clearInterval(t);
+  }, [messages.length, paused]);
+
+  const go = (d: number) => setI((n) => (n + d + messages.length) % messages.length);
+
+  return (
+    <div
+      className="g-announce"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
+      {messages.length > 1 ? (
+        <button type="button" className="g-announce-nav g-announce-nav--prev" aria-label="Previous message" onClick={() => go(-1)}>
+          <IconChevron dir="left" width={16} height={16} />
+        </button>
+      ) : null}
+      <div className="g-announce-inner" aria-live="polite">
+        <Link key={i} href={href} className="g-announce-msg">
+          {messages[i]}
+        </Link>
+      </div>
+      {messages.length > 1 ? (
+        <button type="button" className="g-announce-nav g-announce-nav--next" aria-label="Next message" onClick={() => go(1)}>
+          <IconChevron dir="right" width={16} height={16} />
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+function SearchPanel({ products, onClose }: { products: NavProduct[]; onClose: () => void }) {
+  const router = useRouter();
+  const [q, setQ] = useState("");
+  const [active, setActive] = useState(0);
+  const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => input.current?.focus(), []);
+
+  const results = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    if (!term) return products;
+    return products.filter((p) =>
+      [p.name, p.kicker, p.firmness, ...p.layers.map((l) => l.name)].join(" ").toLowerCase().includes(term)
+    );
+  }, [q, products]);
+
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    trackEvent("search", { label: q.slice(0, 60) });
+    const pick = results[active];
+    if (pick && q.trim()) router.push(`/mattresses/${pick.slug}`);
+    else router.push(`/mattresses${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ""}`);
+    onClose();
+  }
+
+  return (
+    <div className="g-search" role="search">
+      <div className="g-wrap">
+        <form onSubmit={submit}>
+          <label htmlFor="site-search" className="g-sr">
+            Search mattresses
+          </label>
+          <input
+            ref={input}
+            id="site-search"
+            className="g-input"
+            type="search"
+            placeholder="Try “memory foam”, “firm” or “pocket springs”"
+            value={q}
+            autoComplete="off"
+            onChange={(e) => {
+              setQ(e.target.value);
+              setActive(0);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowDown") {
+                e.preventDefault();
+                setActive((a) => Math.min(a + 1, results.length - 1));
+              }
+              if (e.key === "ArrowUp") {
+                e.preventDefault();
+                setActive((a) => Math.max(a - 1, 0));
+              }
+            }}
+            aria-controls="search-results"
+          />
+          <button type="submit" className="g-btn">
+            Search
+          </button>
+        </form>
+        {results.length ? (
+          <div className="g-search-results" id="search-results" role="listbox">
+            {results.map((p, i) => (
+              <Link
+                key={p.slug}
+                href={`/mattresses/${p.slug}`}
+                role="option"
+                aria-selected={i === active}
+                onClick={onClose}
+              >
+                <div style={{ width: 80, flex: "none" }}>
+                  <MattressStack layers={p.layers} />
+                </div>
+                <div>
+                  <b>{p.name}</b>
+                  <br />
+                  <span>
+                    {p.firmness} feel, from {money(p.basePrice)}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="g-search-hint">
+            Nothing matches “{q}”. We only make three mattresses — <Link href="/compare" className="g-link" onClick={onClose}>see them side by side</Link>.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function MobileDock({ pathname, count, onCart }: { pathname: string; count: number; onCart: () => void }) {
+  return (
+    <nav className="g-dock" aria-label="Quick links">
+      <Link href="/mattresses" aria-current={pathname.startsWith("/mattresses") ? "page" : undefined}>
+        <IconGrid />
+        Shop
+      </Link>
+      <Link href="/sleep-quiz" aria-current={pathname === "/sleep-quiz" ? "page" : undefined}>
+        <IconQuiz />
+        Quiz
+      </Link>
+      <Link href="/contact" aria-current={pathname === "/contact" ? "page" : undefined}>
+        <IconPhone />
+        Help
+      </Link>
+      <button type="button" onClick={onCart} aria-label={`Cart, ${count} items`}>
+        <IconCart />
+        Cart
+        {count ? <span className="g-badge">{count}</span> : null}
+      </button>
+    </nav>
   );
 }

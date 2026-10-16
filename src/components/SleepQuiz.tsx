@@ -1,248 +1,202 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Link from "next/link";
-import type { Mattress } from "@/lib/catalog";
-import { money } from "@/lib/catalog";
+import { useEffect, useMemo, useState } from "react";
+import MattressStack from "@/components/store/MattressStack";
+import { useCart } from "@/components/CartProvider";
+import { money, type Mattress } from "@/lib/catalog";
+import { trackEvent } from "@/lib/telemetry-client";
 
-type MatchKey = "ortho" | "cooling" | "hybrid" | "essential";
+type Key = "regular" | "pro" | "ultimate";
+type Option = { label: string; hint: string; score: Partial<Record<Key, number>>; why?: string };
+type Question = { title: string; body: string; options: Option[] };
 
-type QuizOption = {
-  label: string;
-  hint: string;
-  score: Partial<Record<MatchKey, number>>;
-};
-
-type QuizQuestion = {
-  eyebrow: string;
-  title: string;
-  body: string;
-  options: QuizOption[];
-};
-
-const questions: QuizQuestion[] = [
+const QUESTIONS: Question[] = [
   {
-    eyebrow: "01 / SLEEP STYLE",
-    title: "How do you spend most of the night?",
-    body: "This helps us decide whether stability or easier movement deserves more weight.",
+    title: "How do you usually fall asleep?",
+    body: "Your sleeping position decides how much give you need at the shoulders and hips.",
     options: [
-      { label: "Mostly on my side", hint: "Pressure relief without feeling swallowed.", score: { cooling: 1, hybrid: 1 } },
-      { label: "Mostly on my back", hint: "A steady, supported feel.", score: { ortho: 3 } },
-      { label: "Mostly on my stomach", hint: "Less sink and more stability.", score: { ortho: 3, essential: 1 } },
-      { label: "I move around", hint: "I do not stay in one position for long.", score: { hybrid: 3 } },
+      { label: "On my side", hint: "Shoulders and hips need to sink in a little", score: { pro: 3, ultimate: 3 }, why: "side sleepers need some give at the shoulder" },
+      { label: "On my back", hint: "Even support along the spine", score: { pro: 3, regular: 2 }, why: "back sleepers do best with even, steady support" },
+      { label: "On my stomach", hint: "Less sink so the hips don't dip", score: { regular: 3, pro: 2 }, why: "stomach sleepers need a firmer surface so the hips don't dip" },
+      { label: "All over the place", hint: "I turn a lot through the night", score: { pro: 3, regular: 1 }, why: "a balanced surface is easier to move on" },
     ],
   },
   {
-    eyebrow: "02 / TEMPERATURE",
-    title: "How much does heat bother you?",
-    body: "If sleeping warm is a real problem, it should influence the choice instead of becoming a footnote.",
+    title: "Which feel do you like?",
+    body: "Think of a bed you slept really well on — a hotel, a relative's house.",
     options: [
-      { label: "A lot", hint: "I regularly wake up feeling too warm.", score: { cooling: 4 } },
-      { label: "Sometimes", hint: "Cooling matters, but it is not the whole decision.", score: { cooling: 2, hybrid: 1 } },
-      { label: "Not really", hint: "Temperature is not high on my list.", score: { ortho: 1, essential: 1 } },
+      { label: "Firm", hint: "Like a good cotton gadda: you lie on it, not in it", score: { regular: 4, pro: 1 }, why: "you like it firm" },
+      { label: "In between", hint: "Supportive, with a soft top", score: { pro: 4 }, why: "you want firm support with a softer top" },
+      { label: "Plush", hint: "Sink in a little, feel held", score: { ultimate: 4, pro: 1 }, why: "you like a plush, sink-in feel" },
     ],
   },
   {
-    eyebrow: "03 / FEEL",
-    title: "Which description sounds more like your bed?",
-    body: "Forget marketing names. Pick the physical feel you would rather live with.",
+    title: "Who else is in the bed?",
+    body: "Sharing changes how much movement you feel.",
     options: [
-      { label: "Firm and stable", hint: "Less sink. More structure.", score: { ortho: 4, essential: 1 } },
-      { label: "Balanced", hint: "Supportive, but not board-like.", score: { ortho: 2, cooling: 1, hybrid: 1 } },
-      { label: "Responsive and buoyant", hint: "I want movement to feel easier.", score: { hybrid: 4 } },
+      { label: "Just me", hint: "", score: { regular: 1 } },
+      { label: "My partner", hint: "Less disturbance when they turn", score: { pro: 2, ultimate: 2 }, why: "memory foam soaks up a partner's movement" },
+      { label: "Partner plus kids or pets", hint: "Busy bed", score: { pro: 2, ultimate: 1 }, why: "a busy bed needs a tough support base" },
     ],
   },
   {
-    eyebrow: "04 / PRIORITY",
-    title: "If you could solve one thing, what would it be?",
-    body: "This answer carries the most weight in the match.",
+    title: "Do you wake up feeling hot?",
+    body: "Foam can hold heat; some layers handle it better.",
     options: [
-      { label: "Steady back support", hint: "A structured everyday mattress.", score: { ortho: 6 } },
-      { label: "Sleeping cooler", hint: "Heat is the thing I want to reduce.", score: { cooling: 6 } },
-      { label: "Movement and partner disturbance", hint: "Response and separation matter most.", score: { hybrid: 6 } },
-      { label: "Keeping the spend sensible", hint: "The essentials done properly.", score: { essential: 6 } },
+      { label: "Often", hint: "Fan on full, still warm", score: { ultimate: 3 }, why: "the Ultimate's top layer is a cooler memory foam" },
+      { label: "Sometimes", hint: "In summer", score: { pro: 1, ultimate: 1 } },
+      { label: "Not really", hint: "", score: { regular: 1, pro: 1 } },
+    ],
+  },
+  {
+    title: "What matters most on price?",
+    body: "All three are built properly. The difference is in the comfort layers.",
+    options: [
+      { label: "Best value", hint: "Good sleep, sensible spend", score: { regular: 5 }, why: "you want the best value" },
+      { label: "Middle of the range", hint: "Pay for what makes a difference", score: { pro: 4 } },
+      { label: "The best one", hint: "Every upgrade", score: { ultimate: 5 }, why: "you want every comfort upgrade" },
     ],
   },
 ];
 
-function categoryKey(product: Mattress): MatchKey {
-  const value = `${product.slug} ${product.category} ${product.kicker} ${product.name}`.toLowerCase();
-  if (value.includes("ultimate")) return "cooling";
-  if (value.includes("regular")) return "essential";
-  if (value.includes("gadda-pro")) return "ortho";
-  if (value.includes("cool") || value.includes("air")) return "cooling";
-  if (value.includes("hybrid") || value.includes("float") || value.includes("spring")) return "hybrid";
-  if (value.includes("essential") || value.includes("easy") || value.includes("basic")) return "essential";
-  return "ortho";
-}
-
-function matchReason(key: MatchKey, answers: QuizOption[]) {
-  const priority = answers[answers.length - 1]?.label || "Your priority";
-  if (key === "cooling") return `Cooling came out strongest in your answers. ${priority} pushed the match toward the cooling job.`;
-  if (key === "hybrid") return `Your answers leaned toward easier movement and a more responsive feel. ${priority} pushed the match toward the hybrid job.`;
-  if (key === "essential") return `You put more weight on a straightforward mattress and sensible spend. ${priority} made the essential build the cleanest starting point.`;
-  return `Your answers leaned toward a steadier, more structured feel. ${priority} made everyday support the clearest starting point.`;
+function keyOf(p: Mattress): Key {
+  const s = `${p.slug} ${p.name}`.toLowerCase();
+  if (s.includes("ultimate")) return "ultimate";
+  if (s.includes("regular")) return "regular";
+  return "pro";
 }
 
 export default function SleepQuiz({ products }: { products: Mattress[] }) {
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<QuizOption[]>([]);
-  const done = step >= questions.length;
+  const [answers, setAnswers] = useState<Option[]>([]);
+  const { addItem } = useCart();
+  const done = step >= QUESTIONS.length;
 
-  const ranked = useMemo(() => {
-    if (!products.length) return [];
-
-    const score: Record<MatchKey, number> = {
-      ortho: 0,
-      cooling: 0,
-      hybrid: 0,
-      essential: 0,
-    };
-
-    answers.forEach((answer) => {
-      Object.entries(answer.score).forEach(([key, value]) => {
-        score[key as MatchKey] += value || 0;
-      });
-    });
-
-    /* A job with no matching mattress counts toward the all-rounder. */
-    const covered = new Set(products.map(categoryKey));
-    (["cooling", "hybrid", "essential"] as MatchKey[]).forEach((key) => {
-      if (!covered.has(key)) {
-        score.ortho += score[key];
-        score[key] = 0;
-      }
-    });
-
-    return [...products]
-      .map((product, index) => ({
-        product,
-        key: categoryKey(product),
-        score: score[categoryKey(product)] - index * 0.001,
-      }))
-      .sort((a, b) => b.score - a.score);
+  const result = useMemo(() => {
+    const score: Record<Key, number> = { regular: 0, pro: 0, ultimate: 0 };
+    for (const a of answers) for (const [k, v] of Object.entries(a.score)) score[k as Key] += v || 0;
+    const ranked = [...products].sort((a, b) => score[keyOf(b)] - score[keyOf(a)]);
+    const reasons = answers.map((a) => a.why).filter(Boolean) as string[];
+    return { best: ranked[0], runner: ranked[1], reasons: reasons.slice(0, 3) };
   }, [answers, products]);
 
-  const recommendation = ranked[0] || null;
-  const alternative = ranked[1] || null;
+  useEffect(() => {
+    if (done && result.best) trackEvent("quiz_complete", { productSlug: result.best.slug, label: result.best.slug });
+  }, [done, result.best]);
 
-  if (!products.length) {
-    return (
-      <div className="site-quiz-card site-quiz-card-empty">
-        <p className="site-quiz-count">NOTHING TO MATCH YET</p>
-        <h2>No Gaddas are configured.</h2>
-      </div>
-    );
+  function choose(o: Option) {
+    setAnswers((a) => [...a.slice(0, step), o]);
+    setStep((s) => s + 1);
   }
 
-  if (done && recommendation) {
+  if (done && result.best) {
+    const p = result.best;
+    const firstSize = p.sizes[Math.min(2, p.sizes.length - 1)];
     return (
-      <div className="site-quiz-card site-quiz-result">
-        <div className="site-quiz-result-meta">
-          <span>YOUR STARTING POINT</span>
-          <span>{answers.length} / {questions.length} ANSWERED</span>
-        </div>
-
-        <div className="site-quiz-result-grid">
-          <div className="site-quiz-result-media">
-            <img src={recommendation.product.image} alt={recommendation.product.name} />
-            <span>{recommendation.product.badge || recommendation.product.category}</span>
+      <div className="g-quiz" aria-live="polite">
+        <div className="g-card-flat" style={{ display: "grid", gap: 20 }}>
+          <span className="g-chip g-chip--orange" style={{ justifySelf: "start" }}>
+            Your match
+          </span>
+          <h2 className="g-h2">{p.name}</h2>
+          <div style={{ maxWidth: 420 }}>
+            <MattressStack layers={p.layers} spread="open" />
           </div>
-
-          <div className="site-quiz-result-copy">
-            <p className="site-orange">MATCHED TO THE JOB</p>
-            <h2>{recommendation.product.name}</h2>
-            <p className="site-quiz-result-reason">{matchReason(recommendation.key, answers)}</p>
-
-            <div className="site-quiz-result-facts">
-              <div><small>STARTS AT</small><strong>{money(recommendation.product.basePrice)}</strong></div>
-              <div><small>FEEL</small><strong>{recommendation.product.firmness}</strong></div>
-              <div><small>TRIAL</small><strong>{recommendation.product.trial}</strong></div>
-              <div><small>WARRANTY</small><strong>{recommendation.product.warranty}</strong></div>
-            </div>
-
-            {recommendation.product.reviews > 0 ? (
-              <div className="site-quiz-result-rating">
-                <strong>★ {recommendation.product.rating}</strong>
-                <span>{recommendation.product.reviews.toLocaleString("en-IN")} reviews</span>
-              </div>
+          <p className="g-lede" style={{ margin: 0 }}>
+            {result.reasons.length
+              ? `Because ${result.reasons.join(", and ")}.`
+              : p.shortDescription}
+          </p>
+          <p style={{ margin: 0 }}>
+            <b>{money(p.basePrice)}</b> for a {p.sizes[0]?.label} {p.heights[0]?.label}. Delivery included.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            <Link href={`/mattresses/${p.slug}`} className="g-btn g-btn--orange">
+              See the {p.name}
+            </Link>
+            {firstSize ? (
+              <button
+                type="button"
+                className="g-btn g-btn--ghost"
+                onClick={() =>
+                  addItem({
+                    id: `${p.slug}-${firstSize.label}-${p.heights[0].label}${p.options?.length ? `-${p.options.map((o) => o.choices[0].label).join(" · ")}` : ""}`,
+                    slug: p.slug,
+                    name: p.name,
+                    image: p.image,
+                    size: firstSize.label,
+                    height: p.heights[0].label,
+                    variant: p.options?.length ? p.options.map((o) => o.choices[0].label).join(" · ") : undefined,
+                    price: p.basePrice + firstSize.priceAdd + p.heights[0].priceAdd,
+                    quantity: 1,
+                  })
+                }
+              >
+                Add {firstSize.label} {p.heights[0].label} to cart
+              </button>
             ) : null}
-
-            <div className="site-quiz-actions">
-              <Link href={`/mattresses/${recommendation.product.slug}`} className="site-quiz-primary">SEE THIS GADDA →</Link>
-              <Link href="/compare" className="site-quiz-secondary">COMPARE THE RANGE</Link>
-              <button type="button" onClick={() => { setStep(0); setAnswers([]); }}>START AGAIN</button>
-            </div>
-
-            {alternative ? (
-              <div className="site-quiz-alternative">
-                <span>ALSO WORTH A LOOK</span>
-                <Link href={`/mattresses/${alternative.product.slug}`}>{alternative.product.name} →</Link>
-              </div>
-            ) : null}
-
-            <small className="site-quiz-disclaimer">
-              This is a shopping aid based on your answers, not a medical or sleep-health recommendation.
-            </small>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  const question = questions[step];
-  const progress = Math.round((step / questions.length) * 100);
-
-  return (
-    <div className="site-quiz-card">
-      <div className="site-quiz-progress-head">
-        <span>{question.eyebrow}</span>
-        <span>{progress}% COMPLETE</span>
-      </div>
-
-      <div className="site-quiz-progress"><i style={{ width: `${progress}%` }} /></div>
-
-      <div className="site-quiz-question">
-        <h2>{question.title}</h2>
-        <p>{question.body}</p>
-      </div>
-
-      <div className="site-quiz-options">
-        {question.options.map((option, index) => (
+          {result.runner ? (
+            <p style={{ margin: 0, color: "var(--g-ink-2)" }}>
+              Close second: <Link href={`/mattresses/${result.runner.slug}`} className="g-link">{result.runner.name}</Link>. Still unsure?
+              The 100-night trial means you can&apos;t really get this wrong.
+            </p>
+          ) : null}
           <button
             type="button"
-            key={option.label}
+            className="g-link"
+            style={{ justifySelf: "start" }}
             onClick={() => {
-              setAnswers((current) => [...current, option]);
-              setStep((current) => current + 1);
+              setAnswers([]);
+              setStep(0);
             }}
           >
-            <span className="site-quiz-option-number">{String(index + 1).padStart(2, "0")}</span>
-            <span className="site-quiz-option-copy">
-              <strong>{option.label}</strong>
-              <small>{option.hint}</small>
-            </span>
-            <b>→</b>
+            Start again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const q = QUESTIONS[step];
+  return (
+    <div className="g-quiz">
+      <div
+        className="g-quiz-progress"
+        role="progressbar"
+        aria-valuemin={1}
+        aria-valuemax={QUESTIONS.length}
+        aria-valuenow={step + 1}
+        aria-label={`Question ${step + 1} of ${QUESTIONS.length}`}
+      >
+        <span style={{ width: `${((step + 1) / QUESTIONS.length) * 100}%` }} />
+      </div>
+      <p style={{ margin: "0 0 8px", color: "var(--g-ink-3)", fontWeight: 600 }}>
+        Question {step + 1} of {QUESTIONS.length}
+      </p>
+      <h2 className="g-h2">{q.title}</h2>
+      <p className="g-lede">{q.body}</p>
+      <div className="g-quiz-options" role="radiogroup" aria-label={q.title}>
+        {q.options.map((o) => (
+          <button
+            key={o.label}
+            type="button"
+            role="radio"
+            aria-checked={answers[step]?.label === o.label}
+            className="g-choice"
+            onClick={() => choose(o)}
+          >
+            <b>{o.label}</b>
+            {o.hint ? <small>{o.hint}</small> : null}
           </button>
         ))}
       </div>
-
-      <div className="site-quiz-card-foot">
-        <span>No answer locks you in.</span>
-        {step > 0 ? (
-          <button
-            type="button"
-            onClick={() => {
-              setStep((current) => Math.max(0, current - 1));
-              setAnswers((current) => current.slice(0, -1));
-            }}
-          >
-            ← BACK
-          </button>
-        ) : (
-          <Link href="/mattresses">SKIP TO ALL GADDAS →</Link>
-        )}
-      </div>
+      {step > 0 ? (
+        <button type="button" className="g-link" style={{ marginTop: 20 }} onClick={() => setStep((s) => s - 1)}>
+          Back
+        </button>
+      ) : null}
     </div>
   );
 }

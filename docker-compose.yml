@@ -8,7 +8,16 @@ services:
     environment:
       - CMS_DATA_DIR=/app/data
       - ADMIN_SESSION_SECRET=${ADMIN_SESSION_SECRET}
+      - CUSTOMER_SESSION_SECRET=${CUSTOMER_SESSION_SECRET}
       - PUBLIC_SITE_URL=${PUBLIC_SITE_URL}
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /app/.next/cache:uid=1001,gid=1001
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
     volumes:
       - eurofoam_data:/app/data
 

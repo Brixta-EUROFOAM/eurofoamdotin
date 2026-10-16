@@ -5,9 +5,13 @@ import {
   createCustomerSession
 } from "@/lib/customerAuth";
 
+import { clientIp, forbidden, rateLimit, sameOrigin, tooMany } from "@/lib/security";
+
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  if (!sameOrigin(request)) return forbidden();
+  if (!rateLimit(`login:${clientIp(request)}`, 10, 900000)) return tooMany();
   try {
     const body = await request.json();
 

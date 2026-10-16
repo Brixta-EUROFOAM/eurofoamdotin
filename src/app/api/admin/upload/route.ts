@@ -15,10 +15,29 @@ const ALLOWED = new Set([
   "image/avif"
 ]);
 
-function filenameFor(name: string) {
-  const ext = path.extname(name).toLowerCase();
+const EXT: Record<string, string> = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/gif": ".gif",
+  "image/avif": ".avif"
+};
+
+/* Trust the file's bytes, not the browser's label. */
+function sniff(bytes: Buffer): string | null {
+  const hex = bytes.subarray(0, 12).toString("hex");
+  if (hex.startsWith("ffd8ff")) return "image/jpeg";
+  if (hex.startsWith("89504e470d0a1a0a")) return "image/png";
+  if (hex.startsWith("47494638")) return "image/gif";
+  if (hex.startsWith("52494646") && bytes.subarray(8, 12).toString("ascii") === "WEBP") return "image/webp";
+  if (bytes.subarray(4, 12).toString("ascii").startsWith("ftypavi")) return "image/avif";
+  return null;
+}
+
+function filenameFor(name: string, type: string) {
+  const ext = EXT[type] || ".bin";
   const stem = path
-    .basename(name, ext)
+    .basename(name, path.extname(name))
     .replace(/[^a-zA-Z0-9-_]/g, "-")
     .replace(/-+/g, "-")
     .slice(0, 80);
@@ -46,13 +65,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Image exceeds 12 MB" }, { status: 400 });
   }
 
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const real = sniff(bytes);
+  if (!real) {
+    return NextResponse.json({ error: "That file isn't a real image" }, { status: 400 });
+  }
+
   await ensureStore();
 
-  const safe = filenameFor(file.name);
-  await fs.writeFile(
-    path.join(mediaDir(), safe),
-    Buffer.from(await file.arrayBuffer())
-  );
+  const safe = filenameFor(file.name, real);
+  await fs.writeFile(path.join(mediaDir(), safe), bytes);
 
   return NextResponse.json({ url: `/media/${safe}` });
 }

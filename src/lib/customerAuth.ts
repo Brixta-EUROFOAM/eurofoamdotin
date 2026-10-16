@@ -71,6 +71,8 @@ function verifyPassword(password: string, stored: string) {
   return timingSafeEqual(actual, expected);
 }
 
+const DUMMY_HASH = hashPassword(randomBytes(12).toString("hex"));
+
 function publicCustomer(record: CustomerRecord): Customer {
   return {
     id: record.id,
@@ -102,6 +104,10 @@ export async function registerCustomer(input: {
 
   if (password.length < 8) {
     throw new Error("Password must be at least 8 characters.");
+  }
+
+  if (password.length > 200) {
+    throw new Error("Password is too long.");
   }
 
   const db = await readDb();
@@ -136,7 +142,14 @@ export async function authenticateCustomer(
     (customer) => customer.email === email
   );
 
-  if (!record || !verifyPassword(password, record.passwordHash)) {
+  // Always run scrypt, even for unknown emails, so response time
+  // doesn't reveal which emails have accounts.
+  const ok = verifyPassword(
+    password.slice(0, 200),
+    record?.passwordHash || DUMMY_HASH
+  );
+
+  if (!record || !ok) {
     throw new Error("Incorrect email or password.");
   }
 
@@ -215,3 +228,13 @@ export async function customerFromSession(token?: string) {
 }
 
 export const CUSTOMER_COOKIE = "eurofoam_customer";
+
+/* DPDP right to erasure: removes the account. Orders are kept (GST law
+   requires invoices for 8 years) but are no longer linked to a login. */
+export async function deleteCustomer(id: string) {
+  const db = await readDb();
+  const before = db.customers.length;
+  db.customers = db.customers.filter((c) => c.id !== id);
+  if (db.customers.length !== before) await writeDb(db);
+  return before !== db.customers.length;
+}

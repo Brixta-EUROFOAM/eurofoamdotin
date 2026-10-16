@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { IconHeart } from "@/components/store/Icons";
+import { trackEvent } from "@/lib/telemetry-client";
 
 export type SavedMattress = {
   slug: string;
@@ -10,77 +12,50 @@ export type SavedMattress = {
   basePrice: number;
 };
 
-function readSaved(): SavedMattress[] {
+export const WISHLIST_KEY = "eurofoam-wishlist";
+
+export function readSaved(): SavedMattress[] {
   try {
-    return JSON.parse(
-      localStorage.getItem("eurofoam-wishlist") || "[]"
-    );
+    const raw = JSON.parse(localStorage.getItem(WISHLIST_KEY) || "[]");
+    return Array.isArray(raw) ? raw.filter((i) => i && typeof i.slug === "string").slice(0, 20) : [];
   } catch {
     return [];
   }
 }
 
-export default function WishlistButton({
-  mattress
-}: {
-  mattress: SavedMattress;
-}) {
+export default function WishlistButton({ mattress, className = "g-icon-btn" }: { mattress: SavedMattress; className?: string }) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    setSaved(
-      readSaved().some((item) => item.slug === mattress.slug)
-    );
+    const sync = () => setSaved(readSaved().some((item) => item.slug === mattress.slug));
+    sync();
+    window.addEventListener("eurofoam:wishlist", sync);
+    return () => window.removeEventListener("eurofoam:wishlist", sync);
   }, [mattress.slug]);
 
   function toggle() {
     const current = readSaved();
-
-    const next = current.some(
-      (item) => item.slug === mattress.slug
-    )
-      ? current.filter((item) => item.slug !== mattress.slug)
-      : [...current, mattress];
-
-    localStorage.setItem(
-      "eurofoam-wishlist",
-      JSON.stringify(next)
-    );
-
-    setSaved(
-      next.some((item) => item.slug === mattress.slug)
-    );
-
-    window.dispatchEvent(
-      new Event("eurofoam:wishlist")
-    );
+    const has = current.some((item) => item.slug === mattress.slug);
+    const next = has ? current.filter((item) => item.slug !== mattress.slug) : [...current, mattress];
+    try {
+      localStorage.setItem(WISHLIST_KEY, JSON.stringify(next));
+    } catch {}
+    setSaved(!has);
+    if (!has) trackEvent("wishlist_add", { productSlug: mattress.slug });
+    window.dispatchEvent(new Event("eurofoam:wishlist"));
   }
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={
-        saved
-          ? `Remove ${mattress.name} from saved`
-          : `Save ${mattress.name}`
-      }
-      title={saved ? "Saved" : "Save mattress"}
-      className={`absolute right-6 top-6 z-20 flex h-11 w-11 items-center justify-center rounded-full border shadow-sm transition ${
-        saved
-          ? "border-[#FF6500] bg-[#FF6500] text-white"
-          : "border-white/70 bg-white/90 text-ink hover:text-[#FF6500]"
-      }`}
+      aria-pressed={saved}
+      aria-label={saved ? `Remove ${mattress.name} from saved` : `Save ${mattress.name} for later`}
+      title={saved ? "Saved" : "Save for later"}
+      className={className}
+      style={{ background: "#fff", color: saved ? "var(--g-orange)" : "var(--g-ink)" }}
     >
-      <svg
-        viewBox="0 0 24 24"
-        className="h-5 w-5"
-        fill={saved ? "currentColor" : "none"}
-        stroke="currentColor"
-        strokeWidth="1.8"
-      >
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
-      </svg>
+      <IconHeart filled={saved} />
     </button>
   );
 }

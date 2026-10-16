@@ -1,143 +1,80 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { headers } from "next/headers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { money } from "@/lib/catalog";
+import ProductListing from "@/components/store/ProductListing";
+import TrustStrip from "@/components/store/TrustStrip";
+import HelpStrip from "@/components/store/HelpStrip";
+import JsonLd from "@/components/store/JsonLd";
 import { getStoreData } from "@/lib/store";
-import styles from "./page.module.css";
+import { breadcrumbLd } from "@/lib/seo";
+import { siteUrl } from "@/lib/public-url";
 
 export const dynamic = "force-dynamic";
 
-export default async function MattressesPage() {
-  const { products } = await getStoreData();
+export const metadata: Metadata = {
+  title: "Mattresses — firm, balanced and plush",
+  description: "All three GADDA mattresses: Regular, Pro and Ultimate. Every size in 6 or 8 inch, one honest price, delivery included.",
+  alternates: { canonical: "/mattresses" },
+};
+
+export default async function MattressesPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const { q = "" } = await searchParams;
+  const { products, site } = await getStoreData();
+  const nonce = (await headers()).get("x-nonce") || undefined;
 
   return (
     <>
       <Header />
-      <main className={styles.shop}>
-        <section className={styles.intro} aria-labelledby="mattresses-title">
-          <div className={styles.introInner}>
-            <div className={styles.breadcrumb}>
-              <Link href="/">GADDA</Link>
-              <span aria-hidden="true">/</span>
-              <span>MATTRESSES</span>
-              <span className={styles.rangeCount}>{products.length} MODELS</span>
-            </div>
-
-            <div className={styles.heroGrid}>
-              <div className={styles.heroCopy}>
-                <p className={styles.eyebrow}>THE GADDA COLLECTION</p>
-                <h1 id="mattresses-title">FIND YOUR<br /><span>GADDA.</span></h1>
-                <p className={styles.heroDescription}>
-                  A mattress should be easy to understand and comfortable to live with.
-                  See what each one is made of, compare the feel, and choose the one that suits you.
-                </p>
-                <div className={styles.heroActions}>
-                  <a className={styles.primaryAction} href="#range">
-                    SHOP THE RANGE <span aria-hidden="true">↗</span>
-                  </a>
-                  <Link className={styles.textAction} href="/compare">
-                    COMPARE MATTRESSES <span aria-hidden="true">→</span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className={styles.heroPhoto}>
-                <img
-                  src="/media/1789122018422-a-mattress-on-a-wooden-floor-in-a-bedroom-photo.jpg"
-                  alt="Mattress in a furnished bedroom"
-                />
-                <div className={styles.photoCaption}>GOOD SLEEP. NO DRAMA.</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.range} id="range" aria-labelledby="range-title">
-          <div className={styles.container}>
-            <div className={styles.sectionHeader}>
-              <div>
-                <p className={styles.eyebrow}>THE RANGE</p>
-                <h2 id="range-title">CHOOSE YOUR COMFORT.</h2>
-              </div>
-              <p className={styles.sectionIntro}>
-                Different materials. Different feels. Clear starting prices.
-                Open any mattress to choose your size and height.
-              </p>
-            </div>
-
-            {products.length === 0 ? (
-              <div className={styles.empty}>Our mattress range is being updated. Please check back soon.</div>
-            ) : (
-              <div className={styles.productGrid}>
-                {products.map((product, index) => (
-                  <article className={styles.card} key={product.slug}>
-                    <div className={styles.productVisual}>
-                      <Link
-                        href={`/mattresses/${product.slug}`}
-                        className={styles.imageLink}
-                        aria-label={`View ${product.name}`}
-                      >
-                        <img src={product.image} alt={product.name} loading="lazy" />
-                      </Link>
-                      <span className={styles.itemNumber}>
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-
-                    <div className={styles.cardBody}>
-                      <p className={styles.productCategory}>{product.category || "MATTRESS"}</p>
-                      <h3>
-                        <Link href={`/mattresses/${product.slug}`}>{product.name}</Link>
-                      </h3>
-                      <p className={styles.productDescription}>{product.shortDescription}</p>
-                      <dl className={styles.specifications}>
-                        <div>
-                          <dt>FEEL</dt>
-                          <dd>{product.firmness}</dd>
-                        </div>
-                        <div>
-                          <dt>AVAILABLE HEIGHTS</dt>
-                          <dd>{product.heights.map((height) => height.label).join(" / ")}</dd>
-                        </div>
-                      </dl>
-                      <div className={styles.cardBottom}>
-                        <div className={styles.productPrice}>
-                          <span>STARTING AT</span>
-                          <strong>{money(product.basePrice)}</strong>
-                        </div>
-                        <Link className={styles.cardAction} href={`/mattresses/${product.slug}`}>
-                          VIEW MATTRESS <span aria-hidden="true">↗</span>
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
-            <p className={styles.priceNote}>
-              Starting prices are for the lowest-priced available configuration.
-              Your selected size and height determine the final price.
+      <JsonLd
+        nonce={nonce}
+        data={[
+          breadcrumbLd([
+            { name: "Home", path: "/" },
+            { name: "Mattresses", path: "/mattresses" },
+          ]),
+          {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            itemListElement: products.map((p, i) => ({ "@type": "ListItem", position: i + 1, url: siteUrl(`/mattresses/${p.slug}`), name: p.name })),
+          },
+        ]}
+      />
+      <main id="main">
+        <header className="g-page-head">
+          <div className="g-wrap">
+            <nav aria-label="Breadcrumb">
+              <ol className="g-crumbs">
+                <li>
+                  <Link href="/">Home</Link>
+                </li>
+                <li aria-current="page">Mattresses</li>
+              </ol>
+            </nav>
+            <h1 className="g-h1" style={{ fontSize: "clamp(2.4rem, 5.6vw, 4.6rem)" }}>
+              {q ? <>Mattresses matching &ldquo;{q}&rdquo;</> : "All mattresses"}
+            </h1>
+            <p className="g-lede">
+              Three of them, because that&apos;s all most homes need. Not sure?{" "}
+              <Link href="/sleep-quiz" className="g-link">
+                Take the quiz
+              </Link>{" "}
+              or{" "}
+              <Link href="/compare" className="g-link">
+                compare them
+              </Link>
+              .
             </p>
           </div>
-        </section>
-
-        <section className={styles.helpSection} aria-labelledby="help-title">
-          <div className={styles.helpInner}>
-            <div>
-              <p className={styles.eyebrow}>NEED A HAND?</p>
-              <h2 id="help-title">NOT SURE WHICH ONE?</h2>
-              <p>Put the mattresses side by side, or answer a few questions to narrow down the options.</p>
-            </div>
-            <div className={styles.helpActions}>
-              <Link className={styles.primaryAction} href="/compare">
-                COMPARE THE RANGE <span aria-hidden="true">↗</span>
-              </Link>
-              <Link className={styles.outlineAction} href="/sleep-quiz">
-                FIND MY MATCH <span aria-hidden="true">→</span>
-              </Link>
-            </div>
+        </header>
+        <section className="g-section g-section--tight">
+          <div className="g-wrap">
+            <ProductListing products={products} query={q} pick={site.homeStoryProductSlug} />
           </div>
         </section>
+        <TrustStrip />
+        <HelpStrip />
       </main>
       <Footer />
     </>

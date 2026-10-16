@@ -1,165 +1,160 @@
 import Link from "next/link";
-
 import { getStoreData } from "@/lib/store";
-import {
-  BUSINESS_ACTIVITY,
-  BUSINESS_LEGAL_NAME,
-} from "@/lib/business";
+import { BUSINESS } from "@/lib/business";
+import { phoneLink, realEmail, whatsappLink } from "@/lib/contact";
+import { CookieSettingsLink } from "@/components/store/ConsentProvider";
+import NewsletterForm from "@/components/store/NewsletterForm";
+import { IconWhatsApp } from "@/components/store/Icons";
+import SewnLabel from "@/components/store/SewnLabel";
 
 export default async function Footer() {
-  const { site } = await getStoreData();
-
-  /* Floating WhatsApp help on every page, only once a real number is set in Admin. */
-  const waDigits = (site.phone || "").replace(/\D/g, "");
-  const waNumber =
-    waDigits.length >= 10 && !/^9?1?0+$/.test(waDigits)
-      ? waDigits.length === 10
-        ? `91${waDigits}`
-        : waDigits
-      : null;
+  const { site, products } = await getStoreData();
+  const phone = phoneLink(site.phone);
+  const email = realEmail(site.email);
+  const wa = whatsappLink(site.phone);
 
   return (
-    <footer className="bg-[#111] text-[#F3ECDD]">
-      {waNumber ? (
-        <a
-          className="gp-wa-float"
-          href={`https://wa.me/${waNumber}?text=${encodeURIComponent("Hi GADDA! I have a question about the mattresses.")}`}
-          target="_blank"
-          rel="noopener"
-          aria-label="Chat with GADDA on WhatsApp"
-        >
-          <svg viewBox="0 0 32 32" aria-hidden="true">
-            <path
-              fill="currentColor"
-              d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6a10.6 10.6 0 0 1-5.4-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.6 3.6 0 0 0-1.1 2.7 6.3 6.3 0 0 0 1.3 3.3 14.4 14.4 0 0 0 5.5 4.9c2 .9 2.8.9 3.8.8a3.3 3.3 0 0 0 2.2-1.5 2.7 2.7 0 0 0 .2-1.5c-.1-.2-.3-.3-.6-.4z"
-            />
-          </svg>
+    <footer className="g-footer">
+      {wa ? (
+        <a className="g-wa" href={wa} target="_blank" rel="noopener noreferrer" aria-label="Chat with GADDA on WhatsApp">
+          <IconWhatsApp />
           <span>Talk to a human</span>
         </a>
       ) : null}
 
-      <div className="mx-auto max-w-[1500px] px-5 py-16 lg:px-10 lg:py-24">
-
-        <div className="border-b border-white/20 pb-16">
-
-          <div className="relative inline-block pt-3">
-
-            <div className="absolute left-0 right-0 top-0 h-[6px] bg-[#F3ECDD]" />
-
-            <div className="text-[clamp(5rem,14vw,14rem)] font-black leading-[.7] tracking-[-.09em]">
-              GADDA
+      <div className="g-footer-cover">
+        <div className="g-wrap">
+          <SewnLabel>
+            <div className="g-footer-mark">
+              <span>
+                <span className="g-logo-latin">GADDA</span>{" "}
+                <span className="g-logo-deva" aria-hidden="true">
+                  गद्दा
+                </span>
+              </span>
+              <p>
+                Made in {BUSINESS.countryOfOrigin} by {BUSINESS.legalName}
+              </p>
+              <p>{site.tagline || "Gadda hi hai yaar."}</p>
             </div>
-
-          </div>
-
-          <p className="mt-8 text-[clamp(1.5rem,3vw,3rem)] font-bold tracking-[-.04em] text-white/70">
-            Gadda hi hai yaar.
-          </p>
-
+          </SewnLabel>
         </div>
-
-
-        <div className="grid gap-12 py-14 md:grid-cols-3">
-
-          <div>
-
-            <p className="text-[10px] font-black uppercase tracking-[.2em] text-[#FF6500]">
-              GADDA
-            </p>
-
-            <div className="mt-5 grid gap-3 text-sm text-white/65">
-
-              <Link href="/mattresses" className="hover:text-white">
-                Saare gadde →
-              </Link>
-
-              <Link href="/compare" className="hover:text-white">
-                Compare →
-              </Link>
-
-              <Link href="/sleep-quiz" className="hover:text-white">
-                Kaunsa wala? →
-              </Link>
-
-            </div>
-
-          </div>
-
-
-          <div>
-
-            <p className="text-[10px] font-black uppercase tracking-[.2em] text-[#FF6500]">
-              IDHAR BHI
-            </p>
-
-            <div className="mt-5 grid gap-3 text-sm text-white/65">
-
-              <Link href="/reviews" className="hover:text-white">
-                Log kya bol rahe hain →
-              </Link>
-
-              <Link href="/wishlist" className="hover:text-white">
-                Pasand wale →
-              </Link>
-
-              <Link href="/account" className="hover:text-white">
-                Account →
-              </Link>
-
-            </div>
-
-          </div>
-
-
-          <div>
-
-            <p className="text-[10px] font-black uppercase tracking-[.2em] text-[#FF6500]">
-              BAAT KARNI HAI?
-            </p>
-
-            <div className="mt-5 text-sm leading-7 text-white/65">
-
-              <div>{site.email}</div>
-
-              <div>{site.phone}</div>
-
-            </div>
-
-            <Link
-              href="/business-information"
-              className="mt-5 inline-block text-xs font-black tracking-[.08em] text-white/55 hover:text-white"
-            >
-              BUSINESS INFORMATION →
-            </Link>
-
-          </div>
-
-        </div>
-
-
-        <div className="flex flex-col justify-between gap-5 border-t border-white/20 pt-7 text-xs text-white/40 md:flex-row">
-
-          <div>
-            <span className="text-white/65">
-              Legal business name: {BUSINESS_LEGAL_NAME}
-            </span>
-
-            <span className="mx-2">
-              ·
-            </span>
-
-            {BUSINESS_ACTIVITY}
-          </div>
-
-
-          <div>
-            © {new Date().getFullYear()} GADDA.
-          </div>
-
-        </div>
-
       </div>
 
+      <div className="g-wrap g-footer-top">
+        <div className="g-footer-brand">
+          <Link href="/" className="g-logo" aria-label="GADDA home">
+            <span className="g-logo-latin">GADDA</span>
+            <span className="g-logo-deva" aria-hidden="true">
+              गद्दा
+            </span>
+          </Link>
+          <p>{site.tagline || "Gadda hi hai yaar."} Three honest mattresses, made in India, sold direct.</p>
+          <NewsletterForm />
+        </div>
+
+        <div>
+          <h2>Shop</h2>
+          <ul>
+            {products.map((p) => (
+              <li key={p.slug}>
+                <Link href={`/mattresses/${p.slug}`}>{p.name}</Link>
+              </li>
+            ))}
+            <li>
+              <Link href="/compare">Compare mattresses</Link>
+            </li>
+            <li>
+              <Link href="/sleep-quiz">Find my match</Link>
+            </li>
+            <li>
+              <Link href="/wishlist">Saved mattresses</Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>Help</h2>
+          <ul>
+            <li>
+              <Link href="/contact">Contact us</Link>
+            </li>
+            <li>
+              <Link href="/track-order">Track your order</Link>
+            </li>
+            <li>
+              <Link href="/policies/shipping">Delivery</Link>
+            </li>
+            <li>
+              <Link href="/policies/trial">100-night trial &amp; returns</Link>
+            </li>
+            <li>
+              <Link href="/policies/cancellation">Cancellations &amp; refunds</Link>
+            </li>
+            <li>
+              <Link href="/policies/warranty">Warranty</Link>
+            </li>
+            <li>
+              <Link href="/contact#faq">FAQs</Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>Talk to us</h2>
+          <ul>
+            {phone ? (
+              <li>
+                <a href={phone.href}>{phone.label}</a>
+              </li>
+            ) : null}
+            {wa ? (
+              <li>
+                <a href={wa} target="_blank" rel="noopener noreferrer">
+                  WhatsApp
+                </a>
+              </li>
+            ) : null}
+            {email ? (
+              <li>
+                <a href={`mailto:${email}`}>{email}</a>
+              </li>
+            ) : null}
+            <li>{BUSINESS.supportHours}</li>
+            <li>
+              <Link href="/why-gadda">Why GADDA</Link>
+            </li>
+            <li>
+              <Link href="/reviews">Reviews</Link>
+            </li>
+          </ul>
+          <div className="g-footer-pay" aria-label="Ways to pay">
+            <span>Pay on delivery</span>
+            <span>UPI</span>
+            <span>Cash</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="g-wrap g-footer-legal">
+        <div>
+          <p>
+            © {new Date().getFullYear()} {BUSINESS.legalName}. GADDA is a brand of {BUSINESS.legalName}.
+          </p>
+          {BUSINESS.registeredAddress.length ? <p>Registered office: {BUSINESS.registeredAddress.join(", ")}</p> : null}
+          {BUSINESS.gstin ? <p>GSTIN: {BUSINESS.gstin}</p> : null}
+          <p>All prices are in Indian rupees and include GST. Made in {BUSINESS.countryOfOrigin}.</p>
+        </div>
+        <nav aria-label="Legal">
+          <Link href="/policies/terms">Terms of sale</Link>
+          <Link href="/policies/privacy">Privacy</Link>
+          <Link href="/policies/cookies">Cookies</Link>
+          <CookieSettingsLink className="g-btn-reset" />
+          <Link href="/policies/grievance">Grievance officer</Link>
+          <Link href="/business-information">Business information</Link>
+          <Link href="/sitemap.xml">Sitemap</Link>
+        </nav>
+      </div>
     </footer>
   );
 }

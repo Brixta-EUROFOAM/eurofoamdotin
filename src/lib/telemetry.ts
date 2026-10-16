@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomBytes } from "crypto";
 import { dataDir } from "@/lib/store";
+import { pruneIfDue } from "@/lib/retention";
 
 export type TelemetryEvent = {
   id: string;
@@ -25,6 +26,8 @@ export type TelemetryEvent = {
   value?: number;
   quantity?: number;
   itemCount?: number;
+  /* short free-form detail: quiz result, checkout step, PIN zone… */
+  label?: string;
 };
 
 function filePath() {
@@ -44,6 +47,7 @@ function number(value: unknown) {
 
 export async function appendTelemetry(input: any) {
   await fs.mkdir(dataDir(), { recursive: true });
+  void pruneIfDue("telemetry.jsonl");
 
   const event: TelemetryEvent = {
     id: `event-${Date.now()}-${randomBytes(4).toString("hex")}`,
@@ -93,7 +97,10 @@ export async function appendTelemetry(input: any) {
     durationSeconds: number(input.durationSeconds),
     value: number(input.value),
     quantity: number(input.quantity),
-    itemCount: number(input.itemCount)
+    itemCount: number(input.itemCount),
+    label: input.label || input.zone || input.step || input.result
+      ? text(input.label || input.zone || input.step || input.result, 80)
+      : undefined
   };
 
   await fs.appendFile(

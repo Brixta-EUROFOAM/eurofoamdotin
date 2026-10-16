@@ -2,187 +2,108 @@
 
 import Link from "next/link";
 import { useCart } from "@/components/CartProvider";
+import { useLocation } from "@/components/store/LocationProvider";
+import { useLiveQuote } from "@/components/store/useLiveQuote";
 import { money } from "@/lib/catalog";
-import { useState } from "react";
-import CheckoutPanel, { OrderDone, type Done } from "@/components/CheckoutPanel";
 
 export default function CartClient() {
+  const { items, changeQty, removeItem, subtotal, hydrated } = useCart();
+  const { total, stale } = useLiveQuote(true);
+  const { info, eta, openPicker } = useLocation();
+  const shown = total ?? subtotal;
 
-  const {
-    items,
-    removeItem,
-    changeQty,
-    subtotal,
-  } = useCart();
-  const [placed, setPlaced] = useState<Done | null>(null);
+  if (!hydrated) return <div style={{ minHeight: 320 }} />;
+
+  if (!items.length) {
+    return (
+      <div className="g-empty" style={{ marginBlock: 40 }}>
+        <h1 className="g-h3">Your cart is empty</h1>
+        <p>Three mattresses, one honest price each. Pick one and it&apos;ll wait here.</p>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <Link href="/mattresses" className="g-btn">
+            Shop mattresses
+          </Link>
+          <Link href="/sleep-quiz" className="g-btn g-btn--ghost">
+            Take the quiz
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <section className="site-cart">
-
-      <div className="site-utility-heading">
-        <p className="site-orange">
-          ALMOST YOURS.
-        </p>
-
-        <h1>
-          YOUR
-          <br />
-          CART.
+    <div className="g-checkout">
+      <div>
+        <h1 className="g-h2" style={{ marginBottom: 20 }}>
+          Your cart
         </h1>
-      </div>
-
-
-      {placed ? (
-
-        <div className="site-empty gp-placed">
-          <OrderDone done={placed} />
-          <Link href="/">BACK TO HOME →</Link>
-        </div>
-
-      ) : !items.length ? (
-
-        <div className="site-empty">
-
-          <span>0</span>
-
-          <h2>
-            CART MEIN
-            <br />
-            KUCH NAHI.
-          </h2>
-
-          <p>
-            Fair enough. The Gaddas are still there.
-          </p>
-
-          <Link href="/mattresses">
-            GO SEE THEM →
-          </Link>
-
-        </div>
-
-      ) : (
-
-        <div className="site-cart-grid">
-
-          <div className="site-cart-items">
-
-            {items.map((item, index) => (
-
-              <article
-                key={item.id}
-                className="site-cart-item"
-              >
-
-                <div className="site-cart-number">
-                  {String(index + 1).padStart(2, "0")}
+        <div className="g-card-flat">
+          {items.map((item) => (
+            <div className="g-line" key={item.id}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={item.image || "/layers/gadda/comfort.webp"} alt="" />
+              <div>
+                <div className="g-line-top">
+                  <Link href={`/mattresses/${item.slug}`}>{item.name}</Link>
+                  <b>{money(item.price * item.quantity)}</b>
                 </div>
-
-                <img
-                  src={item.image}
-                  alt={item.name}
-                />
-
-                <div className="site-cart-copy">
-
-                  <div>
-
-                    <h2>
-                      {item.name}
-                    </h2>
-
-                    <p>
-                      {item.size} · {item.height}
-                      {item.variant ? ` · ${item.variant}` : ""}
-                    </p>
-
-                  </div>
-
-
-                  <strong>
-                    {money(item.price * item.quantity)}
-                  </strong>
-
-
-                  <div className="site-cart-controls">
-
-                    <button
-                      onClick={() =>
-                        changeQty(item.id, item.quantity - 1)
-                      }
-                    >
+                <p className="g-line-spec">
+                  {item.size}, {item.height}
+                  {item.variant ? `, ${item.variant}` : ""} — {money(item.price)} each
+                </p>
+                <div className="g-line-row">
+                  <div className="g-qty" role="group" aria-label={`Quantity of ${item.name}`}>
+                    <button type="button" aria-label="One less" onClick={() => changeQty(item.id, item.quantity - 1)}>
                       −
                     </button>
-
-                    <span>
-                      {item.quantity}
-                    </span>
-
-                    <button
-                      onClick={() =>
-                        changeQty(item.id, item.quantity + 1)
-                      }
-                    >
+                    <output>{item.quantity}</output>
+                    <button type="button" aria-label="One more" onClick={() => changeQty(item.id, item.quantity + 1)}>
                       +
                     </button>
-
-                    <button
-                      className="site-cart-remove"
-                      onClick={() => removeItem(item.id)}
-                    >
-                      REMOVE
-                    </button>
-
                   </div>
-
+                  <button type="button" className="g-remove" onClick={() => removeItem(item.id)}>
+                    Remove
+                  </button>
                 </div>
-
-              </article>
-
-            ))}
-
-          </div>
-
-
-          <aside className="site-cart-summary">
-
-            <p className="site-orange">
-              ORDER SUMMARY
-            </p>
-
-            <div>
-              <span>Subtotal</span>
-              <strong>{money(subtotal)}</strong>
+              </div>
             </div>
-
-            <div>
-              <span>Shipping</span>
-              <strong>INCLUDED</strong>
-            </div>
-
-            <div className="site-cart-total">
-              <span>TOTAL</span>
-              <strong>{money(subtotal)}</strong>
-            </div>
-
-            <CheckoutPanel onPlaced={setPlaced} />
-
-            <div className="site-cart-trust">
-              <span>FREE DELIVERY TO YOUR DOOR</span>
-              <span>100 NIGHTS TO DECIDE</span>
-              <span>WE CALL TO CONFIRM BEFORE ANYTHING SHIPS</span>
-            </div>
-
-            <Link href="/mattresses" className="site-cart-continue">
-              ← CONTINUE SHOPPING
-            </Link>
-
-          </aside>
-
+          ))}
         </div>
+        <p style={{ marginTop: 16 }}>
+          <Link href="/mattresses" className="g-link">
+            Keep shopping
+          </Link>
+        </p>
+      </div>
 
-      )}
-
-    </section>
+      <aside className="g-summary" aria-labelledby="cart-summary">
+        <h2 id="cart-summary">Summary</h2>
+        <button type="button" className="g-pin-row" onClick={openPicker} style={{ width: "100%", border: 0, cursor: "pointer", textAlign: "left" }}>
+          <span>{info?.ok && eta ? <>Arrives {eta}</> : "Add PIN code for a delivery date"}</span>
+          <span style={{ textDecoration: "underline" }}>{info?.ok ? info.pin : "Add"}</span>
+        </button>
+        <div className="g-totals">
+          <div>
+            <span>Subtotal</span>
+            <span>{money(shown)}</span>
+          </div>
+          <div>
+            <span>Delivery</span>
+            <span className="g-ok">Included</span>
+          </div>
+          <div className="g-totals-grand">
+            <span>
+              Total <small>(incl. GST)</small>
+            </span>
+            <span>{money(shown)}</span>
+          </div>
+        </div>
+        {stale ? <p className="g-note">A price changed since you added it. This is today&apos;s total.</p> : null}
+        <Link href="/checkout" className="g-btn g-btn--orange g-btn--block">
+          Checkout
+        </Link>
+        <p className="g-note">Pay on delivery or by UPI link. Nothing is charged online.</p>
+      </aside>
+    </div>
   );
 }

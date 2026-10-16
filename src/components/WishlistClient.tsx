@@ -2,182 +2,66 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import type { SavedMattress } from "@/components/WishlistButton";
-
-function money(value: number) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { readSaved, WISHLIST_KEY, type SavedMattress } from "@/components/WishlistButton";
+import { money } from "@/lib/catalog";
+import NeedleArt from "@/components/store/NeedleArt";
 
 export default function WishlistClient() {
-
   const [items, setItems] = useState<SavedMattress[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    try {
-      setItems(
-        JSON.parse(
-          localStorage.getItem("eurofoam-wishlist") || "[]"
-        )
-      );
-    } finally {
-      setReady(true);
-    }
+    setItems(readSaved());
+    setReady(true);
   }, []);
 
-
   function remove(slug: string) {
-
-    const next =
-      items.filter(
-        (item) => item.slug !== slug
-      );
-
+    const next = items.filter((item) => item.slug !== slug);
     setItems(next);
-
-    localStorage.setItem(
-      "eurofoam-wishlist",
-      JSON.stringify(next)
-    );
-
-    window.dispatchEvent(
-      new Event("eurofoam:wishlist")
-    );
+    try {
+      localStorage.setItem(WISHLIST_KEY, JSON.stringify(next));
+    } catch {}
+    window.dispatchEvent(new Event("eurofoam:wishlist"));
   }
-
 
   if (!ready) return null;
 
-
   if (!items.length) {
-
     return (
-      <section className="site-wishlist">
-
-        <div className="site-utility-heading">
-
-          <p className="site-orange">
-            THE ONES YOU LIKED.
-          </p>
-
-          <h1>
-            ABHI
-            <br />
-            KUCH
-            <br />
-            NAHI.
-          </h1>
-
-        </div>
-
-
-        <div className="site-empty">
-
-          <span>♡</span>
-
-          <h2>
-            DIL DABAO.
-            <br />
-            YAHAAN MILEGA.
-          </h2>
-
-          <p>
-            Save the Gaddas you want to come back to.
-          </p>
-
-          <Link href="/mattresses">
-            SEE THE RANGE →
-          </Link>
-
-        </div>
-
-      </section>
+      <div className="g-empty">
+        <NeedleArt />
+        <h2 className="g-h3">Nothing saved yet</h2>
+        <p>Tap the heart on any mattress to keep it here while you decide. Saved items stay on this device only.</p>
+        <Link href="/mattresses" className="g-btn">
+          Browse mattresses
+        </Link>
+      </div>
     );
   }
 
-
   return (
-    <section className="site-wishlist">
-
-      <div className="site-utility-heading">
-
-        <p className="site-orange">
-          SAVED FOR LATER
-        </p>
-
-        <h1>
-          TERE
-          <br />
-          WALE
-          <br />
-          GADDE.
-        </h1>
-
-      </div>
-
-
-      <div className="site-wishlist-tools">
-        <p>Saved is not decided. Compare them before you buy.</p>
-        <Link href="/compare">COMPARE GADDAS →</Link>
-      </div>
-
-      <div className="site-wishlist-grid">
-
-        {items.map((item, index) => (
-
-          <article
-            key={item.slug}
-            className="site-wishlist-card"
-          >
-
-            <div className="site-wishlist-number">
-              {String(index + 1).padStart(2, "0")}
+    <div className="g-card-flat" style={{ padding: 0 }}>
+      {items.map((item) => (
+        <div key={item.slug} className="g-line" style={{ padding: 20, margin: 0 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={item.image} alt="" />
+          <div>
+            <div className="g-line-top">
+              <Link href={`/mattresses/${item.slug}`}>{item.name}</Link>
+              <b>from {money(item.basePrice)}</b>
             </div>
-
-            <Link href={`/mattresses/${item.slug}`}>
-
-              <img
-                src={item.image}
-                alt={item.name}
-              />
-
-            </Link>
-
-            <div className="site-wishlist-copy">
-
-              <small>
-                {item.kicker}
-              </small>
-
-              <Link href={`/mattresses/${item.slug}`}>
-                <h2>
-                  {item.name}
-                </h2>
+            <p className="g-line-spec">{item.kicker}</p>
+            <div className="g-line-row">
+              <Link href={`/mattresses/${item.slug}`} className="g-btn g-btn--sm">
+                Choose size
               </Link>
-
-              <strong>
-                {money(item.basePrice)}
-              </strong>
-
-              <button
-                type="button"
-                onClick={() => remove(item.slug)}
-              >
-                REMOVE
+              <button type="button" className="g-remove" onClick={() => remove(item.slug)}>
+                Remove
               </button>
-
             </div>
-
-          </article>
-
-        ))}
-
-      </div>
-
-    </section>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

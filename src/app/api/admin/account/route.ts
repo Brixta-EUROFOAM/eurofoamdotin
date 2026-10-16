@@ -41,7 +41,7 @@ export async function PUT(request: Request) {
     const response = NextResponse.json({ ok: true });
     response.cookies.set(adminCookie.name, createSessionToken(username), {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
       path: "/",
       maxAge: adminCookie.maxAge
