@@ -197,7 +197,7 @@ export default async function ProductPage({ params }: Params) {
                   Compare all three
                 </Link>
               </div>
-              <div className="g-products" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}>
+              <div className="g-products g-products--two g-rail">
                 {others.map((p) => (
                   <ProductCard key={p.slug} mattress={p} />
                 ))}

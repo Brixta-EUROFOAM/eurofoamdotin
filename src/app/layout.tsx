@@ -4,6 +4,7 @@ import { Bricolage_Grotesque, Hanken_Grotesk } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./craft.css";
+import "./app.css";
 import CartProvider from "@/components/CartProvider";
 import TelemetryTracker from "@/components/TelemetryTracker";
 import ConsentProvider from "@/components/store/ConsentProvider";
@@ -53,6 +54,7 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   formatDetection: { telephone: false, address: false, email: false },
+  appleWebApp: { capable: true, title: "GADDA", statusBarStyle: "default" },
   robots: { index: true, follow: true },
 };
 
@@ -60,6 +62,7 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

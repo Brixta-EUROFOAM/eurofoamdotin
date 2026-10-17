@@ -1,0 +1,797 @@
+/*
+  APP LAYER — the phone experience.
+  On phones the site behaves like a native shopping app:
+  compact top bar with back button and location strip, a 5-tab bottom
+  bar, swipeable rails, bottom sheets, an always-on buy bar, and a
+  comparison that keeps all three mattresses side by side.
+  Desktop is untouched: everything is inside the media queries.
+*/
+
+.g-back-btn {
+  display: none;
+}
+.g-products--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Touch devices: no hover-only effects, real press feedback */
+@media (hover: none) {
+  .g-card:hover {
+    box-shadow: none;
+  }
+  .g-card:hover .g-card-media img {
+    transform: none;
+  }
+  .g-card:hover .g-mstack-layer {
+    transform: none;
+  }
+  .g-btn:hover {
+    transform: none;
+  }
+  .g-btn--orange:hover {
+    animation: none;
+    background-image: none;
+  }
+  .g-btn:active,
+  .g-icon-btn:active,
+  .g-choice:active,
+  .g-filter:active,
+  .g-dock a:active,
+  .g-dock button:active {
+    transform: scale(0.96);
+  }
+  .g-card:active {
+    transform: scale(0.985);
+  }
+}
+
+@media (max-width: 820px) {
+  :root {
+    --g-gutter: 16px;
+    --g-header-h: 54px;
+    --g-dock-h: 64px;
+  }
+
+  body {
+    padding-bottom: calc(var(--g-dock-h) + env(safe-area-inset-bottom));
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+  /* nothing may widen the phone's layout viewport */
+  main,
+  .g-hero,
+  .g-gallery {
+    overflow-x: clip;
+  }
+  .g-stamp--hero,
+  .g-stamp--gallery {
+    animation: none;
+  }
+  .g-sticky-buy-info {
+    flex: 1;
+  }
+  body:has(.g-sticky-buy) {
+    padding-bottom: calc(var(--g-dock-h) + 76px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Top bar ---------- */
+  .g-announce-inner {
+    min-height: 30px;
+    font-size: 0.78rem;
+    padding-inline: 36px;
+  }
+  .g-announce-nav {
+    width: 28px;
+    height: 28px;
+  }
+  .g-header {
+    padding-top: env(safe-area-inset-top);
+  }
+  .g-utility {
+    order: 2;
+    border-bottom: 0;
+    border-top: 1px solid var(--g-line);
+  }
+  .g-header {
+    display: flex;
+    flex-direction: column;
+  }
+  .g-bar {
+    order: 1;
+    gap: 2px;
+    height: var(--g-header-h);
+  }
+  .g-utility .g-wrap {
+    min-height: 34px;
+  }
+  .g-deliver {
+    margin-left: -6px;
+    font-size: 0.8rem;
+  }
+  .g-back-btn {
+    display: inline-grid;
+    margin-left: -8px;
+  }
+  .g-back-btn + .g-menu-btn {
+    display: none;
+  }
+  .g-menu-btn {
+    margin-left: -8px;
+  }
+  .g-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .g-bar {
+    position: relative;
+  }
+  .g-logo-latin {
+    font-size: 1.45rem;
+  }
+  .g-logo-deva {
+    font-size: 0.95rem;
+  }
+  .g-actions .g-icon-btn[aria-label="Account"] {
+    display: none;
+  }
+  .g-header::after {
+    height: 6px;
+    bottom: -8px;
+  }
+  .g-header::before {
+    bottom: -12px;
+  }
+
+  /* ---------- Bottom tab bar ---------- */
+  .g-dock {
+    grid-template-columns: repeat(5, 1fr);
+    height: calc(var(--g-dock-h) + env(safe-area-inset-bottom));
+    padding: 6px 6px env(safe-area-inset-bottom);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(1.6) blur(16px);
+    -webkit-backdrop-filter: saturate(1.6) blur(16px);
+    border-top: 0;
+    box-shadow: 0 -1px 0 var(--g-line), 0 -10px 30px -18px rgba(35, 33, 30, 0.35);
+  }
+  .g-dock::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -4px;
+    height: 4px;
+    background: var(--g-ticking-rich);
+    opacity: 0.9;
+  }
+  .g-dock a,
+  .g-dock button {
+    align-content: center;
+    gap: 3px;
+    padding: 4px 0;
+    border-radius: 14px;
+    font-size: 0.68rem;
+    color: var(--g-ink-3);
+    transition: color 160ms, background-color 160ms, transform 120ms;
+  }
+  .g-dock svg {
+    width: 23px;
+    height: 23px;
+    stroke-width: 1.8;
+  }
+  .g-dock [aria-current="page"] {
+    color: var(--g-ink);
+    background: var(--g-cream);
+  }
+  .g-dock [aria-current="page"] svg {
+    color: var(--g-orange);
+    stroke-width: 2.2;
+  }
+  .g-dock .g-badge {
+    top: 0;
+    right: calc(50% - 24px);
+  }
+
+  /* floating buttons sit above the tab bar */
+  .g-wa {
+    bottom: calc(var(--g-dock-h) + 14px + env(safe-area-inset-bottom));
+    right: 14px;
+    width: 50px;
+    height: 50px;
+  }
+  body:has(.g-sticky-buy) .g-wa {
+    bottom: calc(var(--g-dock-h) + 90px + env(safe-area-inset-bottom));
+  }
+  .g-toast {
+    bottom: calc(var(--g-dock-h) + 16px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Type and spacing, phone-sized ---------- */
+  .g-section {
+    padding-block: 44px;
+  }
+  .g-section--tight {
+    padding-block: 30px;
+  }
+  .g-h2 {
+    font-size: clamp(1.75rem, 8vw, 2.2rem);
+  }
+  .g-lede {
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+  .g-head {
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .g-head > .g-btn {
+    min-height: 40px;
+    padding: 0 16px;
+    font-size: 0.88rem;
+  }
+  .g-page-head {
+    padding-block: 18px 22px;
+  }
+  .g-page-head .g-h1 {
+    font-size: clamp(2rem, 9vw, 2.6rem) !important;
+  }
+  .g-crumbs {
+    display: none;
+  }
+
+  /* ---------- Swipe rails ---------- */
+  .g-rail {
+    display: grid !important;
+    grid-auto-flow: column;
+    grid-template-columns: none !important;
+    grid-auto-columns: 82%;
+    gap: 12px !important;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--g-gutter);
+    margin-inline: calc(var(--g-gutter) * -1);
+    padding-inline: var(--g-gutter);
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+  .g-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .g-rail > * {
+    scroll-snap-align: start;
+  }
+
+  /* trust strip → swipeable chips */
+  .g-trust-grid.g-rail {
+    grid-auto-columns: max-content;
+    margin-inline: 0;
+    padding-block: 12px;
+  }
+  .g-trust-item,
+  .g-trust-item:nth-child(n) {
+    padding: 8px 14px 8px 8px !important;
+    border: 1px solid var(--g-line) !important;
+    border-radius: var(--g-pill);
+    background: #fff;
+    gap: 10px;
+  }
+  .g-trust-item svg {
+    width: 18px !important;
+    height: 18px !important;
+    padding: 6px !important;
+  }
+  .g-trust-item b {
+    font-size: 0.9rem;
+  }
+  .g-trust-item span {
+    display: none;
+  }
+
+  /* steps → swipeable cards */
+  .g-steps.g-rail {
+    grid-auto-columns: 74%;
+  }
+  .g-steps.g-rail li {
+    padding: 20px;
+    border-radius: var(--g-r-md);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px dashed rgba(255, 255, 255, 0.22);
+  }
+  .g-steps.g-rail li::after {
+    display: none;
+  }
+  .g-steps.g-rail li::before {
+    margin-bottom: 14px;
+  }
+
+  /* ---------- Home ---------- */
+  .g-hero-grid {
+    gap: 18px;
+    padding-block: 22px 26px;
+  }
+  .g-hero .g-h1 {
+    font-size: clamp(2.7rem, 13.5vw, 3.6rem);
+  }
+  .g-hero-deva {
+    margin-bottom: 4px;
+  }
+  .g-hero-cta {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .g-hero-cta .g-btn {
+    padding: 0 12px;
+  }
+  .g-hero-from {
+    margin-top: 12px;
+    font-size: 0.88rem;
+  }
+  .g-hero-visual {
+    order: -1;
+    margin-top: 8px;
+  }
+  .g-hero-visual > p {
+    display: none;
+  }
+
+  .g-card-body {
+    padding: 16px 16px 18px;
+    gap: 8px;
+  }
+  .g-card-title h3 {
+    font-size: 1.3rem;
+  }
+  .g-card-desc {
+    font-size: 0.88rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .g-card-meta .g-chip:nth-child(n + 3) {
+    display: none;
+  }
+
+  .g-vs {
+    gap: 14px;
+  }
+  .g-vs-col {
+    padding: 20px;
+  }
+  .g-vs-col--them img {
+    max-width: 240px;
+  }
+  .g-panel {
+    min-height: 0;
+    padding: 22px;
+    gap: 16px;
+  }
+  .g-panel h3 {
+    font-size: 1.7rem;
+  }
+
+  .g-faq-list summary {
+    padding: 16px 0;
+    font-size: 1rem;
+  }
+  .g-faq-list details > div {
+    padding-right: 0;
+  }
+  .g-help-ways {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  /* ---------- Product listing ---------- */
+  .g-filters {
+    position: sticky;
+    top: calc(var(--g-header-h) + 34px + 12px);
+    z-index: 5;
+    margin-inline: calc(var(--g-gutter) * -1);
+    padding: 10px var(--g-gutter);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    flex-wrap: nowrap;
+  }
+  .g-filter-group {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .g-filter-group::-webkit-scrollbar {
+    display: none;
+  }
+  .g-filter {
+    white-space: nowrap;
+    min-height: 36px;
+    padding: 0 14px;
+  }
+
+  /* ---------- Product page ---------- */
+  .g-pdp {
+    padding-top: 0;
+    gap: 18px;
+  }
+  .g-pdp > *,
+  .g-checkout > *,
+  .g-split > *,
+  .g-faq > * {
+    min-width: 0;
+  }
+  .g-buy-price {
+    flex-wrap: wrap;
+  }
+  .g-gallery {
+    margin-inline: calc(var(--g-gutter) * -1);
+  }
+  .g-gallery-main {
+    border-radius: 0;
+  }
+  .g-gallery-main--stack {
+    padding: 12% 4% 8%;
+  }
+  .g-gallery-thumbs {
+    padding-inline: var(--g-gutter);
+  }
+  .g-stamp--gallery {
+    left: auto;
+    right: 10px;
+    top: 10px;
+  }
+  .g-buy h1 {
+    font-size: 2.2rem;
+  }
+  .g-buy-sub {
+    font-size: 0.95rem;
+  }
+  .g-buy-price {
+    margin-top: 12px;
+  }
+  .g-buy-price b {
+    font-size: 1.8rem;
+  }
+  .g-choices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .g-buy-cta {
+    grid-template-columns: auto 1fr;
+  }
+  .g-buy-cta > .g-btn--orange {
+    display: none; /* "Buy now" lives in the sticky bar on phones */
+  }
+  .g-buy-perks {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 80%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    border: 0;
+    gap: 10px;
+    margin-inline: calc(var(--g-gutter) * -1);
+    padding-inline: var(--g-gutter);
+    scrollbar-width: none;
+  }
+  .g-buy-perks::-webkit-scrollbar {
+    display: none;
+  }
+  .g-buy-perks > div {
+    scroll-snap-align: start;
+    border: 1px solid var(--g-line) !important;
+    border-radius: var(--g-r-md);
+    align-items: flex-start;
+  }
+
+  /* always-on buy bar, like an app's checkout footer */
+  .g-sticky-buy,
+  .g-sticky-buy[data-show="false"] {
+    transform: none;
+    bottom: calc(var(--g-dock-h) + env(safe-area-inset-bottom));
+    border-top: 0;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -12px 30px -16px rgba(35, 33, 30, 0.45);
+  }
+  .g-sticky-buy .g-wrap {
+    padding-block: 10px;
+  }
+  .g-sticky-buy .g-btn {
+    min-height: 48px;
+    flex: 0 0 auto;
+  }
+
+  .g-layer {
+    grid-template-columns: 40px minmax(0, 1fr);
+    padding: 12px 14px;
+  }
+  .g-layer-swatch {
+    width: 40px;
+    height: 30px;
+  }
+  .g-products--two.g-rail {
+    grid-auto-columns: 82%;
+  }
+
+  /* ---------- Compare: all three, side by side, on a phone ---------- */
+  .g-compare-wrap {
+    overflow: visible;
+    border-radius: var(--g-r-md);
+  }
+  .g-compare {
+    min-width: 0 !important;
+    display: block;
+  }
+  .g-compare thead,
+  .g-compare tbody {
+    display: block;
+  }
+  .g-compare tr {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+    column-gap: 0;
+    border-bottom: 1px solid var(--g-line);
+  }
+  .g-compare tr > * {
+    border-bottom: 0;
+    padding: 10px 10px;
+    font-size: 0.86rem;
+  }
+  .g-compare tr > * + * {
+    border-left: 1px dashed var(--g-line);
+  }
+  .g-compare tbody th {
+    grid-column: 1 / -1;
+    width: auto;
+    padding: 12px 10px 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--g-ink-3);
+    border-left: 0 !important;
+  }
+  .g-compare tbody th + td {
+    border-left: 0;
+  }
+  .g-compare thead tr {
+    position: sticky;
+    top: calc(var(--g-header-h) + 34px + 12px);
+    z-index: 4;
+    background: var(--g-cream);
+    box-shadow: 0 8px 16px -14px rgba(0, 0, 0, 0.4);
+  }
+  .g-compare thead td:first-child {
+    display: none;
+  }
+  .g-compare thead th {
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .g-compare thead th > div:first-child {
+    max-width: 92px !important;
+    margin: 0 auto 8px !important;
+  }
+  .g-compare thead a {
+    font-size: 0.95rem;
+  }
+  .g-compare thead th > div:last-child {
+    font-size: 0.74rem;
+  }
+  .g-compare ol {
+    padding-left: 14px !important;
+    font-size: 0.82rem;
+  }
+  .g-compare .g-btn--sm {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 0.78rem;
+  }
+  .g-compare tbody tr:last-child th {
+    display: none;
+  }
+  /* the size guide table is 3 columns already: keep its header row */
+  .g-compare--sizes tbody th {
+    grid-column: auto;
+    padding: 10px;
+    font-size: 0.9rem;
+    color: var(--g-ink);
+  }
+  .g-compare--sizes thead tr {
+    position: static;
+  }
+  .g-compare--sizes thead th {
+    text-align: left;
+  }
+
+  /* ---------- Bottom sheets (cart, menu, dialogs, cookies) ---------- */
+  .g-drawer--right,
+  .g-drawer--left {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: 92svh;
+    height: 92svh;
+    border-radius: 22px 22px 0 0;
+    animation: g-sheet-up 320ms var(--g-ease);
+  }
+  .g-drawer--left {
+    height: auto;
+    max-height: 88svh;
+  }
+  .g-drawer-head {
+    padding-top: 22px;
+  }
+  .g-drawer-head::before,
+  .g-dialog::before {
+    /* grab handle */
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 40px;
+    height: 5px;
+    margin-left: -20px;
+    border-radius: 3px;
+    background: var(--g-line);
+  }
+  .g-drawer-foot {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+  .g-dialog-wrap {
+    place-items: end stretch;
+    padding: 0;
+  }
+  .g-dialog,
+  .g-dialog--wide {
+    position: relative;
+    width: 100%;
+    max-height: 90svh;
+    border-radius: 22px 22px 0 0;
+    padding: 30px 20px calc(22px + env(safe-area-inset-bottom));
+    animation: g-sheet-up 320ms var(--g-ease);
+  }
+  .g-consent {
+    left: 0;
+    right: 0;
+    width: 100%;
+    bottom: calc(var(--g-dock-h) + env(safe-area-inset-bottom));
+    border-radius: 20px 20px 0 0;
+    padding: 18px 16px;
+  }
+  @keyframes g-sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+  }
+
+  /* ---------- Checkout & forms: app-sized inputs ---------- */
+  .g-field input,
+  .g-field textarea,
+  .g-field select,
+  .g-input {
+    font-size: 16px; /* stops iOS zooming into fields */
+  }
+  .g-checkout {
+    padding-top: 16px;
+    gap: 18px;
+  }
+  .g-fieldset {
+    padding: 18px 16px;
+  }
+  .g-checkout-steps {
+    overflow-x: auto;
+  }
+
+  /* ---------- Footer, compact ---------- */
+  .g-footer-cover {
+    padding-block: 26px;
+  }
+  .g-footer-cover .g-label {
+    transform: rotate(-1deg) scale(0.92);
+  }
+  .g-footer-top {
+    gap: 24px 16px;
+    padding-block: 32px 24px;
+  }
+  .g-footer-brand .g-logo {
+    display: none;
+  }
+  .g-footer-brand p {
+    margin-top: 0;
+  }
+  .g-footer ul {
+    gap: 6px;
+    font-size: 0.88rem;
+  }
+  .g-footer-legal {
+    padding-bottom: 24px;
+    font-size: 0.78rem;
+  }
+}
+
+/* Installed as an app (home-screen): hide the browser-ish bits */
+@media (display-mode: standalone) {
+  .g-announce {
+    display: none;
+  }
+  .g-footer-cover,
+  .g-footer-top {
+    display: none;
+  }
+  .g-header {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-drawer--right,
+  .g-drawer--left,
+  .g-dialog {
+    animation: none;
+  }
+}
+
+/* "Usual mattress vs A GADDA" stays side by side on phones — that's the point */
+@media (max-width: 820px) {
+  .g-vs {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .g-vs-col {
+    padding: 14px 12px 16px;
+    gap: 10px;
+    border-radius: 18px;
+    align-content: start;
+  }
+  .g-vs-col h3 {
+    font-size: 1.02rem;
+    line-height: 1.15;
+    min-height: 2.3em;
+  }
+  .g-vs-col--them img {
+    max-width: 100%;
+    margin-top: -4px;
+  }
+  .g-vs-col--us > div[style] {
+    padding: 14% 2% !important;
+  }
+  .g-vs-list {
+    gap: 9px;
+  }
+  .g-vs-list li {
+    grid-template-columns: 18px 1fr;
+    gap: 7px;
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  .g-vs-list li::before {
+    width: 16px;
+    height: 16px;
+    background-size: 10px;
+  }
+  .g-vs-col--them .g-vs-list li::before {
+    background-size: 8px;
+  }
+  .g-vs-col--us .g-vs-list li span {
+    display: none; /* keep just the claim; the detail lives on Why GADDA */
+  }
+  .g-vs-col--us .g-btn {
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: 0.78rem;
+    white-space: normal;
+    text-align: center;
+  }
+  .g-vs-col .g-stamp--corner {
+    width: 58px;
+    height: 58px;
+    top: 8px;
+    right: 6px;
+  }
+  .g-panel--orange::after,
+  .g-vs-col--us::after {
+    inset: 6px;
+    border-radius: 13px;
+  }
+}

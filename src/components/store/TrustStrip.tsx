@@ -7,7 +7,7 @@ const ICONS = { trial: IconMoon, delivery: IconTruck, price: IconTag, pay: IconR
 export default function TrustStrip() {
   return (
     <section className="g-trust" aria-label="What you get with every GADDA">
-      <div className="g-wrap g-trust-grid">
+      <div className="g-wrap g-trust-grid g-rail">
         {TRUST.map((t) => {
           const Icon = ICONS[t.id];
           return (

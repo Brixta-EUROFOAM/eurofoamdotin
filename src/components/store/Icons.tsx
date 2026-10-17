@@ -145,3 +145,9 @@ export const IconWhatsApp = (p: P) => (
     />
   </svg>
 );
+
+export const IconHome = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" />
+  </svg>
+);

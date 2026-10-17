@@ -81,7 +81,7 @@ export default async function ComparePage() {
         <section className="g-section g-section--tight">
           <div className="g-wrap">
             <div className="g-compare-wrap">
-              <table className="g-compare">
+              <table className="g-compare" style={{ ["--cols" as string]: products.length }}>
                 <caption className="g-sr">Comparison of GADDA mattresses</caption>
                 <thead>
                   <tr>
@@ -134,7 +134,7 @@ export default async function ComparePage() {
               </p>
             </div>
             <div className="g-compare-wrap">
-              <table className="g-compare" style={{ minWidth: 0 }}>
+              <table className="g-compare g-compare--sizes" style={{ minWidth: 0 }}>
                 <thead>
                   <tr>
                     <th scope="col">Size</th>

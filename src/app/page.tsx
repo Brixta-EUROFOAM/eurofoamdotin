@@ -103,7 +103,7 @@ export default async function Home() {
                   Compare side by side
                 </Link>
               </div>
-              <div className="g-products">
+              <div className="g-products g-rail">
                 {products.map((p) => (
                   <ProductCard
                     key={p.slug}
@@ -205,7 +205,7 @@ export default async function Home() {
                 <p className="g-lede">No payment gateway hoops. Order online, and a person takes it from there.</p>
               </div>
             </div>
-            <ol className="g-steps">
+            <ol className="g-steps g-rail">
               <li>
                 <h3>Pick size and height</h3>
                 <p>Order online in two minutes. No payment needed on the site.</p>

@@ -12,6 +12,7 @@ import {
   IconChevron,
   IconClose,
   IconGrid,
+  IconHome,
   IconHeart,
   IconMenu,
   IconPhone,
@@ -43,6 +44,7 @@ type Props = {
 
 export default function HeaderClient({ messages, announcementHref, phone, products, pick, trialNights }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mega, setMega] = useState(false);
   const [search, setSearch] = useState(false);
   const [drawer, setDrawer] = useState(false);
@@ -132,6 +134,16 @@ export default function HeaderClient({ messages, announcementHref, phone, produc
         </div>
 
         <div className="g-wrap g-bar">
+          {pathname !== "/" ? (
+            <button
+              type="button"
+              className="g-icon-btn g-back-btn"
+              aria-label="Go back"
+              onClick={() => (window.history.length > 1 ? router.back() : router.push("/"))}
+            >
+              <IconChevron dir="left" />
+            </button>
+          ) : null}
           <button
             type="button"
             className="g-icon-btn g-menu-btn"
@@ -403,23 +415,28 @@ function SearchPanel({ products, onClose }: { products: NavProduct[]; onClose: (
 }
 
 function MobileDock({ pathname, count, onCart }: { pathname: string; count: number; onCart: () => void }) {
+  const at = (p: string, exact = false) => (exact ? pathname === p : pathname.startsWith(p)) ? "page" : undefined;
   return (
-    <nav className="g-dock" aria-label="Quick links">
-      <Link href="/mattresses" aria-current={pathname.startsWith("/mattresses") ? "page" : undefined}>
+    <nav className="g-dock" aria-label="App">
+      <Link href="/" aria-current={at("/", true)}>
+        <IconHome />
+        <span>Home</span>
+      </Link>
+      <Link href="/mattresses" aria-current={at("/mattresses") || at("/compare")}>
         <IconGrid />
-        Shop
+        <span>Shop</span>
       </Link>
-      <Link href="/sleep-quiz" aria-current={pathname === "/sleep-quiz" ? "page" : undefined}>
+      <Link href="/sleep-quiz" aria-current={at("/sleep-quiz")}>
         <IconQuiz />
-        Quiz
+        <span>Quiz</span>
       </Link>
-      <Link href="/contact" aria-current={pathname === "/contact" ? "page" : undefined}>
-        <IconPhone />
-        Help
+      <Link href="/account" aria-current={at("/account") || at("/wishlist") || at("/track-order")}>
+        <IconUser />
+        <span>You</span>
       </Link>
       <button type="button" onClick={onCart} aria-label={`Cart, ${count} items`}>
         <IconCart />
-        Cart
+        <span>Cart</span>
         {count ? <span className="g-badge">{count}</span> : null}
       </button>
     </nav>
