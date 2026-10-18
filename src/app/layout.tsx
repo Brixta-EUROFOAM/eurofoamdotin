@@ -41,7 +41,7 @@ const yatra = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(publicOrigin() || "https://eurofoam.in"),
   title: {
-    default: "GADDA Mattresses | Gadda hi hai yaar.",
+    default: "GADDA Mattresses | Gadda hheheh",
     template: "%s | GADDA Mattresses",
   },
   description:

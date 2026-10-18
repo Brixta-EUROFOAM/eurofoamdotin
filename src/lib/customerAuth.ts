@@ -7,6 +7,7 @@ import {
   timingSafeEqual
 } from "crypto";
 import { dataDir } from "@/lib/store";
+import { db as pg, hasDb } from "@/lib/db";
 
 export type Customer = {
   id: string;
@@ -46,6 +47,58 @@ async function writeDb(db: CustomerDatabase) {
 
   await fs.writeFile(temp, JSON.stringify(db, null, 2), "utf-8");
   await fs.rename(temp, target);
+}
+
+/* ---------- storage: Postgres (gadda.customers) or data/customers.json ---------- */
+
+type Row = { id: string; name: string; email: string; mobile: string; password_hash: string; created_at: Date };
+const fromRow = (r: Row): CustomerRecord => ({
+  id: r.id,
+  name: r.name,
+  email: r.email,
+  mobile: r.mobile,
+  passwordHash: r.password_hash,
+  createdAt: new Date(r.created_at).toISOString()
+});
+
+async function findByEmail(email: string): Promise<CustomerRecord | undefined> {
+  if (hasDb()) {
+    const { rows } = await (await pg()).query("select * from gadda.customers where email = $1", [email]);
+    return rows[0] ? fromRow(rows[0]) : undefined;
+  }
+  return (await readDb()).customers.find((c) => c.email === email);
+}
+
+async function findById(id: string, email: string): Promise<CustomerRecord | undefined> {
+  if (hasDb()) {
+    const { rows } = await (await pg()).query("select * from gadda.customers where id = $1 and email = $2", [id, email]);
+    return rows[0] ? fromRow(rows[0]) : undefined;
+  }
+  return (await readDb()).customers.find((c) => c.id === id && c.email === email);
+}
+
+async function insertCustomer(record: CustomerRecord) {
+  if (hasDb()) {
+    try {
+      await (await pg()).query(
+        `insert into gadda.customers (id, name, email, mobile, password_hash, created_at)
+         values ($1, $2, $3, $4, $5, $6)`,
+        [record.id, record.name, record.email, record.mobile, record.passwordHash, record.createdAt]
+      );
+    } catch (e) {
+      if ((e as { code?: string }).code === "23505") throw new Error("An account already exists with this email.");
+      throw e;
+    }
+    return;
+  }
+  const file = await readDb();
+  file.customers.push(record);
+  await writeDb(file);
+}
+
+/* For the one-time import of data/customers.json into Postgres. */
+export async function readCustomerFile() {
+  return (await readDb()).customers;
 }
 
 function normalizeEmail(email: string) {
@@ -110,9 +163,7 @@ export async function registerCustomer(input: {
     throw new Error("Password is too long.");
   }
 
-  const db = await readDb();
-
-  if (db.customers.some((customer) => customer.email === email)) {
+  if (await findByEmail(email)) {
     throw new Error("An account already exists with this email.");
   }
 
@@ -125,8 +176,7 @@ export async function registerCustomer(input: {
     passwordHash: hashPassword(password)
   };
 
-  db.customers.push(record);
-  await writeDb(db);
+  await insertCustomer(record);
 
   return publicCustomer(record);
 }
@@ -136,11 +186,7 @@ export async function authenticateCustomer(
   password: string
 ) {
   const email = normalizeEmail(emailInput);
-  const db = await readDb();
-
-  const record = db.customers.find(
-    (customer) => customer.email === email
-  );
+  const record = await findByEmail(email);
 
   // Always run scrypt, even for unknown emails, so response time
   // doesn't reveal which emails have accounts.
@@ -213,13 +259,7 @@ export async function customerFromSession(token?: string) {
 
     if (!decoded.exp || decoded.exp < Date.now()) return null;
 
-    const db = await readDb();
-
-    const record = db.customers.find(
-      (customer) =>
-        customer.id === decoded.id &&
-        customer.email === decoded.email
-    );
+    const record = await findById(decoded.id, decoded.email);
 
     return record ? publicCustomer(record) : null;
   } catch {
@@ -232,6 +272,10 @@ export const CUSTOMER_COOKIE = "eurofoam_customer";
 /* DPDP right to erasure: removes the account. Orders are kept (GST law
    requires invoices for 8 years) but are no longer linked to a login. */
 export async function deleteCustomer(id: string) {
+  if (hasDb()) {
+    const res = await (await pg()).query("delete from gadda.customers where id = $1", [id]);
+    return (res as { rowCount?: number }).rowCount === 1;
+  }
   const db = await readDb();
   const before = db.customers.length;
   db.customers = db.customers.filter((c) => c.id !== id);

@@ -10,6 +10,11 @@ services:
       - ADMIN_SESSION_SECRET=${ADMIN_SESSION_SECRET}
       - CUSTOMER_SESSION_SECRET=${CUSTOMER_SESSION_SECRET}
       - PUBLIC_SITE_URL=${PUBLIC_SITE_URL}
+      # Your self-hosted Supabase Postgres. Schema "gadda" is created on boot.
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_SSL=${DATABASE_SSL:-false}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     read_only: true
     tmpfs:
       - /tmp

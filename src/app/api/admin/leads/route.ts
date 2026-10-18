@@ -1,34 +1,22 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { dataDir } from "@/lib/store";
+import { LEAD_FILES, readLeads, type LeadType } from "@/lib/leads";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const FILES = { callbacks: "callbacks.jsonl", subscribers: "subscribers.jsonl", consent: "consent.jsonl" } as const;
-
 /* Admin-only CSV export of call-back requests, newsletter sign-ups and consent receipts. */
 export async function GET(request: Request) {
   if (!(await isAdminAuthenticated())) return new Response("Unauthorized", { status: 401 });
-  const type = new URL(request.url).searchParams.get("type") as keyof typeof FILES;
-  const file = FILES[type];
-  if (!file) return new Response("Unknown type", { status: 400 });
+  const type = new URL(request.url).searchParams.get("type") as LeadType;
+  if (!Object.hasOwn(LEAD_FILES, type)) return new Response("Unknown type", { status: 400 });
 
   let rows: Record<string, unknown>[] = [];
   try {
-    rows = (await fs.readFile(path.join(dataDir(), file), "utf-8"))
-      .split("\n")
-      .filter(Boolean)
-      .map((l) => {
-        try {
-          return JSON.parse(l);
-        } catch {
-          return null;
-        }
-      })
-      .filter(Boolean);
-  } catch {}
+    rows = await readLeads(type);
+  } catch (e) {
+    console.error("[leads]", (e as Error).message);
+    return new Response("Database unavailable", { status: 503 });
+  }
 
   const head = Array.from(new Set(rows.flatMap((r) => Object.keys(r))));
   const esc = (v: unknown) => {

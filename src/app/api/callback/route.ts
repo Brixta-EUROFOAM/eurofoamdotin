@@ -1,7 +1,5 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
-import { dataDir } from "@/lib/store";
+import { addCallback } from "@/lib/leads";
 import { pruneIfDue } from "@/lib/retention";
 import { clientIp, forbidden, rateLimit, readJson, sameOrigin, tooMany } from "@/lib/security";
 
@@ -10,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 const clip = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 
-/* "Call me back" requests → data/callbacks.jsonl (download from /api/admin/leads?type=callbacks). */
+/* "Call me back" requests → gadda.callbacks (download from /api/admin/leads?type=callbacks). */
 export async function POST(request: Request) {
   if (!sameOrigin(request)) return forbidden();
   if (!rateLimit(`cb:${clientIp(request)}`, 4, 60 * 60_000)) return tooMany();
@@ -25,12 +23,7 @@ export async function POST(request: Request) {
   if (name.length < 2 || !/^[6-9]\d{9}$/.test(phone)) {
     return NextResponse.json({ error: "Enter your name and a 10-digit mobile number." }, { status: 422 });
   }
-  await fs.mkdir(dataDir(), { recursive: true });
   void pruneIfDue("callbacks.jsonl");
-  await fs.appendFile(
-    path.join(dataDir(), "callbacks.jsonl"),
-    JSON.stringify({ at: new Date().toISOString(), name, phone, when, message }) + "\n",
-    "utf-8"
-  );
+  await addCallback({ at: new Date().toISOString(), name, phone, when, message });
   return NextResponse.json({ ok: true });
 }

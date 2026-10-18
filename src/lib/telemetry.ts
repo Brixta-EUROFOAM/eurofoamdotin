@@ -3,6 +3,7 @@ import path from "path";
 import { randomBytes } from "crypto";
 import { dataDir } from "@/lib/store";
 import { pruneIfDue } from "@/lib/retention";
+import { db, hasDb } from "@/lib/db";
 
 export type TelemetryEvent = {
   id: string;
@@ -46,7 +47,6 @@ function number(value: unknown) {
 }
 
 export async function appendTelemetry(input: any) {
-  await fs.mkdir(dataDir(), { recursive: true });
   void pruneIfDue("telemetry.jsonl");
 
   const event: TelemetryEvent = {
@@ -103,6 +103,11 @@ export async function appendTelemetry(input: any) {
       : undefined
   };
 
+  if (hasDb()) {
+    await insertEvent(event);
+    return event;
+  }
+  await fs.mkdir(dataDir(), { recursive: true });
   await fs.appendFile(
     filePath(),
     JSON.stringify(event) + "\n",
@@ -112,7 +117,33 @@ export async function appendTelemetry(input: any) {
   return event;
 }
 
-export async function readTelemetry(days = 30) {
+export async function insertEvent(event: TelemetryEvent) {
+  await (await db()).query(
+    `insert into gadda.events (ts, type, visitor_id, session_id, customer_id, path, product_slug, data)
+     values ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [event.timestamp, event.type, event.visitorId, event.sessionId, event.customerId ?? null,
+     event.path, event.productSlug ?? null, JSON.stringify(event)]
+  );
+}
+
+export async function readTelemetry(days = 30): Promise<TelemetryEvent[]> {
+  if (hasDb()) {
+    try {
+      const { rows } = await (await db()).query(
+        `select data from gadda.events where ts >= now() - make_interval(days => $1)
+         order by ts desc limit 100000`,
+        [Math.max(1, Math.min(400, Math.floor(days)))]
+      );
+      return rows.map((r) => r.data as TelemetryEvent).reverse();
+    } catch (e) {
+      console.error("[telemetry]", (e as Error).message);
+      return [];
+    }
+  }
+  return readTelemetryFile(days);
+}
+
+export async function readTelemetryFile(days = 30) {
   try {
     const raw = await fs.readFile(filePath(), "utf-8");
 

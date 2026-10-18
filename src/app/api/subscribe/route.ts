@@ -1,7 +1,5 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
-import { dataDir } from "@/lib/store";
+import { addSubscriber } from "@/lib/leads";
 import { clientIp, forbidden, rateLimit, readJson, sameOrigin, tooMany } from "@/lib/security";
 
 export const runtime = "nodejs";
@@ -9,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 const CONSENT_TEXT = "By signing up you agree to get marketing emails from GADDA. See our privacy notice.";
 
-/* Newsletter opt-ins → data/subscribers.jsonl with proof of consent. */
+/* Newsletter opt-ins → gadda.subscribers with proof of consent. */
 export async function POST(request: Request) {
   if (!sameOrigin(request)) return forbidden();
   if (!rateLimit(`sub:${clientIp(request)}`, 5, 60 * 60_000)) return tooMany();
@@ -19,11 +17,6 @@ export async function POST(request: Request) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     return NextResponse.json({ error: "Enter a valid email address." }, { status: 422 });
   }
-  await fs.mkdir(dataDir(), { recursive: true });
-  await fs.appendFile(
-    path.join(dataDir(), "subscribers.jsonl"),
-    JSON.stringify({ email, consent: CONSENT_TEXT, at: new Date().toISOString() }) + "\n",
-    "utf-8"
-  );
+  await addSubscriber({ email, consent: CONSENT_TEXT, at: new Date().toISOString() });
   return NextResponse.json({ ok: true });
 }

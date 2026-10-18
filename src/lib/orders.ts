@@ -3,6 +3,7 @@ import path from "path";
 import { randomBytes } from "crypto";
 import { dataDir, getStoreData } from "@/lib/store";
 import type { Mattress } from "@/lib/catalog";
+import { db, hasDb } from "@/lib/db";
 
 /*
   Orders, saved one per line in data/orders.jsonl (same storage style as
@@ -122,7 +123,10 @@ export async function createOrder(
   if (body.acceptTerms !== true) throw new OrderError("Please accept the Terms of Sale to place the order.");
   const idempotencyKey = clip(body.idempotencyKey, 64).replace(/[^a-zA-Z0-9-]/g, "");
   if (idempotencyKey) {
-    const existing = (await listOrders()).find((o) => o.idempotencyKey === idempotencyKey);
+    const existing = hasDb()
+      ? ((await (await db()).query("select data from gadda.orders where idempotency_key = $1", [idempotencyKey])).rows[0]
+          ?.data as Order | undefined)
+      : (await listOrders()).find((o) => o.idempotencyKey === idempotencyKey);
     if (existing) return existing;
   }
 
@@ -147,12 +151,36 @@ export async function createOrder(
     total: lines.reduce((sum, l) => sum + l.lineTotal, 0),
   };
 
+  if (hasDb()) {
+    await insertOrder(order);
+    return order;
+  }
   await fs.mkdir(dataDir(), { recursive: true });
   await fs.appendFile(file(), JSON.stringify(order) + "\n", "utf-8");
   return order;
 }
 
+/* Insert one order row (also used by the one-time file import). */
+export async function insertOrder(order: Order) {
+  await (await db()).query(
+    `insert into gadda.orders (id, created_at, status, customer_id, phone, pincode, total, idempotency_key, data)
+     values ($1, $2, $3, $4, $5, $6, $7, $8, $9) on conflict do nothing`,
+    [order.id, order.createdAt, order.status, order.customerId ?? null, order.customer.phone,
+     order.customer.pincode, order.total, order.idempotencyKey ?? null, JSON.stringify(order)]
+  );
+}
+
 export async function listOrders(): Promise<Order[]> {
+  if (hasDb()) {
+    const { rows } = await (await db()).query(
+      "select data, status from gadda.orders order by created_at desc limit 5000"
+    );
+    return rows.map((r) => ({ ...(r.data as Order), status: r.status }));
+  }
+  return listOrderFile();
+}
+
+export async function listOrderFile(): Promise<Order[]> {
   try {
     const raw = await fs.readFile(file(), "utf-8");
     return raw
@@ -177,12 +205,23 @@ export async function findOrderForTracking(id: string, phone: string) {
   const cleanId = id.trim().toUpperCase().slice(0, 30);
   const digits = phone.replace(/\D/g, "").slice(-10);
   if (!cleanId || digits.length !== 10) return null;
-  const order = (await listOrders()).find((o) => o.id === cleanId);
+  const order = hasDb()
+    ? ((await (await db()).query("select data, status from gadda.orders where id = $1", [cleanId])).rows.map(
+        (r) => ({ ...(r.data as Order), status: r.status })
+      )[0] as Order | undefined)
+    : (await listOrders()).find((o) => o.id === cleanId);
   if (!order || order.customer.phone.replace(/\D/g, "").slice(-10) !== digits) return null;
   return order;
 }
 
 export async function ordersForCustomer(customerId: string) {
+  if (hasDb()) {
+    const { rows } = await (await db()).query(
+      "select data, status from gadda.orders where customer_id = $1 order by created_at desc",
+      [customerId]
+    );
+    return rows.map((r) => ({ ...(r.data as Order), status: r.status })) as Order[];
+  }
   return (await listOrders()).filter((o) => o.customerId === customerId);
 }
 

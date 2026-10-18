@@ -1,7 +1,5 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
-import { dataDir } from "@/lib/store";
+import { addConsent } from "@/lib/leads";
 import { CONSENT_VERSION } from "@/lib/consent";
 import { clientIp, rateLimit, readJson, tooMany } from "@/lib/security";
 
@@ -10,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 /*
   Consent receipts (DPDP Rules: the Data Fiduciary must be able to show
-  consent was given). One line per choice in data/consent.jsonl.
+  consent was given). One row per choice in gadda.consent_receipts.
   Stores the random receipt id, the choice, version and time — no IP,
   no identifiers that tie it to a person.
 */
@@ -30,8 +28,7 @@ export async function POST(request: Request) {
   if (!record.id || !record.v) return NextResponse.json({ ok: false }, { status: 400 });
 
   try {
-    await fs.mkdir(dataDir(), { recursive: true });
-    await fs.appendFile(path.join(dataDir(), "consent.jsonl"), JSON.stringify(record) + "\n", "utf-8");
+    await addConsent(record);
   } catch (e) {
     console.error("[consent] write failed", e);
   }

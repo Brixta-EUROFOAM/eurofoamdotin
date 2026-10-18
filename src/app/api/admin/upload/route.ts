@@ -1,8 +1,7 @@
-import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { ensureStore, mediaDir } from "@/lib/store";
+import { saveMedia } from "@/lib/leads";
 
 export const runtime = "nodejs";
 
@@ -71,10 +70,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "That file isn't a real image" }, { status: 400 });
   }
 
-  await ensureStore();
-
   const safe = filenameFor(file.name, real);
-  await fs.writeFile(path.join(mediaDir(), safe), bytes);
+  await saveMedia(safe, real, bytes);
 
   return NextResponse.json({ url: `/media/${safe}` });
 }

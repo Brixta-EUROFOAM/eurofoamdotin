@@ -35,7 +35,7 @@ export default async function Home() {
                 गद्दा
               </p>
               <h1 className="g-h1" id="hero-title">
-                {site.heroTitle || "Gadda hi hai yaar."}
+                {site.heroTitle || "Gad"}
               </h1>
               <p className="g-lede">
                 It&apos;s a mattress, not a rocket. Three honest ones, built from foam you can name, sold at one

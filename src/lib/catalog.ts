@@ -308,13 +308,13 @@ export const defaultStoreData: StoreData = {
   site: {
     brandName: "GADDA",
     brandSuffix: "MATTRESSES",
-    tagline: "Gadda hi hai yaar.",
+    tagline: "hehehehehghgh",
     logoUrl: "/eurofoam-logo-v2.png",
     announcement: "FREE SHIPPING · EASY TRIALS · WARRANTY INCLUDED",
     homeBackground: "#000000",
     homeForeground: "#FFFFFF",
     heroEyebrow: "GADDA MATTRESSES",
-    heroTitle: "A better mattress shouldn't need a showroom.",
+    heroTitle: "Heheheh",
     heroBody:
       "Clear comfort choices, transparent construction and direct-to-your-door convenience. Choose the feel that fits you and try it where sleep actually happens: at home.",
     heroImage:

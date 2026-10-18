@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { dataDir } from "@/lib/store";
+import { db, hasDb } from "@/lib/db";
 
 /*
   Storage limitation (DPDP Act s.8(7)): drop log lines older than the
@@ -8,9 +9,9 @@ import { dataDir } from "@/lib/store";
   day per file, lazily, from the code that writes to that file.
 */
 
-const RULES: Record<string, { days: number; field: string }> = {
-  "telemetry.jsonl": { days: 396, field: "timestamp" }, // 13 months
-  "callbacks.jsonl": { days: 183, field: "at" }, // 6 months
+const RULES: Record<string, { days: number; field: string; table: string; col: string }> = {
+  "telemetry.jsonl": { days: 396, field: "timestamp", table: "gadda.events", col: "ts" }, // 13 months
+  "callbacks.jsonl": { days: 183, field: "at", table: "gadda.callbacks", col: "at" }, // 6 months
 };
 
 const lastRun = new Map<string, number>();
@@ -21,6 +22,18 @@ export async function pruneIfDue(file: keyof typeof RULES | string) {
   const now = Date.now();
   if (now - (lastRun.get(file) || 0) < 24 * 60 * 60 * 1000) return;
   lastRun.set(file, now);
+
+  if (hasDb()) {
+    try {
+      await (await db()).query(
+        `delete from ${rule.table} where ${rule.col} < now() - make_interval(days => $1)`,
+        [rule.days]
+      );
+    } catch (e) {
+      console.error("[retention]", (e as Error).message);
+    }
+    return;
+  }
 
   const full = path.join(dataDir(), file);
   try {

@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
 import { cookies } from "next/headers";
+import { db, hasDb, tx } from "@/lib/db";
 
 import {
   dataDir,
@@ -28,7 +29,7 @@ type AdminRecord = {
 };
 
 
-type AdminFile = {
+export type AdminFile = {
   version: 2;
   admins: AdminRecord[];
 };
@@ -138,7 +139,7 @@ function sameUsername(
 }
 
 
-function normalizeAdminFile(
+export function normalizeAdminFile(
   raw: unknown
 ): AdminFile {
   if (
@@ -227,6 +228,26 @@ function normalizeAdminFile(
 
 async function readAdminFile():
   Promise<AdminFile> {
+  if (hasDb()) {
+    const pool = await db();
+    const { rows } = await pool.query(
+      `select id, username, salt, password_hash, role, created_at, updated_at
+         from gadda.admins order by created_at`
+    );
+    return {
+      version: 2,
+      admins: rows.map((r) => ({
+        id: r.id,
+        username: r.username,
+        salt: r.salt,
+        passwordHash: r.password_hash,
+        role: r.role as AdminRole,
+        createdAt: new Date(r.created_at).toISOString(),
+        updatedAt: new Date(r.updated_at).toISOString()
+      }))
+    };
+  }
+
   await ensureStore();
 
   try {
@@ -250,9 +271,41 @@ async function readAdminFile():
 }
 
 
+/* Database: make gadda.admins exactly match `state`, atomically. */
+export async function writeAdminRows(
+  state: AdminFile
+) {
+  await tx(async (c) => {
+    const ids = state.admins.map((a) => a.id);
+    await c.query(
+      "delete from gadda.admins where not (id = any($1::text[]))",
+      [ids]
+    );
+    for (const a of state.admins) {
+      await c.query(
+        `insert into gadda.admins (id, username, salt, password_hash, role, created_at, updated_at)
+         values ($1, $2, $3, $4, $5, $6, $7)
+         on conflict (id) do update set
+           username = excluded.username,
+           salt = excluded.salt,
+           password_hash = excluded.password_hash,
+           role = excluded.role,
+           updated_at = excluded.updated_at`,
+        [a.id, a.username, a.salt, a.passwordHash, a.role, a.createdAt, a.updatedAt]
+      );
+    }
+  });
+}
+
+
 async function writeAdminFile(
   state: AdminFile
 ) {
+  if (hasDb()) {
+    await writeAdminRows(state);
+    return;
+  }
+
   await ensureStore();
 
   const destination =
