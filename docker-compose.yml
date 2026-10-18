@@ -1,16 +1,23 @@
 services:
   eurofoam:
+    build: .
     image: zahrbrixta/eurofoam-mattresses:latest
     container_name: eurofoam-mattresses
     restart: unless-stopped
     ports:
-      - "55002:3000"
+      # Cloudflare tunnel: eurofoam.brixtahomeserver.site -> localhost:3700
+      - "127.0.0.1:3700:3000"
+    # DATABASE_URL, secrets etc. live in .env next to this file
+    env_file:
+      - path: .env
+        required: false
     environment:
       - CMS_DATA_DIR=/app/data
       - ADMIN_SESSION_SECRET=${ADMIN_SESSION_SECRET}
       - CUSTOMER_SESSION_SECRET=${CUSTOMER_SESSION_SECRET}
       - PUBLIC_SITE_URL=${PUBLIC_SITE_URL}
-      # Your self-hosted Supabase Postgres. Schema "gadda" is created on boot.
+      # Self-hosted Supabase Postgres (via the pooler on :55005, same as NAMS).
+      # Schema "gadda" is created on boot.
       - DATABASE_URL=${DATABASE_URL}
       - DATABASE_SSL=${DATABASE_SSL:-false}
     extra_hosts:

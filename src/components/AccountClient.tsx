@@ -9,6 +9,7 @@ type OrderRow = {
   id: string;
   createdAt: string;
   status: string;
+  statusLabel?: string;
   total: number;
   payment: string;
   lines: { name: string; size: string; height: string; variant?: string; quantity: number }[];
@@ -122,7 +123,7 @@ export default function AccountClient() {
                 <div className="g-order-top">
                   <b>{o.id}</b>
                   <span className={`g-chip ${o.status === "delivered" ? "g-chip--ok" : o.status === "cancelled" ? "" : "g-chip--indigo"}`}>
-                    {STATUS[o.status] || o.status}
+                    {o.statusLabel || STATUS[o.status] || o.status}
                   </span>
                 </div>
                 <p style={{ margin: "6px 0 0", color: "var(--g-ink-2)", fontSize: ".93rem" }}>

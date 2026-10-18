@@ -67,7 +67,7 @@ function adminPath() {
 }
 
 
-function sessionSecret() {
+export function sessionSecret() {
   const configured =
     process.env.ADMIN_SESSION_SECRET;
 

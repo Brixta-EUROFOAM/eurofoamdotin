@@ -6,6 +6,9 @@ import { money } from "@/lib/catalog";
 type Result = {
   id: string;
   status: string;
+  cancelled?: boolean;
+  timeline?: { label: string; done: boolean; current: boolean; at: string | null }[];
+  eta?: string | null;
   createdAt: string;
   city: string;
   pincode: string;
@@ -80,8 +83,24 @@ export default function TrackOrder() {
           <p style={{ color: "var(--g-ink-2)", margin: "6px 0 18px" }}>
             {result.lines.map((l) => `${l.name} ${l.size} ${l.height} × ${l.quantity}`).join("; ")}. To {result.city} {result.pincode}.
           </p>
-          {result.status === "cancelled" ? (
+          {result.cancelled || result.status === "cancelled" ? (
             <p className="g-chip">This order was cancelled.</p>
+          ) : result.timeline?.length ? (
+            <>
+              <ol className="g-track">
+                {result.timeline.map((s, i) => (
+                  <li key={i} data-done={s.done || undefined} aria-current={s.current ? "step" : undefined}>
+                    <b>{s.label}</b>
+                    {s.at ? <span>{when(s.at)}</span> : null}
+                  </li>
+                ))}
+              </ol>
+              {result.eta ? (
+                <p style={{ margin: "14px 0 0", fontWeight: 700 }}>
+                  Expected by {new Date(result.eta).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" })}
+                </p>
+              ) : null}
+            </>
           ) : (
             <ol className="g-checkout-steps" style={{ flexWrap: "wrap" }}>
               {FLOW.map((s, i) => (
@@ -95,4 +114,8 @@ export default function TrackOrder() {
       ) : null}
     </div>
   );
+}
+
+function when(iso: string) {
+  return new Date(iso).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
 }

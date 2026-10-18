@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { CUSTOMER_COOKIE, customerFromSession } from "@/lib/customerAuth";
 import { ordersForCustomer } from "@/lib/orders";
+import { CANCELLED, getOps } from "@/lib/ops";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,10 +12,13 @@ export async function GET() {
   const jar = await cookies();
   const customer = await customerFromSession(jar.get(CUSTOMER_COOKIE)?.value);
   if (!customer) return NextResponse.json({ orders: [] }, { status: 401 });
+  const { stages } = await getOps();
+  const label = (s: string) => (s === CANCELLED ? "Cancelled" : stages.find((x) => x.id === s)?.customerLabel || s);
   const orders = (await ordersForCustomer(customer.id)).map((o) => ({
     id: o.id,
     createdAt: o.createdAt,
     status: o.status,
+    statusLabel: label(o.status),
     total: o.total,
     payment: o.payment,
     lines: o.lines.map((l) => ({ name: l.name, size: l.size, height: l.height, variant: l.variant, quantity: l.quantity })),

@@ -4,6 +4,7 @@ import { randomBytes } from "crypto";
 import { dataDir, getStoreData } from "@/lib/store";
 import type { Mattress } from "@/lib/catalog";
 import { db, hasDb } from "@/lib/db";
+import { CANCELLED, getOps, OpsError } from "@/lib/ops";
 
 /*
   Orders, saved one per line in data/orders.jsonl (same storage style as
@@ -26,7 +27,10 @@ export type OrderLine = {
 export type Order = {
   id: string;
   createdAt: string;
-  status: "new" | "confirmed" | "dispatched" | "delivered" | "cancelled";
+  /* id of a stage in Operations settings (src/lib/ops.ts), or "cancelled" */
+  status: string;
+  /* every move, accept and note from the /ops board */
+  history?: OrderEvent[];
   customer: {
     name: string;
     phone: string;
@@ -47,6 +51,14 @@ export type Order = {
   idempotencyKey?: string;
   lines: OrderLine[];
   total: number;
+};
+
+export type OrderEvent = {
+  at: string;
+  by: string;
+  stage: string;
+  event: "moved" | "accepted" | "note" | "cancelled";
+  note?: string;
 };
 
 type InLine = { slug?: unknown; size?: unknown; height?: unknown; variant?: unknown; quantity?: unknown };
@@ -139,7 +151,7 @@ export async function createOrder(
   const order: Order = {
     id,
     createdAt: d.toISOString(),
-    status: "new",
+    status: (await getOps()).stages[0]?.id || "new",
     customer: { name, phone, email: email || undefined, address, city, pincode },
     payment,
     notes: notes || undefined,
@@ -241,4 +253,92 @@ export function whatsappFor(phone: string, order: Order) {
     `${order.customer.name}, ${order.customer.city} ${order.customer.pincode}`,
   ].join("\n");
   return `https://wa.me/${to}?text=${encodeURIComponent(text)}`;
+}
+
+/* ---------- moving orders through stages (used by the /ops board) ---------- */
+
+export async function getOrder(id: string): Promise<Order | null> {
+  if (hasDb()) {
+    const { rows } = await (await db()).query("select data, status from gadda.orders where id = $1", [id]);
+    return rows[0] ? ({ ...(rows[0].data as Order), status: rows[0].status } as Order) : null;
+  }
+  return (await listOrderFile()).find((o) => o.id === id) || null;
+}
+
+async function saveOrder(order: Order) {
+  if (hasDb()) {
+    await (await db()).query("update gadda.orders set status = $2, data = $3 where id = $1", [
+      order.id,
+      order.status,
+      JSON.stringify(order),
+    ]);
+    return;
+  }
+  const all = (await listOrderFile()).reverse(); // back to oldest-first file order
+  const next = all.map((o) => (o.id === order.id ? order : o));
+  const tmp = `${file()}.tmp`;
+  await fs.writeFile(tmp, next.map((o) => JSON.stringify(o)).join("\n") + "\n", "utf-8");
+  await fs.rename(tmp, file());
+}
+
+export type OrderAction =
+  | { action: "accept" }
+  | { action: "advance" }
+  | { action: "set"; stage: string }
+  | { action: "note"; note: string }
+  | { action: "cancel"; note?: string };
+
+/*
+  Apply one board action. `can(stageId)` says whether this person may act
+  on an order sitting in that stage (their department); admins pass () => true.
+*/
+export async function actOnOrder(
+  id: string,
+  act: OrderAction,
+  who: { name: string; admin: boolean; can: (stage: string) => boolean }
+): Promise<Order> {
+  const order = await getOrder(id);
+  if (!order) throw new OpsError("Order not found.");
+  const { stages } = await getOps();
+  const i = stages.findIndex((s) => s.id === order.status);
+  const now = new Date().toISOString();
+  const note = "note" in act && act.note ? String(act.note).replace(/[\r\n]+/g, " ").trim().slice(0, 300) : undefined;
+  const history = [...(order.history || [])];
+
+  if (!who.admin && !who.can(order.status)) throw new OpsError("This order isn't in your department right now.");
+
+  switch (act.action) {
+    case "accept":
+      history.push({ at: now, by: who.name, stage: order.status, event: "accepted" });
+      break;
+    case "note":
+      if (!note) throw new OpsError("Write a note first.");
+      history.push({ at: now, by: who.name, stage: order.status, event: "note", note });
+      break;
+    case "advance": {
+      if (order.status === CANCELLED) throw new OpsError("This order is cancelled.");
+      const next = stages[i + 1];
+      if (!next) throw new OpsError("Already at the last stage.");
+      order.status = next.id;
+      history.push({ at: now, by: who.name, stage: next.id, event: "moved" });
+      break;
+    }
+    case "set": {
+      if (!who.admin) throw new OpsError("Only admins can jump stages.");
+      if (!stages.some((s) => s.id === act.stage)) throw new OpsError("Unknown stage.");
+      order.status = act.stage;
+      history.push({ at: now, by: who.name, stage: act.stage, event: "moved" });
+      break;
+    }
+    case "cancel":
+      if (!who.admin) throw new OpsError("Only admins can cancel orders.");
+      order.status = CANCELLED;
+      history.push({ at: now, by: who.name, stage: CANCELLED, event: "cancelled", note });
+      break;
+    default:
+      throw new OpsError("Unknown action.");
+  }
+  order.history = history.slice(-200);
+  await saveOrder(order);
+  return order;
 }

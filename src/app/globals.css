@@ -2226,8 +2226,11 @@ a {
 .g-gallery-thumbs {
   display: flex;
   gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 .g-gallery-thumbs button {
+  flex: none;
   width: 84px;
   height: 64px;
   padding: 0;
@@ -2909,3 +2912,33 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+/* Customer order tracking timeline (driven by Operations stages) */
+.g-track { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.g-track li { position: relative; display: grid; gap: 2px; padding: 0 0 18px 30px; color: var(--g-ink-3); }
+.g-track li::before { content: ""; position: absolute; left: 0; top: 3px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--g-line); background: var(--g-paper); }
+.g-track li::after { content: ""; position: absolute; left: 7px; top: 20px; bottom: 2px; width: 2px; background: var(--g-line); }
+.g-track li:last-child { padding-bottom: 0; }
+.g-track li:last-child::after { display: none; }
+.g-track li[data-done], .g-track li[aria-current] { color: var(--g-ink); }
+.g-track li[data-done]::before { background: var(--g-ok); border-color: var(--g-ok); }
+.g-track li[data-done]::after { background: var(--g-ok); }
+.g-track li[aria-current]::before { background: var(--g-orange); border-color: var(--g-orange); box-shadow: 0 0 0 5px rgba(255, 101, 0, 0.18); }
+.g-track span { font-size: 0.85rem; color: var(--g-ink-2); }
+
+/* Ad / offer banners (Admin → Homepage & banners) */
+.g-promos-sec { padding-block: clamp(20px, 4vw, 40px); }
+.g-promos { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(min(86vw, 520px), 1fr); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
+.g-promos--one { grid-auto-columns: 1fr; }
+.g-promo { position: relative; display: grid; align-items: end; min-height: clamp(220px, 30vw, 320px); border-radius: var(--g-r-lg); overflow: hidden; background: var(--g-ink); color: #fff; text-decoration: none; scroll-snap-align: start; isolation: isolate; }
+.g-promo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform .6s var(--g-ease); }
+.g-promo:not(.g-promo--plain)::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, transparent 25%, rgba(0, 0, 0, 0.72)); }
+.g-promo:hover img { transform: scale(1.03); }
+.g-promo--plain { background: var(--g-orange); }
+.g-promo--light { color: var(--g-ink); background: var(--g-sand); }
+.g-promo--light:not(.g-promo--plain)::before { background: linear-gradient(180deg, transparent 25%, rgba(255, 255, 255, 0.82)); }
+.g-promo-text { display: grid; gap: 8px; justify-items: start; padding: clamp(18px, 3vw, 30px); max-width: 560px; }
+.g-promo-text h3 { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2.3rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.02; }
+.g-promo-text p { margin: 0; opacity: 0.9; }
+.g-promo-eyebrow { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.g-promo .g-btn { margin-top: 6px; }

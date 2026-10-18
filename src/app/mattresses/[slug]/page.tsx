@@ -80,7 +80,7 @@ export default async function ProductPage({ params }: Params) {
             </ol>
           </nav>
           <div className="g-pdp">
-            <ProductGallery name={mattress.name} image={mattress.image} layers={mattress.layers} />
+            <ProductGallery name={mattress.name} image={mattress.image} gallery={mattress.gallery} layers={mattress.layers} />
             <ProductBuyBox mattress={mattress} trialNights={BUSINESS.trialNights} warranty={warranty} />
           </div>
         </div>

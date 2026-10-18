@@ -4,6 +4,7 @@ import { hasAdminAccount, isAdminAuthenticated } from "@/lib/admin-auth";
 import { listOrders } from "@/lib/orders";
 import { money } from "@/lib/catalog";
 import { missingBusinessFields } from "@/lib/business";
+import { CANCELLED, dueAt, getOps } from "@/lib/ops";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,7 @@ export default async function AdminOrdersPage() {
   if (!(await isAdminAuthenticated())) redirect("/admin/login");
 
   const orders = await listOrders();
+  const { stages, depts } = await getOps();
   const total = orders.reduce((sum, o) => sum + o.total, 0);
   const missing = missingBusinessFields();
 
@@ -27,6 +29,8 @@ export default async function AdminOrdersPage() {
         </div>
         <nav>
           <Link href="/admin">← Back to admin</Link>
+          <a href="/ops">Order board</a>
+          <a href="/admin/ops">Operations &amp; TAT</a>
           <a href="/api/admin/orders" download>
             Orders CSV
           </a>
@@ -53,6 +57,7 @@ export default async function AdminOrdersPage() {
             <thead>
               <tr>
                 <th>Order</th>
+                <th>Stage</th>
                 <th>Customer</th>
                 <th>Deliver to</th>
                 <th>Items</th>
@@ -73,6 +78,23 @@ export default async function AdminOrdersPage() {
                       hour: "numeric",
                       minute: "2-digit",
                     })}
+                  </td>
+                  <td>
+                    {(() => {
+                      if (o.status === CANCELLED) return <strong style={{ color: "var(--g-err)" }}>Cancelled</strong>;
+                      const st = stages.find((x) => x.id === o.status);
+                      const dept = depts.find((d) => d.id === st?.dept);
+                      const due = dueAt(o, stages);
+                      const late = due && new Date(due).getTime() < Date.now();
+                      return (
+                        <>
+                          <strong style={{ color: dept?.color }}>{st?.label || o.status}</strong>
+                          <br />
+                          {dept?.name}
+                          {late ? <strong style={{ color: "var(--g-err)" }}> · LATE</strong> : null}
+                        </>
+                      );
+                    })()}
                   </td>
                   <td>
                     <strong>{o.customer.name}</strong>

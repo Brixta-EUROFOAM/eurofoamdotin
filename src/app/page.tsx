@@ -13,6 +13,8 @@ import HindiNote from "@/components/store/HindiNote";
 import { getStoreData } from "@/lib/store";
 import { money } from "@/lib/catalog";
 import { BUSINESS } from "@/lib/business";
+import { copyText } from "@/lib/site-copy";
+import PromoBanners from "@/components/store/PromoBanners";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +24,8 @@ export default async function Home() {
   const show = site.homeSections || {};
   const hero = products.find((p) => p.slug === site.homeStoryProductSlug) || products[1] || products[0];
   const cheapest = products.length ? Math.min(...products.map((p) => p.basePrice)) : 0;
+  const t = (key: string, vars: Record<string, string | number> = {}) =>
+    copyText(site, key, { trial: BUSINESS.trialNights, count: products.length, ...vars });
 
   return (
     <>
@@ -35,12 +39,9 @@ export default async function Home() {
                 गद्दा
               </p>
               <h1 className="g-h1" id="hero-title">
-                {site.heroTitle || "Gad"}
+                {site.heroTitle || "Gadda hi hai yaar."}
               </h1>
-              <p className="g-lede">
-                It&apos;s a mattress, not a rocket. Three honest ones, built from foam you can name, sold at one
-                fair price with delivery included — and {BUSINESS.trialNights} nights at home to make sure.
-              </p>
+              <p className="g-lede">{t("heroLede")}</p>
               <div className="g-hero-cta">
                 <Link href="/mattresses" className="g-btn g-btn--orange">
                   {sentence(site.primaryCtaLabel) || "Shop mattresses"}
@@ -51,7 +52,16 @@ export default async function Home() {
               </div>
               {cheapest ? (
                 <p className="g-hero-from">
-                  From <b>{money(cheapest)}</b>, GST and delivery included.
+                  {(() => {
+                    const [before, ...after] = t("heroFrom").split("{price}");
+                    return (
+                      <>
+                        {before}
+                        {after.length ? <b>{money(cheapest)}</b> : null}
+                        {after.join("")}
+                      </>
+                    );
+                  })()}
                 </p>
               ) : null}
             </div>
@@ -86,21 +96,21 @@ export default async function Home() {
 
         <TrustStrip />
 
+        {show.promos !== false ? <PromoBanners banners={site.homeBanners || []} title={t("promosTitle")} /> : null}
+
         {show.productGrid !== false ? (
           <section className="g-section" aria-labelledby="range-title">
             <div className="g-wrap">
               <div className="g-head">
                 <div>
                   <h2 className="g-h2" id="range-title">
-                    Three mattresses. That&apos;s the whole range.
+                    {t("rangeTitle")}
                   </h2>
-                  <HindiNote>बस तीन</HindiNote>
-                  <p className="g-lede">
-                    Firm, balanced or plush. Every size in 6 or 8 inch, priced the same for everyone, every day.
-                  </p>
+                  {t("rangeHindi") ? <HindiNote>{t("rangeHindi")}</HindiNote> : null}
+                  <p className="g-lede">{t("rangeLede")}</p>
                 </div>
                 <Link href="/compare" className="g-btn g-btn--ghost">
-                  Compare side by side
+                  {t("rangeCompare")}
                 </Link>
               </div>
               <div className="g-products g-rail">
@@ -108,7 +118,7 @@ export default async function Home() {
                   <ProductCard
                     key={p.slug}
                     mattress={p}
-                    highlight={p.slug === hero?.slug ? "Our pick for most people" : undefined}
+                    highlight={p.slug === hero?.slug ? t("rangePick") || undefined : undefined}
                   />
                 ))}
               </div>
@@ -122,18 +132,15 @@ export default async function Home() {
             <div className="g-head">
               <div>
                 <h2 className="g-h2" id="vs-title">
-                  Buying a mattress shouldn&apos;t need a glossary.
+                  {t("vsTitle")}
                 </h2>
-                <HindiNote>सीधी बात</HindiNote>
-                <p className="g-lede">
-                  Most of the words on a mattress label are there to justify the price tag. Here&apos;s the
-                  difference.
-                </p>
+                {t("vsHindi") ? <HindiNote>{t("vsHindi")}</HindiNote> : null}
+                <p className="g-lede">{t("vsLede")}</p>
               </div>
             </div>
             <div className="g-vs">
               <div className="g-vs-col g-vs-col--them">
-                <h3>The usual mattress</h3>
+                <h3>{t("vsThemTitle")}</h3>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/home/mattress-jargon.png"
@@ -143,19 +150,17 @@ export default async function Home() {
                   height={801}
                 />
                 <ul className="g-vs-list" style={{ color: "var(--g-ink-2)" }}>
-                  <li>
-                    <span>An &ldquo;MRP&rdquo; that nobody pays, slashed by 60% forever</span>
-                  </li>
-                  <li>
-                    <span>Trademarked names for ordinary foam</span>
-                  </li>
-                  <li>
-                    <span>A sale countdown that resets at midnight</span>
-                  </li>
+                  {["vsThem1", "vsThem2", "vsThem3"].map((k) =>
+                    t(k) ? (
+                      <li key={k}>
+                        <span>{t(k)}</span>
+                      </li>
+                    ) : null
+                  )}
                 </ul>
               </div>
               <div className="g-vs-col g-vs-col--us">
-                <h3>A GADDA</h3>
+                <h3>{t("vsUsTitle")}</h3>
                 <Stamp className="g-stamp--corner" ring="One price for everyone" center="₹" sub="No fake MRP" tone="indigo" size={112} rotate={10} />
                 {hero ? (
                   <div style={{ padding: "8% 6%" }}>
@@ -163,30 +168,20 @@ export default async function Home() {
                   </div>
                 ) : null}
                 <ul className="g-vs-list">
-                  <li>
-                    <div>
-                      Every layer named, in plain words
-                      <br />
-                      <span>Cover, comfort foam, support foam. Density printed where we know it.</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      One price, the real one
-                      <br />
-                      <span>Including GST and delivery. No coupons needed to get a fair deal.</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      Made in India, sold direct
-                      <br />
-                      <span>No showroom rent or middlemen added to what you pay.</span>
-                    </div>
-                  </li>
+                  {["vsUs1", "vsUs2", "vsUs3"].map((k) =>
+                    t(k) ? (
+                      <li key={k}>
+                        <div>
+                          {t(k)}
+                          <br />
+                          <span>{t(`${k}Sub`)}</span>
+                        </div>
+                      </li>
+                    ) : null
+                  )}
                 </ul>
                 <Link href="/why-gadda" className="g-btn g-btn--orange" style={{ justifySelf: "start" }}>
-                  Why we do it this way
+                  {t("vsCta")}
                 </Link>
               </div>
             </div>
@@ -199,29 +194,21 @@ export default async function Home() {
             <div className="g-head">
               <div>
                 <h2 className="g-h2" id="how-title">
-                  How buying a GADDA works
+                  {t("howTitle")}
                 </h2>
-                <HindiNote>आराम से</HindiNote>
-                <p className="g-lede">No payment gateway hoops. Order online, and a person takes it from there.</p>
+                {t("howHindi") ? <HindiNote>{t("howHindi")}</HindiNote> : null}
+                <p className="g-lede">{t("howLede")}</p>
               </div>
             </div>
             <ol className="g-steps g-rail">
-              <li>
-                <h3>Pick size and height</h3>
-                <p>Order online in two minutes. No payment needed on the site.</p>
-              </li>
-              <li>
-                <h3>We call to confirm</h3>
-                <p>A real person checks your size, address and a delivery time that suits you.</p>
-              </li>
-              <li>
-                <h3>It arrives flat</h3>
-                <p>Delivered to your door. Pay on delivery, or by UPI link if you prefer.</p>
-              </li>
-              <li>
-                <h3>{BUSINESS.trialNights} nights to decide</h3>
-                <p>Not right for you? We pick it up and refund you.</p>
-              </li>
+              {["how1", "how2", "how3", "how4"].map((k) =>
+                t(k) ? (
+                  <li key={k}>
+                    <h3>{t(k)}</h3>
+                    <p>{t(`${k}Sub`)}</p>
+                  </li>
+                ) : null
+              )}
             </ol>
           </div>
         </section>
@@ -230,20 +217,20 @@ export default async function Home() {
           <div className="g-wrap g-split">
             <Link href="/sleep-quiz" className="g-panel g-panel--orange">
               <div>
-                <h3>Not sure which one?</h3>
-                <p>Five quick questions about how you sleep. We&apos;ll point you to one mattress, with the reason.</p>
+                <h3>{t("quizTitle")}</h3>
+                <p>{t("quizBody")}</p>
               </div>
               <span className="g-btn" style={{ justifySelf: "start" }}>
-                Take the 60-second quiz
+                {t("quizCta")}
               </span>
             </Link>
             <Link href="/compare" className="g-panel g-panel--ticking">
               <div>
-                <h3>See all three side by side</h3>
-                <p>Layers, feel, heights and prices in one table. No marketing words.</p>
+                <h3>{t("compareTitle")}</h3>
+                <p>{t("compareBody")}</p>
               </div>
               <span className="g-btn" style={{ justifySelf: "start" }}>
-                Compare mattresses
+                {t("compareCta")}
               </span>
             </Link>
           </div>

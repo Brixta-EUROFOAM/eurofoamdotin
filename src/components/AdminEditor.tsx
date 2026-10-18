@@ -3,6 +3,8 @@
 import AdminDashboard from "@/components/admin/AdminDashboard";
 
 import HomepageControlPanel from "@/components/admin/HomepageControlPanel";
+import GalleryField from "@/components/admin/GalleryField";
+import CopyPanel from "@/components/admin/CopyPanel";
 
 import {
   useEffect,
@@ -21,7 +23,7 @@ import type {
   StoreData
 } from "@/lib/catalog";
 
-type Tab = "dashboard" | "homepage" | "site" | "products" | "reviews" | "account";
+type Tab = "dashboard" | "homepage" | "copy" | "site" | "products" | "reviews" | "account";
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
@@ -364,7 +366,8 @@ export default function AdminEditor({
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "dashboard", label: "Dashboard" },
-    { id: "homepage", label: "Homepage" },
+    { id: "homepage", label: "Homepage & banners" },
+    { id: "copy", label: "Taglines & text" },
     { id: "site", label: "Site & Home" },
     { id: "products", label: "Products" },
     { id: "reviews", label: "Reviews" },
@@ -393,6 +396,15 @@ export default function AdminEditor({
 
           <div className="flex items-center gap-3">
             <span className="text-xs text-white/50">{status}</span>
+            <a href="/admin/orders" className="rounded-full border border-white/20 px-4 py-2 text-xs font-black">
+              ORDERS
+            </a>
+            <a href="/ops" className="rounded-full border border-white/20 px-4 py-2 text-xs font-black">
+              ORDER BOARD
+            </a>
+            <a href="/admin/ops" className="rounded-full border border-white/20 px-4 py-2 text-xs font-black">
+              OPERATIONS
+            </a>
             <a
               href="/"
               target="_blank"
@@ -443,6 +455,8 @@ export default function AdminEditor({
               onChange={setData}
             />
           ) : null}
+
+          {tab === "copy" ? <CopyPanel data={data} onChange={setData} /> : null}
 
           {tab === "site" ? (
             <section className="rounded-[1.5rem] border border-ink/10 bg-white p-6 md:p-8">
@@ -1207,10 +1221,11 @@ export default function AdminEditor({
                       />
                     </label>
                     <div className="md:col-span-2">
-                      <FieldLabel>Product image</FieldLabel>
-                      <MediaField
-                        value={product.image}
-                        onChange={(image) => updateProduct({ image })}
+                      <FieldLabel>Photos — first one is the main image</FieldLabel>
+                      <GalleryField
+                        image={product.image}
+                        gallery={product.gallery}
+                        onChange={(next) => updateProduct(next)}
                       />
                     </div>
                   </div>

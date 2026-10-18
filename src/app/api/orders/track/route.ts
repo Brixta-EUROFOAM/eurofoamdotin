@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { findOrderForTracking } from "@/lib/orders";
+import { CANCELLED, customerTimeline, eta, getOps } from "@/lib/ops";
 import { clientIp, rateLimit, readJson, sameOrigin, forbidden, tooMany } from "@/lib/security";
 
 export const runtime = "nodejs";
@@ -21,9 +22,14 @@ export async function POST(request: Request) {
       { status: 404 }
     );
   }
+  const { stages } = await getOps();
+  const cancelled = order.status === CANCELLED;
   return NextResponse.json({
     id: order.id,
     status: order.status,
+    cancelled,
+    timeline: cancelled ? [] : customerTimeline(order, stages),
+    eta: cancelled ? null : eta(order, stages),
     createdAt: order.createdAt,
     city: order.customer.city,
     pincode: order.customer.pincode,

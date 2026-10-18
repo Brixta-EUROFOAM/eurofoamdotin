@@ -54,7 +54,10 @@ export type Mattress = {
   reviews: number;
   trial: string;
   warranty: string;
+  /* main image (shop cards, link previews, first photo) */
   image: string;
+  /* extra product photos, in order */
+  gallery?: string[];
   accent: string;
   features: string[];
   layers: MattressLayer[];
@@ -288,6 +291,8 @@ export type SiteSettings = {
   email: string;
   phone: string;
   headerUtilities?: HeaderUtility[];
+  /* editable headings and lines on the homepage (see src/lib/site-copy.ts) */
+  copy?: Record<string, string>;
 };
 
 export type Review = {
@@ -308,13 +313,13 @@ export const defaultStoreData: StoreData = {
   site: {
     brandName: "GADDA",
     brandSuffix: "MATTRESSES",
-    tagline: "hehehehehghgh",
+    tagline: "Gadda hi hai yaar.",
     logoUrl: "/eurofoam-logo-v2.png",
     announcement: "FREE SHIPPING · EASY TRIALS · WARRANTY INCLUDED",
     homeBackground: "#000000",
     homeForeground: "#FFFFFF",
     heroEyebrow: "GADDA MATTRESSES",
-    heroTitle: "Heheheh",
+    heroTitle: "A better mattress shouldn't need a showroom.",
     heroBody:
       "Clear comfort choices, transparent construction and direct-to-your-door convenience. Choose the feel that fits you and try it where sleep actually happens: at home.",
     heroImage:
