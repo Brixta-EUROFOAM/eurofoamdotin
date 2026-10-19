@@ -92,7 +92,7 @@ export function faqLd(items: { q: string; a: string }[]) {
     mainEntity: items.map((i) => ({
       "@type": "Question",
       name: i.q,
-      acceptedAnswer: { "@type": "Answer", text: i.a },
+      acceptedAnswer: { "@type": "Answer", text: i.a.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, "$1") },
     })),
   };
 }

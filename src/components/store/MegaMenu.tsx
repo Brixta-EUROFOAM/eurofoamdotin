@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import MattressStack from "@/components/store/MattressStack";
+import ProductVisual from "@/components/store/ProductVisual";
 import { IconMoon, IconRupee, IconTruck, IconShield } from "@/components/store/Icons";
 import { money, type MattressLayer } from "@/lib/catalog";
 
@@ -12,6 +12,7 @@ export type MegaProduct = {
   kicker: string;
   firmness: string;
   basePrice: number;
+  image?: string;
   layers: Pick<MattressLayer, "name" | "visualKind" | "description">[];
 };
 
@@ -75,7 +76,7 @@ export default function MegaMenu({
                   onClick={onNavigate}
                 >
                   <span className="g-mm-thumb">
-                    <MattressStack layers={p.layers} spread="open" />
+                    <ProductVisual image={p.image} layers={p.layers} alt="" />
                   </span>
                   <span className="g-mm-name">
                     <b>
@@ -101,7 +102,7 @@ export default function MegaMenu({
         {shown ? (
           <Link href={`/mattresses/${shown.slug}`} className="g-mm-preview" onClick={onNavigate} aria-label={`Shop ${shown.name}`}>
             <div className="g-mm-preview-art" key={shown.slug}>
-              <MattressStack layers={shown.layers} spread="open" />
+              <ProductVisual image={shown.image} layers={shown.layers} alt={shown.name} />
             </div>
             <div className="g-mm-preview-body">
               <div className="g-mm-preview-head">
@@ -129,7 +130,7 @@ export default function MegaMenu({
             <Link href="/compare" onClick={onNavigate}>
               Compare all three
             </Link>
-            <Link href="/compare#sizes" onClick={onNavigate}>
+            <Link href="/size-guide" onClick={onNavigate}>
               Size guide
             </Link>
             <Link href="/why-gadda" onClick={onNavigate}>

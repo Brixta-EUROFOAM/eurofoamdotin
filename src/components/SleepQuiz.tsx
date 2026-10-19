@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import MattressStack from "@/components/store/MattressStack";
+import ProductVisual from "@/components/store/ProductVisual";
 import { useCart } from "@/components/CartProvider";
 import { money, type Mattress } from "@/lib/catalog";
 import { trackEvent } from "@/lib/telemetry-client";
@@ -44,7 +44,7 @@ const QUESTIONS: Question[] = [
     title: "Do you wake up feeling hot?",
     body: "Foam can hold heat; some layers handle it better.",
     options: [
-      { label: "Often", hint: "Fan on full, still warm", score: { ultimate: 3 }, why: "the Ultimate's top layer is a cooler memory foam" },
+      { label: "Often", hint: "Fan on full, still warm", score: { ultimate: 3 }, why: "the Ultimate's natural latex top breathes and doesn't trap heat" },
       { label: "Sometimes", hint: "In summer", score: { pro: 1, ultimate: 1 } },
       { label: "Not really", hint: "", score: { regular: 1, pro: 1 } },
     ],
@@ -100,8 +100,8 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
             Your match
           </span>
           <h2 className="g-h2">{p.name}</h2>
-          <div style={{ maxWidth: 420 }}>
-            <MattressStack layers={p.layers} spread="open" />
+          <div className="g-quiz-visual">
+            <ProductVisual image={p.image} layers={p.layers} alt={p.name} />
           </div>
           <p className="g-lede" style={{ margin: 0 }}>
             {result.reasons.length

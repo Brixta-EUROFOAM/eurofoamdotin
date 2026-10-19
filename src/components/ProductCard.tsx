@@ -1,6 +1,6 @@
 import Link from "next/link";
 import WishlistButton from "@/components/WishlistButton";
-import MattressStack from "@/components/store/MattressStack";
+import ProductVisual from "@/components/store/ProductVisual";
 import { FeelScale } from "@/components/store/MegaMenu";
 import { money, type Mattress } from "@/lib/catalog";
 import { BUSINESS } from "@/lib/business";
@@ -11,8 +11,8 @@ export default function ProductCard({ mattress, highlight }: { mattress: Mattres
 
   return (
     <article className="g-card">
-      <div className="g-card-media" style={{ display: "grid", placeItems: "center", padding: "10% 9%" }}>
-        <MattressStack layers={mattress.layers} spread="open" />
+      <div className={`g-card-media ${mattress.image && !mattress.image.includes("unsplash.com") ? "g-card-media--photo" : ""}`}>
+        <ProductVisual image={mattress.image} layers={mattress.layers} alt={mattress.name} />
         <div className="g-card-tags">
           {highlight ? <span className="g-chip g-chip--orange">{highlight}</span> : null}
           <span className="g-chip">{mattress.firmness}</span>

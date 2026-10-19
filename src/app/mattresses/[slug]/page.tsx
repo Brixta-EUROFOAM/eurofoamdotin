@@ -8,12 +8,14 @@ import ProductBuyBox from "@/components/ProductBuyBox";
 import ProductCard from "@/components/ProductCard";
 import ProductGallery from "@/components/store/ProductGallery";
 import JsonLd from "@/components/store/JsonLd";
-import SewnLabel from "@/components/store/SewnLabel";
+import LawTag, { CareStrip } from "@/components/store/LawTag";
+import HindiNote from "@/components/store/HindiNote";
 import Faq from "@/components/store/Faq";
 import Reviews from "@/components/store/Reviews";
 import { money } from "@/lib/catalog";
 import { getProduct, getStoreData } from "@/lib/store";
-import { BUSINESS, SIZE_GUIDE, warrantyLabel } from "@/lib/business";
+import { BUSINESS, warrantyLabel } from "@/lib/business";
+import { getSizing, groupsOf, toCm, type SizeRow } from "@/lib/sizes";
 import { swatchFor } from "@/lib/content";
 import { breadcrumbLd, productLd } from "@/lib/seo";
 import { realEmail, phoneLink } from "@/lib/contact";
@@ -44,6 +46,8 @@ export default async function ProductPage({ params }: Params) {
   const others = products.filter((p) => p.slug !== mattress.slug);
   const mine = reviews.filter((r) => r.product?.toLowerCase().includes(mattress.name.toLowerCase()));
   const warranty = warrantyLabel(mattress.slug);
+  const sizing = getSizing(site);
+  const sizeGroups = groupsOf(mattress.sizes as SizeRow[]);
   const phone = phoneLink(site.phone);
   const email = realEmail(site.email);
   const maxPrice =
@@ -80,8 +84,8 @@ export default async function ProductPage({ params }: Params) {
             </ol>
           </nav>
           <div className="g-pdp">
-            <ProductGallery name={mattress.name} image={mattress.image} gallery={mattress.gallery} layers={mattress.layers} />
-            <ProductBuyBox mattress={mattress} trialNights={BUSINESS.trialNights} warranty={warranty} />
+            <ProductGallery mattress={mattress} trialNights={BUSINESS.trialNights} customSizes={sizing.customEnabled} />
+            <ProductBuyBox mattress={mattress} trialNights={BUSINESS.trialNights} warranty={warranty} sizing={sizing} />
           </div>
         </div>
 
@@ -122,6 +126,64 @@ export default async function ProductPage({ params }: Params) {
           </div>
         </section>
 
+        <section className="g-section" id="size-chart" aria-labelledby="chart-title">
+          <div className="g-wrap">
+            <div className="g-head">
+              <div>
+                <h2 className="g-h2" id="chart-title">
+                  Every size, every price
+                </h2>
+                <p className="g-lede">
+                  Prices include GST and delivery. Measure the inside of your bed frame and find the row that matches.
+                </p>
+              </div>
+              <Link href="/size-guide" className="g-btn g-btn--ghost">
+                How to measure
+              </Link>
+            </div>
+            <div className="g-chart">
+              {sizeGroups.map((g) => (
+                <div className="g-chart-group" key={g.id}>
+                  <h3>{g.id}</h3>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th scope="col">Length × breadth</th>
+                        {mattress.heights.map((h) => (
+                          <th scope="col" key={h.label} className="num">
+                            {h.label}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {g.rows.map((r) => (
+                        <tr key={r.label}>
+                          <th scope="row">
+                            {r.length ? `${r.length} × ${r.width} in` : r.label}
+                            {r.length ? <small>{toCm(r.length)} × {toCm(r.width!)} cm</small> : null}
+                          </th>
+                          {mattress.heights.map((h) => (
+                            <td key={h.label} className="num">
+                              {money(mattress.basePrice + r.priceAdd + h.priceAdd)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </div>
+            {sizing.customEnabled ? (
+              <p className="g-note" style={{ textAlign: "left", marginTop: 18 }}>
+                Bed not on the list? Choose <b>Custom</b> in the size picker and type your measurements — priced as the next
+                size up{sizing.customFee ? ` + ${money(sizing.customFee)}` : ""}.
+              </p>
+            ) : null}
+          </div>
+        </section>
+
         <section className="g-section" aria-labelledby="specs-title">
           <div className="g-wrap g-split" style={{ alignItems: "start" }}>
             <div>
@@ -135,24 +197,18 @@ export default async function ProductPage({ params }: Params) {
                 </Link>
                 .
               </p>
+              <HindiNote>लेबल पढ़ो</HindiNote>
+              <p className="g-care-title">Look after it and it looks after you</p>
+              <CareStrip />
             </div>
-            <SewnLabel
-              title={
-                <>
-                  {mattress.name}
-                  <small>Read this label before you buy</small>
-                </>
-              }
+            <LawTag
+              name={mattress.name}
+              code={`GD-${mattress.slug.replace("gadda-", "").slice(0, 3).toUpperCase()}`}
               rows={[
                 ["Feel", mattress.firmness],
                 [
                   "Sizes",
-                  mattress.sizes
-                    .map((s) => {
-                      const g = SIZE_GUIDE.find((x) => x.label === s.label);
-                      return g ? `${s.label} (${g.inches})` : s.label;
-                    })
-                    .join(", "),
+                  `${sizeGroups.map((g) => g.id).join(", ")}${sizing.customEnabled ? ", or any custom size" : ""} (all dimensions in the size chart above)`,
                 ],
                 ["Heights", mattress.heights.map((h) => h.label).join(", ")],
                 ["Price (MRP, incl. all taxes)", `${money(mattress.basePrice)} to ${money(maxPrice)}, by size, height and options`],

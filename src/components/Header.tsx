@@ -33,6 +33,7 @@ export default async function Header() {
         kicker: p.kicker,
         firmness: p.firmness,
         basePrice: p.basePrice,
+        image: p.image,
         layers: p.layers.map((l) => ({ name: l.name, visualKind: l.visualKind, description: l.description })),
       }))}
       pick={site.homeStoryProductSlug}

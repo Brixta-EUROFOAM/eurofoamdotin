@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import MattressStack from "@/components/store/MattressStack";
+import ProductVisual from "@/components/store/ProductVisual";
 import HelpStrip from "@/components/store/HelpStrip";
 import { getStoreData } from "@/lib/store";
 import { money } from "@/lib/catalog";
@@ -88,8 +88,8 @@ export default async function ComparePage() {
                     <td />
                     {products.map((p) => (
                       <th key={p.slug} scope="col">
-                        <div style={{ maxWidth: 220, marginBottom: 14 }}>
-                          <MattressStack layers={p.layers} spread="open" />
+                        <div className="g-compare-visual">
+                          <ProductVisual image={p.image} layers={p.layers} alt={p.name} />
                         </div>
                         <Link href={`/mattresses/${p.slug}`}>{p.name}</Link>
                         <div style={{ fontWeight: 500, color: "var(--g-ink-2)", marginTop: 4 }}>from {money(p.basePrice)}</div>

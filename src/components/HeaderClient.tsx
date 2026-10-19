@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useCart } from "@/components/CartProvider";
 import { useLocation } from "@/components/store/LocationProvider";
-import MattressStack from "@/components/store/MattressStack";
+import ProductVisual from "@/components/store/ProductVisual";
 import MegaMenu from "@/components/store/MegaMenu";
 import {
   IconCart,
@@ -30,6 +30,7 @@ type NavProduct = {
   kicker: string;
   firmness: string;
   basePrice: number;
+  image?: string;
   layers: Pick<MattressLayer, "name" | "visualKind" | "description">[];
 };
 
@@ -391,8 +392,8 @@ function SearchPanel({ products, onClose }: { products: NavProduct[]; onClose: (
                 aria-selected={i === active}
                 onClick={onClose}
               >
-                <div style={{ width: 80, flex: "none" }}>
-                  <MattressStack layers={p.layers} />
+                <div className="g-search-thumb">
+                  <ProductVisual image={p.image} layers={p.layers} alt="" />
                 </div>
                 <div>
                   <b>{p.name}</b>

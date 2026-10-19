@@ -22,7 +22,7 @@ function csp(nonce: string) {
   if (meta) connect.push("https://www.facebook.com", "https://connect.facebook.net");
   if (isDev) connect.push("ws:", "wss:");
 
-  const frames = ["'self'"];
+  const frames = ["'self'", "https://www.youtube-nocookie.com"]; // size-guide video
   if (gtm) frames.push("https://www.googletagmanager.com");
 
   return [

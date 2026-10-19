@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import MattressStack from "@/components/store/MattressStack";
+import ProductVisual from "@/components/store/ProductVisual";
 import TrustStrip from "@/components/store/TrustStrip";
 import Faq from "@/components/store/Faq";
 import Reviews from "@/components/store/Reviews";
@@ -15,6 +16,7 @@ import { money } from "@/lib/catalog";
 import { BUSINESS } from "@/lib/business";
 import { copyText } from "@/lib/site-copy";
 import PromoBanners from "@/components/store/PromoBanners";
+import Highlight from "@/components/store/Highlight";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +41,7 @@ export default async function Home() {
                 गद्दा
               </p>
               <h1 className="g-h1" id="hero-title">
-                {site.heroTitle || "Gadda hi hai yaar."}
+                <Highlight text={site.heroTitle || "Buy a Mattress, not ==Bullsh#*t.=="} />
               </h1>
               <p className="g-lede">{t("heroLede")}</p>
               <div className="g-hero-cta">
@@ -163,8 +165,8 @@ export default async function Home() {
                 <h3>{t("vsUsTitle")}</h3>
                 <Stamp className="g-stamp--corner" ring="One price for everyone" center="₹" sub="No fake MRP" tone="indigo" size={112} rotate={10} />
                 {hero ? (
-                  <div style={{ padding: "8% 6%" }}>
-                    <MattressStack layers={hero.layers} spread="open" />
+                  <div className="g-vs-visual">
+                    <ProductVisual image={hero.image} layers={hero.layers} alt={hero.name} />
                   </div>
                 ) : null}
                 <ul className="g-vs-list">

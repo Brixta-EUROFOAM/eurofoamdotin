@@ -8,19 +8,30 @@ import { useLocation, PinMessage } from "@/components/store/LocationProvider";
 import WishlistButton from "@/components/WishlistButton";
 import { IconMoon, IconRupee, IconShield, IconTruck } from "@/components/store/Icons";
 import { money, type Mattress } from "@/lib/catalog";
-import { SIZE_GUIDE } from "@/lib/business";
+import { SIZE_GROUPS, groupsOf, parseCustom, type SizeRow, type Sizing } from "@/lib/sizes";
+import SizePicker from "@/components/store/SizePicker";
 
 type Props = {
   mattress: Mattress;
   trialNights: number;
   warranty: string;
+  sizing: Sizing;
 };
 
-export default function ProductBuyBox({ mattress, trialNights, warranty }: Props) {
+function defaultSize(rows: SizeRow[]) {
+  const q = SIZE_GROUPS.find((g) => g.id === "Queen")!.common;
+  return (rows.find((r) => r.length === q[0] && r.width === q[1]) || rows[Math.min(2, rows.length - 1)] || rows[0])?.label;
+}
+
+export default function ProductBuyBox({ mattress, trialNights, warranty, sizing }: Props) {
   const router = useRouter();
   const { addItem } = useCart();
   const { info, eta, pin, check, loading, askOnce } = useLocation();
-  const [size, setSize] = useState(mattress.sizes[Math.min(2, mattress.sizes.length - 1)]?.label || mattress.sizes[0]?.label);
+  const [size, setSize] = useState(() => defaultSize(mattress.sizes as SizeRow[]));
+  const [customAdd, setCustomAdd] = useState(0);
+  const [confirmed, setConfirmed] = useState(false);
+  const [picker, setPicker] = useState<{ open: boolean; group?: string; then?: "add" | "buy" }>({ open: false });
+  const groups = useMemo(() => groupsOf(mattress.sizes as SizeRow[]), [mattress.sizes]);
   const [height, setHeight] = useState(mattress.heights[0]?.label);
   const [picked, setPicked] = useState<Record<string, string>>(() =>
     Object.fromEntries((mattress.options || []).map((o) => [o.id, o.choices[0]?.label]))
@@ -32,6 +43,10 @@ export default function ProductBuyBox({ mattress, trialNights, warranty }: Props
 
   useEffect(() => setPinInput(pin), [pin]);
   useEffect(() => askOnce(), [askOnce]);
+  // ?variant=true opens the size chooser straight away (link it from ads, WhatsApp…)
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("variant") === "true") setPicker({ open: true });
+  }, []);
 
   // Sticky buy bar once the main button scrolls away.
   useEffect(() => {
@@ -42,7 +57,8 @@ export default function ProductBuyBox({ mattress, trialNights, warranty }: Props
     return () => io.disconnect();
   }, []);
 
-  const sizeRow = mattress.sizes.find((s) => s.label === size);
+  const sizeRow = mattress.sizes.find((s) => s.label === size) || (parseCustom(size || "") ? { label: size!, priceAdd: customAdd } : undefined);
+  const sizeGroup = (mattress.sizes as SizeRow[]).find((s) => s.label === size)?.group || (parseCustom(size || "") ? "Custom" : "");
   const heightRow = mattress.heights.find((h) => h.label === height);
   const optionRows = (mattress.options || []).map((o) => o.choices.find((c) => c.label === picked[o.id]) || o.choices[0]);
   const variant = optionRows.map((c) => c?.label).filter(Boolean).join(" · ");
@@ -65,10 +81,12 @@ export default function ProductBuyBox({ mattress, trialNights, warranty }: Props
   );
 
   function add() {
+    if (!confirmed) return setPicker({ open: true, then: "add" });
     addItem(item);
   }
 
   function buyNow() {
+    if (!confirmed) return setPicker({ open: true, then: "buy" });
     addItem(item, { open: false });
     router.push("/checkout");
   }
@@ -108,52 +126,44 @@ export default function ProductBuyBox({ mattress, trialNights, warranty }: Props
 
       <section className="g-buy-block" aria-labelledby="size-h">
         <div>
-          <h2 id="size-h">
-            Size <span>{size}</span>
-          </h2>
-          <Link href="/compare#sizes" className="g-link" style={{ fontSize: ".88rem" }}>
+          <h2 id="size-h">Choose size</h2>
+          <Link href="/size-guide" className="g-link" style={{ fontSize: ".88rem" }} target="_blank">
             Size guide
           </Link>
         </div>
-        <div className="g-choices" role="radiogroup" aria-labelledby="size-h">
-          {mattress.sizes.map((s) => (
+        <button type="button" className="g-size-current" onClick={() => setPicker({ open: true })} aria-haspopup="dialog">
+          <span>
+            <small>{confirmed ? "Your size" : "Selected"}</small>
+            <b>{(size || "").replace(/ in$/, '"')}</b>
+            <span>
+              {height} thick{confirmed ? " · confirmed ✓" : ""}
+            </span>
+          </span>
+          <span className="g-size-change">Change ›</span>
+        </button>
+        <div className="g-size-groups" aria-label="Size groups">
+          {groups.map((g) => (
             <button
-              key={s.label}
+              key={g.id}
               type="button"
-              role="radio"
-              aria-checked={s.label === size}
-              className="g-choice"
-              onClick={() => setSize(s.label)}
+              aria-pressed={sizeGroup === g.id}
+              onClick={() => setPicker({ open: true, group: g.id })}
             >
-              <b>{s.label}</b>
-              <small>{SIZE_GUIDE.find((g) => g.label === s.label)?.inches || "\u00a0"}</small>
-              <small>{money(mattress.basePrice + s.priceAdd + (heightRow?.priceAdd || 0))}</small>
+              {g.id}
             </button>
           ))}
-        </div>
-      </section>
-
-      <section className="g-buy-block" aria-labelledby="height-h">
-        <div>
-          <h2 id="height-h">
-            Height <span>{height}</span>
-          </h2>
-        </div>
-        <div className="g-choices" role="radiogroup" aria-labelledby="height-h">
-          {mattress.heights.map((h) => (
-            <button
-              key={h.label}
-              type="button"
-              role="radio"
-              aria-checked={h.label === height}
-              className="g-choice"
-              onClick={() => setHeight(h.label)}
-            >
-              <b>{h.label}</b>
-              <small>{h.priceAdd ? `+ ${money(h.priceAdd)}` : "Standard"}</small>
+          {sizing.customEnabled ? (
+            <button type="button" aria-pressed={sizeGroup === "Custom"} onClick={() => setPicker({ open: true, group: "Custom" })}>
+              Custom
             </button>
-          ))}
+          ) : null}
         </div>
+        <p className="g-size-tip">
+          📏 Measure the <b>inside of your bed frame</b>, not your old mattress.{" "}
+          <button type="button" className="g-link" onClick={() => setPicker({ open: true })}>
+            How to measure
+          </button>
+        </p>
       </section>
 
       {(mattress.options || []).map((option) => (
@@ -268,6 +278,31 @@ export default function ProductBuyBox({ mattress, trialNights, warranty }: Props
           </div>
         </div>
       </div>
+
+      <SizePicker
+        mattress={mattress}
+        sizing={sizing}
+        open={picker.open}
+        startGroup={picker.group}
+        initial={{ size: size || "", height: height || "" }}
+        optionsAdd={optionRows.reduce((sum, c) => sum + (c?.priceAdd || 0), 0)}
+        onClose={() => setPicker({ open: false })}
+        onConfirm={(c) => {
+          setSize(c.size);
+          setHeight(c.height);
+          setCustomAdd(parseCustom(c.size) ? c.sizeAdd : 0);
+          setConfirmed(true);
+          const then = picker.then;
+          setPicker({ open: false });
+          const next = { ...item, id: `${mattress.slug}-${c.size}-${c.height}${variant ? `-${variant}` : ""}`, size: c.size, height: c.height,
+            price: mattress.basePrice + c.sizeAdd + (mattress.heights.find((h) => h.label === c.height)?.priceAdd || 0) + optionRows.reduce((sum, o) => sum + (o?.priceAdd || 0), 0) };
+          if (then === "add") addItem(next);
+          if (then === "buy") {
+            addItem(next, { open: false });
+            router.push("/checkout");
+          }
+        }}
+      />
 
       <div className="g-sticky-buy" data-show={showSticky} aria-hidden={!showSticky}>
         <div className="g-wrap">

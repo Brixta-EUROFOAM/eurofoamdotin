@@ -1,6 +1,9 @@
 import { BUSINESS } from "@/lib/business";
 
 /*
+  FAQ answers can link to any page: write [link text](/page), e.g.
+  "Take the [60-second quiz](/sleep-quiz)". Admin → FAQs edits these.
+
   Shared copy for the storefront. Plain words, no mattress jargon —
   if a line can't be backed up, it doesn't go here.
 */
@@ -9,17 +12,17 @@ export const FAQS: { q: string; a: string; group: "buying" | "delivery" | "trial
   {
     group: "product",
     q: "Which GADDA should I get?",
-    a: "Regular if you like it firm and want the best price. Pro if you want firm support with a softer top — it suits most people. Ultimate if you like a plush, sink-in-a-little feel. Not sure? The 60-second quiz picks one for you.",
+    a: "Regular if you like it firm and want the best price. Pro if you want firm support with a softer top — it suits most people. Ultimate if you like a plush, sink-in-a-little feel. Not sure? The [60-second quiz](/sleep-quiz) picks one for you.",
   },
   {
     group: "trial",
     q: `How does the ${BUSINESS.trialNights}-night trial work?`,
-    a: `Sleep on it at home. Give it at least 30 nights — your back needs a few weeks to adjust to any new mattress. If you still don't love it before night ${BUSINESS.trialNights}, tell us and we arrange pickup and refund you. The full terms are on the trial page.`,
+    a: `Sleep on it at home. Give it at least 30 nights — your back needs a few weeks to adjust to any new mattress. If you still don't love it before night ${BUSINESS.trialNights}, tell us and we arrange pickup and refund you. The full terms are on the [trial page](/policies/trial).`,
   },
   {
     group: "delivery",
     q: "How long does delivery take, and what does it cost?",
-    a: "Delivery is included in the price. Enter your PIN code on any mattress page for a delivery window — usually 1–3 days around Silchar, up to about 12 days for the rest of India. We call before dispatch to fix a time.",
+    a: "Delivery is included in the price. Enter your PIN code on any [mattress page](/mattresses) for a delivery window — usually 1–3 days around Silchar, up to about 12 days for the rest of India. We call before dispatch to fix a time.",
   },
   {
     group: "buying",
@@ -39,7 +42,7 @@ export const FAQS: { q: string; a: string; group: "buying" | "delivery" | "trial
   {
     group: "product",
     q: "Is there a warranty?",
-    a: "Yes, every GADDA has a manufacturer warranty against defects like permanent sagging or broken foam. What's covered and how to claim is on the warranty page.",
+    a: "Yes, every GADDA has a manufacturer warranty against defects like permanent sagging or broken foam. What's covered and how to claim is on the [warranty page](/policies/warranty).",
   },
   {
     group: "delivery",

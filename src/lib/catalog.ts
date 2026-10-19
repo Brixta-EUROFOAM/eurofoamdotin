@@ -58,10 +58,15 @@ export type Mattress = {
   image: string;
   /* extra product photos, in order */
   gallery?: string[];
+  /* auto-made gallery slides to show (undefined = all): inside, trial, sizes, delivery */
+  slides?: ("cutaway" | "inside" | "trial" | "sizes" | "delivery")[];
+  /* trial stamp in the corner of photos (default on) */
+  photoBadge?: boolean;
   accent: string;
   features: string[];
   layers: MattressLayer[];
-  sizes: { label: string; priceAdd: number }[];
+  /* group/length/width: see src/lib/sizes.ts (e.g. Queen 75 × 60 in) */
+  sizes: { label: string; priceAdd: number; group?: string; length?: number; width?: number }[];
   heights: { label: string; priceAdd: number }[];
   /* Upgrades like "pocket springs instead of HR foam". */
   options?: MattressOption[];
@@ -291,6 +296,10 @@ export type SiteSettings = {
   email: string;
   phone: string;
   headerUtilities?: HeaderUtility[];
+  /* custom size rules + measuring guide (src/lib/sizes.ts) */
+  sizing?: Partial<import("@/lib/sizes").Sizing>;
+  /* FAQ shown on home, contact and product pages. Answers may contain [text](/link). Empty = defaults. */
+  faqs?: { q: string; a: string }[];
   /* editable headings and lines on the homepage (see src/lib/site-copy.ts) */
   copy?: Record<string, string>;
 };
@@ -319,7 +328,7 @@ export const defaultStoreData: StoreData = {
     homeBackground: "#000000",
     homeForeground: "#FFFFFF",
     heroEyebrow: "GADDA MATTRESSES",
-    heroTitle: "A better mattress shouldn't need a showroom.",
+    heroTitle: "Buy a Mattress, not ==Bullsh#*t.==",
     heroBody:
       "Clear comfort choices, transparent construction and direct-to-your-door convenience. Choose the feel that fits you and try it where sleep actually happens: at home.",
     heroImage:

@@ -2,7 +2,8 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomBytes } from "crypto";
 import { dataDir, getStoreData } from "@/lib/store";
-import type { Mattress } from "@/lib/catalog";
+import type { Mattress, SiteSettings } from "@/lib/catalog";
+import { SIZE_GROUPS, customLabel, customPrice, getSizing, parseCustom } from "@/lib/sizes";
 import { db, hasDb } from "@/lib/db";
 import { CANCELLED, getOps, OpsError } from "@/lib/ops";
 
@@ -67,8 +68,18 @@ const file = () => path.join(dataDir(), "orders.jsonl");
 
 const clip = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 
-function priceFor(product: Mattress, size: string, height: string, variant: string) {
-  const sizeRow = product.sizes.find((s) => s.label === size);
+function priceFor(product: Mattress, size: string, height: string, variant: string, site?: SiteSettings) {
+  let sizeRow: { label: string; priceAdd: number } | undefined = product.sizes.find((s) => s.label === size);
+  // carts saved before the size chart said just "Queen" etc. — use that group's most common size
+  if (!sizeRow && SIZE_GROUPS.some((g) => g.id === size)) {
+    const c = SIZE_GROUPS.find((g) => g.id === size)!.common;
+    sizeRow = product.sizes.find((s) => s.length === c[0] && s.width === c[1]);
+  }
+  const custom = sizeRow ? null : parseCustom(size);
+  if (custom) {
+    const p = customPrice(product.sizes, custom.length, custom.width, getSizing(site));
+    if (p) sizeRow = { label: customLabel(custom.length, custom.width), priceAdd: p.priceAdd };
+  }
   const heightRow = product.heights.find((h) => h.label === height);
   if (!sizeRow || !heightRow) return null;
   const picked = variant ? variant.split(" · ").map((v) => v.trim()) : [];
@@ -91,7 +102,7 @@ export class OrderError extends Error {}
 
 /* Re-price cart lines from the live catalogue. Unknown/stale lines are dropped. */
 export async function priceLines(input: unknown): Promise<OrderLine[]> {
-  const { products } = await getStoreData();
+  const { products, site } = await getStoreData();
   const raw = Array.isArray(input) ? (input as InLine[]).slice(0, 20) : [];
   const lines: OrderLine[] = [];
   for (const item of raw) {
@@ -99,7 +110,7 @@ export async function priceLines(input: unknown): Promise<OrderLine[]> {
     if (!product) continue;
     const size = clip(item.size, 40);
     const height = clip(item.height, 40);
-    const priced = priceFor(product, size, height, clip(item.variant, 120));
+    const priced = priceFor(product, size, height, clip(item.variant, 120), site);
     if (!priced) continue;
     const quantity = Math.max(1, Math.min(10, Math.floor(Number(item.quantity) || 1)));
     lines.push({

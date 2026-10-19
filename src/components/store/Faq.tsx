@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { FAQS } from "@/lib/content";
+import { getStoreData } from "@/lib/store";
+import LinkedText from "@/components/store/LinkedText";
 import JsonLd from "@/components/store/JsonLd";
 import { faqLd } from "@/lib/seo";
 import HindiNote from "@/components/store/HindiNote";
 
-export default function Faq({
+export default async function Faq({
   limit,
   nonce,
   title = "Questions people actually ask",
@@ -15,7 +17,9 @@ export default function Faq({
   title?: string;
   id?: string;
 }) {
-  const items = limit ? FAQS.slice(0, limit) : FAQS;
+  const { site } = await getStoreData();
+  const all = site.faqs?.filter((f) => f.q?.trim() && f.a?.trim()).length ? site.faqs.filter((f) => f.q?.trim() && f.a?.trim()) : FAQS;
+  const items = limit ? all.slice(0, limit) : all;
   return (
     <section className="g-section" id={id} aria-labelledby={`${id}-title`}>
       <JsonLd data={faqLd(items)} nonce={nonce} />
@@ -35,7 +39,11 @@ export default function Faq({
             <details key={item.q} open={i === 0}>
               <summary>{item.q}</summary>
               <div>
-                <p>{item.a}</p>
+                {item.a.split(/\n{2,}/).map((para, k) => (
+                  <p key={k}>
+                    <LinkedText text={para} />
+                  </p>
+                ))}
               </div>
             </details>
           ))}

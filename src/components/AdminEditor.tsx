@@ -4,7 +4,11 @@ import AdminDashboard from "@/components/admin/AdminDashboard";
 
 import HomepageControlPanel from "@/components/admin/HomepageControlPanel";
 import GalleryField from "@/components/admin/GalleryField";
+import { AUTO_SLIDES } from "@/components/store/GallerySlides";
 import CopyPanel from "@/components/admin/CopyPanel";
+import FaqPanel from "@/components/admin/FaqPanel";
+import SizingPanel from "@/components/admin/SizingPanel";
+import { SIZE_GROUPS, standardChart, groupsOf } from "@/lib/sizes";
 
 import {
   useEffect,
@@ -23,7 +27,7 @@ import type {
   StoreData
 } from "@/lib/catalog";
 
-type Tab = "dashboard" | "homepage" | "copy" | "site" | "products" | "reviews" | "account";
+type Tab = "dashboard" | "homepage" | "copy" | "faqs" | "sizing" | "site" | "products" | "reviews" | "account";
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
@@ -368,6 +372,8 @@ export default function AdminEditor({
     { id: "dashboard", label: "Dashboard" },
     { id: "homepage", label: "Homepage & banners" },
     { id: "copy", label: "Taglines & text" },
+    { id: "faqs", label: "FAQs" },
+    { id: "sizing", label: "Sizes & guide" },
     { id: "site", label: "Site & Home" },
     { id: "products", label: "Products" },
     { id: "reviews", label: "Reviews" },
@@ -458,6 +464,10 @@ export default function AdminEditor({
 
           {tab === "copy" ? <CopyPanel data={data} onChange={setData} /> : null}
 
+          {tab === "faqs" ? <FaqPanel data={data} onChange={setData} /> : null}
+
+          {tab === "sizing" ? <SizingPanel data={data} onChange={setData} /> : null}
+
           {tab === "site" ? (
             <section className="rounded-[1.5rem] border border-ink/10 bg-white p-6 md:p-8">
               <p className="text-xs font-black uppercase tracking-[0.15em] text-gold-dark">
@@ -502,7 +512,7 @@ export default function AdminEditor({
                   />
                 </label>
                 <label className="md:col-span-2">
-                  <FieldLabel>Hero title</FieldLabel>
+                  <FieldLabel>Hero title — wrap words in ==double equals== for the orange block</FieldLabel>
                   <TextArea
                     rows={3}
                     value={data.site.heroTitle}
@@ -1227,6 +1237,37 @@ export default function AdminEditor({
                         gallery={product.gallery}
                         onChange={(next) => updateProduct(next)}
                       />
+                      <div className="mt-4 rounded-2xl border border-ink/10 bg-sand/40 p-4">
+                        <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/55">
+                          Slides made for you from this product&apos;s details
+                        </div>
+                        <p className="mt-1 text-xs text-ink/55">
+                          Drawn automatically from the layers, sizes and trial — they update when you edit those. Your photos sit between them.
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                          {AUTO_SLIDES.map((a) => {
+                            const list = product.slides || AUTO_SLIDES.map((x) => x.id);
+                            return (
+                              <label key={a.id} className="flex items-center gap-2 text-sm font-bold">
+                                <input
+                                  type="checkbox"
+                                  checked={list.includes(a.id)}
+                                  onChange={(e) =>
+                                    updateProduct({
+                                      slides: e.target.checked ? AUTO_SLIDES.map((x) => x.id).filter((id) => id === a.id || list.includes(id)) : list.filter((id) => id !== a.id),
+                                    })
+                                  }
+                                />
+                                {a.label}
+                              </label>
+                            );
+                          })}
+                          <label className="flex items-center gap-2 text-sm font-bold">
+                            <input type="checkbox" checked={product.photoBadge !== false} onChange={(e) => updateProduct({ photoBadge: e.target.checked })} />
+                            Trial stamp on photos
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -1515,7 +1556,59 @@ export default function AdminEditor({
                         </div>
 
                         <div className="mt-4 space-y-3">
-                          {product[key].map((entry, index) => (
+                          {key === "sizes" ? (
+                            <div className="rounded-xl bg-sand/60 p-3 text-xs text-ink/65">
+                              Columns: group · length × breadth (inches) · extra price over base. The label is written for you.
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (!confirm("Replace this product's sizes with the full standard chart (Single to King, 72/75/78 long)? Each group keeps its current lowest price.")) return;
+                                  const groupAdd: Record<string, number> = {};
+                                  for (const g of groupsOf(product.sizes)) groupAdd[g.id] = Math.min(...g.rows.map((r) => r.priceAdd));
+                                  for (const g of SIZE_GROUPS) if (!(g.id in groupAdd)) groupAdd[g.id] = 0;
+                                  updateProduct({ sizes: standardChart(product.basePrice, groupAdd) });
+                                }}
+                                className="ml-2 rounded-full bg-ink px-3 py-1 font-black text-white"
+                              >
+                                FILL STANDARD CHART
+                              </button>
+                            </div>
+                          ) : null}
+                          {key === "sizes"
+                            ? product.sizes.map((entry, index) => {
+                                const setRow = (patch: Partial<(typeof product.sizes)[number]>) => {
+                                  const entries = clone(product.sizes);
+                                  const row = { ...entries[index], ...patch };
+                                  if (row.group && row.length && row.width) row.label = `${row.group} ${row.length} × ${row.width} in`;
+                                  entries[index] = row;
+                                  updateProduct({ sizes: entries });
+                                };
+                                return (
+                                  <div key={index} className="grid grid-cols-[1.1fr_70px_70px_100px_auto] items-center gap-2">
+                                    <select
+                                      value={entry.group || ""}
+                                      onChange={(e) => setRow({ group: e.target.value })}
+                                      className="rounded-xl border border-ink/15 bg-white px-2 py-3 text-sm"
+                                    >
+                                      <option value="">Group…</option>
+                                      {SIZE_GROUPS.map((g) => (
+                                        <option key={g.id}>{g.id}</option>
+                                      ))}
+                                    </select>
+                                    <TextInput type="number" placeholder="L" value={entry.length || ""} onChange={(e) => setRow({ length: Number(e.target.value) || undefined })} />
+                                    <TextInput type="number" placeholder="B" value={entry.width || ""} onChange={(e) => setRow({ width: Number(e.target.value) || undefined })} />
+                                    <TextInput type="number" value={entry.priceAdd} onChange={(e) => setRow({ priceAdd: Number(e.target.value) })} />
+                                    <button
+                                      onClick={() => updateProduct({ sizes: product.sizes.filter((_, i) => i !== index) })}
+                                      className="rounded-xl border border-red-200 px-3 py-2 text-red-700"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                );
+                              })
+                            : null}
+                          {key === "heights" && product[key].map((entry, index) => (
                             <div key={index} className="grid grid-cols-[1fr_120px_auto] gap-2">
                               <TextInput
                                 value={entry.label}

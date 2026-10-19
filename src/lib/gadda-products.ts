@@ -31,6 +31,39 @@ const HEIGHTS = (step: number) => [
   { label: "8 inch", priceAdd: step },
 ];
 
+/* Product photos shipped with the site (public/products/…). Replace or add more in Admin → Products → Photos. */
+export const REGULAR_PHOTOS = [
+  "/products/gadda-regular/layers.webp",
+  "/products/gadda-regular/bedroom.webp",
+  "/products/gadda-regular/top-view.webp",
+  "/products/gadda-regular/reading.webp",
+  "/products/gadda-regular/sitting.webp",
+  "/products/gadda-regular/label-closeup.webp",
+];
+
+export const PRO_PHOTOS = [
+  "/products/gadda-pro/layers.webp",
+  "/products/gadda-pro/bedroom.webp",
+  "/products/gadda-pro/top-view.webp",
+  "/products/gadda-pro/front.webp",
+  "/products/gadda-pro/side.webp",
+  "/products/gadda-pro/closeup.webp",
+];
+
+export const ULTIMATE_PHOTOS = [
+  "/products/gadda-ultimate/layers.webp",
+  "/products/gadda-ultimate/bedroom.webp",
+  "/products/gadda-ultimate/label-closeup.webp",
+  "/products/gadda-ultimate/corner-closeup.webp",
+];
+
+/* photo sets that ship with the site, by product */
+export const SHIPPED_PHOTOS: Record<string, string[]> = {
+  "gadda-regular": REGULAR_PHOTOS,
+  "gadda-pro": PRO_PHOTOS,
+  "gadda-ultimate": ULTIMATE_PHOTOS,
+};
+
 export const gaddaProducts: Mattress[] = [
   {
     slug: "gadda-regular",
@@ -48,7 +81,10 @@ export const gaddaProducts: Mattress[] = [
     reviews: 0,
     trial: "100-night trial",
     warranty: "Warranty included",
-    image: "/media/1789122018422-a-mattress-on-a-wooden-floor-in-a-bedroom-photo.jpg",
+    image: REGULAR_PHOTOS[0],
+    gallery: REGULAR_PHOTOS.slice(1),
+    // the layers photo already explains what's inside, so skip the drawn cutaway/breakdown here
+    slides: ["trial", "sizes", "delivery"],
     accent: "from-[#F3ECDD] to-[#FF6500]",
     features: ["HD foam support base", "Soft foam comfort layer", "Firm, steady feel", "Best value in the line-up"],
     layers: [
@@ -91,7 +127,10 @@ export const gaddaProducts: Mattress[] = [
     reviews: 0,
     trial: "100-night trial",
     warranty: "Warranty included",
-    image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",
+    image: PRO_PHOTOS[0],
+    gallery: PRO_PHOTOS.slice(1),
+    // the layers photo already explains what's inside
+    slides: ["trial", "sizes", "delivery"],
     accent: "from-[#F3ECDD] to-[#FF6500]",
     features: ["Memory foam pressure relief", "32D HR foam base", "Pocket-spring option", "Balanced feel for most sleepers"],
     layers: [
@@ -159,9 +198,9 @@ export const gaddaProducts: Mattress[] = [
     kicker: "Every upgrade, no gimmicks",
     badge: "ULTIMATE",
     category: "Ultimate",
-    shortDescription: "Cool memory foam and adaptive foam on our densest 40D HR base. Latex upgrade available.",
+    shortDescription: "Natural latex and adaptive foam on our densest 40D HR base. Our most advanced support.",
     longDescription:
-      "Cool memory foam on top so you don't wake up warm. Adaptive foam underneath responds as you move, so you never feel stuck. All of it on a 40-density HR foam base, the most supportive core we make. Prefer natural bounce? Upgrade the top layer to latex.",
+      "Natural latex on top: breathable, responsive and long-lasting, with real pressure relief. Adaptive foam underneath responds as you move, so you never feel stuck. All of it on a 40-density HR foam base, the most supportive core we make.",
     basePrice: 18990,
     compareAt: 18990,
     firmness: "Plush-supportive",
@@ -169,23 +208,30 @@ export const gaddaProducts: Mattress[] = [
     reviews: 0,
     trial: "100-night trial",
     warranty: "Warranty included",
-    image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=85",
+    image: ULTIMATE_PHOTOS[0],
+    gallery: ULTIMATE_PHOTOS.slice(1),
+    // the layers photo already explains what's inside
+    slides: ["trial", "sizes", "delivery"],
     accent: "from-[#F3ECDD] to-[#FF6500]",
-    features: ["Cool memory foam top", "Adaptive foam layer", "40D HR foam base", "Latex upgrade option"],
+    features: ["Natural latex comfort layer", "Adaptive foam layer", "40D HR foam base", "Breathable, washable AeroTex cover"],
     layers: [
-      COVER,
       {
-        name: "Cool memory foam",
-        description: "Memory foam made to sleep cooler. For the Garmi-mein-bhi crowd.",
-        material: "Cooling memory foam",
+        ...COVER,
+        name: "Breathable AeroTex cover",
+        description: "Soft, skin-friendly, breathable and washable. Stays fresh.",
+      },
+      {
+        name: "Natural latex",
+        description: "Breathable, responsive and durable. Real pressure relief with natural bounce.",
+        material: "Natural latex",
         thickness: "",
         density: "",
         technicalNote: "",
-        visualKind: "cool",
+        visualKind: "latex",
       },
       {
         name: "Adaptive foam",
-        description: "Reacts as you move, so you never feel stuck in one spot.",
+        description: "Responds to your body as you move, so you never feel stuck in one spot.",
         material: "Adaptive foam",
         thickness: "",
         density: "",
@@ -200,32 +246,6 @@ export const gaddaProducts: Mattress[] = [
         density: "40D",
         technicalNote: "",
         visualKind: "hr",
-      },
-    ],
-    options: [
-      {
-        id: "comfort",
-        label: "Top layer",
-        choices: [
-          { label: "Cool memory foam", priceAdd: 0, note: "Slow, hugging, sleeps cool." },
-          {
-            label: "Latex",
-            priceAdd: 4000,
-            note: "Bouncy, breathable, long-lasting.",
-            swap: {
-              index: 1,
-              layer: {
-                name: "Latex",
-                description: "Latex instead of memory foam. More bounce, breathes better.",
-                material: "Latex",
-                thickness: "",
-                density: "",
-                technicalNote: "",
-                visualKind: "latex",
-              },
-            },
-          },
-        ],
       },
     ],
     sizes: SIZES(3400),
