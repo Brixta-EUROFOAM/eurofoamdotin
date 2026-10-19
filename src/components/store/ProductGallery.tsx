@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import MattressStack from "@/components/store/MattressStack";
 import Stamp from "@/components/store/Stamp";
 import { AUTO_SLIDES, AutoSlideView, type AutoSlide } from "@/components/store/GallerySlides";
@@ -132,7 +133,7 @@ export default function ProductGallery({
         </div>
       ) : null}
 
-      {full ? (
+      {full && typeof document !== "undefined" ? createPortal(
         <div className="g-lightbox" role="dialog" aria-modal="true" aria-label={`${mattress.name} images`} {...swipe}>
           <button type="button" className="g-lightbox-x" onClick={() => setFull(false)} aria-label="Close">
             ×
@@ -153,7 +154,8 @@ export default function ProductGallery({
           <span className="g-gal-count g-gal-count--lb">
             {i + 1} / {n}
           </span>
-        </div>
+        </div>,
+        document.body
       ) : null}
     </div>
   );
