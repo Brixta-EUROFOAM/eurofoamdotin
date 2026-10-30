@@ -180,6 +180,19 @@ export default function AdminEditor({
   const [tab, setTab] = useState<Tab>("dashboard");
   const [selectedSlug, setSelectedSlug] = useState(initial.products[0]?.slug || "");
   const [status, setStatus] = useState("");
+  const [savedJson, setSavedJson] = useState(() => JSON.stringify(initial));
+  const dirty = JSON.stringify(data) !== savedJson;
+
+  // don't lose unsaved edits by closing the tab
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
 
   const selectedIndex = useMemo(
     () => data.products.findIndex((product) => product.slug === selectedSlug),
@@ -365,7 +378,12 @@ export default function AdminEditor({
       body: JSON.stringify(data)
     });
 
-    setStatus(response.ok ? "Saved." : "Save failed.");
+    if (response.ok) {
+      setSavedJson(JSON.stringify(data));
+      setStatus("Saved. Live on the site now.");
+    } else {
+      setStatus("Save failed. Try again.");
+    }
   }
 
   const tabs: { id: Tab; label: string }[] = [
@@ -401,7 +419,11 @@ export default function AdminEditor({
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs text-white/50">{status}</span>
+            {dirty ? (
+              <span className="rounded-full bg-orange-500 px-3 py-1.5 text-xs font-black text-white">UNSAVED CHANGES · PRESS SAVE ALL</span>
+            ) : (
+              <span className="text-xs text-white/60">{status}</span>
+            )}
             <a href="/admin/orders" className="rounded-full border border-white/20 px-4 py-2 text-xs font-black">
               ORDERS
             </a>
@@ -1237,6 +1259,49 @@ export default function AdminEditor({
                         gallery={product.gallery}
                         onChange={(next) => updateProduct(next)}
                       />
+                      <div className="mt-4 rounded-2xl border border-ink/10 bg-white p-4">
+                        <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/55">
+                          Shop card picture — homepage, mattress list &amp; menu
+                        </div>
+                        <p className="mt-1 text-xs text-ink/55">
+                          A different picture just for the product cards. Leave empty to use the main image above.
+                        </p>
+                        <div className="mt-3 grid gap-4 md:grid-cols-[1fr_220px]">
+                          <div>
+                            <MediaField value={product.cardImage || ""} onChange={(cardImage) => updateProduct({ cardImage })} />
+                            <div className="mt-3 flex flex-wrap items-center gap-2 text-sm font-bold">
+                              <span className="text-xs font-black uppercase tracking-[0.12em] text-ink/55">Keep in view:</span>
+                              {(["top", "center", "bottom"] as const).map((f) => (
+                                <button
+                                  key={f}
+                                  type="button"
+                                  onClick={() => updateProduct({ cardFocus: f })}
+                                  className={`rounded-full border px-3 py-1.5 text-xs font-black ${
+                                    (product.cardFocus || "center") === f ? "border-ink bg-ink text-white" : "border-ink/15"
+                                  }`}
+                                >
+                                  {f.toUpperCase()}
+                                </button>
+                              ))}
+                              {product.cardImage ? (
+                                <button type="button" onClick={() => updateProduct({ cardImage: "" })} className="text-xs font-black text-red-700">
+                                  USE MAIN IMAGE
+                                </button>
+                              ) : null}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/55">Card preview</div>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={product.cardImage || product.image}
+                              alt=""
+                              className="mt-2 aspect-[4/5] w-full rounded-2xl border border-ink/10 object-cover"
+                              style={{ objectPosition: `center ${product.cardFocus || "center"}` }}
+                            />
+                          </div>
+                        </div>
+                      </div>
                       <div className="mt-4 rounded-2xl border border-ink/10 bg-sand/40 p-4">
                         <div className="text-xs font-black uppercase tracking-[0.12em] text-ink/55">
                           Slides made for you from this product&apos;s details

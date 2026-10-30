@@ -7,12 +7,13 @@ import { BUSINESS } from "@/lib/business";
 
 export default function ProductCard({ mattress, highlight }: { mattress: Mattress; highlight?: string }) {
   const href = `/mattresses/${mattress.slug}`;
+  const cardPic = mattress.cardImage?.trim() || mattress.image;
   const largest = Math.max(...mattress.sizes.map((s) => s.priceAdd)) + Math.max(...mattress.heights.map((h) => h.priceAdd));
 
   return (
     <article className="g-card">
-      <div className={`g-card-media ${mattress.image && !mattress.image.includes("unsplash.com") ? "g-card-media--photo" : ""}`}>
-        <ProductVisual image={mattress.image} layers={mattress.layers} alt={mattress.name} />
+      <div className={`g-card-media ${cardPic && !cardPic.includes("unsplash.com") ? "g-card-media--photo" : ""}`}>
+        <ProductVisual image={cardPic} layers={mattress.layers} alt={mattress.name} focus={mattress.cardFocus} />
         <div className="g-card-tags">
           {highlight ? <span className="g-chip g-chip--orange">{highlight}</span> : null}
           <span className="g-chip">{mattress.firmness}</span>

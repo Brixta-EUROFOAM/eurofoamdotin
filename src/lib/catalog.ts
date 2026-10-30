@@ -56,6 +56,9 @@ export type Mattress = {
   warranty: string;
   /* main image (shop cards, link previews, first photo) */
   image: string;
+  /* picture for shop cards & menus (falls back to the main image) and which part of it to keep in view */
+  cardImage?: string;
+  cardFocus?: "top" | "center" | "bottom";
   /* extra product photos, in order */
   gallery?: string[];
   /* auto-made gallery slides to show (undefined = all): inside, trial, sizes, delivery */

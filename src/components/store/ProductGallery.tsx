@@ -39,6 +39,18 @@ export default function ProductGallery({
   if (!slides.length) slides.push({ kind: "inside" });
 
   const [i, setI] = useState(0);
+  // frame takes the shape of the main photo (square photos → square frame, tall → 4:5)
+  const [ratio, setRatio] = useState<string | null>(null);
+  useEffect(() => {
+    if (!photos[0]) return;
+    const im = new Image();
+    im.onload = () => {
+      const r = im.naturalWidth / im.naturalHeight;
+      setRatio(r > 0.95 ? "1 / 1" : "4 / 5");
+    };
+    im.src = photos[0];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [photos[0]]);
   const [full, setFull] = useState(false);
   const n = slides.length;
   const go = useCallback((d: number) => setI((x) => (x + d + n) % n), [n]);
@@ -88,7 +100,7 @@ export default function ProductGallery({
 
   return (
     <div className="g-gallery">
-      <div className="g-gallery-main g-gallery-main--slides" {...swipe}>
+      <div className="g-gallery-main g-gallery-main--slides" style={ratio ? { aspectRatio: ratio } : undefined} {...swipe}>
         <div className="g-gallery-track" style={{ transform: `translateX(-${i * 100}%)` }}>
           {slides.map((s, k) => (
             <div className="g-gallery-cell" key={k} aria-hidden={k !== i} role="group" aria-roledescription="slide" aria-label={`${k + 1} of ${n}: ${label(s)}`}>
@@ -139,7 +151,7 @@ export default function ProductGallery({
             ×
           </button>
           <div className="g-lightbox-stage" onClick={(e) => e.target === e.currentTarget && setFull(false)}>
-            <div className="g-lightbox-frame">{render(slides[i], true)}</div>
+            <div className="g-lightbox-frame" style={ratio ? { aspectRatio: ratio } : undefined}>{render(slides[i], true)}</div>
           </div>
           {n > 1 ? (
             <>

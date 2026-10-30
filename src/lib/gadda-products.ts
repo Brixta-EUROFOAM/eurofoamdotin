@@ -33,13 +33,25 @@ const HEIGHTS = (step: number) => [
 
 /* Product photos shipped with the site (public/products/…). Replace or add more in Admin → Products → Photos. */
 export const REGULAR_PHOTOS = [
-  "/products/gadda-regular/layers.webp",
-  "/products/gadda-regular/bedroom.webp",
-  "/products/gadda-regular/top-view.webp",
-  "/products/gadda-regular/reading.webp",
-  "/products/gadda-regular/sitting.webp",
-  "/products/gadda-regular/label-closeup.webp",
+  "/products/gadda-regular/v2-layers.webp",
+  "/products/gadda-regular/v2-bed-angle.webp",
+  "/products/gadda-regular/v2-bed-front.webp",
+  "/products/gadda-regular/v2-bed-sunlight.webp",
+  "/products/gadda-regular/v2-label.webp",
+  "/products/gadda-regular/v2-corner.webp",
 ];
+
+/* exact photo orders shipped in earlier versions (bedroom first). Only these are upgraded to the
+   current order — any order you set in Admin (e.g. "Make main") is left alone. */
+export const PREVIOUS_ORDERS: Record<string, string[][]> = {
+  "gadda-pro": [["bedroom", "layers", "top-view", "front", "side", "closeup"].map((n) => `/products/gadda-pro/${n}.webp`)],
+  "gadda-ultimate": [["bedroom", "layers", "label-closeup", "corner-closeup"].map((n) => `/products/gadda-ultimate/${n}.webp`)],
+};
+
+/* photos that shipped in earlier versions — replaced automatically by the current set */
+export const LEGACY_PHOTOS: Record<string, string[]> = {
+  "gadda-regular": ["layers", "bedroom", "top-view", "reading", "sitting", "label-closeup"].map((n) => `/products/gadda-regular/${n}.webp`),
+};
 
 export const PRO_PHOTOS = [
   "/products/gadda-pro/layers.webp",

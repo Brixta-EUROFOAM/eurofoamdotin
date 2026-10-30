@@ -100,6 +100,7 @@ export default function GalleryField({
         <p className="rounded-xl border border-dashed border-ink/20 p-4 text-sm text-ink/55">No photos yet. Upload a few — the first becomes the main image.</p>
       )}
 
+      <p className="text-xs text-ink/55">Changes here (main image, order, new photos) go live when you press <b>SAVE ALL</b> at the top.</p>
       <div className="flex flex-wrap items-center gap-3">
         <label className="cursor-pointer rounded-full bg-ink px-4 py-2 text-xs font-black text-white">
           {busy ? `UPLOADING ${busy}…` : "+ UPLOAD PHOTOS"}

@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { defaultStoreData, type Mattress, type StoreData } from "@/lib/catalog";
-import { SHIPPED_PHOTOS, gaddaProducts } from "@/lib/gadda-products";
+import { LEGACY_PHOTOS, PREVIOUS_ORDERS, SHIPPED_PHOTOS, gaddaProducts } from "@/lib/gadda-products";
 import { db, hasDb } from "@/lib/db";
 import { expandSizes } from "@/lib/sizes";
 
@@ -50,7 +50,9 @@ function withShippedPhotos(p: Mattress): Mattress {
   if (!set) return p;
   // saved with the shipped photos in an older order → use the current order (layers photo first)
   const saved = [p.image, ...(p.gallery || [])].filter(Boolean);
-  if (saved.length === set.length && saved.every((x) => set.includes(x)) && saved.join() !== set.join()) {
+  const legacy = LEGACY_PHOTOS[p.slug] || [];
+  if (saved.length && saved.every((x) => legacy.includes(x))) return { ...p, image: set[0], gallery: set.slice(1) };
+  if ((PREVIOUS_ORDERS[p.slug] || []).some((old) => old.join() === saved.join())) {
     return { ...p, image: set[0], gallery: set.slice(1) };
   }
   if (p.gallery?.length) return p;
