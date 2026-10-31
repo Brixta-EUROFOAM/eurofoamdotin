@@ -8,6 +8,16 @@ import { BUSINESS } from "@/lib/business";
   if a line can't be backed up, it doesn't go here.
 */
 
+/* "How do I pay?": two ways when online payment is on, one when it's off (see Faq.tsx) */
+export const PAY_QUESTION = "How do I pay?";
+export const OLD_PAY_ANSWER =
+  "Pay on delivery (cash or UPI when it arrives), or ask for a secure UPI payment link after we confirm your order. We never ask for card details on the phone.";
+export function payAnswer(online: boolean) {
+  return online
+    ? "Two ways: pay online at checkout (UPI, card or net banking, on Razorpay's secure page), or pay on delivery (cash or UPI when it arrives). We never ask for card details on the phone."
+    : "Pay on delivery: cash or UPI when it arrives. We never ask for card details on the phone.";
+}
+
 export const FAQS: { q: string; a: string; group: "buying" | "delivery" | "trial" | "product" }[] = [
   {
     group: "product",
@@ -27,7 +37,7 @@ export const FAQS: { q: string; a: string; group: "buying" | "delivery" | "trial
   {
     group: "buying",
     q: "How do I pay?",
-    a: "Pay on delivery (cash or UPI when it arrives), or ask for a secure UPI payment link after we confirm your order. We never ask for card details on the phone.",
+    a: payAnswer(true),
   },
   {
     group: "buying",
@@ -58,22 +68,25 @@ export const TRUST = [
   { id: "pay", title: "Pay on delivery", body: "Cash or UPI when it arrives", href: "/policies/terms#payment" },
 ] as const;
 
+/* layer colours, matched to the layer photos (public/products/…) */
 export const LAYER_SWATCH: Record<string, string> = {
-  fabric: "#f3efe7",
-  foam: "#ecd3b2",
-  memory: "#e8d6bf",
+  fabric: "#8c8b8d",
+  foam: "#e9dbb9",
+  memory: "#ece9e2",
   latex: "#efe2b8",
-  hr: "#ff8a3d",
-  hd: "#3a3835",
-  spring: "#b9bec8",
-  zoned: "#ff6500",
-  core: "#ff6500",
-  cool: "#cfe0ee",
-  adaptive: "#e2cfb4",
+  hr: "#8f8e8b",
+  hd: "#b9b8b5",
+  spring: "#dcd8cf",
+  zoned: "#8f8e8b",
+  core: "#8f8e8b",
+  cool: "#d9e3dd",
+  adaptive: "#e2d5bb",
   auto: "#e6e1d8",
 };
+const DENSEST = "#4d4b48"; // 40-density HR foam is charcoal in the photos
 
 export function swatchFor(kind?: string, name = "") {
+  if (/\b40\s*d\b/i.test(name) && (kind === "hr" || /\bhr\b/i.test(name))) return DENSEST;
   if (kind && kind !== "auto" && LAYER_SWATCH[kind]) return LAYER_SWATCH[kind];
   const n = name.toLowerCase();
   if (n.includes("cover") || n.includes("fabric")) return LAYER_SWATCH.fabric;

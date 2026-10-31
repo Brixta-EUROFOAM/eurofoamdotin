@@ -862,7 +862,8 @@ body {
 /* real product photos wherever a product is shown */
 .g-pv { display: block; width: 100%; height: 100%; object-fit: cover; }
 .g-card-media--photo { padding: 0 !important; display: block !important; }
-.g-card-media--photo .g-pv { aspect-ratio: 4 / 5; height: auto; }
+/* card photos fill the wide card frame (the picked focus decides what stays in view) */
+.g-card-media--photo .g-pv { aspect-ratio: auto; height: 100%; }
 .g-mm-thumb .g-pv { border-radius: inherit; }
 .g-mm-thumb:has(.g-pv) { padding: 0; overflow: hidden; }
 .g-mm-preview-art:has(.g-pv) { position: relative; padding: 0; overflow: hidden; aspect-ratio: 4 / 3; border-radius: 14px; margin: 14px 14px 0; }

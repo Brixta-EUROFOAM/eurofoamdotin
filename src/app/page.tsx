@@ -4,7 +4,6 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import MattressStack from "@/components/store/MattressStack";
-import ProductVisual from "@/components/store/ProductVisual";
 import TrustStrip from "@/components/store/TrustStrip";
 import Faq from "@/components/store/Faq";
 import Reviews from "@/components/store/Reviews";
@@ -17,6 +16,8 @@ import { BUSINESS } from "@/lib/business";
 import { copyText } from "@/lib/site-copy";
 import PromoBanners from "@/components/store/PromoBanners";
 import Highlight from "@/components/store/Highlight";
+import UltimateReveal from "@/components/store/UltimateReveal";
+import { razorpayReady } from "@/lib/razorpay";
 
 export const dynamic = "force-dynamic";
 
@@ -25,9 +26,20 @@ export default async function Home() {
   const nonce = (await headers()).get("x-nonce") || undefined;
   const show = site.homeSections || {};
   const hero = products.find((p) => p.slug === site.homeStoryProductSlug) || products[1] || products[0];
+  // the star product opens up in the hero (film in public/home/ultimate/); falls back to the drawn stack
+  const star = products.find((p) => p.slug === "gadda-ultimate");
+  const shown = star || hero;
+  const latex = star?.options?.flatMap((o) => o.choices).find((c) => /latex/i.test(c.label) && c.priceAdd > 0);
   const cheapest = products.length ? Math.min(...products.map((p) => p.basePrice)) : 0;
+  const online = razorpayReady();
   const t = (key: string, vars: Record<string, string | number> = {}) =>
-    copyText(site, key, { trial: BUSINESS.trialNights, count: products.length, ...vars });
+    copyText(site, key, {
+      trial: BUSINESS.trialNights,
+      count: products.length,
+      payNow: online ? "Pay online now, or when it arrives." : "Nothing to pay on the site.",
+      payAtDoor: online ? "Chose pay on delivery? Pay cash or UPI then." : "Pay cash or UPI when it arrives.",
+      ...vars,
+    });
 
   return (
     <>
@@ -68,7 +80,7 @@ export default async function Home() {
               ) : null}
             </div>
 
-            {hero ? (
+            {shown ? (
               <div className="g-hero-visual">
                 <Stamp
                   className="g-stamp--hero"
@@ -78,17 +90,30 @@ export default async function Home() {
                   tone="rust"
                   rotate={-12}
                 />
-                <MattressStack
-                  className="g-mstack--labelled"
-                  layers={hero.layers}
-                  spread="exploded"
-                  labels
-                  animate
-                />
+                {star ? (
+                  <UltimateReveal
+                    name={star.name}
+                    layers={star.layers.slice(0, 4).map((l) => ({ name: l.name, description: l.description }))}
+                    upgrade={
+                      latex
+                        ? `Prefer more bounce? Swap the ${(star.layers[1]?.name || "top layer").toLowerCase()} for ${latex.label.toLowerCase()}, ${money(latex.priceAdd)} more.`
+                        : undefined
+                    }
+                  />
+                ) : (
+                  <MattressStack
+                    className="g-mstack--labelled"
+                    layers={shown.layers}
+                    spread="exploded"
+                    labels
+                    animate
+                  />
+                )}
                 <p style={{ margin: "18px 0 0", fontSize: ".92rem", color: "var(--g-ink-2)" }}>
-                  Inside the {hero.name}. That&apos;s all of it.{" "}
-                  <Link href={`/mattresses/${hero.slug}`} className="g-link">
-                    See the {hero.name}
+                  Inside the {shown.name}
+                  {star ? <>, from {money(star.basePrice)}</> : null}. That&apos;s all of it.{" "}
+                  <Link href={`/mattresses/${shown.slug}`} className="g-link">
+                    See the {shown.name}
                   </Link>
                 </p>
               </div>
@@ -164,11 +189,19 @@ export default async function Home() {
               <div className="g-vs-col g-vs-col--us">
                 <h3>{t("vsUsTitle")}</h3>
                 <Stamp className="g-stamp--corner" ring="One price for everyone" center="₹" sub="No fake MRP" tone="indigo" size={112} rotate={10} />
-                {hero ? (
-                  <div className="g-vs-visual">
-                    <ProductVisual image={hero.image} layers={hero.layers} alt={hero.name} />
-                  </div>
-                ) : null}
+                {/* our cover and label, up close (public/home/vs-gadda.webp, 4:3) */}
+                <div className="g-vs-visual">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    className="g-pv"
+                    src="/home/vs-gadda.webp"
+                    alt="Corner of a GADDA mattress on a wooden bed, with its label: GADDA, made in India by UMADUTT INDUSTRIES"
+                    width={1200}
+                    height={900}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
                 <ul className="g-vs-list">
                   {["vsUs1", "vsUs2", "vsUs3"].map((k) =>
                     t(k) ? (

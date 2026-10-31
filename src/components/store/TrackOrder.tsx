@@ -13,6 +13,8 @@ type Result = {
   city: string;
   pincode: string;
   payment: string;
+  payLabel?: string;
+  payUrl?: string;
   total: number;
   lines: { name: string; size: string; height: string; quantity: number }[];
 };
@@ -83,6 +85,18 @@ export default function TrackOrder() {
           <p style={{ color: "var(--g-ink-2)", margin: "6px 0 18px" }}>
             {result.lines.map((l) => `${l.name} ${l.size} ${l.height} × ${l.quantity}`).join("; ")}. To {result.city} {result.pincode}.
           </p>
+          {result.payLabel ? (
+            <p style={{ margin: "0 0 18px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
+              <span>
+                Payment: <b>{result.payLabel}</b>
+              </span>
+              {result.payUrl ? (
+                <a href={result.payUrl} className="g-btn g-btn--sm g-btn--orange">
+                  Pay {money(result.total)} now
+                </a>
+              ) : null}
+            </p>
+          ) : null}
           {result.cancelled || result.status === "cancelled" ? (
             <p className="g-chip">This order was cancelled.</p>
           ) : result.timeline?.length ? (

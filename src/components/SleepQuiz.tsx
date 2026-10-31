@@ -44,7 +44,7 @@ const QUESTIONS: Question[] = [
     title: "Do you wake up feeling hot?",
     body: "Foam can hold heat; some layers handle it better.",
     options: [
-      { label: "Often", hint: "Fan on full, still warm", score: { ultimate: 3 }, why: "the Ultimate's natural latex top breathes and doesn't trap heat" },
+      { label: "Often", hint: "Fan on full, still warm", score: { ultimate: 3 }, why: "the Ultimate's cool memory foam top is made to sleep cooler" },
       { label: "Sometimes", hint: "In summer", score: { pro: 1, ultimate: 1 } },
       { label: "Not really", hint: "", score: { regular: 1, pro: 1 } },
     ],

@@ -42,6 +42,9 @@ Rules 2025. **Have a lawyer read them once.**
 | `PUBLIC_SITE_URL` | yes | e.g. `https://eurofoam.in` — canonical URLs, sitemap, CSRF |
 | `NEXT_PUBLIC_GTM_ID` | no | Google Tag Manager, loads only after "Ads and offers" consent (build-time) |
 | `NEXT_PUBLIC_META_PIXEL_ID` | no | Meta Pixel, same rule (build-time) |
+| `RAZORPAY_KEY_ID` | no | Turns on "Pay online now" and staff payment links. `rzp_test_…` for testing |
+| `RAZORPAY_KEY_SECRET` | with the key id | Razorpay API secret; also checks the return-from-payment signature |
+| `RAZORPAY_WEBHOOK_SECRET` | with the key id | Checks webhooks at `/api/payments/razorpay` |
 
 ## How the important bits work
 
@@ -59,6 +62,11 @@ Rules 2025. **Have a lawyer read them once.**
 - **Checkout** — 3 steps, PIN autofill, explicit Terms checkbox (not
   pre-ticked), optional WhatsApp-updates opt-in, idempotency key against
   double orders. Pay on delivery or UPI link.
+- **Online payment** (`src/lib/razorpay.ts`) — Razorpay Payment Links: the
+  customer pays on Razorpay's page (no payment script on our site), comes
+  back to `/payment/return`, and a signed webhook confirms it. Both are
+  checked, then the link is re-fetched from Razorpay before an order is
+  marked paid. Staff can send a link by SMS from the /ops board.
 - **Customer rights** — account page: order history, download my data,
   delete my account.
 - **Security** — per-request CSP nonce + CSRF wall (`src/proxy.ts`), HSTS,

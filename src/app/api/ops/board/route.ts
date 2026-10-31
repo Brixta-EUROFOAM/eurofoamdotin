@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { opsActor } from "@/lib/ops-session";
 import { CANCELLED, dueAt, enteredAt, getOps } from "@/lib/ops";
-import { listOrders } from "@/lib/orders";
+import { listOrders, paymentLabel } from "@/lib/orders";
+import { razorpayReady } from "@/lib/razorpay";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -28,6 +29,9 @@ export async function GET() {
       status: o.status,
       customer: { name: o.customer.name, phone: o.customer.phone, address: o.customer.address, city: o.customer.city, pincode: o.customer.pincode },
       payment: o.payment,
+      payLabel: paymentLabel(o),
+      paid: o.pay?.status === "paid",
+      payUrl: o.pay?.status === "created" ? o.pay.url : undefined,
       total: o.total,
       notes: o.notes,
       lines: o.lines.map((l) => ({ name: l.name, size: l.size, height: l.height, variant: l.variant, quantity: l.quantity })),
@@ -38,6 +42,7 @@ export async function GET() {
 
   return NextResponse.json({
     me: { name: me.name, admin: me.admin, depts: me.depts },
+    payReady: razorpayReady(),
     depts,
     stages,
     orders,

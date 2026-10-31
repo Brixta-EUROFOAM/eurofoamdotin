@@ -19,6 +19,7 @@ import { getSizing, groupsOf, toCm, type SizeRow } from "@/lib/sizes";
 import { swatchFor } from "@/lib/content";
 import { breadcrumbLd, productLd } from "@/lib/seo";
 import { realEmail, phoneLink } from "@/lib/contact";
+import { razorpayReady } from "@/lib/razorpay";
 
 export const dynamic = "force-dynamic";
 
@@ -85,7 +86,7 @@ export default async function ProductPage({ params }: Params) {
           </nav>
           <div className="g-pdp">
             <ProductGallery mattress={mattress} trialNights={BUSINESS.trialNights} customSizes={sizing.customEnabled} />
-            <ProductBuyBox mattress={mattress} trialNights={BUSINESS.trialNights} warranty={warranty} sizing={sizing} />
+            <ProductBuyBox mattress={mattress} trialNights={BUSINESS.trialNights} warranty={warranty} sizing={sizing} onlinePay={razorpayReady()} />
           </div>
         </div>
 

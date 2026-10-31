@@ -6,6 +6,7 @@ import type { Mattress, SiteSettings } from "@/lib/catalog";
 import { SIZE_GROUPS, customLabel, customPrice, getSizing, parseCustom } from "@/lib/sizes";
 import { db, hasDb } from "@/lib/db";
 import { CANCELLED, getOps, OpsError } from "@/lib/ops";
+import { createPaymentLink, fetchPaymentLink, PaymentError, razorpayReady, razorpayTestMode, type RazorpayLink } from "@/lib/razorpay";
 
 /*
   Orders, saved one per line in data/orders.jsonl (same storage style as
@@ -40,7 +41,10 @@ export type Order = {
     city: string;
     pincode: string;
   };
-  payment: "pay_on_delivery" | "upi_link";
+  /* what the customer chose at checkout ("upi_link" only on older orders) */
+  payment: "pay_on_delivery" | "online" | "upi_link";
+  /* the Razorpay payment link for this order, if one was made (src/lib/razorpay.ts) */
+  pay?: OrderPay;
   notes?: string;
   /* signed-in customer, if any */
   customerId?: string;
@@ -52,6 +56,22 @@ export type Order = {
   idempotencyKey?: string;
   lines: OrderLine[];
   total: number;
+};
+
+export type OrderPay = {
+  linkId: string;
+  url: string;
+  referenceId: string;
+  amount: number; // rupees
+  status: string; // created | partially_paid | paid | expired | cancelled
+  createdAt: string;
+  by: string; // "checkout", or the staff member who sent it
+  amountPaid?: number;
+  paidAt?: string;
+  paymentId?: string;
+  method?: string;
+  test?: boolean;
+  previous?: string[]; // earlier link ids for this order
 };
 
 export type OrderEvent = {
@@ -138,7 +158,8 @@ export async function createOrder(
   const pincode = clip(body.pincode, 6).replace(/\D/g, "");
   const email = clip(body.email, 120);
   const notes = clip(body.notes, 500);
-  const payment = body.payment === "upi_link" ? "upi_link" : "pay_on_delivery";
+  const payment = body.payment === "online" ? "online" : "pay_on_delivery";
+  if (payment === "online" && !razorpayReady()) throw new OrderError("Online payment isn't available right now. Please choose pay on delivery.");
 
   if (!name || !address || !city) throw new OrderError("Please fill in your name, address and city.");
   if (phone.replace(/\D/g, "").length < 10) throw new OrderError("Please enter a valid 10-digit phone number.");
@@ -260,7 +281,7 @@ export function whatsappFor(phone: string, order: Order) {
       (l) => `• ${l.name} · ${l.size} · ${l.height}${l.variant ? ` · ${l.variant}` : ""} × ${l.quantity} = ${rupees(l.lineTotal)}`
     ),
     `Total: ${rupees(order.total)}`,
-    `Payment: ${order.payment === "upi_link" ? "UPI link" : "Pay on delivery"}`,
+    `Payment: ${paymentLabel(order)}`,
     `${order.customer.name}, ${order.customer.city} ${order.customer.pincode}`,
   ].join("\n");
   return `https://wa.me/${to}?text=${encodeURIComponent(text)}`;
@@ -350,6 +371,151 @@ export async function actOnOrder(
       throw new OpsError("Unknown action.");
   }
   order.history = history.slice(-200);
+  await saveOrder(order);
+  return order;
+}
+
+/* ---------- online payment (Razorpay Payment Links) ---------- */
+
+const METHOD: Record<string, string> = { upi: "UPI", card: "card", netbanking: "net banking", wallet: "wallet", emi: "EMI" };
+
+/* One plain line for staff and customers: how this order is being paid. */
+export function paymentLabel(o: Pick<Order, "payment" | "pay">) {
+  const p = o.pay;
+  if (p?.status === "paid") return `Paid online${p.method && METHOD[p.method] ? ` by ${METHOD[p.method]}` : ""}${p.test ? " (test)" : ""}`;
+  if (p?.status === "partially_paid") return "Part paid online";
+  if (o.payment === "online") return "Online, not paid yet";
+  if (p?.status === "created") return "Payment link sent";
+  if (o.payment === "upi_link") return "Wants a payment link";
+  return "Pay on delivery";
+}
+
+const rupeesOf = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+
+function noteOnce(order: Order, text: string, key: string) {
+  if ((order.history || []).some((e) => e.note?.includes(key))) return;
+  order.history = [...(order.history || []), { at: new Date().toISOString(), by: "Razorpay", stage: order.status, event: "note" as const, note: text }].slice(-200);
+}
+
+/*
+  A payment link for this order: reuses the open one if there is one,
+  otherwise makes a new one. notify = Razorpay texts (and emails) it.
+*/
+export async function startPayment(order: Order, opts: { notify: boolean; by: string; callbackUrl: string }): Promise<OrderPay> {
+  if (order.status === CANCELLED) throw new OrderError("This order is cancelled.");
+  if (order.pay?.status === "paid") throw new OrderError("This order is already paid.");
+
+  if (order.pay?.status === "created") {
+    const link = await fetchPaymentLink(order.pay.linkId).catch(() => null);
+    if (link?.status === "created" && link.amount === Math.round(order.total * 100)) return order.pay;
+    if (link) {
+      const updated = await applyPaymentLink(link);
+      if (updated?.pay?.status === "paid") throw new OrderError("This order is already paid.");
+    }
+  }
+
+  const link = await createPaymentLink({
+    amountRupees: order.total,
+    referenceId: `${order.id}-${randomBytes(3).toString("hex")}`,
+    orderId: order.id,
+    description: `GADDA order ${order.id}: ${order.lines.map((l) => `${l.name} ${l.size} ${l.height}${l.quantity > 1 ? ` × ${l.quantity}` : ""}`).join(", ")}`,
+    customer: { name: order.customer.name, phone: order.customer.phone, email: order.customer.email },
+    notify: opts.notify,
+    callbackUrl: opts.callbackUrl,
+    expireDays: opts.by === "checkout" ? 2 : 7,
+  });
+
+  const fresh = (await getOrder(order.id)) || order;
+  const before = fresh.pay;
+  fresh.pay = {
+    linkId: link.id,
+    url: link.short_url,
+    referenceId: link.reference_id,
+    amount: link.amount / 100,
+    status: link.status,
+    createdAt: new Date().toISOString(),
+    by: opts.by,
+    test: razorpayTestMode() || undefined,
+    previous: before ? [...(before.previous || []), before.linkId].slice(-10) : undefined,
+  };
+  fresh.history = [
+    ...(fresh.history || []),
+    {
+      at: new Date().toISOString(),
+      by: opts.by === "checkout" ? "Website" : opts.by,
+      stage: fresh.status,
+      event: "note" as const,
+      note: `Payment link for ${rupeesOf(fresh.pay.amount)}${opts.notify ? " sent by SMS" : " opened at checkout"}: ${link.short_url}`,
+    },
+  ].slice(-200);
+  await saveOrder(fresh);
+  return fresh.pay;
+}
+
+/* Staff on the /ops board: send (or re-share) the payment link for an order. */
+export async function sendPaymentLink(
+  id: string,
+  who: { name: string; admin: boolean; can: (stage: string) => boolean },
+  callbackUrl: string,
+) {
+  const order = await getOrder(id);
+  if (!order) throw new OpsError("Order not found.");
+  if (!who.admin && !who.can(order.status)) throw new OpsError("This order isn't in your department right now.");
+  try {
+    return await startPayment(order, { notify: true, by: who.name, callbackUrl });
+  } catch (e) {
+    if (e instanceof OrderError || e instanceof PaymentError) throw new OpsError(e.message);
+    throw e;
+  }
+}
+
+/*
+  Apply what Razorpay says about a link (always fetched from Razorpay's API,
+  never taken from the browser). Safe to call any number of times.
+*/
+export async function applyPaymentLink(link: RazorpayLink): Promise<Order | null> {
+  const notes = link.notes && !Array.isArray(link.notes) ? link.notes : {};
+  const id = notes.order_id || link.reference_id.replace(/-[0-9a-f]{6}$/i, "");
+  const order = await getOrder(id);
+  if (!order?.pay) return null;
+  const current = order.pay.linkId === link.id;
+  const older = order.pay.previous?.includes(link.id);
+  if (!current && !older) return null;
+
+  const captured = link.payments?.find((p) => p.status === "captured") || link.payments?.[0];
+
+  if (!current) {
+    if (link.status !== "paid") return order;
+    if (order.pay.status === "paid") {
+      noteOnce(order, `Also paid ${rupeesOf(link.amount_paid / 100)} on an older link (${link.id}). Refund one of the two in Razorpay.`, link.id);
+      await saveOrder(order);
+      return order;
+    }
+    order.pay = {
+      ...order.pay,
+      previous: [...(order.pay.previous || []).filter((x) => x !== link.id), order.pay.linkId].slice(-10),
+      linkId: link.id,
+      url: link.short_url,
+      referenceId: link.reference_id,
+      amount: link.amount / 100,
+    };
+  }
+
+  const was = order.pay.status;
+  if (was === link.status && order.pay.amountPaid === link.amount_paid / 100) return order;
+  order.pay = { ...order.pay, status: link.status, amountPaid: link.amount_paid / 100 };
+  if (link.status === "paid" && was !== "paid") {
+    order.pay.paidAt = new Date().toISOString();
+    order.pay.paymentId = captured?.payment_id;
+    order.pay.method = captured?.method;
+    const short = link.amount_paid < Math.round(order.total * 100);
+    noteOnce(
+      order,
+      `Paid ${rupeesOf(link.amount_paid / 100)} online${captured?.method && METHOD[captured.method] ? ` by ${METHOD[captured.method]}` : ""}` +
+        `${captured?.payment_id ? ` (${captured.payment_id})` : ""}${short ? `. Order total is ${rupeesOf(order.total)}: collect the rest.` : "."}`,
+      captured?.payment_id || link.id,
+    );
+  }
   await saveOrder(order);
   return order;
 }

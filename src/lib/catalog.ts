@@ -59,6 +59,8 @@ export type Mattress = {
   /* picture for shop cards & menus (falls back to the main image) and which part of it to keep in view */
   cardImage?: string;
   cardFocus?: "top" | "center" | "bottom";
+  /* which shipped photo set this product was last switched to (see PHOTO_RELEASE) */
+  photoSet?: string;
   /* extra product photos, in order */
   gallery?: string[];
   /* auto-made gallery slides to show (undefined = all): inside, trial, sizes, delivery */

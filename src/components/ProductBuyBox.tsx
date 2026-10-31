@@ -10,12 +10,15 @@ import { IconMoon, IconRupee, IconShield, IconTruck } from "@/components/store/I
 import { money, type Mattress } from "@/lib/catalog";
 import { SIZE_GROUPS, groupsOf, parseCustom, type SizeRow, type Sizing } from "@/lib/sizes";
 import SizePicker from "@/components/store/SizePicker";
+import { OPTIONS_EVENT, type OptionsDetail } from "@/lib/option-photos";
 
 type Props = {
   mattress: Mattress;
   trialNights: number;
   warranty: string;
   sizing: Sizing;
+  /* Razorpay keys are set: checkout offers "Pay online" too */
+  onlinePay?: boolean;
 };
 
 function defaultSize(rows: SizeRow[]) {
@@ -23,7 +26,7 @@ function defaultSize(rows: SizeRow[]) {
   return (rows.find((r) => r.length === q[0] && r.width === q[1]) || rows[Math.min(2, rows.length - 1)] || rows[0])?.label;
 }
 
-export default function ProductBuyBox({ mattress, trialNights, warranty, sizing }: Props) {
+export default function ProductBuyBox({ mattress, trialNights, warranty, sizing, onlinePay = false }: Props) {
   const router = useRouter();
   const { addItem } = useCart();
   const { info, eta, pin, check, loading, askOnce } = useLocation();
@@ -43,9 +46,24 @@ export default function ProductBuyBox({ mattress, trialNights, warranty, sizing 
 
   useEffect(() => setPinInput(pin), [pin]);
   useEffect(() => askOnce(), [askOnce]);
-  // ?variant=true opens the size chooser straight away (link it from ads, WhatsApp…)
+  // let the gallery show the photo of the picked upgrade (e.g. the latex layers)
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("variant") === "true") setPicker({ open: true });
+    const detail: OptionsDetail = { slug: mattress.slug, picked };
+    window.dispatchEvent(new CustomEvent(OPTIONS_EVENT, { detail }));
+  }, [mattress.slug, picked]);
+  // ?variant=true opens the size chooser straight away (link it from ads, WhatsApp…)
+  // ?size=…&height=… (from the compare page) picks that size and height
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    if (q.get("variant") === "true") setPicker({ open: true });
+    const s = q.get("size");
+    if (s && mattress.sizes.some((r) => r.label === s)) {
+      setSize(s);
+      setConfirmed(true);
+    }
+    const h = q.get("height");
+    if (h && mattress.heights.some((r) => r.label === h)) setHeight(h);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Sticky buy bar once the main button scrolls away.
@@ -264,8 +282,8 @@ export default function ProductBuyBox({ mattress, trialNights, warranty, sizing 
         <div>
           <IconRupee />
           <div>
-            <b>Pay on delivery</b>
-            <span>Cash or UPI at your door, or a UPI link once we confirm.</span>
+            <b>{onlinePay ? "Pay online or on delivery" : "Pay on delivery"}</b>
+            <span>{onlinePay ? "UPI, card or net banking at checkout, or cash or UPI at your door." : "Cash or UPI at your door."}</span>
           </div>
         </div>
         <div>

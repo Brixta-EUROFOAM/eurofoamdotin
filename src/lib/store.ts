@@ -1,7 +1,15 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { defaultStoreData, type Mattress, type StoreData } from "@/lib/catalog";
-import { LEGACY_PHOTOS, PREVIOUS_ORDERS, SHIPPED_PHOTOS, gaddaProducts } from "@/lib/gadda-products";
+import {
+  LEGACY_PHOTOS,
+  OLD_MAIN_PHOTOS,
+  PHOTO_RELEASE,
+  PREVIOUS_ORDERS,
+  SHIPPED_CARDS,
+  SHIPPED_PHOTOS,
+  gaddaProducts,
+} from "@/lib/gadda-products";
 import { db, hasDb } from "@/lib/db";
 import { expandSizes } from "@/lib/sizes";
 
@@ -41,7 +49,36 @@ export async function ensureStore() {
 
 /* Older saved products only had Single/Double/Queen/King — give them full dimension charts. */
 function upgrade(d: StoreData): StoreData {
-  return { ...d, products: d.products.map((p) => withUltimateLayers(withShippedPhotos({ ...p, sizes: expandSizes(p) }))) };
+  return {
+    ...d,
+    products: d.products.map((p) =>
+      withUltimateLayers(withCardImage(withPhotoRelease(withMainPhoto(withShippedPhotos({ ...p, sizes: expandSizes(p) }))))),
+    ),
+  };
+}
+
+/* A new shipped photo set replaces the saved photos once (Admin changes after that are kept). */
+function withPhotoRelease(p: Mattress): Mattress {
+  const release = PHOTO_RELEASE[p.slug];
+  const set = SHIPPED_PHOTOS[p.slug];
+  if (!release || !set || p.photoSet === release) return p;
+  return { ...p, image: set[0], gallery: set.slice(1), cardImage: SHIPPED_CARDS[p.slug] || "", cardFocus: undefined, photoSet: release };
+}
+
+/* Shop cards show the whole layer stack, as long as the product still uses its shipped main photo
+   and no card picture of its own was chosen in Admin. */
+function withCardImage(p: Mattress): Mattress {
+  const card = SHIPPED_CARDS[p.slug];
+  if (!card || p.cardImage?.trim() || p.image !== SHIPPED_PHOTOS[p.slug]?.[0]) return p;
+  return { ...p, cardImage: card };
+}
+
+/* A saved product still showing an earlier shipped main photo gets the current one; other photos stay. */
+function withMainPhoto(p: Mattress): Mattress {
+  const old = OLD_MAIN_PHOTOS[p.slug];
+  const main = SHIPPED_PHOTOS[p.slug]?.[0];
+  if (!old || !main || !old.includes(p.image)) return p;
+  return { ...p, image: main, gallery: (p.gallery || []).filter((x) => x !== main && !old.includes(x)) };
 }
 
 /* Photo sets ship with the site (Regular, Pro): give them to a saved product that still has no photos of its own. */
@@ -61,10 +98,13 @@ function withShippedPhotos(p: Mattress): Mattress {
   return { ...p, image: set[0], gallery: set.slice(1), slides: p.slides || ["trial", "sizes", "delivery"] };
 }
 
-/* Ultimate's layers changed to cover → natural latex → adaptive → 40D HR (latex now standard).
-   A saved Ultimate still on the old cool-memory-foam setup is moved to the new one. */
+/* Ultimate is cover → cool memory foam → adaptive → 40D HR, with natural latex as a paid
+   upgrade for the top layer. A saved Ultimate that has latex as standard and no latex
+   upgrade on offer is moved to this setup (price, sizes and photos are kept). */
 function withUltimateLayers(p: Mattress): Mattress {
-  if (p.slug !== "gadda-ultimate" || !p.layers.some((l) => l.visualKind === "cool")) return p;
+  const latexStandard = p.layers[1]?.visualKind === "latex" || /latex/i.test(p.layers[1]?.name || "");
+  const latexUpgrade = (p.options || []).some((o) => o.choices.some((c) => /latex/i.test(c.label)));
+  if (p.slug !== "gadda-ultimate" || !latexStandard || latexUpgrade) return p;
   const fresh = gaddaProducts.find((x) => x.slug === "gadda-ultimate");
   if (!fresh) return p;
   return { ...p, layers: fresh.layers, options: fresh.options, features: fresh.features, shortDescription: fresh.shortDescription, longDescription: fresh.longDescription };

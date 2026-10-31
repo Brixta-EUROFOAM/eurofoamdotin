@@ -92,8 +92,11 @@ export const POLICIES: Policy[] = [
             <b>Pay on delivery</b> — cash or UPI to our delivery team when the mattress arrives.
           </li>
           <li>
-            <b>UPI payment link</b> — after we confirm your order we send a payment link from our business account.
+            <b>Pay online</b> — UPI, card or net banking on the secure payment page of our payment partner, Razorpay
+            Software Private Limited. Razorpay handles your payment details; we never see your card number or UPI PIN.
+            If you return the mattress within the trial, the refund goes back the same way.
           </li>
+
         </ul>
         <p>
           We never ask for card numbers, OTPs or your UPI PIN over the phone, WhatsApp or email. If anyone does, it
@@ -220,7 +223,7 @@ export const POLICIES: Policy[] = [
         <h2>Before dispatch</h2>
         <p>
           Cancel any time before the mattress leaves us, for free, by calling or messaging us. If you&apos;d already paid
-          by UPI link, you get the full amount back within {B.refundDays} working days.
+          online, you get the full amount back within {B.refundDays} working days.
         </p>
         <h2>After dispatch</h2>
         <p>
@@ -339,7 +342,7 @@ export const POLICIES: Policy[] = [
         <h2>Who we share it with</h2>
         <p>
           Only what&apos;s needed: the transport company delivering your order gets your name, phone and address; our
-          bank or UPI provider processes payments; the website runs on our own server in India and is served through Cloudflare&apos;s network, which shields it from attacks. Each is bound to use the
+          payment partner Razorpay and our bank process payments; the website runs on our own server in India and is served through Cloudflare&apos;s network, which shields it from attacks. Each is bound to use the
           data only for that job. We disclose data to authorities only when Indian law requires it.
         </p>
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findOrderForTracking } from "@/lib/orders";
+import { findOrderForTracking, paymentLabel } from "@/lib/orders";
 import { CANCELLED, customerTimeline, eta, getOps } from "@/lib/ops";
 import { clientIp, rateLimit, readJson, sameOrigin, forbidden, tooMany } from "@/lib/security";
 
@@ -34,6 +34,8 @@ export async function POST(request: Request) {
     city: order.customer.city,
     pincode: order.customer.pincode,
     payment: order.payment,
+    payLabel: paymentLabel(order),
+    payUrl: !cancelled && order.pay?.status === "created" ? order.pay.url : undefined,
     total: order.total,
     lines: order.lines.map((l) => ({ name: l.name, size: l.size, height: l.height, quantity: l.quantity })),
   });

@@ -9,7 +9,8 @@ import { money } from "@/lib/catalog";
 import SewnLabel from "@/components/store/SewnLabel";
 import { trackEvent } from "@/lib/telemetry-client";
 
-type Done = { id: string; total: number; whatsapp: string | null };
+type Done = { id: string; total: number; whatsapp: string | null; payError?: string };
+type Pay = "online" | "pay_on_delivery";
 type Step = "contact" | "address" | "payment";
 
 const STEPS: { id: Step; label: string }[] = [
@@ -23,7 +24,16 @@ function newKey() {
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-export default function CheckoutClient({ trialNights }: { trialNights: number }) {
+export default function CheckoutClient({
+  trialNights,
+  onlinePay = false,
+  testMode = false,
+}: {
+  trialNights: number;
+  /* Razorpay keys are set (src/lib/razorpay.ts) */
+  onlinePay?: boolean;
+  testMode?: boolean;
+}) {
   const { items, subtotal, clearCart, hydrated } = useCart();
   const { total, stale, dropped } = useLiveQuote(true);
   const { pin, info, check } = useLocation();
@@ -40,7 +50,8 @@ export default function CheckoutClient({ trialNights }: { trialNights: number })
     notes: "",
     website: "",
   });
-  const [payment, setPayment] = useState<"pay_on_delivery" | "upi_link">("pay_on_delivery");
+  const [payment, setPayment] = useState<Pay>("pay_on_delivery");
+  const [leaving, setLeaving] = useState(false);
   const [accept, setAccept] = useState(false);
   const [waUpdates, setWaUpdates] = useState(false);
   const [error, setError] = useState("");
@@ -114,7 +125,7 @@ export default function CheckoutClient({ trialNights }: { trialNights: number })
 
   async function placeOrder(e: FormEvent) {
     e.preventDefault();
-    if (sending) return;
+    if (sending || leaving) return;
     if (!stepValid.contact) return go("contact");
     if (!stepValid.address) return go("address");
     if (!accept) {
@@ -146,8 +157,14 @@ export default function CheckoutClient({ trialNights }: { trialNights: number })
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.error || "We couldn't place the order. Please try again or call us.");
       trackEvent("order_created", { value: data.total, itemCount: items.length, label: payment });
-      setDone({ id: data.id, total: data.total, whatsapp: data.whatsapp || null });
       clearCart();
+      // Pay online: off to Razorpay's page; they send the customer back to /payment/return
+      if (typeof data.payUrl === "string" && /^https:\/\/[a-z0-9.-]*(rzp\.io|razorpay\.com)\//i.test(data.payUrl)) {
+        setLeaving(true);
+        window.location.assign(data.payUrl);
+        return;
+      }
+      setDone({ id: data.id, total: data.total, whatsapp: data.whatsapp || null, payError: data.payError });
       window.scrollTo({ top: 0 });
     } catch (err) {
       setError((err as Error).message);
@@ -173,10 +190,18 @@ export default function CheckoutClient({ trialNights }: { trialNights: number })
             ["For", form.name],
             ["Deliver to", `${form.city}${form.state ? `, ${form.state}` : ""} ${form.pincode}`],
             ["Total", `${money(done.total)} incl. GST and delivery`],
-            ["Payment", payment === "upi_link" ? "UPI link after confirmation" : "Pay on delivery"],
+            [
+              "Payment",
+              payment === "online" ? "Online, not paid yet" : "Pay on delivery",
+            ],
             ["Trial", `${trialNights} nights from delivery`],
           ]}
         />
+        {done.payError ? (
+          <p className="g-error" role="alert" style={{ margin: 0 }}>
+            {done.payError}
+          </p>
+        ) : null}
         <p style={{ margin: 0, color: "var(--g-ink-2)" }}>
           We&apos;ll call you on {phoneDigits} to confirm your delivery date before anything is dispatched. Nothing is
           charged until then.
@@ -339,20 +364,29 @@ export default function CheckoutClient({ trialNights }: { trialNights: number })
                 <b>Pay on delivery</b>
                 <small>Cash or UPI when the mattress arrives</small>
               </button>
-              <button
-                type="button"
-                role="radio"
-                aria-checked={payment === "upi_link"}
-                className="g-choice"
-                onClick={() => setPayment("upi_link")}
-              >
-                <b>UPI payment link</b>
-                <small>We send a secure link after confirming your order</small>
-              </button>
+              {onlinePay ? (
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={payment === "online"}
+                  className="g-choice"
+                  onClick={() => setPayment("online")}
+                >
+                  <b>Pay online now</b>
+                  <small>UPI, card or net banking on Razorpay&apos;s secure page</small>
+                </button>
+              ) : null}
             </div>
             <p className="g-note" style={{ textAlign: "left", margin: 0 }}>
-              No payment is taken on this page. We&apos;ll never ask for your card number, OTP or UPI PIN on a call.
+              {payment === "online"
+                ? "Next you pay on Razorpay's page, then come back here. We never see your card number or UPI PIN."
+                : "No payment is taken on this page. We'll never ask for your card number, OTP or UPI PIN on a call."}
             </p>
+            {testMode && payment === "online" ? (
+              <p className="g-note" style={{ textAlign: "left", margin: 0, color: "var(--g-err)" }}>
+                Test mode: Razorpay test keys are set, so no real money moves.
+              </p>
+            ) : null}
 
             <label className="g-check">
               <input type="checkbox" checked={accept} onChange={(e) => setAccept(e.target.checked)} required />
@@ -373,8 +407,14 @@ export default function CheckoutClient({ trialNights }: { trialNights: number })
               <span>Send me order and delivery updates on WhatsApp (optional).</span>
             </label>
 
-            <button type="submit" className="g-btn g-btn--orange g-btn--block" disabled={sending} data-busy={sending || undefined}>
-              {sending ? "Placing your order…" : `Place order, ${money(shown)}`}
+            <button type="submit" className="g-btn g-btn--orange g-btn--block" disabled={sending || leaving} data-busy={sending || leaving || undefined}>
+              {leaving
+                ? "Opening Razorpay…"
+                : sending
+                  ? "Placing your order…"
+                  : payment === "online"
+                    ? `Place order and pay ${money(shown)}`
+                    : `Place order, ${money(shown)}`}
             </button>
           </fieldset>
         ) : null}

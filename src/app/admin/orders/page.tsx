@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { hasAdminAccount, isAdminAuthenticated } from "@/lib/admin-auth";
-import { listOrders } from "@/lib/orders";
+import { listOrders, paymentLabel } from "@/lib/orders";
 import { money } from "@/lib/catalog";
 import { missingBusinessFields } from "@/lib/business";
 import { CANCELLED, dueAt, getOps } from "@/lib/ops";
@@ -129,7 +129,7 @@ export default async function AdminOrdersPage() {
                     ))}
                     {o.notes ? <em>“{o.notes}”</em> : null}
                   </td>
-                  <td>{o.payment === "upi_link" ? "Send UPI link" : "Pay on delivery"}</td>
+                  <td>{paymentLabel(o)}</td>
                   <td className="num">
                     <strong>{money(o.total)}</strong>
                   </td>

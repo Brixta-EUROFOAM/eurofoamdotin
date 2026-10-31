@@ -1,5 +1,5 @@
 import { isAdminAuthenticated } from "@/lib/admin-auth";
-import { listOrders } from "@/lib/orders";
+import { listOrders, paymentLabel } from "@/lib/orders";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,7 +26,7 @@ export async function GET() {
       o.customer.address,
       o.customer.city,
       o.customer.pincode,
-      o.payment,
+      paymentLabel(o),
       o.lines.map((l) => `${l.name} ${l.size} ${l.height}${l.variant ? ` ${l.variant}` : ""} x${l.quantity}`).join("; "),
       o.total,
       o.notes || "",

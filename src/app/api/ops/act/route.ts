@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { opsActor } from "@/lib/ops-session";
 import { OpsError } from "@/lib/ops";
-import { actOnOrder, type OrderAction } from "@/lib/orders";
+import { actOnOrder, sendPaymentLink, type OrderAction } from "@/lib/orders";
+import { publicUrl } from "@/lib/public-url";
 import { forbidden, readJson, sameOrigin } from "@/lib/security";
 
 export const runtime = "nodejs";
@@ -14,6 +15,11 @@ export async function POST(request: Request) {
   const body = await readJson<{ id?: string } & Record<string, unknown>>(request, 2048);
   if (!body?.id) return NextResponse.json({ error: "Missing order." }, { status: 400 });
   try {
+    // send (or re-share) a Razorpay payment link for this order
+    if (body.action === "paylink") {
+      const pay = await sendPaymentLink(String(body.id), me, publicUrl(request, "/payment/return").toString());
+      return NextResponse.json({ ok: true, url: pay.url, status: pay.status });
+    }
     const order = await actOnOrder(String(body.id), body as unknown as OrderAction, me);
     return NextResponse.json({ ok: true, status: order.status });
   } catch (e) {

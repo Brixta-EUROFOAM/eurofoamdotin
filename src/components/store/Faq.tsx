@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { FAQS } from "@/lib/content";
+import { FAQS, OLD_PAY_ANSWER, PAY_QUESTION, payAnswer } from "@/lib/content";
+import { razorpayReady } from "@/lib/razorpay";
 import { getStoreData } from "@/lib/store";
 import LinkedText from "@/components/store/LinkedText";
 import JsonLd from "@/components/store/JsonLd";
@@ -19,7 +20,10 @@ export default async function Faq({
 }) {
   const { site } = await getStoreData();
   const all = site.faqs?.filter((f) => f.q?.trim() && f.a?.trim()).length ? site.faqs.filter((f) => f.q?.trim() && f.a?.trim()) : FAQS;
-  const items = limit ? all.slice(0, limit) : all;
+  // the payment answer always matches what checkout offers (unless you rewrote it in Admin)
+  const known = [OLD_PAY_ANSWER, payAnswer(true), payAnswer(false)];
+  const fixed = all.map((f) => (f.q === PAY_QUESTION && known.includes(f.a) ? { ...f, a: payAnswer(razorpayReady()) } : f));
+  const items = limit ? fixed.slice(0, limit) : fixed;
   return (
     <section className="g-section" id={id} aria-labelledby={`${id}-title`}>
       <JsonLd data={faqLd(items)} nonce={nonce} />

@@ -32,41 +32,70 @@ const HEIGHTS = (step: number) => [
 ];
 
 /* Product photos shipped with the site (public/products/…). Replace or add more in Admin → Products → Photos. */
+/* same cover as the Ultimate; the layers photo shows what's different inside */
 export const REGULAR_PHOTOS = [
-  "/products/gadda-regular/v2-layers.webp",
-  "/products/gadda-regular/v2-bed-angle.webp",
-  "/products/gadda-regular/v2-bed-front.webp",
-  "/products/gadda-regular/v2-bed-sunlight.webp",
-  "/products/gadda-regular/v2-label.webp",
-  "/products/gadda-regular/v2-corner.webp",
+  "/products/gadda-regular/v4-layers.webp",
+  "/products/gadda-regular/v3-bed-angle.webp",
+  "/products/gadda-regular/v3-bed-front.webp",
+  "/products/gadda-regular/v3-bed-top.webp",
+  "/products/gadda-regular/v3-label.webp",
 ];
 
 /* exact photo orders shipped in earlier versions (bedroom first). Only these are upgraded to the
    current order — any order you set in Admin (e.g. "Make main") is left alone. */
 export const PREVIOUS_ORDERS: Record<string, string[][]> = {
   "gadda-pro": [["bedroom", "layers", "top-view", "front", "side", "closeup"].map((n) => `/products/gadda-pro/${n}.webp`)],
-  "gadda-ultimate": [["bedroom", "layers", "label-closeup", "corner-closeup"].map((n) => `/products/gadda-ultimate/${n}.webp`)],
+  "gadda-ultimate": [
+    ["bedroom", "layers", "label-closeup", "corner-closeup"].map((n) => `/products/gadda-ultimate/${n}.webp`),
+    ["layers", "bedroom", "label-closeup", "corner-closeup"].map((n) => `/products/gadda-ultimate/${n}.webp`),
+  ],
+};
+
+/* earlier main photos: a saved product still showing one of these gets the current main photo
+   (its other photos are kept). A main photo you upload yourself in Admin is never replaced. */
+export const OLD_MAIN_PHOTOS: Record<string, string[]> = {
+  "gadda-regular": ["layers", "v2-layers", "v3-layers"].map((n) => `/products/gadda-regular/${n}.webp`),
 };
 
 /* photos that shipped in earlier versions — replaced automatically by the current set */
 export const LEGACY_PHOTOS: Record<string, string[]> = {
-  "gadda-regular": ["layers", "bedroom", "top-view", "reading", "sitting", "label-closeup"].map((n) => `/products/gadda-regular/${n}.webp`),
+  "gadda-regular": [
+    ...["layers", "bedroom", "top-view", "reading", "sitting", "label-closeup"],
+    ...["v2-layers", "v2-bed-angle", "v2-bed-front", "v2-bed-sunlight", "v2-label", "v2-corner"],
+  ].map((n) => `/products/gadda-regular/${n}.webp`),
 };
 
+/* same cover as the other two (studio shots shared with the Ultimate); the pocket-spring
+   version of the layers photo shows when someone picks that upgrade (see option-photos.ts) */
 export const PRO_PHOTOS = [
-  "/products/gadda-pro/layers.webp",
-  "/products/gadda-pro/bedroom.webp",
-  "/products/gadda-pro/top-view.webp",
-  "/products/gadda-pro/front.webp",
-  "/products/gadda-pro/side.webp",
-  "/products/gadda-pro/closeup.webp",
+  "/products/gadda-pro/v4-layers.webp",
+  "/products/gadda-ultimate/studio-angle.webp",
+  "/products/gadda-ultimate/studio-front.webp",
+  "/products/gadda-ultimate/label-closeup.webp",
+  "/products/gadda-pro/v4-bed-corner.webp",
 ];
 
+/* Shop-card pictures (homepage, mattress list, menu): the whole layer stack in the wide card frame. */
+export const SHIPPED_CARDS: Record<string, string> = {
+  "gadda-regular": "/products/gadda-regular/v4-card.webp",
+  "gadda-pro": "/products/gadda-pro/v4-card.webp",
+  "gadda-ultimate": "/products/gadda-ultimate/v4-card.webp",
+};
+
+/* A new photo set that replaces whatever the saved product shows, once. After that, anything you
+   change in Admin → Products → Photos sticks. Change the value to roll out another new set. */
+export const PHOTO_RELEASE: Record<string, string> = {
+  "gadda-pro": "pro-2026-10-studio",
+};
+
+/* studio set: layers first, then the outside from three angles and the label up close.
+   The latex version of the layers photo shows when someone picks that upgrade (see option-photos.ts). */
 export const ULTIMATE_PHOTOS = [
   "/products/gadda-ultimate/layers.webp",
-  "/products/gadda-ultimate/bedroom.webp",
+  "/products/gadda-ultimate/studio-angle.webp",
+  "/products/gadda-ultimate/studio-front.webp",
+  "/products/gadda-ultimate/studio-top.webp",
   "/products/gadda-ultimate/label-closeup.webp",
-  "/products/gadda-ultimate/corner-closeup.webp",
 ];
 
 /* photo sets that ship with the site, by product */
@@ -95,6 +124,7 @@ export const gaddaProducts: Mattress[] = [
     warranty: "Warranty included",
     image: REGULAR_PHOTOS[0],
     gallery: REGULAR_PHOTOS.slice(1),
+    cardImage: SHIPPED_CARDS["gadda-regular"],
     // the layers photo already explains what's inside, so skip the drawn cutaway/breakdown here
     slides: ["trial", "sizes", "delivery"],
     accent: "from-[#F3ECDD] to-[#FF6500]",
@@ -141,6 +171,8 @@ export const gaddaProducts: Mattress[] = [
     warranty: "Warranty included",
     image: PRO_PHOTOS[0],
     gallery: PRO_PHOTOS.slice(1),
+    cardImage: SHIPPED_CARDS["gadda-pro"],
+    photoSet: PHOTO_RELEASE["gadda-pro"],
     // the layers photo already explains what's inside
     slides: ["trial", "sizes", "delivery"],
     accent: "from-[#F3ECDD] to-[#FF6500]",
@@ -210,9 +242,9 @@ export const gaddaProducts: Mattress[] = [
     kicker: "Every upgrade, no gimmicks",
     badge: "ULTIMATE",
     category: "Ultimate",
-    shortDescription: "Natural latex and adaptive foam on our densest 40D HR base. Our most advanced support.",
+    shortDescription: "Cool memory foam and adaptive foam on our densest 40D HR base. Natural latex upgrade available.",
     longDescription:
-      "Natural latex on top: breathable, responsive and long-lasting, with real pressure relief. Adaptive foam underneath responds as you move, so you never feel stuck. All of it on a 40-density HR foam base, the most supportive core we make.",
+      "Cool memory foam on top moulds to your shape and is made to sleep cooler than regular memory foam. Adaptive foam underneath responds as you move, so you never feel stuck. All of it on a 40-density HR foam base, the most supportive core we make. Prefer natural bounce? Swap the top layer for natural latex.",
     basePrice: 18990,
     compareAt: 18990,
     firmness: "Plush-supportive",
@@ -222,10 +254,11 @@ export const gaddaProducts: Mattress[] = [
     warranty: "Warranty included",
     image: ULTIMATE_PHOTOS[0],
     gallery: ULTIMATE_PHOTOS.slice(1),
+    cardImage: SHIPPED_CARDS["gadda-ultimate"],
     // the layers photo already explains what's inside
     slides: ["trial", "sizes", "delivery"],
     accent: "from-[#F3ECDD] to-[#FF6500]",
-    features: ["Natural latex comfort layer", "Adaptive foam layer", "40D HR foam base", "Breathable, washable AeroTex cover"],
+    features: ["Cool memory foam comfort layer", "Adaptive foam layer", "40D HR foam base", "Breathable, washable AeroTex cover"],
     layers: [
       {
         ...COVER,
@@ -233,13 +266,13 @@ export const gaddaProducts: Mattress[] = [
         description: "Soft, skin-friendly, breathable and washable. Stays fresh.",
       },
       {
-        name: "Natural latex",
-        description: "Breathable, responsive and durable. Real pressure relief with natural bounce.",
-        material: "Natural latex",
+        name: "Cool memory foam",
+        description: "Moulds to your shape. Made to sleep cooler than regular memory foam.",
+        material: "Cooling memory foam",
         thickness: "",
         density: "",
         technicalNote: "",
-        visualKind: "latex",
+        visualKind: "cool",
       },
       {
         name: "Adaptive foam",
@@ -258,6 +291,32 @@ export const gaddaProducts: Mattress[] = [
         density: "40D",
         technicalNote: "",
         visualKind: "hr",
+      },
+    ],
+    options: [
+      {
+        id: "comfort",
+        label: "Top layer",
+        choices: [
+          { label: "Cool memory foam", priceAdd: 0, note: "Slow, hugging, sleeps cooler." },
+          {
+            label: "Natural latex",
+            priceAdd: 4000,
+            note: "Bouncier and breathable.",
+            swap: {
+              index: 1,
+              layer: {
+                name: "Natural latex",
+                description: "Breathable, responsive and durable. Real pressure relief with natural bounce.",
+                material: "Natural latex",
+                thickness: "",
+                density: "",
+                technicalNote: "",
+                visualKind: "latex",
+              },
+            },
+          },
+        ],
       },
     ],
     sizes: SIZES(3400),

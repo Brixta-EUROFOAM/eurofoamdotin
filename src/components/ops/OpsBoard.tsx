@@ -11,6 +11,9 @@ type Card = {
   status: string;
   customer: { name: string; phone: string; address: string; city: string; pincode: string };
   payment: string;
+  payLabel?: string;
+  paid?: boolean;
+  payUrl?: string;
   total: number;
   notes?: string;
   lines: { name: string; size: string; height: string; variant?: string; quantity: number }[];
@@ -18,7 +21,7 @@ type Card = {
   enteredAt: string;
   dueAt: string | null;
 };
-type Board = { me: { name: string; admin: boolean; depts: string[] }; depts: Dept[]; stages: Stage[]; orders: Card[] };
+type Board = { me: { name: string; admin: boolean; depts: string[] }; payReady?: boolean; depts: Dept[]; stages: Stage[]; orders: Card[] };
 
 const rupees = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -93,7 +96,7 @@ export default function OpsBoard() {
 
   const activePhone = visibleStages.find((s) => s.id === phoneStage)?.id || visibleStages[0]?.id;
 
-  async function act(id: string, body: Record<string, unknown>, done: string) {
+  async function act(id: string, body: Record<string, unknown>, done: string): Promise<Record<string, unknown> | null> {
     setBusy(id);
     const res = await fetch("/api/ops/act", {
       method: "POST",
@@ -104,10 +107,27 @@ export default function OpsBoard() {
     setBusy("");
     if (!res?.ok) {
       setToast(data?.error || "Couldn't save. Try again.");
-      return;
+      return null;
     }
     setToast(done);
     void load();
+    return data;
+  }
+
+  /* send a Razorpay payment link (or copy the open one) */
+  async function payLink(o: Card) {
+    if (o.payUrl) {
+      await navigator.clipboard?.writeText(o.payUrl).catch(() => {});
+      setToast(`Link copied: ${o.payUrl}`);
+      return;
+    }
+    if (!confirm(`Send a ${rupees(o.total)} payment link to ${o.customer.phone} by SMS?`)) return;
+    const data = await act(o.id, { action: "paylink" }, `Payment link sent to ${o.customer.phone}`);
+    const url = typeof data?.url === "string" ? data.url : "";
+    if (url) {
+      await navigator.clipboard?.writeText(url).catch(() => {});
+      setToast(`Sent by SMS and copied: ${url}`);
+    }
   }
 
   if (!board) {
@@ -244,7 +264,7 @@ export default function OpsBoard() {
                         {`${o.customer.address}, `}
                         {o.customer.city} {o.customer.pincode}
                         <br />
-                        {o.payment === "upi_link" ? "UPI link" : "Pay on delivery"} · {rupees(o.total)} · in stage{" "}
+                        {o.paid ? <b>{o.payLabel}</b> : o.payLabel || (o.payment === "upi_link" ? "UPI link" : "Pay on delivery")} · {rupees(o.total)} · in stage{" "}
                         {ago(o.enteredAt)}
                       </div>
                       {o.notes ? <div className="op-note">Customer: {o.notes}</div> : null}
@@ -279,6 +299,11 @@ export default function OpsBoard() {
                               onClick={() => void act(o.id, { action: "accept" }, `Accepted ${o.id}`)}
                             >
                               Accept
+                            </button>
+                          ) : null}
+                          {board.payReady && !o.paid ? (
+                            <button type="button" className="op-btn" disabled={busy === o.id} onClick={() => void payLink(o)}>
+                              {o.payUrl ? "Copy payment link" : "Send payment link"}
                             </button>
                           ) : null}
                           <button

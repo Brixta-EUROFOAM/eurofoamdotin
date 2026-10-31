@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { createOrder, OrderError, whatsappFor } from "@/lib/orders";
+import { createOrder, OrderError, startPayment, whatsappFor } from "@/lib/orders";
 import { getStoreData } from "@/lib/store";
 import { CUSTOMER_COOKIE, customerFromSession } from "@/lib/customerAuth";
 import { clientIp, forbidden, rateLimit, readJson, sameOrigin, tooMany } from "@/lib/security";
+import { publicUrl } from "@/lib/public-url";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,11 +26,32 @@ export async function POST(request: Request) {
     const customer = await customerFromSession(jar.get(CUSTOMER_COOKIE)?.value);
     const order = await createOrder(body, { customerId: customer?.id });
     const { site } = await getStoreData();
+
+    // "Pay online now": open a Razorpay payment link and send the customer there.
+    // The order is already saved, so if Razorpay is down they can still pay on delivery.
+    let payUrl: string | undefined;
+    let payError: string | undefined;
+    if (order.payment === "online" && order.pay?.status !== "paid") {
+      try {
+        const pay = await startPayment(order, {
+          notify: false,
+          by: "checkout",
+          callbackUrl: publicUrl(request, "/payment/return").toString(),
+        });
+        payUrl = pay.url;
+      } catch (e) {
+        console.error("[orders] payment link failed", order.id, (e as Error).message);
+        payError = "We couldn't open the payment page. Your order is saved, and you can pay when it arrives.";
+      }
+    }
+
     return NextResponse.json({
       ok: true,
       id: order.id,
       total: order.total,
       whatsapp: whatsappFor(site.phone, order),
+      payUrl,
+      payError,
     });
   } catch (e) {
     if (e instanceof OrderError) return NextResponse.json({ error: e.message }, { status: 422 });

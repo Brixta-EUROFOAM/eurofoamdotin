@@ -6,7 +6,7 @@ import { useLocation } from "@/components/store/LocationProvider";
 import { useLiveQuote } from "@/components/store/useLiveQuote";
 import { money } from "@/lib/catalog";
 
-export default function CartClient() {
+export default function CartClient({ onlinePay = false }: { onlinePay?: boolean }) {
   const { items, changeQty, removeItem, subtotal, hydrated } = useCart();
   const { total, stale } = useLiveQuote(true);
   const { info, eta, openPicker } = useLocation();
@@ -102,7 +102,7 @@ export default function CartClient() {
         <Link href="/checkout" className="g-btn g-btn--orange g-btn--block">
           Checkout
         </Link>
-        <p className="g-note">Pay on delivery or by UPI link. Nothing is charged online.</p>
+        <p className="g-note">{onlinePay ? "Pay online at checkout, or pay on delivery." : "Pay on delivery. Nothing is charged online."}</p>
       </aside>
     </div>
   );

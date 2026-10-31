@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CheckoutClient from "@/components/store/CheckoutClient";
 import { BUSINESS } from "@/lib/business";
+import { razorpayReady, razorpayTestMode } from "@/lib/razorpay";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ export default function CheckoutPage() {
     <>
       <Header />
       <main id="main" className="g-wrap">
-        <CheckoutClient trialNights={BUSINESS.trialNights} />
+        <CheckoutClient trialNights={BUSINESS.trialNights} onlinePay={razorpayReady()} testMode={razorpayTestMode()} />
       </main>
       <Footer />
     </>

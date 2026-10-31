@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartClient from "@/components/CartClient";
+import { razorpayReady } from "@/lib/razorpay";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,7 @@ export default function CartPage() {
     <>
       <Header />
       <main id="main" className="g-wrap">
-        <CartClient />
+        <CartClient onlinePay={razorpayReady()} />
       </main>
       <Footer />
     </>

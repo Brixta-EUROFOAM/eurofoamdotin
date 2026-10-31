@@ -6,6 +6,7 @@ import MattressStack from "@/components/store/MattressStack";
 import Stamp from "@/components/store/Stamp";
 import { AUTO_SLIDES, AutoSlideView, type AutoSlide } from "@/components/store/GallerySlides";
 import type { Mattress } from "@/lib/catalog";
+import { OPTIONS_EVENT, optionPhoto, type OptionsDetail } from "@/lib/option-photos";
 
 type Slide = { kind: "photo"; src: string } | { kind: AutoSlide };
 
@@ -23,8 +24,26 @@ export default function ProductGallery({
   trialNights: number;
   customSizes?: boolean;
 }) {
+  // an upgrade picked in the buy box can swap the main photo (e.g. latex layers)
+  const [upgradePhoto, setUpgradePhoto] = useState<string | null>(null);
+  const shown = useRef<string | null>(null);
+  useEffect(() => {
+    const onPick = (e: Event) => {
+      const d = (e as CustomEvent<OptionsDetail>).detail;
+      if (!d || d.slug !== mattress.slug) return;
+      const src = optionPhoto(mattress.slug, d.picked);
+      if (src === shown.current) return;
+      shown.current = src;
+      setUpgradePhoto(src);
+      setI(0);
+    };
+    window.addEventListener(OPTIONS_EVENT, onPick);
+    return () => window.removeEventListener(OPTIONS_EVENT, onPick);
+  }, [mattress.slug]);
+
   const photos = Array.from(new Set([mattress.image, ...(mattress.gallery || [])].filter(Boolean)));
-  const on = (k: AutoSlide) => (mattress.slides ? mattress.slides.includes(k) : true) && ((k !== "inside" && k !== "cutaway") || mattress.layers.length > 0);
+  if (upgradePhoto && photos.length) photos[0] = upgradePhoto;
+  const on =(k: AutoSlide) => (mattress.slides ? mattress.slides.includes(k) : true) && ((k !== "inside" && k !== "cutaway") || mattress.layers.length > 0);
   const auto = AUTO_SLIDES.map((a) => a.id).filter(on);
 
   // main photo (or the 3D cutaway if there's no photo), layer breakdown, trial, more photos, sizes, delivery
