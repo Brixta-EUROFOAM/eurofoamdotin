@@ -1,6 +1,5 @@
 services:
   eurofoamlanding:
-    build: .
     image: goswamirohit/eurofoamlanding:v1
     container_name: eurofoamlanding
     restart: unless-stopped
