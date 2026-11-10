@@ -1,290 +1,126 @@
-import Link from "next/link";
-import { headers } from "next/headers";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import ProductCard from "@/components/ProductCard";
-import MattressStack from "@/components/store/MattressStack";
-import TrustStrip from "@/components/store/TrustStrip";
-import Faq from "@/components/store/Faq";
-import Reviews from "@/components/store/Reviews";
-import HelpStrip from "@/components/store/HelpStrip";
-import Stamp from "@/components/store/Stamp";
-import HindiNote from "@/components/store/HindiNote";
-import { getStoreData } from "@/lib/store";
-import { money } from "@/lib/catalog";
-import { BUSINESS } from "@/lib/business";
-import { copyText } from "@/lib/site-copy";
-import PromoBanners from "@/components/store/PromoBanners";
-import Highlight from "@/components/store/Highlight";
-import UltimateReveal from "@/components/store/UltimateReveal";
-import { razorpayReady } from "@/lib/razorpay";
+import Image from "next/image";
 
-export const dynamic = "force-dynamic";
-
-export default async function Home() {
-  const { site, products, reviews } = await getStoreData();
-  const nonce = (await headers()).get("x-nonce") || undefined;
-  const show = site.homeSections || {};
-  const hero = products.find((p) => p.slug === site.homeStoryProductSlug) || products[1] || products[0];
-  // the star product opens up in the hero (film in public/home/ultimate/); falls back to the drawn stack
-  const star = products.find((p) => p.slug === "gadda-ultimate");
-  const shown = star || hero;
-  const latex = star?.options?.flatMap((o) => o.choices).find((c) => /latex/i.test(c.label) && c.priceAdd > 0);
-  const cheapest = products.length ? Math.min(...products.map((p) => p.basePrice)) : 0;
-  const online = razorpayReady();
-  const t = (key: string, vars: Record<string, string | number> = {}) =>
-    copyText(site, key, {
-      trial: BUSINESS.trialNights,
-      count: products.length,
-      payNow: online ? "Pay online now, or when it arrives." : "Nothing to pay on the site.",
-      payAtDoor: online ? "Chose pay on delivery? Pay cash or UPI then." : "Pay cash or UPI when it arrives.",
-      ...vars,
-    });
-
+export default function EurofoamPage() {
   return (
-    <>
-      <Header />
-      <main id="main">
-        {/* Hero: the mattress, taken apart */}
-        <section className="g-hero" aria-labelledby="hero-title">
-          <div className="g-wrap g-hero-grid">
-            <div>
-              <p className="g-hero-deva" lang="hi">
-                गद्दा
-              </p>
-              <h1 className="g-h1" id="hero-title">
-                <Highlight text={site.heroTitle || "Buy a Mattress, not ==Bullsh#*t.=="} />
-              </h1>
-              <p className="g-lede">{t("heroLede")}</p>
-              <div className="g-hero-cta">
-                <Link href="/mattresses" className="g-btn g-btn--orange">
-                  {sentence(site.primaryCtaLabel) || "Shop mattresses"}
-                </Link>
-                <Link href="/sleep-quiz" className="g-btn g-btn--ghost">
-                  {sentence(site.secondaryCtaLabel) || "Find my match"}
-                </Link>
-              </div>
-              {cheapest ? (
-                <p className="g-hero-from">
-                  {(() => {
-                    const [before, ...after] = t("heroFrom").split("{price}");
-                    return (
-                      <>
-                        {before}
-                        {after.length ? <b>{money(cheapest)}</b> : null}
-                        {after.join("")}
-                      </>
-                    );
-                  })()}
-                </p>
-              ) : null}
-            </div>
-
-            {shown ? (
-              <div className="g-hero-visual">
-                <Stamp
-                  className="g-stamp--hero"
-                  ring={`${BUSINESS.trialNights} nights at home`}
-                  center={String(BUSINESS.trialNights)}
-                  sub="nights"
-                  tone="rust"
-                  rotate={-12}
-                />
-                {star ? (
-                  <UltimateReveal
-                    name={star.name}
-                    layers={star.layers.slice(0, 4).map((l) => ({ name: l.name, description: l.description }))}
-                    upgrade={
-                      latex
-                        ? `Prefer more bounce? Swap the ${(star.layers[1]?.name || "top layer").toLowerCase()} for ${latex.label.toLowerCase()}, ${money(latex.priceAdd)} more.`
-                        : undefined
-                    }
-                  />
-                ) : (
-                  <MattressStack
-                    className="g-mstack--labelled"
-                    layers={shown.layers}
-                    spread="exploded"
-                    labels
-                    animate
-                  />
-                )}
-                <p style={{ margin: "18px 0 0", fontSize: ".92rem", color: "var(--g-ink-2)" }}>
-                  Inside the {shown.name}
-                  {star ? <>, from {money(star.basePrice)}</> : null}. That&apos;s all of it.{" "}
-                  <Link href={`/mattresses/${shown.slug}`} className="g-link">
-                    See the {shown.name}
-                  </Link>
-                </p>
-              </div>
-            ) : null}
+    <div className="min-h-screen p-6 md:p-12 flex flex-col items-center">
+      
+      <main className="max-w-4xl w-full space-y-12">
+        
+        {/* Brand & Logo */}
+        <div className="flex flex-col items-center space-y-6 mt-8">
+          <div className="bg-white p-6 rounded-2xl shadow-lg border border-border">
+            <Image
+              src="/eurofoam-logo.png"
+              alt="Eurofoam Logo"
+              width={280}
+              height={160}
+              className="object-contain"
+              priority
+            />
           </div>
+          <h1 className="text-3xl md:text-5xl font-bold text-foreground tracking-wide text-center">
+            Eurofoam PU Foam & Mattress
+          </h1>
+        </div>
+
+        {/* E-Commerce Highlight */}
+        <div className="text-white rounded-2xl p-10 text-center shadow-xl border-4 border-white">
+          <h2 className="text-2xl md:text-4xl font-extrabold mb-6">
+            Exciting News!
+          </h2>
+          
+          <div className="bg-amber-900 text-xl rounded-4xl md:text-2xl font-bold flex flex-col md:flex-row items-center justify-center gap-5 mt-8">
+            <span>We have launched our e-commerce at</span>
+            
+            {/* Stitched Fabric Patch Button */}
+            <a
+              href="https://gadda.store"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative inline-flex items-center justify-center bg-[#EF7C00] text-black font-medium text-2xl md:text-3xl py-3 px-8 rounded-2xl -rotate-3 hover:-rotate-1 hover:scale-105 transition-all duration-300 shadow-lg animate-pulse hover:animate-none"
+              style={{ fontFamily: "ui-sans-serif, system-ui, sans-serif", letterSpacing: "0.02em" }}
+            >
+              {/* White stitching lines (Top and Bottom) */}
+              <div className="absolute inset-1 border-y-2 border-dashed border-white/80 rounded-xl pointer-events-none opacity-90 mix-blend-overlay"></div>
+              
+              <span className="relative z-10">gadda.store</span>
+            </a>
+          </div>
+        </div>
+
+        {/* About Section */}
+        <section className="bg-card text-card-foreground rounded-2xl p-8 shadow-md border border-border">
+          <p className="text-lg leading-relaxed text-center">
+            <strong className="text-amber-500 font-semibold">Eurofoam</strong> is one of the best mattress brands in India, producing premium quality polyurethane foam mattresses. We deal in HD foam, PU foam, HR foam, Spring Mattresses, Foam Mattresses and many more.
+          </p>
         </section>
 
-        <TrustStrip />
+        {/* Information Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* Legal & Addresses */}
+          <section className="bg-card text-card-foreground rounded-2xl p-8 shadow-md border border-border space-y-4">
+            <h3 className="text-xl font-bold text-amber-500 mb-4 border-b border-border pb-3">Corporate Info</h3>
+            <div className="space-y-3">
+              <p><strong className="text-muted-foreground">Legal Name:</strong><br /> Umadutt Industries</p>
+              <p><strong className="text-muted-foreground">Office Address:</strong><br /> 6th floor, Monal Tower, GS Rd, Swaraj Nagar, Sarumotoria, Guwahati, Assam 781036</p>
+              <p><strong className="text-muted-foreground">Factory Address:</strong><br /> 2VV8+7PF Byrnihat, Meghalaya</p>
+            </div>
+          </section>
 
-        {show.promos !== false ? <PromoBanners banners={site.homeBanners || []} title={t("promosTitle")} /> : null}
-
-        {show.productGrid !== false ? (
-          <section className="g-section" aria-labelledby="range-title">
-            <div className="g-wrap">
-              <div className="g-head">
-                <div>
-                  <h2 className="g-h2" id="range-title">
-                    {t("rangeTitle")}
-                  </h2>
-                  {t("rangeHindi") ? <HindiNote>{t("rangeHindi")}</HindiNote> : null}
-                  <p className="g-lede">{t("rangeLede")}</p>
-                </div>
-                <Link href="/compare" className="g-btn g-btn--ghost">
-                  {t("rangeCompare")}
-                </Link>
-              </div>
-              <div className="g-products g-rail">
-                {products.map((p) => (
-                  <ProductCard
-                    key={p.slug}
-                    mattress={p}
-                    highlight={p.slug === hero?.slug ? t("rangePick") || undefined : undefined}
-                  />
-                ))}
+          {/* Contact Info */}
+          <section className="bg-card text-card-foreground rounded-2xl p-8 shadow-md border border-border space-y-4">
+            <h3 className="text-xl font-bold text-amber-500 mb-4 border-b border-border pb-3">Contact Details</h3>
+            <div className="space-y-3">
+              <p><strong className="text-muted-foreground">Director:</strong><br /> Soni Jhunjhunwala</p>
+              <p><strong className="text-muted-foreground">Phone:</strong><br /> <a href="tel:07099017853" className="hover:text-amber-500 transition-colors">07099017853</a></p>
+              <div className="flex flex-col">
+                <strong className="text-muted-foreground mb-1">Email:</strong>
+                <a href="mailto:eurofoammail890@gmail.com" className="hover:text-amber-500 transition-colors">eurofoammail890@gmail.com</a>
+                <a href="mailto:director@eurofoam.in" className="hover:text-amber-500 transition-colors">director@eurofoam.in</a>
               </div>
             </div>
           </section>
-        ) : null}
+        </div>
 
-        {/* The honesty bit */}
-        <section className="g-section g-section--cream" aria-labelledby="vs-title">
-          <div className="g-wrap">
-            <div className="g-head">
-              <div>
-                <h2 className="g-h2" id="vs-title">
-                  {t("vsTitle")}
-                </h2>
-                {t("vsHindi") ? <HindiNote>{t("vsHindi")}</HindiNote> : null}
-                <p className="g-lede">{t("vsLede")}</p>
-              </div>
+        {/* Factory Map */}
+        <section className="bg-card text-card-foreground rounded-2xl p-8 shadow-md border border-border flex flex-col items-center mb-12">
+          <h3 className="text-xl font-bold text-amber-500 mb-6 self-start">Factory Location (Byrnihat)</h3>
+          
+          <div className="w-full h-96 rounded-xl overflow-hidden border border-border bg-muted relative flex items-center justify-center">
+            <iframe
+              title="Eurofoam Factory Location"
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              scrolling="no"
+              marginHeight={0}
+              marginWidth={0}
+              src="https://www.openstreetmap.org/export/embed.html?bbox=91.805%2C25.995%2C91.955%2C26.145&layer=mapnik"
+              className="absolute inset-0 w-full h-full grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500 z-0"
+            ></iframe>
+            
+            <div className="z-10 pointer-events-none text-red-600 pb-10 drop-shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12">
+                <path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+              </svg>
             </div>
-            <div className="g-vs">
-              <div className="g-vs-col g-vs-col--them">
-                <h3>{t("vsThemTitle")}</h3>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/home/mattress-jargon.png"
-                  alt="A tall stack of mattresses with labels like AI Sleep Tech, 15 Layers, Cooling Gel Matrix and Max Pro Ultra+"
-                  loading="lazy"
-                  width={907}
-                  height={801}
-                />
-                <ul className="g-vs-list" style={{ color: "var(--g-ink-2)" }}>
-                  {["vsThem1", "vsThem2", "vsThem3"].map((k) =>
-                    t(k) ? (
-                      <li key={k}>
-                        <span>{t(k)}</span>
-                      </li>
-                    ) : null
-                  )}
-                </ul>
-              </div>
-              <div className="g-vs-col g-vs-col--us">
-                <h3>{t("vsUsTitle")}</h3>
-                <Stamp className="g-stamp--corner" ring="One price for everyone" center="₹" sub="No fake MRP" tone="indigo" size={112} rotate={10} />
-                {/* our cover and label, up close (public/home/vs-gadda.webp, 4:3) */}
-                <div className="g-vs-visual">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    className="g-pv"
-                    src="/home/vs-gadda.webp"
-                    alt="Corner of a GADDA mattress on a wooden bed, with its label: GADDA, made in India by UMADUTT INDUSTRIES"
-                    width={1200}
-                    height={900}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <ul className="g-vs-list">
-                  {["vsUs1", "vsUs2", "vsUs3"].map((k) =>
-                    t(k) ? (
-                      <li key={k}>
-                        <div>
-                          {t(k)}
-                          <br />
-                          <span>{t(`${k}Sub`)}</span>
-                        </div>
-                      </li>
-                    ) : null
-                  )}
-                </ul>
-                <Link href="/why-gadda" className="g-btn g-btn--orange" style={{ justifySelf: "start" }}>
-                  {t("vsCta")}
-                </Link>
-              </div>
-            </div>
+          </div>
+
+          <div className="mt-4 text-sm text-muted-foreground flex items-center justify-between w-full">
+            <span>2VV8+7PF Byrnihat, Meghalaya</span>
+            <a 
+              href="https://www.openstreetmap.org/?mlat=26.07&mlon=91.88#map=13/26.07/91.88" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-amber-500 hover:underline"
+            >
+              View Larger Map
+            </a>
           </div>
         </section>
 
-        {/* How buying works — a real sequence */}
-        <section className="g-section g-section--ink" aria-labelledby="how-title">
-          <div className="g-wrap">
-            <div className="g-head">
-              <div>
-                <h2 className="g-h2" id="how-title">
-                  {t("howTitle")}
-                </h2>
-                {t("howHindi") ? <HindiNote>{t("howHindi")}</HindiNote> : null}
-                <p className="g-lede">{t("howLede")}</p>
-              </div>
-            </div>
-            <ol className="g-steps g-rail">
-              {["how1", "how2", "how3", "how4"].map((k) =>
-                t(k) ? (
-                  <li key={k}>
-                    <h3>{t(k)}</h3>
-                    <p>{t(`${k}Sub`)}</p>
-                  </li>
-                ) : null
-              )}
-            </ol>
-          </div>
-        </section>
-
-        <section className="g-section" aria-label="Help choosing">
-          <div className="g-wrap g-split">
-            <Link href="/sleep-quiz" className="g-panel g-panel--orange">
-              <div>
-                <h3>{t("quizTitle")}</h3>
-                <p>{t("quizBody")}</p>
-              </div>
-              <span className="g-btn" style={{ justifySelf: "start" }}>
-                {t("quizCta")}
-              </span>
-            </Link>
-            <Link href="/compare" className="g-panel g-panel--ticking">
-              <div>
-                <h3>{t("compareTitle")}</h3>
-                <p>{t("compareBody")}</p>
-              </div>
-              <span className="g-btn" style={{ justifySelf: "start" }}>
-                {t("compareCta")}
-              </span>
-            </Link>
-          </div>
-        </section>
-
-        {show.reviews !== false ? <Reviews reviews={reviews} /> : null}
-
-        <Faq limit={6} nonce={nonce} />
-
-        <HelpStrip />
       </main>
-      <Footer />
-    </>
+    </div>
   );
-}
-
-function sentence(text?: string) {
-  if (!text) return "";
-  if (text !== text.toUpperCase()) return text;
-  const lower = text.toLowerCase();
-  return lower.charAt(0).toUpperCase() + lower.slice(1);
 }

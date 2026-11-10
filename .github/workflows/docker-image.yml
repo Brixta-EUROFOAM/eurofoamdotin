@@ -1,0 +1,28 @@
+name: Docker Build & Push
+
+on:
+  push:
+    branches: [ "simpleEuroSite" ]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login To Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.GOSWAMIROHIT_DOCKER_USERNAME }}
+          password: ${{ secrets.GOSWAMIROHIT_DOCKER_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: goswamirohit/eurofoamlanding:v1
