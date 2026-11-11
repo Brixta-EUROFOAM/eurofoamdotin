@@ -29,7 +29,7 @@ export default function EurofoamPage() {
             Exciting News!
           </h2>
           
-          <div className="bg-amber-900 text-xl rounded-4xl md:text-2xl font-bold flex flex-col md:flex-row items-center justify-center gap-5 mt-8">
+          <div className="bg-amber-900 text-xl rounded-4xl md:text-2xl font-bold flex flex-col md:flex-row items-center justify-center gap-5 mt-8 p-4">
             <span>We have launched our e-commerce at</span>
             
             {/* Stitched Fabric Patch Button */}
@@ -64,7 +64,8 @@ export default function EurofoamPage() {
             <div className="space-y-3">
               <p><strong className="text-muted-foreground">Legal Name:</strong><br /> Umadutt Industries</p>
               <p><strong className="text-muted-foreground">Office Address:</strong><br /> 6th floor, Monal Tower, GS Rd, Swaraj Nagar, Sarumotoria, Guwahati, Assam 781036</p>
-              <p><strong className="text-muted-foreground">Factory Address:</strong><br /> 2VV8+7PF Byrnihat, Meghalaya</p>
+              <p><strong className="text-muted-foreground">Mattress Factory:</strong><br /> 2VV8+7PF Byrnihat, Meghalaya</p>
+              <p><strong className="text-muted-foreground">Foam Factory:</strong><br /> 3VRH+RFG Japesiagn, Assam</p>
             </div>
           </section>
 
@@ -83,42 +84,90 @@ export default function EurofoamPage() {
           </section>
         </div>
 
-        {/* Factory Map */}
-        <section className="bg-card text-card-foreground rounded-2xl p-8 shadow-md border border-border flex flex-col items-center mb-12">
-          <h3 className="text-xl font-bold text-amber-500 mb-6 self-start">Factory Location (Byrnihat)</h3>
+        {/* Factory Maps Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-12">
           
-          <div className="w-full h-96 rounded-xl overflow-hidden border border-border bg-muted relative flex items-center justify-center">
-            <iframe
-              title="Eurofoam Factory Location"
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              scrolling="no"
-              marginHeight={0}
-              marginWidth={0}
-              src="https://www.openstreetmap.org/export/embed.html?bbox=91.805%2C25.995%2C91.955%2C26.145&layer=mapnik"
-              className="absolute inset-0 w-full h-full grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500 z-0"
-            ></iframe>
+          {/* Mattress Factory Map */}
+          <section className="bg-card text-card-foreground rounded-2xl p-6 shadow-md border border-border flex flex-col">
+            <h3 className="text-lg font-bold text-amber-500 mb-4">Mattress Factory (Byrnihat)</h3>
             
-            <div className="z-10 pointer-events-none text-red-600 pb-10 drop-shadow-md">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12">
-                <path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-              </svg>
+            <div className="w-full h-64 rounded-xl overflow-hidden border border-border bg-muted relative flex items-center justify-center mb-4">
+              <iframe
+                title="Mattress Factory Location"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                scrolling="no"
+                marginHeight={0}
+                marginWidth={0}
+                src="https://www.openstreetmap.org/export/embed.html?bbox=91.85%2C26.03%2C91.88%2C26.06&layer=mapnik&marker=26.043196%2C91.866791"
+                className="absolute inset-0 w-full h-full grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500 z-0"
+              ></iframe>
+              <div className="z-10 pointer-events-none text-red-600 drop-shadow-md pb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10">
+                  <path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                </svg>
+              </div>
             </div>
-          </div>
 
-          <div className="mt-4 text-sm text-muted-foreground flex items-center justify-between w-full">
-            <span>2VV8+7PF Byrnihat, Meghalaya</span>
-            <a 
-              href="https://www.openstreetmap.org/?mlat=26.07&mlon=91.88#map=13/26.07/91.88" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-amber-500 hover:underline"
-            >
-              View Larger Map
-            </a>
-          </div>
-        </section>
+            <div className="flex flex-col gap-2 mt-auto">
+              <span className="text-sm text-muted-foreground">2VV8+7PF Byrnihat, Meghalaya</span>
+              <a 
+                href="https://www.google.com/maps/place/26%C2%B002'35.5%22N+91%C2%B052'00.5%22E/@26.0919856,91.7979452,12994m/data=!3m1!1e3!4m8!1m2!11m1!3e4!3m4!8m2!3d26.043196!4d91.866791!15sCgEq4AEA?entry=ttu&g_ep=EgoyMDI2MTEwOC4wIKXMDSoASAFQAw%3D%3D" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-500 hover:text-amber-400 transition-colors"
+              >
+                Open in Google Maps
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                  <path fillRule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clipRule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </section>
+
+          {/* Foam Factory Map */}
+          <section className="bg-card text-card-foreground rounded-2xl p-6 shadow-md border border-border flex flex-col">
+            <h3 className="text-lg font-bold text-amber-500 mb-4">Foam Factory (Japesiagn)</h3>
+            
+            <div className="w-full h-64 rounded-xl overflow-hidden border border-border bg-muted relative flex items-center justify-center mb-4">
+              <iframe
+                title="Foam Factory Location"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                scrolling="no"
+                marginHeight={0}
+                marginWidth={0}
+                src="https://www.openstreetmap.org/export/embed.html?bbox=91.86%2C26.08%2C91.90%2C26.11&layer=mapnik&marker=26.092056%2C91.878694"
+                className="absolute inset-0 w-full h-full grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500 z-0"
+              ></iframe>
+              <div className="z-10 pointer-events-none text-red-600 drop-shadow-md pb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10">
+                  <path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                </svg>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 mt-auto">
+              <span className="text-sm text-muted-foreground">3VRH+RFG Japesiagn, Assam</span>
+              <a 
+                href="https://www.google.com/maps/place/26%C2%B005'31.4%22N+91%C2%B052'43.3%22E/@26.0919856,91.7979452,12994m/data=!3m1!1e3!4m8!1m2!11m1!3e4!3m4!8m2!3d26.092056!4d91.878694!15sCgEq4AEA?entry=ttu&g_ep=EgoyMDI2MTEwOC4wIKXMDSoASAFQAw%3D%3D" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-500 hover:text-amber-400 transition-colors"
+              >
+                Open in Google Maps
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                  <path fillRule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clipRule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </section>
+
+        </div>
 
       </main>
     </div>
