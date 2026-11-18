@@ -106,7 +106,7 @@ export default function ProductGallery({
       <div className="g-slide g-slide--photo">
         <span className="g-slide-fill" style={{ backgroundImage: `url("${s.src}")` }} aria-hidden="true" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={s.src} alt={`${mattress.name}`} loading={big ? "eager" : "lazy"} />
+        <img src={s.src} alt={`${mattress.name} mattress product photograph`} loading={big ? "eager" : "lazy"} />
         {badge ? (
           <Stamp className="g-slide-badge" ring="Sleep on it at home" center={String(trialNights)} sub="nights" tone="indigo" size={110} rotate={-8} />
         ) : null}

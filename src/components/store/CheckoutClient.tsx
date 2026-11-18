@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Script from "next/script";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useCart } from "@/components/CartProvider";
 import { useLocation } from "@/components/store/LocationProvider";
@@ -56,6 +57,7 @@ export default function CheckoutClient({
   const [waUpdates, setWaUpdates] = useState(false);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
+  const [checkoutReady, setCheckoutReady] = useState(false);
   const [done, setDone] = useState<Done | null>(null);
   const key = useRef(newKey());
   const started = useRef(false);
@@ -157,14 +159,51 @@ export default function CheckoutClient({
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.error || "We couldn't place the order. Please try again or call us.");
       trackEvent("order_created", { value: data.total, itemCount: items.length, label: payment });
-      clearCart();
-      // Pay online: off to Razorpay's page; they send the customer back to /payment/return
-      if (typeof data.payUrl === "string" && /^https:\/\/[a-z0-9.-]*(rzp\.io|razorpay\.com)\//i.test(data.payUrl)) {
+      if (payment === "online") {
+        const res2 = await fetch("/api/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: data.id, phone: phoneDigits }),
+        });
+        const rz = await res2.json().catch(() => ({}));
+        if (!res2.ok) throw new Error(rz.error || "Unable to open Razorpay.");
+        if (!window.Razorpay) throw new Error("Razorpay hasn't loaded yet. Try again.");
         setLeaving(true);
-        window.location.assign(data.payUrl);
+        const checkout = new window.Razorpay({
+          key: rz.key_id,
+          amount: rz.amount,
+          currency: rz.currency,
+          name: "GADDA Mattresses",
+          description: `Order ${data.id}`,
+          order_id: rz.order_id,
+          prefill: { name: form.name, email: form.email, contact: phoneDigits },
+          theme: { color: "#e66a27" },
+          handler: async (result: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) => {
+            try {
+              const verifyRes = await fetch("/api/verify-payment", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(result),
+              });
+              const verified = await verifyRes.json().catch(() => ({}));
+              if (!verifyRes.ok || !verified.success) throw new Error(verified.error || "Payment could not be verified.");
+              clearCart();
+              setDone({ id: data.id, total: data.total, whatsapp: data.whatsapp || null });
+              window.scrollTo({ top: 0 });
+            } catch (err) {
+              setError((err as Error).message + ` Your order number is ${data.id}.`);
+            } finally { setLeaving(false); }
+          },
+          modal: { ondismiss: () => { setLeaving(false); setError(`Payment cancelled. Your order ${data.id} is saved; you can retry.`); } },
+        });
+        checkout.on("payment.failed", (response: { error?: { description?: string } }) => {
+          setLeaving(false);
+          setError(response.error?.description || "Payment failed. Please try again.");
+        });
+        checkout.open();
         return;
       }
-      setDone({ id: data.id, total: data.total, whatsapp: data.whatsapp || null, payError: data.payError });
+      clearCart();
+      setDone({ id: data.id, total: data.total, whatsapp: data.whatsapp || null });
       window.scrollTo({ top: 0 });
     } catch (err) {
       setError((err as Error).message);
@@ -237,6 +276,7 @@ export default function CheckoutClient({
   return (
     <form className="g-checkout" onSubmit={placeOrder} noValidate>
       <div>
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" onReady={() => setCheckoutReady(true)} onError={() => setError("Could not load secure payment checkout. Refresh the page.")} />
         <h1 className="g-h2" style={{ marginBottom: 18 }}>
           Checkout
         </h1>
@@ -373,13 +413,13 @@ export default function CheckoutClient({
                   onClick={() => setPayment("online")}
                 >
                   <b>Pay online now</b>
-                  <small>UPI, card or net banking on Razorpay&apos;s secure page</small>
+                  <small>UPI, card or net banking in Razorpay&apos;s secure popup</small>
                 </button>
               ) : null}
             </div>
             <p className="g-note" style={{ textAlign: "left", margin: 0 }}>
               {payment === "online"
-                ? "Next you pay on Razorpay's page, then come back here. We never see your card number or UPI PIN."
+                ? "A secure Razorpay payment window opens here. We never see your card number or UPI PIN."
                 : "No payment is taken on this page. We'll never ask for your card number, OTP or UPI PIN on a call."}
             </p>
             {testMode && payment === "online" ? (
@@ -407,7 +447,7 @@ export default function CheckoutClient({
               <span>Send me order and delivery updates on WhatsApp (optional).</span>
             </label>
 
-            <button type="submit" className="g-btn g-btn--orange g-btn--block" disabled={sending || leaving} data-busy={sending || leaving || undefined}>
+            <button type="submit" className="g-btn g-btn--orange g-btn--block" disabled={sending || leaving || (payment === "online" && !checkoutReady)} data-busy={sending || leaving || undefined}>
               {leaving
                 ? "Opening Razorpay…"
                 : sending

@@ -13,7 +13,7 @@ export default function ProductCard({ mattress, highlight }: { mattress: Mattres
   return (
     <article className="g-card">
       <div className={`g-card-media ${cardPic && !cardPic.includes("unsplash.com") ? "g-card-media--photo" : ""}`}>
-        <ProductVisual image={cardPic} layers={mattress.layers} alt={mattress.name} focus={mattress.cardFocus} />
+        <ProductVisual image={cardPic} layers={mattress.layers} alt={`${mattress.name} ${mattress.firmness} comfort mattress`} focus={mattress.cardFocus} />
         <div className="g-card-tags">
           {highlight ? <span className="g-chip g-chip--orange">{highlight}</span> : null}
           <span className="g-chip">{mattress.firmness}</span>

@@ -14,7 +14,7 @@ import { siteUrl } from "@/lib/public-url";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Mattresses — firm, balanced and plush",
+  title: "Buy Mattresses Online in Guwahati",
   description: "All three GADDA mattresses: Regular, Pro and Ultimate. Every size in 6 or 8 inch, one honest price, delivery included.",
   alternates: { canonical: "/mattresses" },
 };

@@ -12,6 +12,7 @@ import {
 } from "@/lib/gadda-products";
 import { db, hasDb } from "@/lib/db";
 import { expandSizes } from "@/lib/sizes";
+import { withAreaPricing } from "@/lib/mattress-pricing";
 
 /*
   Site settings, products and reviews.
@@ -52,7 +53,7 @@ function upgrade(d: StoreData): StoreData {
   return {
     ...d,
     products: d.products.map((p) =>
-      withUltimateLayers(withCardImage(withPhotoRelease(withMainPhoto(withShippedPhotos({ ...p, sizes: expandSizes(p) }))))),
+      withAreaPricing(withUltimateLayers(withCardImage(withPhotoRelease(withMainPhoto(withShippedPhotos({ ...p, sizes: expandSizes(p) })))))),
     ),
   };
 }

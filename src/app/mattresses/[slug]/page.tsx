@@ -13,11 +13,14 @@ import HindiNote from "@/components/store/HindiNote";
 import Faq from "@/components/store/Faq";
 import Reviews from "@/components/store/Reviews";
 import { money } from "@/lib/catalog";
+import { mattressPrice } from "@/lib/mattress-pricing";
 import { getProduct, getStoreData } from "@/lib/store";
 import { BUSINESS, warrantyLabel } from "@/lib/business";
 import { getSizing, groupsOf, toCm, type SizeRow } from "@/lib/sizes";
 import { swatchFor } from "@/lib/content";
-import { breadcrumbLd, productLd } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/seo";
+import { enhancedProductLd } from "@/lib/local-seo";
+import LocalAnswers from "@/components/store/LocalAnswers";
 import { realEmail, phoneLink } from "@/lib/contact";
 import { razorpayReady } from "@/lib/razorpay";
 
@@ -30,10 +33,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const p = await getProduct(slug);
   if (!p) return { title: "Mattress not found" };
   return {
-    title: `${p.name} — ${p.firmness} mattress from ${money(p.basePrice)}`,
-    description: `${p.shortDescription} ${BUSINESS.trialNights}-night trial, delivery included, pay on delivery.`,
+    title: `${p.name} Mattress in Guwahati`,
+    description: `Shop ${p.name} in Guwahati from ${money(p.basePrice)}. Compare real foam layers, firmness, available sizes and ${BUSINESS.trialNights}-night trial terms.`,
     alternates: { canonical: `/mattresses/${p.slug}` },
-    openGraph: { title: p.name, description: p.shortDescription, images: [{ url: p.image }] },
+    openGraph: { type: "website", title: `${p.name} Mattress | GADDA`, description: p.shortDescription, url: `/mattresses/${p.slug}`, images: [{ url: p.image, alt: `${p.name} mattress` }] },
+    twitter: { card: "summary_large_image", images: [p.image] },
   };
 }
 
@@ -51,11 +55,13 @@ export default async function ProductPage({ params }: Params) {
   const sizeGroups = groupsOf(mattress.sizes as SizeRow[]);
   const phone = phoneLink(site.phone);
   const email = realEmail(site.email);
-  const maxPrice =
-    mattress.basePrice +
-    Math.max(...mattress.sizes.map((s) => s.priceAdd)) +
-    Math.max(...mattress.heights.map((h) => h.priceAdd)) +
-    (mattress.options || []).reduce((sum, o) => sum + Math.max(...o.choices.map((c) => c.priceAdd)), 0);
+  const maxPrice = Math.max(...mattress.sizes.flatMap((s) =>
+    mattress.heights.flatMap((h) =>
+      ["", ...(mattress.options || []).flatMap((o) => o.choices.map((c) => c.label))].map((v) =>
+        mattressPrice(mattress, s.label, h.label, v) ?? (mattress.basePrice + s.priceAdd + h.priceAdd)
+      )
+    )
+  ));
 
   return (
     <>
@@ -63,7 +69,7 @@ export default async function ProductPage({ params }: Params) {
       <JsonLd
         nonce={nonce}
         data={[
-          productLd(mattress),
+          enhancedProductLd(mattress),
           breadcrumbLd([
             { name: "Home", path: "/" },
             { name: "Mattresses", path: "/mattresses" },
@@ -90,6 +96,7 @@ export default async function ProductPage({ params }: Params) {
           </div>
         </div>
 
+        <LocalAnswers product={mattress} nonce={nonce} />
         <section className="g-section g-section--cream" aria-labelledby="inside-title">
           <div className="g-wrap g-split" style={{ alignItems: "start" }}>
             <div>
@@ -166,7 +173,7 @@ export default async function ProductPage({ params }: Params) {
                           </th>
                           {mattress.heights.map((h) => (
                             <td key={h.label} className="num">
-                              {money(mattress.basePrice + r.priceAdd + h.priceAdd)}
+                              {money(mattressPrice(mattress, r.label, h.label) ?? (mattress.basePrice + r.priceAdd + h.priceAdd))}
                             </td>
                           ))}
                         </tr>
@@ -178,8 +185,8 @@ export default async function ProductPage({ params }: Params) {
             </div>
             {sizing.customEnabled ? (
               <p className="g-note" style={{ textAlign: "left", marginTop: 18 }}>
-                Bed not on the list? Choose <b>Custom</b> in the size picker and type your measurements — priced as the next
-                size up{sizing.customFee ? ` + ${money(sizing.customFee)}` : ""}.
+                Bed not on the list? Choose <b>Custom</b> in the size picker and type your measurements — priced by
+                exact square footage{sizing.customFee ? ` + ${money(sizing.customFee)} custom cutting` : ""}.
               </p>
             ) : null}
           </div>

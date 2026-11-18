@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { headers } from "next/headers";
 import Footer from "@/components/Footer";
@@ -18,8 +19,10 @@ import PromoBanners from "@/components/store/PromoBanners";
 import Highlight from "@/components/store/Highlight";
 import UltimateReveal from "@/components/store/UltimateReveal";
 import { razorpayReady } from "@/lib/razorpay";
+import LocalAnswers from "@/components/store/LocalAnswers";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
   const { site, products, reviews } = await getStoreData();
@@ -122,6 +125,7 @@ export default async function Home() {
         </section>
 
         <TrustStrip />
+        <LocalAnswers nonce={nonce} />
 
         {show.promos !== false ? <PromoBanners banners={site.homeBanners || []} title={t("promosTitle")} /> : null}
 

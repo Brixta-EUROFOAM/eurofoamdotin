@@ -15,6 +15,7 @@ import {
   type Sizing,
 } from "@/lib/sizes";
 import MeasureGuide from "@/components/store/MeasureGuide";
+import { mattressPrice } from "@/lib/mattress-pricing";
 
 export type SizeChoice = { size: string; height: string; sizeAdd: number };
 
@@ -31,6 +32,7 @@ export default function SizePicker({
   onClose,
   onConfirm,
   optionsAdd,
+  variant,
 }: {
   mattress: Mattress;
   sizing: Sizing;
@@ -40,6 +42,7 @@ export default function SizePicker({
   onClose: () => void;
   onConfirm: (c: SizeChoice) => void;
   optionsAdd: number;
+  variant: string;
 }) {
   const rows = mattress.sizes as SizeRow[];
   const groups = useMemo(() => groupsOf(rows), [rows]);
@@ -74,7 +77,8 @@ export default function SizePicker({
   }, [open, startGroup]);
 
   const heightAdd = mattress.heights.find((h) => h.label === height)?.priceAdd || 0;
-  const priceOf = (sizeAdd: number) => mattress.basePrice + sizeAdd + heightAdd + optionsAdd;
+  const priceOf = (sizeLabel: string) => mattressPrice(mattress, sizeLabel, height, variant, sizing.customFee) ??
+    (mattress.basePrice + (rows.find((r) => r.label === sizeLabel)?.priceAdd || 0) + heightAdd + optionsAdd);
 
   // custom
   const toIn = (v: string) => {
@@ -155,7 +159,7 @@ export default function SizePicker({
                 }}
               >
                 {g.id}
-                <small>from {money(priceOf(Math.min(...g.rows.map((r) => r.priceAdd))))}</small>
+                <small>from {money(Math.min(...g.rows.map((r) => priceOf(r.label))))}</small>
               </button>
             ))}
             {sizing.customEnabled ? (
@@ -181,7 +185,7 @@ export default function SizePicker({
                       <b>
                         {r.length ? `${show(r.length)} × ${show(r.width)}` : r.label}
                       </b>
-                      <small>{money(priceOf(r.priceAdd))}</small>
+                      <small>{money(priceOf(r.label))}</small>
                     </button>
                   );
                 })}
@@ -190,7 +194,7 @@ export default function SizePicker({
           ) : (
             <>
               <p className="g-sp-fits">
-                Odd-sized bed? We cut it to your measurements. Priced as the next standard size up
+                Odd-sized bed? We cut it to your measurements. Priced by your exact square footage
                 {sizing.customFee ? ` + ${money(sizing.customFee)} for the custom cut` : ""}. It&apos;s cut just for you, so
                 measure twice.
               </p>
@@ -225,9 +229,9 @@ export default function SizePicker({
               ) : custom ? (
                 <p className="g-sp-ok">
                   {cl} × {cw} in{unit === "cm" ? ` (rounded to the nearest ½ inch)` : ""} ·{" "}
-                  <b>{money(priceOf(custom.priceAdd))}</b>
+                  <b>{money(priceOf(customLabel(cl, cw)))}</b>
                   <span>
-                    Priced as {custom.from.label}
+                    Priced by actual square footage
                     {sizing.customFee ? ` + ${money(sizing.customFee)} custom cut` : ""}
                   </span>
                 </p>
@@ -242,7 +246,13 @@ export default function SizePicker({
                 {mattress.heights.map((h) => (
                   <button key={h.label} type="button" role="radio" aria-checked={height === h.label} onClick={() => setHeight(h.label)}>
                     <b>{h.label}</b>
-                    <small>{h.priceAdd ? `+ ${money(h.priceAdd)}` : "Standard"}</small>
+                    <small>{(() => {
+                      const s = chosen?.size || rows[0]?.label || "";
+                      const first = mattressPrice(mattress, s, mattress.heights[0]?.label || height, variant, sizing.customFee);
+                      const selected = mattressPrice(mattress, s, h.label, variant, sizing.customFee);
+                      const diff = first != null && selected != null ? selected - first : h.priceAdd;
+                      return diff > 0 ? `+ ${money(diff)}` : "Standard";
+                    })()}</small>
                   </button>
                 ))}
               </div>
@@ -259,7 +269,7 @@ export default function SizePicker({
 
         <footer className="g-sp-foot">
           <div>
-            <b>{chosen ? money(priceOf(chosen.sizeAdd)) : "—"}</b>
+            <b>{chosen ? money(priceOf(chosen.size)) : "—"}</b>
             <span>{chosen ? `${chosen.size.replace(/ in$/, '"')} · ${height}` : isCustom ? "Enter your size" : "Pick a dimension"}</span>
           </div>
           <button

@@ -19,7 +19,7 @@ const securityHeaders = [
     value:
       "camera=(), microphone=(), geolocation=(), payment=(self), usb=(), bluetooth=(), magnetometer=(), gyroscope=(), accelerometer=(), browsing-topics=(), interest-cohort=()",
   },
-  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
   { key: "X-DNS-Prefetch-Control", value: "on" },
 ];
 

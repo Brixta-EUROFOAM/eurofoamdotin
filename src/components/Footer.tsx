@@ -50,6 +50,7 @@ export default async function Footer() {
             </span>
           </Link>
           <p>{site.tagline || "Gadda hi hai yaar."} Three honest mattresses, made in India, sold direct.</p>
+          <p>Shopping for mattresses in Guwahati, Assam? <Link href="/mattresses/guwahati">Compare GADDA sizes and specifications</Link>. Delivery eligibility depends on your PIN code.</p>
           <NewsletterForm />
         </div>
 
@@ -61,6 +62,9 @@ export default async function Footer() {
                 <Link href={`/mattresses/${p.slug}`}>{p.name}</Link>
               </li>
             ))}
+            <li>
+              <Link href="/mattresses/guwahati">Mattresses in Guwahati</Link>
+            </li>
             <li>
               <Link href="/compare">Compare mattresses</Link>
             </li>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { applyPaymentLink } from "@/lib/orders";
+import { applyPaymentLink, confirmCheckoutPayment, listOrders } from "@/lib/orders";
+import { fetchRazorpayPayment } from "@/lib/razorpay-checkout";
 import { fetchPaymentLink, verifyWebhook } from "@/lib/razorpay";
 
 export const runtime = "nodejs";
@@ -25,11 +26,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Bad signature." }, { status: 400 });
   }
 
-  let event: { event?: string; payload?: { payment_link?: { entity?: { id?: string } } } };
+  let event: { event?: string; payload?: { payment_link?: { entity?: { id?: string } }; payment?: { entity?: { id?: string } } } };
   try {
     event = JSON.parse(raw);
   } catch {
     return NextResponse.json({ error: "Bad JSON." }, { status: 400 });
+  }
+
+  if (event.event === "payment.captured") {
+    const paymentId = event.payload?.payment?.entity?.id;
+    if (!paymentId) return NextResponse.json({ error: "Missing payment ID." }, { status: 400 });
+    try {
+      const payment = await fetchRazorpayPayment(paymentId);
+      if (payment.status !== "captured") throw new Error("Payment not captured.");
+      if (!payment.order_id) return NextResponse.json({ ok: true, ignored: true });
+      const exists = (await listOrders()).some((o) => o.checkout?.orderId === payment.order_id);
+      if (!exists) return NextResponse.json({ ok: true, ignored: true }); // Payment Links remain handled by payment_link.* events.
+      const order = await confirmCheckoutPayment(payment.order_id, paymentId, Number(payment.amount), payment.currency);
+      return NextResponse.json({ ok: true, order: order.id, status: "paid" });
+    } catch (e) {
+      console.error("[razorpay capture webhook]", (e as Error).message);
+      return NextResponse.json({ error: "Try again." }, { status: 503 });
+    }
   }
 
   const linkId = event.payload?.payment_link?.entity?.id;

@@ -1,5 +1,6 @@
 import type { Mattress, SiteSettings } from "@/lib/catalog";
 import { BUSINESS } from "@/lib/business";
+import { mattressPrice } from "@/lib/mattress-pricing";
 import { siteUrl } from "@/lib/public-url";
 
 /* schema.org builders. Only facts we actually have — no invented ratings. */
@@ -46,7 +47,7 @@ export function websiteLd() {
 }
 
 export function productLd(p: Mattress) {
-  const prices = p.sizes.flatMap((s) => p.heights.map((h) => p.basePrice + s.priceAdd + h.priceAdd));
+  const prices = p.sizes.flatMap((s) => p.heights.map((h) => mattressPrice(p, s.label, h.label) ?? (p.basePrice + s.priceAdd + h.priceAdd)));
   return {
     "@context": "https://schema.org",
     "@type": "Product",

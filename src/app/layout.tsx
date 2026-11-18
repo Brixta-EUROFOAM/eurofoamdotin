@@ -16,7 +16,7 @@ import SewingThread from "@/components/store/SewingThread";
 import { CONSENT_COOKIE, parseConsent } from "@/lib/consent";
 import { isValidPin } from "@/lib/delivery";
 import { getStoreData } from "@/lib/store";
-import { organizationLd, websiteLd } from "@/lib/seo";
+import { brandKnowledgeGraph } from "@/lib/local-seo";
 import { publicOrigin } from "@/lib/public-url";
 
 const bricolage = Bricolage_Grotesque({
@@ -41,18 +41,21 @@ const yatra = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(publicOrigin() || "https://eurofoam.in"),
   title: {
-    default: "GADDA Mattresses | Gadda hheheh",
+    default: "GADDA Mattresses in Guwahati | Shop Online",
     template: "%s | GADDA Mattresses",
   },
   description:
-    "Three honest mattresses, made in India. Real materials, one fair price, delivery included and 100 nights to decide at home.",
+    "Compare GADDA mattresses in Guwahati: Regular, Pro and Ultimate. Browse real foam specs, sizes, GST-inclusive prices and delivery eligibility.",
   applicationName: "GADDA",
   openGraph: {
     type: "website",
     siteName: "GADDA Mattresses",
     locale: "en_IN",
+    title: "GADDA Mattresses in Guwahati | Shop Online",
+    description: "Compare GADDA mattresses by foam density, dimensions and price in Assam.",
+    images: [{ url: "/products/gadda-regular/v3-bed-angle.webp", alt: "GADDA Regular mattress" }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: ["/products/gadda-regular/v3-bed-angle.webp"] },
   formatDetection: { telephone: false, address: false, email: false },
   appleWebApp: { capable: true, title: "GADDA", statusBarStyle: "default" },
   robots: { index: true, follow: true },
@@ -74,6 +77,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en-IN" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <head><JsonLd data={brandKnowledgeGraph(site)} nonce={nonce} /></head>
       <body
         suppressHydrationWarning
         className={`${bricolage.variable} ${hanken.variable} ${yatra.variable} antialiased`}
@@ -82,7 +86,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <a href="#main" className="g-skip">
           Skip to content
         </a>
-        <JsonLd data={[organizationLd(site), websiteLd()]} nonce={nonce} />
         <ConsentProvider initial={consent}>
           <MarketingTags nonce={nonce} />
           <LocationProvider initialPin={isValidPin(savedPin) ? savedPin : ""}>

@@ -11,6 +11,7 @@ import { money, type Mattress } from "@/lib/catalog";
 import { SIZE_GROUPS, groupsOf, parseCustom, type SizeRow, type Sizing } from "@/lib/sizes";
 import SizePicker from "@/components/store/SizePicker";
 import { OPTIONS_EVENT, type OptionsDetail } from "@/lib/option-photos";
+import { mattressPrice } from "@/lib/mattress-pricing";
 
 type Props = {
   mattress: Mattress;
@@ -80,8 +81,8 @@ export default function ProductBuyBox({ mattress, trialNights, warranty, sizing,
   const heightRow = mattress.heights.find((h) => h.label === height);
   const optionRows = (mattress.options || []).map((o) => o.choices.find((c) => c.label === picked[o.id]) || o.choices[0]);
   const variant = optionRows.map((c) => c?.label).filter(Boolean).join(" · ");
-  const unit =
-    mattress.basePrice + (sizeRow?.priceAdd || 0) + (heightRow?.priceAdd || 0) + optionRows.reduce((s, c) => s + (c?.priceAdd || 0), 0);
+  const unit = mattressPrice(mattress, size || "", height || "", variant, sizing.customFee) ??
+    (mattress.basePrice + (sizeRow?.priceAdd || 0) + (heightRow?.priceAdd || 0) + optionRows.reduce((s, c) => s + (c?.priceAdd || 0), 0));
 
   const item = useMemo(
     () => ({
@@ -202,7 +203,12 @@ export default function ProductBuyBox({ mattress, trialNights, warranty, sizing,
                 onClick={() => setPicked((p) => ({ ...p, [option.id]: c.label }))}
               >
                 <b>{c.label}</b>
-                <small>{c.priceAdd ? `+ ${money(c.priceAdd)}` : "Included"}</small>
+                <small>{(() => {
+                  const chosenPrice = mattressPrice(mattress, size || "", height || "", c.label, sizing.customFee);
+                  const standardPrice = mattressPrice(mattress, size || "", height || "", "", sizing.customFee);
+                  const upcharge = chosenPrice != null && standardPrice != null ? chosenPrice - standardPrice : c.priceAdd;
+                  return upcharge > 0 ? `+ ${money(upcharge)}` : "Included";
+                })()}</small>
                 {c.note ? <small>{c.note}</small> : null}
               </button>
             ))}
@@ -304,6 +310,7 @@ export default function ProductBuyBox({ mattress, trialNights, warranty, sizing,
         startGroup={picker.group}
         initial={{ size: size || "", height: height || "" }}
         optionsAdd={optionRows.reduce((sum, c) => sum + (c?.priceAdd || 0), 0)}
+        variant={variant}
         onClose={() => setPicker({ open: false })}
         onConfirm={(c) => {
           setSize(c.size);
@@ -313,7 +320,8 @@ export default function ProductBuyBox({ mattress, trialNights, warranty, sizing,
           const then = picker.then;
           setPicker({ open: false });
           const next = { ...item, id: `${mattress.slug}-${c.size}-${c.height}${variant ? `-${variant}` : ""}`, size: c.size, height: c.height,
-            price: mattress.basePrice + c.sizeAdd + (mattress.heights.find((h) => h.label === c.height)?.priceAdd || 0) + optionRows.reduce((sum, o) => sum + (o?.priceAdd || 0), 0) };
+            price: mattressPrice(mattress, c.size, c.height, variant, sizing.customFee) ??
+              (mattress.basePrice + c.sizeAdd + (mattress.heights.find((h) => h.label === c.height)?.priceAdd || 0) + optionRows.reduce((sum, o) => sum + (o?.priceAdd || 0), 0)) };
           if (then === "add") addItem(next);
           if (then === "buy") {
             addItem(next, { open: false });

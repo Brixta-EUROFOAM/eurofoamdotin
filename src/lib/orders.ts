@@ -3,7 +3,8 @@ import path from "path";
 import { randomBytes } from "crypto";
 import { dataDir, getStoreData } from "@/lib/store";
 import type { Mattress, SiteSettings } from "@/lib/catalog";
-import { SIZE_GROUPS, customLabel, customPrice, getSizing, parseCustom } from "@/lib/sizes";
+import { SIZE_GROUPS, customCheck, customLabel, customPrice, getSizing, parseCustom } from "@/lib/sizes";
+import { mattressPrice } from "@/lib/mattress-pricing";
 import { db, hasDb } from "@/lib/db";
 import { CANCELLED, getOps, OpsError } from "@/lib/ops";
 import { createPaymentLink, fetchPaymentLink, PaymentError, razorpayReady, razorpayTestMode, type RazorpayLink } from "@/lib/razorpay";
@@ -45,6 +46,7 @@ export type Order = {
   payment: "pay_on_delivery" | "online" | "upi_link";
   /* the Razorpay payment link for this order, if one was made (src/lib/razorpay.ts) */
   pay?: OrderPay;
+  checkout?: { orderId: string; amount: number; status: "created" | "paid"; createdAt: string; paymentId?: string; paidAt?: string; test?: boolean };
   notes?: string;
   /* signed-in customer, if any */
   customerId?: string;
@@ -88,7 +90,7 @@ const file = () => path.join(dataDir(), "orders.jsonl");
 
 const clip = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 
-function priceFor(product: Mattress, size: string, height: string, variant: string, site?: SiteSettings) {
+function priceFor(product: Mattress, size: string, height: string, selectedVariant: string, site?: SiteSettings) {
   let sizeRow: { label: string; priceAdd: number } | undefined = product.sizes.find((s) => s.label === size);
   // carts saved before the size chart said just "Queen" etc. — use that group's most common size
   if (!sizeRow && SIZE_GROUPS.some((g) => g.id === size)) {
@@ -97,12 +99,13 @@ function priceFor(product: Mattress, size: string, height: string, variant: stri
   }
   const custom = sizeRow ? null : parseCustom(size);
   if (custom) {
+    if (customCheck(custom.length, custom.width, getSizing(site))) return null;
     const p = customPrice(product.sizes, custom.length, custom.width, getSizing(site));
     if (p) sizeRow = { label: customLabel(custom.length, custom.width), priceAdd: p.priceAdd };
   }
   const heightRow = product.heights.find((h) => h.label === height);
   if (!sizeRow || !heightRow) return null;
-  const picked = variant ? variant.split(" · ").map((v) => v.trim()) : [];
+  const picked = selectedVariant ? selectedVariant.split(" · ").map((v) => v.trim()) : [];
   let extra = 0;
   const cleanVariant: string[] = [];
   for (const option of product.options || []) {
@@ -112,9 +115,11 @@ function priceFor(product: Mattress, size: string, height: string, variant: stri
       cleanVariant.push(choice.label);
     }
   }
+  const variant = cleanVariant.join(" · ");
+  const computed = mattressPrice(product, sizeRow.label, heightRow.label, variant, getSizing(site).customFee);
   return {
-    unit: product.basePrice + sizeRow.priceAdd + heightRow.priceAdd + extra,
-    variant: cleanVariant.join(" · "),
+    unit: computed ?? (product.basePrice + sizeRow.priceAdd + heightRow.priceAdd + extra),
+    variant,
   };
 }
 
@@ -380,7 +385,8 @@ export async function actOnOrder(
 const METHOD: Record<string, string> = { upi: "UPI", card: "card", netbanking: "net banking", wallet: "wallet", emi: "EMI" };
 
 /* One plain line for staff and customers: how this order is being paid. */
-export function paymentLabel(o: Pick<Order, "payment" | "pay">) {
+export function paymentLabel(o: Pick<Order, "payment" | "pay" | "checkout">) {
+  if (o.checkout?.status === "paid") return `Paid online${o.checkout.test ? " (test)" : ""}`;
   const p = o.pay;
   if (p?.status === "paid") return `Paid online${p.method && METHOD[p.method] ? ` by ${METHOD[p.method]}` : ""}${p.test ? " (test)" : ""}`;
   if (p?.status === "partially_paid") return "Part paid online";
@@ -403,7 +409,7 @@ function noteOnce(order: Order, text: string, key: string) {
 */
 export async function startPayment(order: Order, opts: { notify: boolean; by: string; callbackUrl: string }): Promise<OrderPay> {
   if (order.status === CANCELLED) throw new OrderError("This order is cancelled.");
-  if (order.pay?.status === "paid") throw new OrderError("This order is already paid.");
+  if (order.checkout?.status === "paid" || order.pay?.status === "paid") throw new OrderError("This order is already paid.");
 
   if (order.pay?.status === "created") {
     const link = await fetchPaymentLink(order.pay.linkId).catch(() => null);
@@ -518,4 +524,39 @@ export async function applyPaymentLink(link: RazorpayLink): Promise<Order | null
   }
   await saveOrder(order);
   return order;
+}
+
+
+/* Razorpay Standard Checkout: reuses our existing order storage, no extra tables. */
+export async function saveCheckoutOrder(id: string, razorpayOrderId: string, amount: number) {
+  const order = await getOrder(id);
+  if (!order || order.status === CANCELLED || order.payment !== "online") throw new OrderError("Order not eligible for online payment.");
+  if (order.checkout?.status === "paid" || order.pay?.status === "paid") throw new OrderError("Order is already paid.");
+  if (order.checkout?.orderId && order.checkout.orderId !== razorpayOrderId) throw new OrderError("An online payment is already open.");
+  if (!/^order_[A-Za-z0-9]+$/.test(razorpayOrderId) || amount !== Math.round(order.total * 100)) throw new OrderError("Invalid payment amount.");
+  order.checkout = { orderId: razorpayOrderId, amount, status: "created", createdAt: new Date().toISOString(), test: razorpayTestMode() };
+  await saveOrder(order);
+  return order;
+}
+
+export async function confirmCheckoutPayment(razorpayOrderId: string, paymentId: string, amount: number, currency: string) {
+  // Razorpay's payment must be retrieved via the private API before calling this.
+  if (currency !== "INR" || !Number.isSafeInteger(amount) || amount < 100) throw new OrderError("Invalid captured payment.");
+  const order = (await listOrders()).find((o) => o.checkout?.orderId === razorpayOrderId);
+  if (!order || !order.checkout || order.status === CANCELLED) throw new OrderError("Matching order not found.");
+  if (order.checkout.amount !== amount || Math.round(order.total * 100) !== amount) throw new OrderError("Payment amount mismatch.");
+  if (order.checkout.status === "paid") {
+    if (order.checkout.paymentId !== paymentId) throw new OrderError("Order already paid with another payment.");
+    return order;
+  }
+  const fresh = await getOrder(order.id);
+  if (!fresh?.checkout || fresh.checkout.orderId !== razorpayOrderId) throw new OrderError("Payment order changed.");
+  if (fresh.checkout.status === "paid") {
+    if (fresh.checkout.paymentId !== paymentId) throw new OrderError("Order already paid with another payment.");
+    return fresh;
+  }
+  fresh.checkout = { ...fresh.checkout, status: "paid", paidAt: new Date().toISOString(), paymentId };
+  fresh.history = [...(fresh.history || []), { at: new Date().toISOString(), by: "Razorpay", stage: fresh.status, event: "note" as const, note: `Standard Checkout paid ("${paymentId}").` }].slice(-200);
+  await saveOrder(fresh);
+  return fresh;
 }

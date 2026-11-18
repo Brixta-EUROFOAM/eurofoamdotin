@@ -20,9 +20,10 @@ function csp(nonce: string) {
   const connect = ["'self'"];
   if (gtm) connect.push("https://*.google-analytics.com", "https://*.analytics.google.com", "https://*.googletagmanager.com");
   if (meta) connect.push("https://www.facebook.com", "https://connect.facebook.net");
+  connect.push("https://api.razorpay.com", "https://checkout.razorpay.com", "https://*.razorpay.com", "https://*.razorpay.in");
   if (isDev) connect.push("ws:", "wss:");
 
-  const frames = ["'self'", "https://www.youtube-nocookie.com"]; // size-guide video
+  const frames = ["'self'", "https://www.youtube-nocookie.com", "https://api.razorpay.com", "https://checkout.razorpay.com", "https://*.razorpay.com"]; // checkout modal + size guide
   if (gtm) frames.push("https://www.googletagmanager.com");
 
   return [
