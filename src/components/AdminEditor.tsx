@@ -424,6 +424,7 @@ export default function AdminEditor({
             ) : (
               <span className="text-xs text-white/60">{status}</span>
             )}
+            <a href="/admin/crm" className="rounded-full border border-white/20 px-4 py-2 text-xs font-black">CRM / LEADS</a>
             <a href="/admin/orders" className="rounded-full border border-white/20 px-4 py-2 text-xs font-black">
               ORDERS
             </a>

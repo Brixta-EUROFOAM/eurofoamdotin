@@ -29,6 +29,7 @@ export default async function AdminOrdersPage() {
         </div>
         <nav>
           <Link href="/admin">← Back to admin</Link>
+          <Link href="/admin/crm">Unified CRM / Leads</Link>
           <a href="/ops">Order board</a>
           <a href="/admin/ops">Operations &amp; TAT</a>
           <a href="/api/admin/orders" download>

@@ -9,6 +9,8 @@ import { useLiveQuote } from "@/components/store/useLiveQuote";
 import { money } from "@/lib/catalog";
 import SewnLabel from "@/components/store/SewnLabel";
 import { trackEvent } from "@/lib/telemetry-client";
+import { useConsent } from "@/components/store/ConsentProvider";
+import { getAcquisition } from "@/lib/acquisition-client";
 
 type Done = { id: string; total: number; whatsapp: string | null; payError?: string };
 type Pay = "online" | "pay_on_delivery";
@@ -35,6 +37,7 @@ export default function CheckoutClient({
   onlinePay?: boolean;
   testMode?: boolean;
 }) {
+  const { marketing } = useConsent();
   const { items, subtotal, clearCart, hydrated } = useCart();
   const { total, stale, dropped } = useLiveQuote(true);
   const { pin, info, check } = useLocation();
@@ -153,6 +156,7 @@ export default function CheckoutClient({
           acceptTerms: true,
           whatsappUpdates: waUpdates,
           idempotencyKey: key.current,
+          acquisition: getAcquisition(marketing),
           items: items.map((i) => ({ slug: i.slug, size: i.size, height: i.height, variant: i.variant, quantity: i.quantity })),
         }),
       });

@@ -1,6 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { randomBytes } from "crypto";
+import { notifyAdmin } from "@/lib/admin-notify";
+import { normalizeAcquisition, type Acquisition } from "@/lib/acquisition";
 import { dataDir, getStoreData } from "@/lib/store";
 import type { Mattress, SiteSettings } from "@/lib/catalog";
 import { SIZE_GROUPS, customCheck, customLabel, customPrice, getSizing, parseCustom } from "@/lib/sizes";
@@ -48,6 +50,7 @@ export type Order = {
   pay?: OrderPay;
   checkout?: { orderId: string; amount: number; status: "created" | "paid"; createdAt: string; paymentId?: string; paidAt?: string; test?: boolean };
   notes?: string;
+  acquisition?: Acquisition;
   /* signed-in customer, if any */
   customerId?: string;
   /* when the buyer ticked "I agree to the Terms of Sale" */
@@ -192,6 +195,7 @@ export async function createOrder(
     customer: { name, phone, email: email || undefined, address, city, pincode },
     payment,
     notes: notes || undefined,
+    acquisition: normalizeAcquisition(body.acquisition),
     customerId: meta.customerId,
     termsAcceptedAt: d.toISOString(),
     whatsappUpdates: body.whatsappUpdates === true,
@@ -202,10 +206,16 @@ export async function createOrder(
 
   if (hasDb()) {
     await insertOrder(order);
-    return order;
+  } else {
+    await fs.mkdir(dataDir(), { recursive: true });
+    await fs.appendFile(file(), JSON.stringify(order) + "\n", "utf-8");
   }
-  await fs.mkdir(dataDir(), { recursive: true });
-  await fs.appendFile(file(), JSON.stringify(order) + "\n", "utf-8");
+  await notifyAdmin({ key: `created-${order.id}`, title: `New ${payment === "online" ? "unpaid online" : "pay-on-delivery"} order ${order.id}`, lines: [
+    `Order: ${order.id}`, `Customer: ${name}`, `Phone: ${phone}`,
+    `Email: ${email}`, `Total: INR ${order.total}`, `Payment: ${payment === "online" ? "NOT PAID YET" : "PAY ON DELIVERY"}`,
+    `Delivery: ${city} ${pincode}`, `Source: ${order.acquisition?.source || "unattributed"}`,
+    `Campaign: ${order.acquisition?.campaign || ""}`, "Manage: /admin/orders",
+  ] });
   return order;
 }
 
@@ -523,6 +533,13 @@ export async function applyPaymentLink(link: RazorpayLink): Promise<Order | null
     );
   }
   await saveOrder(order);
+  if (link.status === "paid" && was !== "paid") {
+    await notifyAdmin({ key: `paid-${order.id}`, title: `Payment link paid ${order.id}`, lines: [
+      `Order: ${order.id}`, `Paid: INR ${link.amount_paid / 100}`, `Customer: ${order.customer.name}`,
+      `Phone: ${order.customer.phone}`, `Source: ${order.acquisition?.source || "unattributed"}`,
+      "Status: Payment link paid (verified through Razorpay)", "Manage: /admin/orders",
+    ] });
+  }
   return order;
 }
 
@@ -558,5 +575,11 @@ export async function confirmCheckoutPayment(razorpayOrderId: string, paymentId:
   fresh.checkout = { ...fresh.checkout, status: "paid", paidAt: new Date().toISOString(), paymentId };
   fresh.history = [...(fresh.history || []), { at: new Date().toISOString(), by: "Razorpay", stage: fresh.status, event: "note" as const, note: `Standard Checkout paid ("${paymentId}").` }].slice(-200);
   await saveOrder(fresh);
+  await notifyAdmin({ key: `paid-${fresh.id}`, title: `Payment captured ${fresh.id}`, lines: [
+    `Order: ${fresh.id}`, `Captured: INR ${fresh.total}`, `Razorpay payment: ${paymentId}`,
+    `Customer: ${fresh.customer.name}`, `Phone: ${fresh.customer.phone}`,
+    `Source: ${fresh.acquisition?.source || "unattributed"}`, `Campaign: ${fresh.acquisition?.campaign || ""}`,
+    "Status: PAID (verified through Razorpay)", "Manage: /admin/orders",
+  ] });
   return fresh;
 }

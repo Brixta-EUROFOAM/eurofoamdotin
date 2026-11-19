@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { dataDir, mediaDir } from "@/lib/store";
 import { db, hasDb } from "@/lib/db";
+import type { Acquisition } from "@/lib/acquisition";
 
 /*
   Call-backs, newsletter sign-ups, consent receipts and uploaded images.
@@ -16,7 +17,7 @@ export const LEAD_FILES = {
 } as const;
 export type LeadType = keyof typeof LEAD_FILES;
 
-export type Callback = { at: string; name: string; phone: string; when?: string; message?: string };
+export type Callback = { at: string; name: string; phone: string; when?: string; message?: string; acquisition?: Acquisition };
 export type Subscriber = { at: string; email: string; consent: string };
 export type ConsentReceipt = { id: string; v: number; analytics: boolean; marketing: boolean; source: string; at: string };
 
@@ -46,8 +47,8 @@ export async function readLeadFile(type: LeadType): Promise<Record<string, unkno
 export async function addCallback(c: Callback) {
   if (!hasDb()) return appendLine(LEAD_FILES.callbacks, c);
   await (await db()).query(
-    `insert into gadda.callbacks (at, name, phone, "when", message) values ($1, $2, $3, $4, $5)`,
-    [c.at, c.name, c.phone, c.when || null, c.message || null]
+    `insert into gadda.callbacks (at, name, phone, "when", message, acquisition) values ($1, $2, $3, $4, $5, $6)`,
+    [c.at, c.name, c.phone, c.when || null, c.message || null, c.acquisition ? JSON.stringify(c.acquisition) : null]
   );
 }
 
@@ -73,7 +74,7 @@ export async function addConsent(r: ConsentReceipt) {
 export async function readLeads(type: LeadType): Promise<Record<string, unknown>[]> {
   if (!hasDb()) return readLeadFile(type);
   const q = {
-    callbacks: `select to_char(at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as at, name, phone, "when", message, status
+    callbacks: `select to_char(at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as at, name, phone, "when", message, status, acquisition
                 from gadda.callbacks order by at`,
     subscribers: `select to_char(at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as at, email, consent
                   from gadda.subscribers order by at`,

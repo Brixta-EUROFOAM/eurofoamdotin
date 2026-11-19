@@ -8,6 +8,7 @@ import "./app.css";
 import CartProvider from "@/components/CartProvider";
 import TelemetryTracker from "@/components/TelemetryTracker";
 import ConsentProvider from "@/components/store/ConsentProvider";
+import AcquisitionTracker from "@/components/store/AcquisitionTracker";
 import LocationProvider from "@/components/store/LocationProvider";
 import CartDrawer from "@/components/store/CartDrawer";
 import MarketingTags from "@/components/store/MarketingTags";
@@ -87,6 +88,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           Skip to content
         </a>
         <ConsentProvider initial={consent}>
+          <AcquisitionTracker />
           <MarketingTags nonce={nonce} />
           <LocationProvider initialPin={isValidPin(savedPin) ? savedPin : ""}>
             <CartProvider>

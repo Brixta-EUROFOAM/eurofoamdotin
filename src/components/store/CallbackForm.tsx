@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useConsent } from "@/components/store/ConsentProvider";
+import { getAcquisition } from "@/lib/acquisition-client";
 
 export default function CallbackForm() {
+  const { marketing } = useConsent();
   const [state, setState] = useState<"idle" | "busy" | "done">("idle");
   const [error, setError] = useState("");
 
@@ -15,7 +18,7 @@ export default function CallbackForm() {
       const res = await fetch("/api/callback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(f.entries())),
+        body: JSON.stringify({ ...Object.fromEntries(f.entries()), acquisition: getAcquisition(marketing) }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Couldn't send that. Try again.");

@@ -14,7 +14,7 @@ export async function GET() {
     if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
-  const head = ["order", "date", "status", "name", "phone", "email", "address", "city", "pincode", "payment", "items", "total", "notes"];
+  const head = ["order", "date", "status", "name", "phone", "email", "address", "city", "pincode", "payment", "items", "total", "notes", "utm_source", "utm_medium", "utm_campaign"];
   const rows = orders.map((o) =>
     [
       o.id,
@@ -30,6 +30,9 @@ export async function GET() {
       o.lines.map((l) => `${l.name} ${l.size} ${l.height}${l.variant ? ` ${l.variant}` : ""} x${l.quantity}`).join("; "),
       o.total,
       o.notes || "",
+      o.acquisition?.source || "",
+      o.acquisition?.medium || "",
+      o.acquisition?.campaign || "",
     ]
       .map(esc)
       .join(",")

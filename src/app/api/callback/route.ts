@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { addCallback } from "@/lib/leads";
+import { normalizeAcquisition } from "@/lib/acquisition";
+import { notifyAdmin } from "@/lib/admin-notify";
 import { pruneIfDue } from "@/lib/retention";
 import { clientIp, forbidden, rateLimit, readJson, sameOrigin, tooMany } from "@/lib/security";
 
@@ -24,6 +26,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Enter your name and a 10-digit mobile number." }, { status: 422 });
   }
   void pruneIfDue("callbacks.jsonl");
-  await addCallback({ at: new Date().toISOString(), name, phone, when, message });
+  const at = new Date().toISOString();
+  const acquisition = normalizeAcquisition(body.acquisition);
+  await addCallback({ at, name, phone, when, message, acquisition });
+  await notifyAdmin({ key: `callback-${phone}-${at}`, title: "New callback enquiry", lines: [
+    `Name: ${name}`, `Phone: ${phone}`, `Preferred time: ${when || "Any"}`,
+    `Message: ${message || "None"}`, `Source: ${acquisition?.source || "unattributed"}`,
+    `Campaign: ${acquisition?.campaign || ""}`, "View: /admin/crm",
+  ] });
   return NextResponse.json({ ok: true });
 }

@@ -106,6 +106,7 @@ create table if not exists gadda.callbacks (
   message  text,
   status   text not null default 'new'
 );
+alter table gadda.callbacks add column if not exists acquisition jsonb;
 create index if not exists callbacks_at_idx on gadda.callbacks (at);
 
 create table if not exists gadda.media (
