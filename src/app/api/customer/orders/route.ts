@@ -21,7 +21,8 @@ export async function GET() {
     statusLabel: label(o.status),
     total: o.total,
     payment: o.payment,
-    lines: o.lines.map((l) => ({ name: l.name, size: l.size, height: l.height, variant: l.variant, quantity: l.quantity })),
+    lines: o.lines.map((l) => ({ slug: l.slug, name: l.name, size: l.size, height: l.height,
+      variant: l.variant, quantity: l.quantity, unitPrice: l.unitPrice })),
   }));
   return NextResponse.json({ orders });
 }

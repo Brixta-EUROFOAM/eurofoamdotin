@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { money } from "@/lib/catalog";
+import { useCart } from "@/components/CartProvider";
 
 type Customer = { id: string; name: string; email: string; mobile: string };
 type OrderRow = {
@@ -12,7 +13,7 @@ type OrderRow = {
   statusLabel?: string;
   total: number;
   payment: string;
-  lines: { name: string; size: string; height: string; variant?: string; quantity: number }[];
+  lines: { slug: string; name: string; size: string; height: string; variant?: string; quantity: number; unitPrice: number }[];
 };
 
 const STATUS: Record<string, string> = {
@@ -24,6 +25,7 @@ const STATUS: Record<string, string> = {
 };
 
 export default function AccountClient() {
+  const { addItem, openDrawer } = useCart();
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,6 +97,21 @@ export default function AccountClient() {
     }
   }
 
+  function buyAgain(order: OrderRow) {
+    // Restored prices are only display estimates; checkout always recalculates current prices.
+    for (const line of order.lines) {
+      if (!line.slug || !line.name || !line.size || !line.height) continue;
+      addItem({
+        id: `${line.slug}-${line.size}-${line.height}-${line.variant || "default"}`,
+        slug: line.slug, name: line.name, image: "/layers/gadda/comfort.webp",
+        size: line.size, height: line.height, variant: line.variant,
+        quantity: line.quantity, price: line.unitPrice,
+      }, { open: false });
+    }
+    // Cart can be reviewed before checkout; we do not silently charge the user.
+    openDrawer();
+  }
+
   if (loading) return <div style={{ minHeight: 320 }} />;
 
   if (customer) {
@@ -130,6 +147,8 @@ export default function AccountClient() {
                   {new Date(o.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}.{" "}
                   {o.lines.map((l) => `${l.name} ${l.size} ${l.height} × ${l.quantity}`).join("; ")}. {money(o.total)}
                 </p>
+                <button type="button" className="g-btn g-btn--ghost g-btn--sm"
+                  style={{ marginTop: 10 }} onClick={() => buyAgain(o)}>Buy again — review current prices</button>
               </div>
             ))
           ) : (
@@ -141,6 +160,13 @@ export default function AccountClient() {
               .
             </p>
           )}
+        </section>
+
+        <section className="g-card-flat" aria-labelledby="share-h">
+          <h2 className="g-h3" id="share-h">Recommend GADDA</h2>
+          <p>Share our mattresses with a friend. No discount or referral reward is currently promised.</p>
+          <a className="g-btn g-btn--ghost g-btn--sm" href="https://wa.me/?text=Take%20a%20look%20at%20GADDA%20mattresses%3A%20https%3A%2F%2Fgadda.store%2F%3Futm_source%3Dreferral%26utm_medium%3Dshare%26utm_campaign%3Dcustomer_recommendation"
+            target="_blank" rel="noopener noreferrer">Share on WhatsApp</a>
         </section>
 
         <section className="g-card-flat" aria-labelledby="data-h">

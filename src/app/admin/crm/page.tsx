@@ -16,7 +16,7 @@ export default async function CRMPage() {
   const [orders, callbacks, subscribers] = await Promise.all([
     listOrders(), readLeads("callbacks"), readLeads("subscribers"),
   ]);
-  const paid = orders.filter(o => (o.checkout?.status === "paid" && !o.checkout.test) || (o.pay?.status === "paid" && !o.pay.test));
+  const paid = orders.filter(o => (o.checkout?.status === "paid" && o.checkout.test === false) || (o.pay?.status === "paid" && o.pay.test === false));
   const revenue = paid.reduce((sum, o) => sum + o.total, 0);
   const entries = [
     ...orders.map(o => ({ id: o.id, at: o.createdAt, type: "ORDER", name: o.customer.name,
@@ -27,10 +27,10 @@ export default async function CRMPage() {
       contact:String(c.phone||""),detail:String(c.message||c.when||"Callback requested"),
       source: a?.source || "unattributed",campaign:a?.campaign || "" };}),
     ...subscribers.map((c,i) => ({id:`subscriber-${i}`,at:String(c.at||""),type:"SUBSCRIBER",
-      name:"Newsletter",contact:String(c.email||""),detail:"Email signup",source:"unattributed",campaign:""})),
+      name:"Newsletter",contact:String(c.email||""),detail:"Email signup",source:String(c.source||"newsletter"),campaign:""})),
   ].sort((a,b) => b.at.localeCompare(a.at));
   return <main style={{padding:"32px 5vw",maxWidth:1500,margin:"auto",fontFamily:"system-ui",color:"#232323"}}>
-    <nav style={{display:"flex",gap:16,marginBottom:24}}><Link href="/admin">← Admin</Link><Link href="/admin/orders">Orders</Link><Link href="/ops">Operations</Link></nav>
+    <nav style={{display:"flex",gap:16,marginBottom:24}}><Link href="/admin">← Admin</Link><Link href="/admin/orders">Orders</Link><Link href="/admin/roas">Campaign ROAS</Link><Link href="/ops">Operations</Link></nav>
     <h1>GADDA Customer &amp; Lead Inbox</h1>
     <p>Website orders, callback requests and newsletter signups. Verified payment status only — no assumed conversions.</p>
     <section style={{display:"flex",gap:20,flexWrap:"wrap",margin:"24px 0"}}>

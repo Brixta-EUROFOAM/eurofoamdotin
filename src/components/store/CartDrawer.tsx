@@ -157,7 +157,8 @@ export default function CartDrawer() {
               Checkout
             </Link>
             <p className="g-note">
-              Pay on delivery or by UPI. {BUSINESS.trialNights} nights to decide.
+              Pay on delivery or pay online. {BUSINESS.trialNights} nights to decide.{' '}
+              <Link href="/policies/trial" className="g-link" onClick={closeDrawer}>Trial and return terms</Link>
             </p>
           </div>
         ) : null}

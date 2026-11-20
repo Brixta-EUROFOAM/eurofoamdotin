@@ -72,6 +72,6 @@ export function publicOrigin() {
 }
 
 export function siteUrl(pathname = "/") {
-  const origin = publicOrigin() || "https://eurofoam.in";
+  const origin = publicOrigin() || "https://gadda.store";
   return new URL(pathname, `${origin}/`).toString();
 }

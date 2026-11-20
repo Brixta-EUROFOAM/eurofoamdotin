@@ -11,6 +11,7 @@ import SewnLabel from "@/components/store/SewnLabel";
 import { trackEvent } from "@/lib/telemetry-client";
 import { useConsent } from "@/components/store/ConsentProvider";
 import { getAcquisition } from "@/lib/acquisition-client";
+import { recordVerifiedPurchase } from "@/lib/paid-conversions-client";
 
 type Done = { id: string; total: number; whatsapp: string | null; payError?: string };
 type Pay = "online" | "pay_on_delivery";
@@ -190,6 +191,8 @@ export default function CheckoutClient({
               });
               const verified = await verifyRes.json().catch(() => ({}));
               if (!verifyRes.ok || !verified.success) throw new Error(verified.error || "Payment could not be verified.");
+              // Paid conversion: never fire for order creation, failed payments, or COD.
+              if (!testMode) recordVerifiedPurchase(data.id, Number(data.total), marketing);
               clearCart();
               setDone({ id: data.id, total: data.total, whatsapp: data.whatsapp || null });
               window.scrollTo({ top: 0 });

@@ -18,7 +18,7 @@ export const LEAD_FILES = {
 export type LeadType = keyof typeof LEAD_FILES;
 
 export type Callback = { at: string; name: string; phone: string; when?: string; message?: string; acquisition?: Acquisition };
-export type Subscriber = { at: string; email: string; consent: string };
+export type Subscriber = { at: string; email: string; consent: string; source?: string };
 export type ConsentReceipt = { id: string; v: number; analytics: boolean; marketing: boolean; source: string; at: string };
 
 async function appendLine(file: string, row: unknown) {
@@ -54,10 +54,11 @@ export async function addCallback(c: Callback) {
 
 export async function addSubscriber(s: Subscriber) {
   if (!hasDb()) return appendLine(LEAD_FILES.subscribers, s);
-  await (await db()).query("insert into gadda.subscribers (at, email, consent) values ($1, $2, $3)", [
+  await (await db()).query("insert into gadda.subscribers (at, email, consent, source) values ($1, $2, $3, $4)", [
     s.at,
     s.email,
     s.consent,
+    s.source || "newsletter",
   ]);
 }
 
@@ -76,7 +77,7 @@ export async function readLeads(type: LeadType): Promise<Record<string, unknown>
   const q = {
     callbacks: `select to_char(at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as at, name, phone, "when", message, status, acquisition
                 from gadda.callbacks order by at`,
-    subscribers: `select to_char(at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as at, email, consent
+    subscribers: `select to_char(at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as at, email, consent, source
                   from gadda.subscribers order by at`,
     consent: `select receipt_id as id, version as v, analytics, marketing, source,
                      to_char(at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as at

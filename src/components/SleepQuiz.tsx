@@ -6,6 +6,8 @@ import ProductVisual from "@/components/store/ProductVisual";
 import { useCart } from "@/components/CartProvider";
 import { money, type Mattress } from "@/lib/catalog";
 import { trackEvent } from "@/lib/telemetry-client";
+import { useConsent } from "@/components/store/ConsentProvider";
+
 
 type Key = "regular" | "pro" | "ultimate";
 type Option = { label: string; hint: string; score: Partial<Record<Key, number>>; why?: string };
@@ -70,6 +72,12 @@ function keyOf(p: Mattress): Key {
 export default function SleepQuiz({ products }: { products: Mattress[] }) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Option[]>([]);
+  const { marketing } = useConsent();
+  const [resultUnblocked, setResultUnblocked] = useState(false);
+  const [quizEmail, setQuizEmail] = useState("");
+  const [quizOptIn, setQuizOptIn] = useState(false);
+  const [quizBusy, setQuizBusy] = useState(false);
+  const [quizError, setQuizError] = useState("");
   const { addItem } = useCart();
   const done = step >= QUESTIONS.length;
 
@@ -88,6 +96,51 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
   function choose(o: Option) {
     setAnswers((a) => [...a.slice(0, step), o]);
     setStep((s) => s + 1);
+  }
+
+  // Optional, explicit email signup; the recommendation is never paywalled.
+  if (done && result.best && !resultUnblocked) {
+    return (
+      <div className="g-quiz" aria-live="polite">
+        <section className="g-card-flat" style={{ display: "grid", gap: 14 }}>
+          <span className="g-chip g-chip--orange" style={{ justifySelf: "start" }}>Your mattress match is ready</span>
+          <h2 className="g-h3">Want occasional GADDA updates by email?</h2>
+          <p style={{ margin: 0 }}>Optional — see your personalised result with or without signing up.</p>
+          <form onSubmit={async (event) => {
+            event.preventDefault();
+            if (!quizOptIn) { setQuizError("Please agree to receive marketing emails, or skip."); return; }
+            setQuizBusy(true);
+            setQuizError("");
+            try {
+              const response = await fetch("/api/subscribe", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: quizEmail, source: "sleep_quiz", optIn: true }),
+              });
+              const data = await response.json().catch(() => ({}));
+              if (!response.ok) throw new Error(data.error || "Could not save your preference.");
+              // Marketing signup is separate from tracking consent. No tracking without consent.
+              setResultUnblocked(true);
+            } catch (err) { setQuizError((err as Error).message); }
+            finally { setQuizBusy(false); }
+          }} style={{ display: "grid", gap: 12 }}>
+            <label className="g-field"><span>Email address</span>
+              <input type="email" value={quizEmail} onChange={e => setQuizEmail(e.target.value)}
+                required autoComplete="email" maxLength={120} placeholder="you@example.com" />
+            </label>
+            <label style={{ display: "flex", gap: 10, alignItems: "start" }}>
+              <input type="checkbox" checked={quizOptIn} onChange={e => setQuizOptIn(e.target.checked)} />
+              <span>I agree to receive occasional GADDA marketing emails. I can unsubscribe at any time.</span>
+            </label>
+            {quizError && <p className="g-error" role="alert">{quizError}</p>}
+            <button type="submit" className="g-btn g-btn--orange" disabled={quizBusy}>{quizBusy ? "Saving…" : "Subscribe and view result"}</button>
+          </form>
+          <button type="button" className="g-link" onClick={() => setResultUnblocked(true)}>
+            No thanks — show my result
+          </button>
+          <small>See our <Link href="/policies/privacy">privacy policy</Link>. Subscription is optional.</small>
+        </section>
+      </div>
+    );
   }
 
   if (done && result.best) {
@@ -150,6 +203,8 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
             onClick={() => {
               setAnswers([]);
               setStep(0);
+              setResultUnblocked(false);
+              setQuizError("");
             }}
           >
             Start again

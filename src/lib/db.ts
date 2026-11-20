@@ -95,6 +95,7 @@ create table if not exists gadda.subscribers (
   email    text not null,
   consent  text not null
 );
+alter table gadda.subscribers add column if not exists source text;
 create index if not exists subscribers_email_idx on gadda.subscribers (email);
 
 create table if not exists gadda.callbacks (

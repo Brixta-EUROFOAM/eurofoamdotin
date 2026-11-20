@@ -9,6 +9,7 @@ import CartProvider from "@/components/CartProvider";
 import TelemetryTracker from "@/components/TelemetryTracker";
 import ConsentProvider from "@/components/store/ConsentProvider";
 import AcquisitionTracker from "@/components/store/AcquisitionTracker";
+import CloudflareAnalytics from "@/components/store/CloudflareAnalytics";
 import LocationProvider from "@/components/store/LocationProvider";
 import CartDrawer from "@/components/store/CartDrawer";
 import MarketingTags from "@/components/store/MarketingTags";
@@ -40,7 +41,7 @@ const yatra = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(publicOrigin() || "https://eurofoam.in"),
+  metadataBase: new URL(publicOrigin() || "https://gadda.store"),
   title: {
     default: "GADDA Mattresses in Guwahati | Shop Online",
     template: "%s | GADDA Mattresses",
@@ -89,6 +90,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </a>
         <ConsentProvider initial={consent}>
           <AcquisitionTracker />
+          <CloudflareAnalytics nonce={nonce} />
           <MarketingTags nonce={nonce} />
           <LocationProvider initialPin={isValidPin(savedPin) ? savedPin : ""}>
             <CartProvider>

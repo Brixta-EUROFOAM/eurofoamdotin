@@ -16,10 +16,12 @@ const isDev = process.env.NODE_ENV !== "production";
 function csp(nonce: string) {
   const gtm = Boolean(process.env.NEXT_PUBLIC_GTM_ID);
   const meta = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
+  const cfAnalytics = Boolean(process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN);
 
   const connect = ["'self'"];
   if (gtm) connect.push("https://*.google-analytics.com", "https://*.analytics.google.com", "https://*.googletagmanager.com");
   if (meta) connect.push("https://www.facebook.com", "https://connect.facebook.net");
+  if (cfAnalytics) connect.push("https://cloudflareinsights.com", "https://*.cloudflareinsights.com");
   connect.push("https://api.razorpay.com", "https://checkout.razorpay.com", "https://*.razorpay.com", "https://*.razorpay.in");
   if (isDev) connect.push("ws:", "wss:");
 
@@ -67,6 +69,15 @@ function crossSite(request: NextRequest) {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Public canonical host; preserve full path and query string. Cloudflare edge 301 is preferred.
+  if (request.headers.get("host")?.split(":")[0].toLowerCase() === "www.gadda.store") {
+    const destination = request.nextUrl.clone();
+    destination.protocol = "https:";
+    destination.hostname = "gadda.store";
+    destination.port = "";
+    return NextResponse.redirect(destination, 308);
+  }
 
   if (pathname.startsWith("/api/")) {
     if (!SAFE_METHODS.has(request.method) && crossSite(request)) {

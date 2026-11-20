@@ -4,7 +4,7 @@ This installation is designed for the existing Next.js storefront and does not m
 
 ## Before production
 
-1. Confirm `PUBLIC_SITE_URL=https://eurofoam.in` on the production host. Use the canonical origin that serves the storefront.
+1. Confirm `PUBLIC_SITE_URL=https://gadda.store` on the production host. Use the canonical origin that serves the storefront.
 2. Edit `src/lib/local-seo.ts`: enter a **genuine**, verifiable physical location only if one exists and is eligible for a Google Business Profile. Do not invent a Guwahati showroom, street address, postal code, business hours, or geographic coordinates. Add verified social/profile URLs to `sameAs`.
 3. Fill out missing facts in `src/lib/business.ts` (registered and manufacturing addresses, GSTIN, grievance officer, and confirmed warranty periods) and the real phone/email in the Admin store configuration.
 4. Reconcile `src/lib/delivery.ts` (`DISPATCH_FROM = "Silchar, Assam"`) with the ex-factory Byrnihat basis. Do not promise 24–48-hour delivery without transporter evidence. Confirm the actual PIN-zone SLAs.
@@ -31,7 +31,7 @@ Google Business Profile is separate from on-site SEO. Set up/claim and verify th
 
 ## Measurement
 
-Set up Google Search Console for the domain property; submit `https://eurofoam.in/sitemap.xml`; inspect `/mattresses/guwahati` and all product pages. Monitor impressions, click-through rate and nonbrand queries such as "mattress guwahati", "queen size mattress guwahati", "high density foam mattress assam". For Maps, use Business Profile Performance calls/directions/website clicks where available. For AI answer visibility, periodically test citations manually; `llms.txt` is optional and does not guarantee indexing or citations.
+Set up Google Search Console for the domain property; submit `https://gadda.store/sitemap.xml`; inspect `/mattresses/guwahati` and all product pages. Monitor impressions, click-through rate and nonbrand queries such as "mattress guwahati", "queen size mattress guwahati", "high density foam mattress assam". For Maps, use Business Profile Performance calls/directions/website clicks where available. For AI answer visibility, periodically test citations manually; `llms.txt` is optional and does not guarantee indexing or citations.
 
 ## What the architecture supplies
 

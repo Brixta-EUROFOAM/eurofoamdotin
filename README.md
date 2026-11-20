@@ -39,7 +39,7 @@ Rules 2025. **Have a lawyer read them once.**
 |---|---|---|
 | `ADMIN_SESSION_SECRET` | yes | Signs admin sessions (32+ random chars) |
 | `CUSTOMER_SESSION_SECRET` | yes | Signs customer sessions — **login fails without it** |
-| `PUBLIC_SITE_URL` | yes | e.g. `https://eurofoam.in` — canonical URLs, sitemap, CSRF |
+| `PUBLIC_SITE_URL` | yes | e.g. `https://gadda.store` — canonical URLs, sitemap, CSRF |
 | `NEXT_PUBLIC_GTM_ID` | no | Google Tag Manager, loads only after "Ads and offers" consent (build-time) |
 | `NEXT_PUBLIC_META_PIXEL_ID` | no | Meta Pixel, same rule (build-time) |
 | `RAZORPAY_KEY_ID` | no | Turns on "Pay online now" and staff payment links. `rzp_test_…` for testing |
