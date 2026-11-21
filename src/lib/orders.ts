@@ -4,6 +4,7 @@ import { randomBytes } from "crypto";
 import { notifyAdmin } from "@/lib/admin-notify";
 import { normalizeAcquisition, type Acquisition } from "@/lib/acquisition";
 import { dataDir, getStoreData } from "@/lib/store";
+import { checkPin } from "@/lib/delivery";
 import type { Mattress, SiteSettings } from "@/lib/catalog";
 import { SIZE_GROUPS, customCheck, customLabel, customPrice, getSizing, parseCustom } from "@/lib/sizes";
 import { mattressPrice } from "@/lib/mattress-pricing";
@@ -172,6 +173,7 @@ export async function createOrder(
   if (!name || !address || !city) throw new OrderError("Please fill in your name, address and city.");
   if (phone.replace(/\D/g, "").length < 10) throw new OrderError("Please enter a valid 10-digit phone number.");
   if (!/^[1-9]\d{5}$/.test(pincode)) throw new OrderError("Please enter a valid 6-digit PIN code.");
+  if (!checkPin(pincode).ok) throw new OrderError("GADDA currently delivers only within Assam and Meghalaya. Contact us if your address is in either state but the PIN was rejected.");
   if (body.acceptTerms !== true) throw new OrderError("Please accept the Terms of Sale to place the order.");
   const idempotencyKey = clip(body.idempotencyKey, 64).replace(/[^a-zA-Z0-9-]/g, "");
   if (idempotencyKey) {

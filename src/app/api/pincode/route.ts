@@ -56,11 +56,15 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, pin: result.pin, reason: result.reason });
   }
   const place = await lookupPlace(result.pin);
+  if (place && !["assam", "meghalaya"].includes(place.state.trim().toLowerCase())) {
+    return NextResponse.json({ ok: false, pin: result.pin, reason: "unserviceable" },
+      { headers: { "Cache-Control": "no-store" } });
+  }
   return NextResponse.json(
     {
       ok: true,
       pin: result.pin,
-      zone: result.zone.label,
+      zone: place?.state || result.zone.label,
       minDays: result.minDays,
       maxDays: result.maxDays,
       place,

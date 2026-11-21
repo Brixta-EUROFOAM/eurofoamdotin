@@ -149,7 +149,7 @@ export const POLICIES: Policy[] = [
     body: () => (
       <>
         <p>
-          Delivery is <b>included in every price</b>, anywhere we deliver in India. Mattresses are dispatched from{" "}
+          Delivery is <b>included in every price</b> for eligible PIN codes in Assam (including Guwahati) and Meghalaya. Mattresses are dispatched from{" "}
           {DISPATCH_FROM} and arrive flat (not rolled), wrapped in protective plastic.
         </p>
         <h2>How long it takes</h2>
@@ -174,8 +174,8 @@ export const POLICIES: Policy[] = [
         </table>
         <p>
           Enter your PIN code on any product page for dates. These are estimates; we confirm a delivery window on the
-          phone before dispatch, and call again if anything changes. We currently can&apos;t deliver to Army Post Office
-          PIN codes.
+          phone before dispatch, and call again if anything changes. Online delivery is currently limited to
+          Assam and Meghalaya. If your address is in either state but the PIN check fails, contact us for a manual check.
         </p>
         <h2>On delivery day</h2>
         <ul>

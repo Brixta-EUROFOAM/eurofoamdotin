@@ -139,7 +139,7 @@ export function PinMessage({ info, eta }: { info: PinInfo | null; eta: string | 
       <div className="g-pin-result g-pin-result--bad" role="status">
         {info.reason === "invalid"
           ? "That doesn't look like a 6-digit PIN code."
-          : "We can't deliver to this PIN code yet. Call or WhatsApp us — we'll try to sort it out."}
+          : "We currently deliver in Assam and Meghalaya only. If your address is in either state, contact us to verify this PIN code."}
       </div>
     );
   }

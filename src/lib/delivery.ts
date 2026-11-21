@@ -18,15 +18,17 @@ export type DeliveryZone = {
 
 export const DISPATCH_FROM = "Silchar, Assam";
 
+/* Delivery scope: all of Assam (including Guwahati) and Meghalaya ONLY.
+   Meghalaya also has some 78-prefixed shared postal districts, which are
+   accepted by the Assam-circle 78 prefix and displayed using postal lookup.
+   These prefixes are an eligibility screen, NOT an exhaustive list of valid
+   post offices or a courier guarantee. Confirm actual serviceability and ETA.
+*/
 export const DELIVERY_ZONES: DeliveryZone[] = [
-  { id: "local", label: "Barak Valley", prefixes: ["788"], minDays: 1, maxDays: 3 },
-  { id: "northeast", label: "North East", prefixes: ["78", "79"], minDays: 3, maxDays: 6 },
-  { id: "east", label: "East India", prefixes: ["7", "8"], minDays: 5, maxDays: 8 },
-  { id: "rest", label: "Rest of India", prefixes: ["1", "2", "3", "4", "5", "6"], minDays: 7, maxDays: 12 },
+  { id: "assam-barak", label: "Assam — Barak Valley", prefixes: ["788"], minDays: 1, maxDays: 3 },
+  { id: "assam", label: "Assam", prefixes: ["78"], minDays: 3, maxDays: 6 },
+  { id: "meghalaya", label: "Meghalaya", prefixes: ["793", "794"], minDays: 3, maxDays: 6 },
 ];
-
-/* PINs we can't deliver to (Army Post Office etc.). */
-const NOT_SERVICEABLE = ["9"];
 
 export function isValidPin(pin: string) {
   return /^[1-9]\d{5}$/.test(pin);
@@ -39,7 +41,6 @@ export type PinCheck =
 export function checkPin(raw: string): PinCheck {
   const pin = String(raw || "").replace(/\D/g, "").slice(0, 6);
   if (!isValidPin(pin)) return { ok: false, pin, reason: "invalid" };
-  if (NOT_SERVICEABLE.some((p) => pin.startsWith(p))) return { ok: false, pin, reason: "unserviceable" };
 
   let best: DeliveryZone | null = null;
   let bestLen = 0;

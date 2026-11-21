@@ -104,7 +104,7 @@ export default function CheckoutClient({
   const stepValid = useMemo(
     () => ({
       contact: form.name.trim().length >= 2 && /^[6-9]\d{9}$/.test(phoneDigits) && (!form.email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)),
-      address: /^[1-9]\d{5}$/.test(form.pincode) && form.address.trim().length >= 8 && form.city.trim().length >= 2 && info?.ok !== false,
+      address: /^[1-9]\d{5}$/.test(form.pincode) && form.address.trim().length >= 8 && form.city.trim().length >= 2 && info?.ok === true && info.pin === form.pincode,
       payment: accept,
     }),
     [form, phoneDigits, accept, info]
