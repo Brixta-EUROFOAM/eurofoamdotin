@@ -29,6 +29,9 @@
 }
 
 :root {
+  /* Self-hosted Fontsource faces: no Google Fonts fetch during Docker builds. */
+  --font-bricolage: "Bricolage Grotesque Variable";
+  --font-hanken: "Hanken Grotesk Variable";
   --g-paper: #ffffff;
   --g-cream: #f6f3ee;
   --g-sand: #ecd3b2;

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
-import { Bricolage_Grotesque, Hanken_Grotesk } from "next/font/google";
+import "@fontsource-variable/bricolage-grotesque/wght.css";
+import "@fontsource-variable/hanken-grotesk/wght.css";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./craft.css";
@@ -20,19 +21,6 @@ import { isValidPin } from "@/lib/delivery";
 import { getStoreData } from "@/lib/store";
 import { brandKnowledgeGraph } from "@/lib/local-seo";
 import { publicOrigin } from "@/lib/public-url";
-
-const bricolage = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-bricolage",
-  display: "swap",
-  weight: ["500", "700", "800"],
-});
-
-const hanken = Hanken_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-hanken",
-  display: "swap",
-});
 
 const yatra = localFont({
   src: "../../public/fonts/YatraOne.ttf",
@@ -82,7 +70,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <head><JsonLd data={brandKnowledgeGraph(site)} nonce={nonce} /></head>
       <body
         suppressHydrationWarning
-        className={`${bricolage.variable} ${hanken.variable} ${yatra.variable} antialiased`}
+        className={`${yatra.variable} antialiased`}
       >
         <SewingThread />
         <a href="#main" className="g-skip">
