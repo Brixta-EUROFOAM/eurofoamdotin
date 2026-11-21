@@ -1,0 +1,87 @@
+gadda.store
+ in Brixtamail@gmail.com's Account
+Zone: Edit
+Zone Custom Assets: Edit
+Zone Settings: Edit
+Zone Versioning: Edit
+DNS: Edit
+DNS Settings: Edit
+Zone WAF: Edit
+Zone Security Insights Partner Assets: Read
+Zone Security Center Insights: Edit
+Access: Apps and Policies: Edit
+Zone Observability: Edit
+Entire Brixtamail@gmail.com's Account account
+DNS Firewall: Edit
+DNS Settings: Edit
+DNS Views: Edit
+registrar_sandbox_domains
+Registrar: Domains: Admin
+Account Firewall Access Rules: Edit
+Account Security Center Insights: Edit
+Account Security Insights Partner Integrations: Edit
+Account WAF: Edit
+Account Abuse Protection PII: Read
+Allow Request Tracer: Read
+Application Security Reports: Read
+Client-side security: Edit
+Cloudforce One: Edit
+DDoS Botnet Feed: Edit
+DDoS Protection: Edit
+Field Extractors: Edit
+Fraud Events API: Edit
+Fraud Feedback API: Edit
+HTTP Applications: Edit
+IOT: Edit
+L3/4 DDoS Managed Ruleset: Edit
+Resource Tags: Edit
+Trust and Safety: Edit
+trust_api_assessments
+Turnstile: Edit
+URL Scanner: Edit
+Account Custom Error Rules: Edit
+Account Custom Pages: Edit
+Account Filter Lists: Edit
+Account Rulesets: Edit
+Bulk URL Redirects: Edit
+Select Configuration: Edit
+Transform Rules: Edit
+Access: Apps: Edit
+Access: Apps and Policies: Edit
+Access: Audit Logs: Read
+Access: Custom Pages: Edit
+Access: Device Posture: Edit
+Access: Identity Providers: Edit
+Access: Groups: Edit
+Access: Keys: Edit
+Access: Mutual TLS Certificates: Edit
+Access: Organizations: Edit
+Access: Organizations, Identity Providers, and Groups: Edit
+Access: Policies: Edit
+Access: Policy Test: Edit
+Access: SAML Certificate: Edit
+Access: SCIM Logs: Read
+Access: SCIM Populations: Edit
+Access: Service Tokens: Edit
+Access: SSH Auditing: Edit
+Access: Tags: Edit
+Access: Users: Edit
+Cloud Workload Security: Edit
+Cloudflare CASB: Edit
+Cloudflare CDS Compute Account: Edit
+Cloudflare DEX: Edit
+teams_connector_cloudflared_monitoring
+Cloudflare One Connector: cloudflared: Edit
+Cloudflare One Connector: WARP: Edit
+Cloudflare One Connectors: Edit
+Cloudflare One Networks: Edit
+Cloudflare Tunnel: Edit
+teams_secure_location
+Data Localization Suite: Edit
+Resource Library: Edit
+Zero Trust: Edit
+Zero Trust Resilience: Edit
+Zero Trust: PII: Read
+Zero Trust: Seats: Edit
+IP Address Filtering
+All IP addresses allowed

@@ -21,6 +21,7 @@ export default function TurnstileWidget({ action, onToken }: {
   const [config, setConfig] = useState<{ siteKey: string; enforced: boolean } | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
   const [broken, setBroken] = useState(false);
+  const [verified, setVerified] = useState(false);
   const target = useRef<HTMLDivElement>(null);
   const callback = useRef(onToken);
   useEffect(() => { callback.current = onToken; }, [onToken]);
@@ -38,9 +39,9 @@ export default function TurnstileWidget({ action, onToken }: {
     if (!scriptReady || !config?.siteKey || !target.current || !window.turnstile) return;
     const id = window.turnstile.render(target.current, {
       sitekey: config.siteKey, action, theme: "auto",
-      callback: token => callback.current(token),
-      "expired-callback": () => callback.current(""),
-      "error-callback": () => callback.current(""),
+      callback: token => { setVerified(Boolean(token)); callback.current(token); },
+      "expired-callback": () => { setVerified(false); callback.current(""); },
+      "error-callback": () => { setVerified(false); callback.current(""); },
     });
     return () => { callback.current(""); window.turnstile?.remove(id); };
   }, [scriptReady, config?.siteKey, action]);
@@ -53,6 +54,6 @@ export default function TurnstileWidget({ action, onToken }: {
     <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
       strategy="afterInteractive" onReady={() => setScriptReady(true)} onError={() => setBroken(true)} />
     <div ref={target} aria-label="Security verification" />
-    {config.enforced && <small>Security verification is required before submitting.</small>}
+    {config.enforced && <small role="status">{verified ? "Security verified. You can submit the form." : "Security verification is required before submitting."}</small>}
   </>;
 }

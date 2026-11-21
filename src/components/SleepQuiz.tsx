@@ -16,6 +16,18 @@ type Question = { title: string; body: string; options: Option[] };
 
 const QUESTIONS: Question[] = [
   {
+    title: "What's the biggest mattress problem you want to solve?",
+    body: "Start with the thing that bothers you most. We'll balance it with your sleeping position and preferred feel.",
+    options: [
+      { label: "It feels too firm or hard on my shoulders", hint: "I'd like more contouring without losing support", score: { pro: 7, ultimate: 2 }, why: "you want pressure-sensitive comfort without losing a support base" },
+      { label: "I sink too far and want a steadier bed", hint: "I prefer a firmer, more even feel", score: { regular: 7, pro: 1 }, why: "you want a firmer surface and less of a sink-in feel" },
+      { label: "I often wake up too warm", hint: "Temperature and surface feel both matter", score: { ultimate: 7, pro: 1 }, why: "you want to consider a cooling comfort-layer construction" },
+      { label: "I need good support without overspending", hint: "Show me the essentials before the upgrades", score: { regular: 6 }, why: "you want a simple mattress at a sensible starting price" },
+      { label: "I'm not sure — help me choose", hint: "I'll answer a few questions about how I sleep", score: { pro: 2, regular: 2, ultimate: 2 }, why: "you are comparing several comfort trade-offs" },
+    ],
+  },
+
+  {
     title: "How do you usually fall asleep?",
     body: "Your sleeping position decides how much give you need at the shoulders and hips.",
     options: [
@@ -197,7 +209,7 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
           {result.runner ? (
             <p style={{ margin: 0, color: "var(--g-ink-2)" }}>
               Close second: <Link href={`/mattresses/${result.runner.slug}`} className="g-link">{result.runner.name}</Link>. Still unsure?
-              The 100-night trial means you can&apos;t really get this wrong.
+              Read the 100-night trial eligibility and exclusions before you decide.
             </p>
           ) : null}
           <button
