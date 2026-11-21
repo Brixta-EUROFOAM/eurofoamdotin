@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 };
 export default function Page() {
   return <ProblemGuide
+    problem="sinking"
     eyebrow="Sinking and support"
     title="Mattress feels too soft or sinks? Find out why."
     summary="Feeling stuck in a mattress is not always solved by buying the most expensive bed. Start with the mattress, the foundation and the kind of surface you prefer."

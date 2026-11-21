@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 };
 export default function Page() {
   return <ProblemGuide
+    problem="hot"
     eyebrow="Heat and comfort"
     title="Sleeping hot on your mattress? Check the whole setup."
     summary="Heat buildup can involve bedding, room conditions, the mattress cover and the material itself. There is no single mattress that stays cool for every sleeper."

@@ -3,60 +3,81 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SleepQuiz from "@/components/SleepQuiz";
+import ProductVisual from "@/components/store/ProductVisual";
 import { getStoreData } from "@/lib/store";
+import { money } from "@/lib/catalog";
+import "./sleepmatch.css";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Find the Right Mattress | SleepMatch Quiz",
-  description: "Mattress too firm, too soft or too hot? Try GADDA SleepMatch to compare three mattresses by feel, support, sleeping position and price.",
+  title: "SleepMatch: Find Your Mattress in 4 Questions | GADDA",
+  description: "Mattress too hard, sinking too much or sleeping hot? Answer 4 quick questions, see a personalized GADDA mattress match, choose your size and head straight to checkout.",
   alternates: { canonical: "/sleep-quiz" },
+  openGraph: {
+    title: "Stop guessing. Find your mattress with SleepMatch.",
+    description: "Four questions. Three real GADDA mattresses. One recommendation, with clear pricing and no signup.",
+    url: "/sleep-quiz",
+  },
 };
+
+const problems = [
+  { n: "01", title: "Too hard?", description: "Understand cushioning, pressure points and support before buying another firm mattress.", guide: "/guides/mattress-too-firm", cta: "Learn about comfort" },
+  { n: "02", title: "Sinking too far?", description: "Learn how surface softness and a supportive base differ, and what to look for in each.", guide: "/guides/mattress-too-soft", cta: "Explore steady support" },
+  { n: "03", title: "Sleeping too hot?", description: "Understand foam, covers and bedroom temperature without believing exaggerated cooling claims.", guide: "/guides/sleeping-hot-on-mattress", cta: "Explore cooling materials" },
+];
 
 export default async function SleepQuizPage() {
   const { products } = await getStoreData();
   return (
     <>
       <Header />
-      <main id="main">
-        <section className="g-section" style={{ background: "var(--g-cream)", paddingBottom: 24 }}>
-          <div className="g-wrap" style={{ maxWidth: 920 }}>
-            <p className="g-chip g-chip--orange">GADDA SleepMatch · Free mattress finder</p>
-            <h1 className="g-h1">Don't buy the wrong mattress. Find your fit first.</h1>
-            <p className="g-lede">Too firm? Sinking too far? Waking up hot? Tell us your biggest mattress problem and how you sleep. Our transparent quiz recommends one of three GADDA constructions and explains why.</p>
-            <p>It is a buying shortlist, not a diagnosis or a guarantee. Your answers are not sold and you can see a recommendation without subscribing.</p>
-            <a className="g-btn g-btn--orange" href="#quiz">Find my match — start the quiz</a>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(210px,1fr))", gap: 16, marginTop: 32 }}>
-              <div className="g-card-flat" style={{ padding: 18 }}><h2 className="g-h3">Want a steady, firmer feel?</h2><p>Explore support vs sink and avoid unnecessary extras.</p><Link className="g-link" href="/guides/mattress-too-soft">Check sinking and support</Link></div>
-              <div className="g-card-flat" style={{ padding: 18 }}><h2 className="g-h3">Too hard on shoulders?</h2><p>Understand comfort layers and pressure points.</p><Link className="g-link" href="/guides/mattress-too-firm">Compare firmness and comfort</Link></div>
-              <div className="g-card-flat" style={{ padding: 18 }}><h2 className="g-h3">Waking up too warm?</h2><p>Compare material, cover and bedroom factors.</p><Link className="g-link" href="/guides/sleeping-hot-on-mattress">Explore sleeping cooler</Link></div>
+      <main id="main" className="sm-page">
+        <section className="sm-hero" aria-labelledby="sm-title">
+          <div className="g-wrap sm-hero-layout">
+            <div className="sm-hero-copy">
+              <p className="sm-hero-eyebrow"><span className="sm-hero-dot"/> INTRODUCING GADDA SLEEPMATCH</p>
+              <h1 id="sm-title">The wrong mattress costs <em>more than money.</em></h1>
+              <p className="sm-hero-lede">Stop guessing. Tell us what&apos;s bothering you. We&apos;ll match you to a real mattress, explain the trade-offs, and show you the price before checkout.</p>
+              <div className="sm-hero-proof">
+                <div><strong>04</strong><span>Quick questions</span></div>
+                <div><strong>03</strong><span>Real mattresses</span></div>
+                <div><strong>0</strong><span>Email gates</span></div>
+              </div>
+              <a href="#sleepmatch" className="sm-hero-cta">Find my mattress <span aria-hidden="true">↗</span></a>
+              <p className="sm-hero-note">Free to try. No signup or pressure.</p>
+            </div>
+            <div className="sm-hero-quiz" id="sleepmatch"><p className="sm-mobile-quiz-intro">Your better mattress starts here.</p><SleepQuiz products={products} /></div>
+          </div>
+          <div className="sm-hero-footer"><div className="g-wrap"><span>Firmness isn't the whole story.</span><span>Neither is the price tag.</span><span>Find what fits <b>your</b> sleep.</span></div></div>
+        </section>
+
+        <section className="sm-three" aria-labelledby="sm-products-heading">
+          <div className="g-wrap">
+            <div className="sm-section-intro"><p className="sm-kicker">THREE WAYS TO SLEEP BETTER</p><h2 id="sm-products-heading">No twenty-model maze.<br/>Just three meaningful choices.</h2><p>SleepMatch compares the construction and feel of GADDA Regular, Pro and Ultimate. Choose for your needs, not for a flashy badge.</p></div>
+            <div className="sm-product-grid">
+              {products.map((product, index) => <article className="sm-product" key={product.slug}>
+                <div className="sm-product-media"><span>0{index + 1} / GADDA</span><ProductVisual image={product.cardImage || product.image} layers={product.layers} alt={`${product.name} mattress`} /></div>
+                <div className="sm-product-text"><div><h3>{product.name}</h3><p>{product.shortDescription}</p></div><div className="sm-product-price"><span>From {money(product.basePrice)}</span><Link href={`/mattresses/${product.slug}?variant=true`}>Choose size & buy <span aria-hidden="true">↗</span></Link></div></div>
+              </article>)}
             </div>
           </div>
         </section>
 
-        <section id="quiz" className="g-section" style={{ minHeight: "70vh" }}>
+        <section className="sm-problems" aria-labelledby="sm-problems-title">
           <div className="g-wrap">
-            <SleepQuiz products={products} />
-            <p className="g-note" style={{ marginTop: 40 }}>
-              A shortlist, not a medical opinion. If you have a back condition, ask your doctor what they recommend.
-            </p>
+            <div className="sm-section-intro"><p className="sm-kicker">START WITH YOUR PROBLEM</p><h2 id="sm-problems-title">What&apos;s keeping you up?</h2><p>You can read the science and trade-offs, or go straight to your personalized match.</p></div>
+            <div className="sm-problem-grid">{problems.map((problem) => <article className="sm-problem" key={problem.n}>
+              <span>{problem.n} / THE PROBLEM</span><h3>{problem.title}</h3><p>{problem.description}</p><Link href={problem.guide}>{problem.cta} ↗</Link>
+            </article>)}</div>
           </div>
         </section>
-        <section className="g-section" style={{ background: "var(--g-cream)" }}>
-          <div className="g-wrap" style={{ maxWidth: 900 }}>
-            <h2 className="g-h2">How SleepMatch works</h2>
-            <p>SleepMatch looks at your main concern, preferred firmness, sleeping position, whether you share the bed, your temperature preference and your budget. The score is a simple recommendation heuristic; it isn't AI-powered medical advice or a laboratory measurement.</p>
-            <h3 className="g-h3">Three mattress constructions, three different trade-offs</h3>
-            <p><Link className="g-link" href="/mattresses/gadda-regular">GADDA Regular</Link> offers a firmer, simpler foam construction and the lowest catalogue starting price. <Link className="g-link" href="/mattresses/gadda-pro">GADDA Pro</Link> adds a memory-foam comfort layer over HR support, with optional pocket springs. <Link className="g-link" href="/mattresses/gadda-ultimate">GADDA Ultimate</Link> offers a more plush feel with a cooling-memory-foam comfort layer and an optional latex upgrade. No material is right for every sleeper.</p>
-            <h3 className="g-h3">The questions to ask before paying</h3>
-            <p>A mattress can look right online and still feel wrong at home. Verify your bed measurements, layer construction, actual final price and delivery eligibility. Read the written trial exclusions and pickup conditions rather than relying on a large '100 nights' badge.</p>
-            <p><Link className="g-link" href="/guides/mattress-trial-returns">Read our plain-English trial and returns checklist</Link>, then check GADDA's <Link className="g-link" href="/policies/trial">published policy</Link>. We currently screen delivery to Assam and Meghalaya by PIN code; the quiz alone does not establish serviceability.</p>
-            <h2 className="g-h2">Common questions</h2>
-            <h3 className="g-h3">Is SleepMatch free?</h3><p>Yes. No purchase or marketing-email signup is required to see your recommendation. An optional signup may be offered before the result; you can skip it.</p>
-            <h3 className="g-h3">Will this help diagnose back pain?</h3><p>No. SleepMatch helps compare firmness and surface feel, not medical conditions. Consult a qualified professional about persistent pain.</p>
-            <h3 className="g-h3">Can I return any mattress after 100 nights?</h3><p>Do not assume so. Read the specific product and order eligibility, condition requirements, exclusions, fees, timelines and pickup instructions in the applicable policy.</p>
-          </div>
-        </section>
+
+        <section className="sm-help" aria-labelledby="sm-help-title"><div className="g-wrap sm-help-layout">
+          <div><p className="sm-kicker">BUY SMARTER</p><h2 id="sm-help-title">Choose the feel.<br/>Know the terms.</h2><p>A mattress that feels comfortable in a showroom may feel different at home. Measure the inside of your bed frame, check your PIN code and read the actual trial terms before you pay.</p><Link href="/guides/mattress-trial-returns">Understand trials and returns ↗</Link></div>
+          <div className="sm-help-checks"><p><b>01.</b> Match your preferred firmness and material.</p><p><b>02.</b> Select the exact length, width and thickness.</p><p><b>03.</b> Confirm delivery eligibility for your PIN code.</p><p><b>04.</b> Read the published <Link href="/policies/trial">100-night trial terms</Link>.</p></div>
+        </div></section>
+        <section className="sm-bottom-cta"><div className="g-wrap"><p className="sm-kicker">READY WHEN YOU ARE</p><h2>Let's get you to the right mattress.</h2><a href="#sleepmatch" className="sm-hero-cta">Find my mattress <span aria-hidden="true">↗</span></a><p>SleepMatch is a preference-based buying guide, not medical advice or a promise of pain relief. For persistent pain, consult a qualified healthcare professional.</p></div></section>
       </main>
       <Footer />
     </>

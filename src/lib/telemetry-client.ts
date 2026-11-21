@@ -22,6 +22,10 @@ export type TelemetryType =
   | "checkout_step"
   | "order_created"
   | "pincode_check"
+  | "quiz_start"
+  | "quiz_step"
+  | "quiz_result_view"
+  | "quiz_checkout_click"
   | "quiz_complete"
   | "search"
   | "wishlist_add";

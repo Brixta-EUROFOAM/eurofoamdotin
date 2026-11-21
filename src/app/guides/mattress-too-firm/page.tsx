@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 };
 export default function Page() {
   return <ProblemGuide
+    problem="firm"
     eyebrow="Pressure and firmness"
     title="Mattress too firm? Don't guess your next one."
     summary="A surface that feels supportive for one person can put uncomfortable pressure on another person's shoulders or hips. Identify the mismatch before replacing the mattress."
