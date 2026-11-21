@@ -1,5 +1,7 @@
 "use client";
 
+// GADDA SleepMatch V3: functional retail UI; matching, pricing and checkout logic unchanged.
+
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -214,17 +216,17 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
     return (
       <div className="sm-quiz sm-result" aria-live="polite">
         <div className="sm-result-top">
-          <span className="sm-pill sm-pill--success"><span aria-hidden="true">✓</span> Your SleepMatch result</span>
+          <span className="sm-result-heading">SLEEPMATCH / PERSONALISED RESULT</span>
           <button type="button" className="sm-text-button" onClick={reset}>Start over ↺</button>
         </div>
         <div className="sm-result-layout">
           <div className="sm-result-art">
             <div className="sm-result-photo"><ProductVisual image={best.image} layers={best.layers} alt={`${best.name} construction`} /></div>
-            <span className="sm-result-stamp">Your top match</span>
-            <div className="sm-result-features">{positioning.check.map((t) => <span key={t}>✓ {t}</span>)}</div>
+            <span className="sm-result-stamp">MATCHED TO YOUR ANSWERS</span>
+            <div className="sm-result-features">{positioning.check.map((t) => <span key={t}>{t}</span>)}</div>
           </div>
           <div className="sm-result-detail">
-            <p className="sm-kicker">WE FOUND YOUR STARTING POINT</p>
+            <p className="sm-kicker">RECOMMENDED BASED ON YOUR ANSWERS</p>
             <h2 className="sm-result-name">{best.name}</h2>
             <p className="sm-result-tag">{positioning.tagline}</p>
             <p className="sm-result-why">{positioning.angle}</p>
@@ -267,7 +269,7 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
               {count > 0 && <p className="sm-cart-notice">You already have {count} item{count > 1 ? "s" : ""} in your cart. This match will be added to your existing checkout.</p>}
               <p className="sm-fineprint">Your delivery PIN will be checked at checkout. Currently serving eligible PIN codes in Assam and Meghalaya. <Link href="/policies/trial">Read the 100-night trial terms.</Link></p>
             </div>
-            <div className="sm-result-links"><Link href={`/mattresses/${best.slug}?variant=true`}>View complete specs & custom sizes ↗</Link>{ranked[1] && <Link href={`/mattresses/${ranked[1].slug}`}>Compare with {ranked[1].name} ↗</Link>}</div>
+            <div className="sm-result-links"><Link href={`/mattresses/${best.slug}?variant=true`}>Product details and custom sizes →</Link>{ranked[1] && <Link href={`/mattresses/${ranked[1].slug}`}>Compare with {ranked[1].name} ↗</Link>}</div>
           </div>
         </div>
       </div>
@@ -278,7 +280,7 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
   return (
     <div className="sm-quiz" aria-live="polite">
       <div className="sm-quiz-head">
-        <span className="sm-pill"><span aria-hidden="true">✳</span> 4 quick questions · no signup</span>
+        <span className="sm-quiz-brand">SLEEPMATCH <span className="sm-quiz-detail">/ FOUR QUESTIONS</span></span>
         <span className="sm-step-count">{String(step + 1).padStart(2, "0")} <span>/ {String(QUESTIONS.length).padStart(2, "0")}</span></span>
       </div>
       <div className="sm-progress" role="progressbar" aria-label="Quiz progress" aria-valuemin={0} aria-valuemax={QUESTIONS.length} aria-valuenow={step}><span style={{ width: `${(step / QUESTIONS.length) * 100}%` }} /></div>
@@ -290,7 +292,7 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
         {question.choices.map((choice) => <button type="button" key={choice.label} className="sm-option" onClick={() => choose(choice)}>
           <span className="sm-option-symbol" aria-hidden="true">{choice.symbol}</span>
           <span className="sm-option-copy"><strong>{choice.label}</strong><small>{choice.hint}</small></span>
-          <span className="sm-option-arrow" aria-hidden="true">↗</span>
+          <span className="sm-option-arrow" aria-hidden="true">→</span>
         </button>)}
       </div>
       <div className="sm-quiz-foot">
