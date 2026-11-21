@@ -2,12 +2,15 @@
 
 import { useState, type FormEvent } from "react";
 import { useConsent } from "@/components/store/ConsentProvider";
+import TurnstileWidget from "@/components/store/TurnstileWidget";
 import { getAcquisition } from "@/lib/acquisition-client";
 
 export default function CallbackForm() {
   const { marketing } = useConsent();
   const [state, setState] = useState<"idle" | "busy" | "done">("idle");
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileRun, setTurnstileRun] = useState(0);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,13 +21,15 @@ export default function CallbackForm() {
       const res = await fetch("/api/callback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...Object.fromEntries(f.entries()), acquisition: getAcquisition(marketing) }),
+        body: JSON.stringify({ ...Object.fromEntries(f.entries()), turnstileToken, acquisition: getAcquisition(marketing) }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Couldn't send that. Try again.");
       setState("done");
     } catch (err) {
       setError((err as Error).message);
+      setTurnstileToken("");
+      setTurnstileRun(x => x + 1);
       setState("idle");
     }
   }
@@ -71,6 +76,7 @@ export default function CallbackForm() {
           {error}
         </p>
       ) : null}
+      <TurnstileWidget key={turnstileRun} action="lead" onToken={setTurnstileToken} />
       <button type="submit" className="g-btn" disabled={state === "busy"}>
         {state === "busy" ? "Sending…" : "Call me back"}
       </button>

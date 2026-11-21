@@ -7,6 +7,7 @@ import { useCart } from "@/components/CartProvider";
 import { money, type Mattress } from "@/lib/catalog";
 import { trackEvent } from "@/lib/telemetry-client";
 import { useConsent } from "@/components/store/ConsentProvider";
+import TurnstileWidget from "@/components/store/TurnstileWidget";
 
 
 type Key = "regular" | "pro" | "ultimate";
@@ -78,6 +79,8 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
   const [quizOptIn, setQuizOptIn] = useState(false);
   const [quizBusy, setQuizBusy] = useState(false);
   const [quizError, setQuizError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileRun, setTurnstileRun] = useState(0);
   const { addItem } = useCart();
   const done = step >= QUESTIONS.length;
 
@@ -114,13 +117,13 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
             try {
               const response = await fetch("/api/subscribe", {
                 method: "POST", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: quizEmail, source: "sleep_quiz", optIn: true }),
+                body: JSON.stringify({ email: quizEmail, source: "sleep_quiz", optIn: true, turnstileToken }),
               });
               const data = await response.json().catch(() => ({}));
               if (!response.ok) throw new Error(data.error || "Could not save your preference.");
               // Marketing signup is separate from tracking consent. No tracking without consent.
               setResultUnblocked(true);
-            } catch (err) { setQuizError((err as Error).message); }
+            } catch (err) { setQuizError((err as Error).message); setTurnstileToken(""); setTurnstileRun(x => x + 1); }
             finally { setQuizBusy(false); }
           }} style={{ display: "grid", gap: 12 }}>
             <label className="g-field"><span>Email address</span>
@@ -131,6 +134,7 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
               <input type="checkbox" checked={quizOptIn} onChange={e => setQuizOptIn(e.target.checked)} />
               <span>I agree to receive occasional GADDA marketing emails. I can unsubscribe at any time.</span>
             </label>
+            <TurnstileWidget key={turnstileRun} action="lead" onToken={setTurnstileToken} />
             {quizError && <p className="g-error" role="alert">{quizError}</p>}
             <button type="submit" className="g-btn g-btn--orange" disabled={quizBusy}>{quizBusy ? "Saving…" : "Subscribe and view result"}</button>
           </form>

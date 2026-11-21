@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addCallback } from "@/lib/leads";
+import { verifyTurnstile } from "@/lib/turnstile";
 import { normalizeAcquisition } from "@/lib/acquisition";
 import { notifyAdmin } from "@/lib/admin-notify";
 import { pruneIfDue } from "@/lib/retention";
@@ -17,6 +18,9 @@ export async function POST(request: Request) {
   const body = await readJson<Record<string, unknown>>(request, 4096);
   if (!body) return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   if (clip(body.website, 50)) return NextResponse.json({ ok: true });
+
+  const challenge = await verifyTurnstile(body.turnstileToken, "lead");
+  if (!challenge.ok) return NextResponse.json({ error: challenge.error }, { status: challenge.status });
 
   const name = clip(body.name, 80);
   const phone = clip(body.phone, 20).replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addSubscriber } from "@/lib/leads";
+import { verifyTurnstile } from "@/lib/turnstile";
 import { notifyAdmin } from "@/lib/admin-notify";
 import { clientIp, forbidden, rateLimit, readJson, sameOrigin, tooMany } from "@/lib/security";
 
@@ -12,7 +13,7 @@ const CONSENT_TEXT = "By signing up you agree to get marketing emails from GADDA
 export async function POST(request: Request) {
   if (!sameOrigin(request)) return forbidden();
   if (!rateLimit(`sub:${clientIp(request)}`, 5, 60 * 60_000)) return tooMany();
-  const body = await readJson<{ email?: string; website?: string; source?: string; optIn?: boolean }>(request, 1024);
+  const body = await readJson<{ email?: string; website?: string; source?: string; optIn?: boolean; turnstileToken?: string }>(request, 4096);
   if (body?.website) return NextResponse.json({ ok: true });
   if (body?.source === "sleep_quiz" && body.optIn !== true) {
     return NextResponse.json({ error: "Email subscription requires explicit consent." }, { status: 422 });
@@ -21,6 +22,9 @@ export async function POST(request: Request) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     return NextResponse.json({ error: "Enter a valid email address." }, { status: 422 });
   }
+  const challenge = await verifyTurnstile(body?.turnstileToken, "lead");
+  if (!challenge.ok) return NextResponse.json({ error: challenge.error }, { status: challenge.status });
+
   const at = new Date().toISOString();
   const source = body?.source === "sleep_quiz" ? "sleep_quiz" : "newsletter";
   await addSubscriber({ email, consent: CONSENT_TEXT, at, source });

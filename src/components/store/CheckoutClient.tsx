@@ -12,6 +12,7 @@ import { trackEvent } from "@/lib/telemetry-client";
 import { useConsent } from "@/components/store/ConsentProvider";
 import { getAcquisition } from "@/lib/acquisition-client";
 import { recordVerifiedPurchase } from "@/lib/paid-conversions-client";
+import TurnstileWidget from "@/components/store/TurnstileWidget";
 
 type Done = { id: string; total: number; whatsapp: string | null; payError?: string };
 type Pay = "online" | "pay_on_delivery";
@@ -62,6 +63,8 @@ export default function CheckoutClient({
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [checkoutReady, setCheckoutReady] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileRun, setTurnstileRun] = useState(0);
   const [done, setDone] = useState<Done | null>(null);
   const key = useRef(newKey());
   const started = useRef(false);
@@ -155,6 +158,7 @@ export default function CheckoutClient({
           website: form.website,
           payment,
           acceptTerms: true,
+          turnstileToken,
           whatsappUpdates: waUpdates,
           idempotencyKey: key.current,
           acquisition: getAcquisition(marketing),
@@ -164,6 +168,7 @@ export default function CheckoutClient({
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.error || "We couldn't place the order. Please try again or call us.");
       trackEvent("order_created", { value: data.total, itemCount: items.length, label: payment });
+      setTurnstileToken(""); setTurnstileRun(x => x + 1); // Tokens are single-use.
       if (payment === "online") {
         const res2 = await fetch("/api/create-order", {
           method: "POST",
@@ -214,6 +219,8 @@ export default function CheckoutClient({
       window.scrollTo({ top: 0 });
     } catch (err) {
       setError((err as Error).message);
+      setTurnstileToken("");
+      setTurnstileRun(x => x + 1);
     } finally {
       setSending(false);
     }
@@ -454,6 +461,7 @@ export default function CheckoutClient({
               <span>Send me order and delivery updates on WhatsApp (optional).</span>
             </label>
 
+            <TurnstileWidget key={turnstileRun} action="order" onToken={setTurnstileToken} />
             <button type="submit" className="g-btn g-btn--orange g-btn--block" disabled={sending || leaving || (payment === "online" && !checkoutReady)} data-busy={sending || leaving || undefined}>
               {leaving
                 ? "Opening Razorpay…"

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { verifyTurnstile } from "@/lib/turnstile";
 import { createOrder, OrderError, whatsappFor } from "@/lib/orders";
 import { getStoreData } from "@/lib/store";
 import { CUSTOMER_COOKIE, customerFromSession } from "@/lib/customerAuth";
@@ -19,6 +20,9 @@ export async function POST(request: Request) {
   if (typeof body.website === "string" && body.website.trim()) {
     return NextResponse.json({ ok: true, id: "OK" }); // honeypot
   }
+
+  const challenge = await verifyTurnstile(body.turnstileToken, "order");
+  if (!challenge.ok) return NextResponse.json({ error: challenge.error }, { status: challenge.status });
 
   try {
     const jar = await cookies();

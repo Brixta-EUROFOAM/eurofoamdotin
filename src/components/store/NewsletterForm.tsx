@@ -1,11 +1,15 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import TurnstileWidget from "@/components/store/TurnstileWidget";
 
 /* Opt-in only: the email is stored with the exact wording agreed to and when. */
 export default function NewsletterForm() {
   const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
+  const [verifyOpen, setVerifyOpen] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileRun, setTurnstileRun] = useState(0);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -16,13 +20,14 @@ export default function NewsletterForm() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: form.get("email"), website: form.get("website") }),
+        body: JSON.stringify({ email: form.get("email"), website: form.get("website"), turnstileToken }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Couldn't sign you up. Try again.");
       setState("done");
     } catch (err) {
       setError((err as Error).message);
+      setTurnstileToken(""); setTurnstileRun(x => x + 1);
       setState("error");
     }
   }
@@ -36,8 +41,9 @@ export default function NewsletterForm() {
       <label htmlFor="news-email" style={{ color: "#fff", fontWeight: 600 }}>
         Rare emails: new mattresses and real offers only
       </label>
+      {verifyOpen && <TurnstileWidget key={turnstileRun} action="lead" onToken={setTurnstileToken} />}
       <div className="g-footer-news">
-        <input id="news-email" name="email" type="email" required maxLength={120} placeholder="you@example.com" autoComplete="email" />
+        <input id="news-email" name="email" type="email" onFocus={() => setVerifyOpen(true)} required maxLength={120} placeholder="you@example.com" autoComplete="email" />
         <input name="website" className="g-hp" tabIndex={-1} autoComplete="off" aria-hidden="true" />
         <button type="submit" className="g-btn g-btn--orange g-btn--sm" style={{ minHeight: 46 }} disabled={state === "busy"}>
           Sign up

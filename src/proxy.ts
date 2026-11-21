@@ -23,9 +23,11 @@ function csp(nonce: string) {
   if (meta) connect.push("https://www.facebook.com", "https://connect.facebook.net");
   if (cfAnalytics) connect.push("https://cloudflareinsights.com", "https://*.cloudflareinsights.com");
   connect.push("https://api.razorpay.com", "https://checkout.razorpay.com", "https://*.razorpay.com", "https://*.razorpay.in");
+  connect.push("https://challenges.cloudflare.com"); // Turnstile verification widget
   if (isDev) connect.push("ws:", "wss:");
 
   const frames = ["'self'", "https://www.youtube-nocookie.com", "https://api.razorpay.com", "https://checkout.razorpay.com", "https://*.razorpay.com"]; // checkout modal + size guide
+  frames.push("https://challenges.cloudflare.com"); // Turnstile iframe
   if (gtm) frames.push("https://www.googletagmanager.com");
 
   return [
