@@ -11,7 +11,7 @@ import { LENGTHS, SIZE_GROUPS, getSizing, toCm } from "@/lib/sizes";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Mattress size guide — how to measure your bed",
+  title: "Mattress Size Guide: Measure Your Bed",
   description: "Measure your bed in 40 seconds and pick the right mattress size: Single, Double, Queen, King or any custom size, in inches and cm.",
   alternates: { canonical: "/size-guide" },
 };

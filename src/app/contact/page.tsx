@@ -13,7 +13,7 @@ import { IconMail, IconPhone, IconWhatsApp } from "@/components/store/Icons";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Help & contact",
-  description: "Call, WhatsApp or email GADDA. Real people, working hours, no bots.",
+  description: "Contact the GADDA team by WhatsApp, phone or email for product sizing, delivery PIN checks, orders, returns and mattress advice.",
   alternates: { canonical: "/contact" },
 };
 

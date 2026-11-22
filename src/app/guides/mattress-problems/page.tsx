@@ -4,8 +4,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Mattress Problems: Too Hard, Sinking, Hot or Return Issues",
-  description: "Uncomfortable mattress? Troubleshoot firmness, sinking, overheating and return problems before switching. Explore practical guides and compare GADDA mattresses where delivery is available.",
+  title: "Mattress Problems: Too Hard, Soft or Hot",
+  description: "Troubleshoot firmness, sinking, heat and mattress returns. Find practical fixes and compare replacements in Assam and Meghalaya.",
   alternates: { canonical: "/guides/mattress-problems" },
   openGraph: {
     title: "Mattress Problems & Solutions | GADDA",

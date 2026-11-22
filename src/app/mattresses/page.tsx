@@ -70,6 +70,9 @@ export default async function MattressesPage({ searchParams }: { searchParams: P
         </header>
         <section className="g-section g-section--tight">
           <div className="g-wrap">
+            <h2 className="g-h2" style={{ fontSize: "clamp(1.4rem, 3vw, 1.8rem)", marginBottom: 20 }}>
+              Choose your mattress
+            </h2>
             <ProductListing products={products} query={q} pick={site.homeStoryProductSlug} />
           </div>
         </section>

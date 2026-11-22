@@ -6,6 +6,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "./craft.css";
 import "./app.css";
+import "./intent-purchase-path.css";
 import CartProvider from "@/components/CartProvider";
 import TelemetryTracker from "@/components/TelemetryTracker";
 import ConsentProvider from "@/components/store/ConsentProvider";
@@ -15,6 +16,7 @@ import LocationProvider from "@/components/store/LocationProvider";
 import CartDrawer from "@/components/store/CartDrawer";
 import MarketingTags from "@/components/store/MarketingTags";
 import GA4Tracker from "@/components/store/GA4Tracker";
+import IntentPurchasePath from "@/components/store/IntentPurchasePath";
 import JsonLd from "@/components/store/JsonLd";
 import SewingThread from "@/components/store/SewingThread";
 import { CONSENT_COOKIE, parseConsent } from "@/lib/consent";
@@ -86,6 +88,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <CartProvider>
               <TelemetryTracker />
               {children}
+              <IntentPurchasePath />
               <CartDrawer />
             </CartProvider>
           </LocationProvider>

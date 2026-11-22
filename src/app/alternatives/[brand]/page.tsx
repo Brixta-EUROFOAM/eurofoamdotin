@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { brand } = await params;
   const data = alternativeBySlug(brand);
   if (!data) return { title: "Comparison not found", robots: { index: false } };
-  return { title: `${data.brand} Mattress Alternatives & Buyer Checklist`, description: data.description,
+  return { title: `${data.brand} Mattress Alternatives`, description: data.description,
     alternates: { canonical: `/alternatives/${data.slug}` },
     openGraph: { title: data.title, description: data.description, url: `/alternatives/${data.slug}` } };
 }

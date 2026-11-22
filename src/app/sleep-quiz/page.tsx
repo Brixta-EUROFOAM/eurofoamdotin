@@ -19,8 +19,8 @@ import "./sleepmatch-extra.css";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Mattress Finder for Firmness, Heat & Comfort | GADDA SleepMatch",
-  description: "Mattress too firm, too soft or too hot? Explore real GADDA foam layers, compare Regular, Pro and Ultimate, then answer four questions for a size-priced mattress match. Assam and Meghalaya delivery eligibility checked at checkout.",
+  title: "Mattress Finder: Firmness, Heat & Comfort",
+  description: "Mattress too firm, soft or hot? Compare GADDA models and find your match in four questions. Check delivery eligibility in Assam and Meghalaya.",
   alternates: { canonical: "/sleep-quiz" },
   openGraph: {
     title: "SleepMatch | Which GADDA Mattress Is Right for You?",

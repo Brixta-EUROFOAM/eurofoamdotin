@@ -1,0 +1,14 @@
+/* Optional contextual shopping prompt, designed to remain dismissible and non-obstructive. */
+.g-intent-path{position:fixed;z-index:38;right:18px;bottom:20px;max-width:390px;width:calc(100vw - 36px);background:#fff;color:#262422;border:1px solid #ddd7d0;border-radius:16px;box-shadow:0 8px 32px rgba(29,24,18,.16);padding:18px 20px 15px;line-height:1.45}
+.g-intent-path-kicker{margin:0 30px 5px 0;color:#9b4720!important;letter-spacing:.09em;text-transform:uppercase;font-size:.67rem;font-weight:750}
+.g-intent-path h2{font-size:1.13rem;line-height:1.23;letter-spacing:-.02em;margin:0 20px 8px 0}
+.g-intent-path>p:not(.g-intent-path-kicker){font-size:.85rem;color:#5e5a54;margin:0 0 12px}
+.g-intent-path-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.g-intent-path-actions a{text-decoration:none;font-size:.82rem;font-weight:700;text-align:center;border-radius:8px;padding:10px 12px;min-height:42px;display:inline-flex;align-items:center;justify-content:center}
+.g-intent-path-primary{background:#d94b14;color:#fff!important}
+.g-intent-path-secondary{border:1px solid #c8c1b8;color:#24211f!important}
+.g-intent-path a:focus-visible,.g-intent-path button:focus-visible{outline:3px solid #284390;outline-offset:2px}
+.g-intent-path-close{position:absolute;top:9px;right:10px;border:none;background:transparent;color:#45413d;font-size:25px;line-height:1;cursor:pointer;padding:5px 10px}
+.g-intent-path small{display:block;font-size:.71rem;color:#6b655d}
+@media(max-width:700px){.g-intent-path{right:10px;bottom:calc(9px + env(safe-area-inset-bottom));width:calc(100vw - 20px);max-width:none;padding:12px 14px;border-radius:12px}.g-intent-path h2{font-size:.98rem}.g-intent-path>p:not(.g-intent-path-kicker){font-size:.76rem;margin-bottom:8px}.g-intent-path-actions a{flex:1;font-size:.76rem;min-width:118px}.g-intent-path small{font-size:.66rem}}
+@media(prefers-reduced-motion:reduce){.g-intent-path *{scroll-behavior:auto}}

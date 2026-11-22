@@ -22,6 +22,13 @@ export function trackGa4Interaction(type: string, extra: Record<string, unknown>
     case "checkout_start":
       window.gtag("event", "begin_checkout", { send_to: ID, ...(value ? { value, currency: "INR" } : {}), ...(count ? { item_count: count } : {}) });
       break;
+    case "purchase_path_click": {
+      const intents = new Set(["firm", "sinking", "hot", "return", "problem", "research", "guwahati", "size", "compare"]);
+      const intent = typeof extra.intent === "string" && intents.has(extra.intent) ? extra.intent : "other";
+      const choice = extra.choice === "secondary" ? "secondary" : "primary";
+      window.gtag("event", "select_content", { send_to: ID, content_type: "shopping_path", item_id: intent, path_choice: choice });
+      break;
+    }
     case "quiz_start":
     case "quiz_complete":
       window.gtag("event", type, { send_to: ID });

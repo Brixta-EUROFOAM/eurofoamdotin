@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ProblemGuide from "@/components/store/ProblemGuide";
 export const metadata: Metadata = {
-  title: "Mattress Too Soft or Sinking? What to Check",
+  title: "Mattress Too Soft or Sinking?",
   description: "Understand sinking versus support, bed-base issues, and how to find a firmer mattress without overpaying.",
   alternates: { canonical: "/guides/mattress-too-soft" },
 };

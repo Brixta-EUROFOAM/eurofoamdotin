@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import { ALTERNATIVES } from "@/lib/sleepmatch-alternatives";
 
 export const metadata: Metadata = {
-  title: "Mattress Alternatives & Buying Checklists | GADDA",
+  title: "Mattress Alternatives & Buyer Guides",
   description: "Looking for Wakefit, SleepyCat or The Sleep Company mattress alternatives? Compare comfort, support, delivery expectations, returns and real GADDA construction.",
   alternates: { canonical: "/alternatives" },
 };

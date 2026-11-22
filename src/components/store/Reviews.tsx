@@ -43,7 +43,11 @@ export default function Reviews({ reviews, limit = 6, heading = true }: { review
         ) : (
           <div className="g-empty">
             <NeedleArt />
-            <h3 className="g-h3">No reviews yet — and we won&apos;t fake them</h3>
+            {heading ? (
+              <h3 className="g-h3">No reviews yet — and we won&apos;t fake them</h3>
+            ) : (
+              <h2 className="g-h3">No reviews yet — and we won&apos;t fake them</h2>
+            )}
             <p>
               GADDA is new. Instead of borrowing celebrity faces or inventing five-star quotes, we&apos;ll show real
               reviews here as our first customers sleep on their mattresses. Until then, the 100-night trial is our

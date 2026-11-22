@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ProblemGuide from "@/components/store/ProblemGuide";
 export const metadata: Metadata = {
-  title: "Mattress Too Firm? How to Choose a Softer Feel",
+  title: "Mattress Too Firm? What to Check",
   description: "Why mattresses can feel too hard, how sleep position changes comfort, and what to compare before buying a replacement.",
   alternates: { canonical: "/guides/mattress-too-firm" },
 };

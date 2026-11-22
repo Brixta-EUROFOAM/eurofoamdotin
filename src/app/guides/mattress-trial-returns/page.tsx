@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ProblemGuide from "@/components/store/ProblemGuide";
 export const metadata: Metadata = {
-  title: "100-Night Mattress Trials: What to Check Before You Buy",
+  title: "100-Night Mattress Trial Checklist",
   description: "A plain-English checklist for return eligibility, custom-size exclusions, pickup, refunds and delivery before buying a mattress online.",
   alternates: { canonical: "/guides/mattress-trial-returns" },
 };

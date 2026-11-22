@@ -7,8 +7,8 @@ import JsonLd from "@/components/store/JsonLd";
 import { breadcrumbLd, faqLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "How to Return The Sleep Company Mattress: Steps & Trial Rules",
-  description: "Returning a The Sleep Company mattress? Find the official contact, trial checks, refund process and exclusions, plus what to consider before buying a replacement.",
+  title: "Return The Sleep Company Mattress: Steps",
+  description: "How to request a The Sleep Company mattress return: official support, trial eligibility and refund checks, plus replacement advice.",
   alternates: { canonical: "/guides/the-sleep-company-mattress-return" },
   openGraph: {
     title: "How to Return The Sleep Company Mattress | Independent Guide",

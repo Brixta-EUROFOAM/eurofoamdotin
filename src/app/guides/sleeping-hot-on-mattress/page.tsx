@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ProblemGuide from "@/components/store/ProblemGuide";
 export const metadata: Metadata = {
-  title: "Sleeping Hot on a Mattress? Cooling Foam Guide",
+  title: "Sleeping Hot on a Mattress?",
   description: "Understand how bedding, temperature, mattress materials and airflow can affect sleep warmth before selecting a cooling mattress.",
   alternates: { canonical: "/guides/sleeping-hot-on-mattress" },
 };

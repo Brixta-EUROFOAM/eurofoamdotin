@@ -15,7 +15,16 @@ type Params = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const p = getPolicy(slug);
-  return p ? { title: p.title, description: p.summary, alternates: { canonical: `/policies/${p.slug}` } } : { title: "Not found" };
+  const snippets: Record<string, string> = {
+    terms: "Understand GADDA mattress prices, order confirmation, payment, fulfilment and consumer rights before purchasing in Assam or Meghalaya.",
+    cancellation: "Learn how to cancel a GADDA mattress order, what happens after dispatch and how applicable refunds are processed.",
+    cookies: "See which cookies GADDA uses for shopping, delivery PIN checks and optional analytics. Review or change your consent choices.",
+    grievance: "Find GADDA's grievance contact process, escalation channels and the information to include when reporting an unresolved order problem.",
+    privacy: "Read how GADDA handles personal information for orders, deliveries, support and optional analytics, including your privacy choices.",
+    trial: "Read GADDA's 100-night mattress trial rules, adjustment period, eligibility, exclusions, pickup process and refund timing.",
+    warranty: "Check GADDA mattress warranty coverage, exclusions and claim steps before ordering or reporting a product concern.",
+  };
+  return p ? { title: p.title, description: snippets[p.slug] || p.summary, alternates: { canonical: `/policies/${p.slug}` } } : { title: "Not found" };
 }
 
 export default async function PolicyPage({ params }: Params) {
