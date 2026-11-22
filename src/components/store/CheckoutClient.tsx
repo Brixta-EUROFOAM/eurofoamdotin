@@ -125,7 +125,7 @@ export default function CheckoutClient({
       setError(
         current === "contact"
           ? "Enter your name and a 10-digit mobile number."
-          : "Enter a full address and a PIN code we deliver to."
+          : "Enter a full address and a verified delivery PIN in Assam or Meghalaya."
       );
       return;
     }
@@ -370,7 +370,7 @@ export default function CheckoutClient({
                     </small>
                   ) : (
                     <small style={{ color: "var(--g-err)", fontWeight: 600 }}>
-                      {info.reason === "invalid" ? "Check the PIN code." : "We can't deliver here yet — call us and we'll try."}
+                      {info.reason === "invalid" ? "Check the PIN code." : "Delivery is available only to eligible PIN codes in Assam and Meghalaya. If your address is in either state, contact us for a manual check."}
                     </small>
                   )
                 ) : null}

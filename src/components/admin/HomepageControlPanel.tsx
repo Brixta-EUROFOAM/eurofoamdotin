@@ -239,7 +239,7 @@ const defaultTrustItems:
       value: "FREE",
       title: "SHIPPING",
       body:
-        "Delivered directly to your door."
+        "Delivery to eligible PIN codes in Assam and Meghalaya only."
     }
   ];
 

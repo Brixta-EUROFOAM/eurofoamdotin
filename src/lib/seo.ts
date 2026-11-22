@@ -22,7 +22,7 @@ export function organizationLd(site: SiteSettings) {
           contactPoint: {
             "@type": "ContactPoint",
             contactType: "customer service",
-            areaServed: "IN",
+            areaServed: ["Assam", "Meghalaya"],
             availableLanguage: ["en", "hi", "bn"],
             ...(realPhone ? { telephone: phone } : {}),
             ...(site.email && !site.email.endsWith(".example") ? { email: site.email } : {}),
@@ -77,7 +77,10 @@ export function productLd(p: Mattress) {
       shippingDetails: {
         "@type": "OfferShippingDetails",
         shippingRate: { "@type": "MonetaryAmount", value: 0, currency: "INR" },
-        shippingDestination: { "@type": "DefinedRegion", addressCountry: "IN" },
+        shippingDestination: [
+          { "@type": "DefinedRegion", addressCountry: "IN", addressRegion: "AS" },
+          { "@type": "DefinedRegion", addressCountry: "IN", addressRegion: "ML" },
+        ],
       },
     },
     ...(p.reviews > 0 && p.rating > 0

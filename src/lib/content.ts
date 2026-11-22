@@ -32,7 +32,7 @@ export const FAQS: { q: string; a: string; group: "buying" | "delivery" | "trial
   {
     group: "delivery",
     q: "How long does delivery take, and what does it cost?",
-    a: "Delivery is included in the price. Enter your PIN code on any [mattress page](/mattresses) for a delivery window — usually 1–3 days around Silchar, up to about 12 days for the rest of India. We call before dispatch to fix a time.",
+    a: "Delivery is included in the listed price for eligible PIN codes in Assam (including Guwahati) and Meghalaya only. Enter your PIN code on any [mattress page](/mattresses) to check serviceability and see an estimated delivery window. We confirm timing before dispatch. We do not currently deliver to other states.",
   },
   {
     group: "buying",
@@ -63,7 +63,7 @@ export const FAQS: { q: string; a: string; group: "buying" | "delivery" | "trial
 
 export const TRUST = [
   { id: "trial", title: `${BUSINESS.trialNights} nights to decide`, body: "Try it at home, not in a showroom", href: "/policies/trial" },
-  { id: "delivery", title: "Delivery included", body: "To your door, anywhere in India", href: "/policies/shipping" },
+  { id: "delivery", title: "Delivery included", body: "Assam & Meghalaya only · check your PIN", href: "/policies/shipping" },
   { id: "price", title: "One honest price", body: "No fake MRP, no 'sale' countdowns", href: "/why-gadda" },
   { id: "pay", title: "Pay on delivery", body: "Cash or UPI when it arrives", href: "/policies/terms#payment" },
 ] as const;

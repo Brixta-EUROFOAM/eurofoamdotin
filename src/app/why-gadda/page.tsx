@@ -223,7 +223,7 @@ export default async function WhyGaddaPage() {
                 </div>
                 <div>
                   <dt>Delivery included</dt>
-                  <dd>To your door, anywhere in India. We call first to fix a time.</dd>
+                  <dd>To eligible PIN codes in Assam and Meghalaya only. Check your PIN before ordering; we call to confirm timing.</dd>
                 </div>
                 <div>
                   <dt>{online ? "Pay online or when it arrives" : "Pay when it arrives"}</dt>

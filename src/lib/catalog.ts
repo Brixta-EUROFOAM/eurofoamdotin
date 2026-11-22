@@ -329,7 +329,7 @@ export const defaultStoreData: StoreData = {
     brandSuffix: "MATTRESSES",
     tagline: "Gadda hi hai yaar.",
     logoUrl: "/eurofoam-logo-v2.png",
-    announcement: "FREE SHIPPING · EASY TRIALS · WARRANTY INCLUDED",
+    announcement: "DELIVERY IN ASSAM & MEGHALAYA ONLY · CHECK YOUR PIN · EASY TRIALS",
     homeBackground: "#000000",
     homeForeground: "#FFFFFF",
     heroEyebrow: "GADDA MATTRESSES",

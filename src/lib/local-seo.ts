@@ -10,7 +10,7 @@ import { phoneLink } from "@/lib/contact";
    Do NOT invent EdgeLock, an inspection zip, delivery SLAs or a 10-year warranty. */
 export const LOCAL_SEO = {
   market: "Guwahati, Assam, India",
-  serviceRegions: ["Guwahati", "Assam", "Northeast India"],
+  serviceRegions: ["Guwahati", "Assam", "Meghalaya"],
   googleBusinessProfileUrl: "", // verified direct GBP share URL, if one exists
   socialProfiles: [] as string[], // verified Instagram, Facebook etc. full HTTPS URLs
   physicalLocation: {
@@ -55,7 +55,7 @@ export function localBusinessLd(site: SiteSettings) {
     image: siteUrl(site.logoUrl || "/icon.png"),
     address: { "@type": "PostalAddress", ...a },
     ...(phone ? { telephone: phone.label } : {}),
-    areaServed: [{ "@type": "City", name: "Guwahati" }, { "@type": "AdministrativeArea", name: "Assam" }],
+    areaServed: [{ "@type": "City", name: "Guwahati" }, { "@type": "AdministrativeArea", name: "Assam" }, { "@type": "AdministrativeArea", name: "Meghalaya" }],
     ...(LOCAL_SEO.googleBusinessProfileUrl ? { sameAs: [LOCAL_SEO.googleBusinessProfileUrl] } : {}),
   };
 }

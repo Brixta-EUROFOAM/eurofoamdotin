@@ -12,7 +12,7 @@ export const HOME_COPY: CopyGroup[] = [
   {
     title: "Top of the page",
     fields: [
-      { key: "heroLede", label: "Paragraph under the headline", long: true, def: "It's a Mattress not a rocket. No made-up discounts. No confusing jargon. Just thoughtfully built foam mattresses, honestly priced and delivered to your door." },
+      { key: "heroLede", label: "Paragraph under the headline", long: true, def: "It's a Mattress not a rocket. No made-up discounts. No confusing jargon. Just thoughtfully built foam mattresses, honestly priced for delivery to eligible PIN codes in Assam and Meghalaya." },
       { key: "heroFrom", label: "Price line (use {price})", def: "From {price}, GST and delivery included." },
     ],
   },

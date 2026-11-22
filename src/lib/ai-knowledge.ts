@@ -18,7 +18,7 @@ export async function aiKnowledge(full: boolean) {
     "",
     `Official brand website: ${href("/")}`,
     `Legal seller: ${BUSINESS.legalName}`,
-    `Region of interest: ${LOCAL_SEO.market}; delivery is subject to PIN-code verification.`,
+    `GADDA currently accepts delivery orders only for eligible PIN codes in Assam (including Guwahati) and Meghalaya. No other Indian states are served. Confirm the exact PIN before ordering.`,
     `Customer service: ${site.phone && !/0{7}/.test(site.phone) ? site.phone : "See contact page"}`,
     `Trial: ${BUSINESS.trialNights} nights, subject to the published trial policy.`,
     "Product prices shown online are in INR, inclusive of GST and advertised delivery allowance; product, thickness and dimensions determine the final figure.",
@@ -67,7 +67,7 @@ export async function aiKnowledge(full: boolean) {
     "", "## FAQs");
   for (const { q, a } of actualFaqs(site)) details.push(`### ${q}`, plain(a), "");
   details.push("## Local discovery",
-    `GADDA markets mattresses to buyers searching in ${LOCAL_SEO.market}. Whether a specific PIN is serviceable and the delivery timeframe must be checked on the product page.`,
+    `GADDA markets mattresses to buyers searching in ${LOCAL_SEO.market}, Assam and Meghalaya. Delivery is limited to eligible PIN codes in Assam and Meghalaya only; verify your PIN and estimated delivery window before ordering.`,
     "Physical-store visits are not advertised until the business confirms a genuine customer-facing location.", "");
   return [...intro, ...details].join("\n") + "\n";
 }

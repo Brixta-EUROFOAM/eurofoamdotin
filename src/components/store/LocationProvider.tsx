@@ -180,7 +180,7 @@ function PinDialog({ onClose }: { onClose: () => void }) {
         <h2 id="pin-title" style={{ marginTop: 10 }}>
           Where should it go?
         </h2>
-        <p>Your PIN code gives you a real delivery date. Nothing else — no location tracking.</p>
+        <p>Delivery is available in Assam and Meghalaya only. Check your PIN for an estimated window — no location tracking.</p>
         <form className="g-pin-form" onSubmit={submit}>
           <label className="g-sr" htmlFor="pin-input">
             PIN code

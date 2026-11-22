@@ -145,7 +145,7 @@ export const POLICIES: Policy[] = [
   {
     slug: "shipping",
     title: "Delivery",
-    summary: "Where we deliver, how long it takes and what it costs (nothing).",
+    summary: "Delivery only to eligible PIN codes in Assam and Meghalaya, with delivery included in the price.",
     body: () => (
       <>
         <p>
@@ -174,8 +174,9 @@ export const POLICIES: Policy[] = [
         </table>
         <p>
           Enter your PIN code on any product page for dates. These are estimates; we confirm a delivery window on the
-          phone before dispatch, and call again if anything changes. Online delivery is currently limited to
-          Assam and Meghalaya. If your address is in either state but the PIN check fails, contact us for a manual check.
+          phone before dispatch, and call again if anything changes. Online delivery is currently limited to eligible PIN codes in
+          Assam and Meghalaya only; we do not deliver to other Indian states. If your address is in either state but
+          the PIN check fails, contact us for a manual check.
         </p>
         <h2>On delivery day</h2>
         <ul>
