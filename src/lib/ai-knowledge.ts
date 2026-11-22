@@ -32,6 +32,8 @@ export async function aiKnowledge(full: boolean) {
     `- [All mattresses](${href("/mattresses")})`,
     `- [Compare products](${href("/compare")})`,
     `- [Mattress alternatives and buyer checklists](${href("/alternatives")})`,
+    `- [Mattress problems: too firm, sinking, heat and return issues](${href("/guides/mattress-problems")})`,
+    `- [How to request a The Sleep Company mattress return (independent guide)](${href("/guides/the-sleep-company-mattress-return")})`,
     `- [Wakefit mattress alternatives: what to check](${href("/alternatives/wakefit-mattress")})`,
     `- [SleepyCat mattress alternatives: firmness and fit](${href("/alternatives/sleepycat-mattress")})`,
     `- [The Sleep Company alternatives: compare constructions](${href("/alternatives/the-sleep-company-mattress")})`,

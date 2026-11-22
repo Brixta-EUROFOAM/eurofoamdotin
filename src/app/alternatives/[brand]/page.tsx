@@ -68,6 +68,10 @@ export default async function AlternativePage({ params }: Params) {
           </aside>
         </div>
         <section className="sm5-alt-faq" aria-labelledby="alt-faq-title"><h2 id="alt-faq-title">Frequently asked questions</h2>{data.faq.map((x) => <details key={x.q}><summary>{x.q}</summary><p>{x.a}</p></details>)}</section>
+        {data.slug === "the-sleep-company-mattress" ? <section className="sm5-alt-other" aria-label="Official return guidance">
+          <h2>Already bought and want to return it?</h2>
+          <p>Read the original seller's terms and contact their support before buying a replacement. <Link href="/guides/the-sleep-company-mattress-return">Steps to request The Sleep Company mattress return →</Link></p>
+        </section> : null}
         <div className="sm5-alt-other"><h2>Continue comparing</h2>{ALTERNATIVES.filter((x) => x.slug !== data.slug).map((x)=><Link href={`/alternatives/${x.slug}`} key={x.slug}>{x.brand} alternatives →</Link>)}<Link href="/guides/mattress-trial-returns">Understand trial and returns →</Link></div>
       </div>
     </main><Footer />

@@ -31,18 +31,18 @@ const yatra = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(publicOrigin() || "https://gadda.store"),
   title: {
-    default: "GADDA Mattresses in Guwahati | Shop Online",
+    default: "GADDA Mattresses Online | Assam & Meghalaya",
     template: "%s | GADDA Mattresses",
   },
   description:
-    "Compare GADDA mattresses in Guwahati: Regular, Pro and Ultimate. Browse real foam specs, sizes, GST-inclusive prices and delivery eligibility.",
+    "Shop GADDA Regular, Pro and Ultimate mattresses. Compare firmness, foam layers and prices. Delivery to eligible PIN codes in Assam and Meghalaya.",
   applicationName: "GADDA",
   openGraph: {
     type: "website",
-    siteName: "GADDA Mattresses",
+    siteName: "GADDA",
     locale: "en_IN",
-    title: "GADDA Mattresses in Guwahati | Shop Online",
-    description: "Compare GADDA mattresses by foam density, dimensions and price in Assam.",
+    title: "GADDA Mattresses Online | Assam & Meghalaya",
+    description: "Compare GADDA mattress construction, sizes and prices. Delivery for eligible PIN codes in Assam and Meghalaya only.",
     images: [{ url: "/products/gadda-regular/v3-bed-angle.webp", alt: "GADDA Regular mattress" }],
   },
   twitter: { card: "summary_large_image", images: ["/products/gadda-regular/v3-bed-angle.webp"] },

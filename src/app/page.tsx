@@ -22,7 +22,17 @@ import { razorpayReady } from "@/lib/razorpay";
 import LocalAnswers from "@/components/store/LocalAnswers";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { alternates: { canonical: "/" } };
+export const metadata: Metadata = {
+  title: { absolute: "GADDA Mattresses Online | Assam & Meghalaya" },
+  description: "Shop GADDA Regular, Pro and Ultimate mattresses. Compare firmness, foam layers, sizes and prices. Delivery to eligible PIN codes in Assam and Meghalaya.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "GADDA Mattresses Online | Assam & Meghalaya",
+    description: "Three GADDA mattress constructions, transparent specifications and PIN-based delivery in Assam and Meghalaya.",
+    url: "/",
+  },
+  twitter: { title: "GADDA Mattresses Online | Assam & Meghalaya" },
+};
 
 export default async function Home() {
   const { site, products, reviews } = await getStoreData();
@@ -277,6 +287,19 @@ export default async function Home() {
 
         {show.reviews !== false ? <Reviews reviews={reviews} /> : null}
 
+        <section className="g-section g-section--tight" aria-labelledby="mattress-problem-title">
+          <div className="g-wrap" style={{ maxWidth: 1000 }}>
+            <h2 className="g-h2" id="mattress-problem-title">Not sleeping well on your current mattress?</h2>
+            <p className="g-lede">Too hard, sinking, sleeping hot or stuck on a return? Identify the actual problem before choosing a replacement.</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginTop: 16 }}>
+              <Link className="g-link" href="/guides/mattress-too-firm">Too firm</Link>
+              <Link className="g-link" href="/guides/mattress-too-soft">Sinking or sagging</Link>
+              <Link className="g-link" href="/guides/sleeping-hot-on-mattress">Sleeping hot</Link>
+              <Link className="g-link" href="/guides/mattress-trial-returns">Returns and refunds</Link>
+              <Link className="g-link" href="/guides/mattress-problems">All mattress problem guides</Link>
+            </div>
+          </div>
+        </section>
         <Faq limit={6} nonce={nonce} />
 
         <HelpStrip />

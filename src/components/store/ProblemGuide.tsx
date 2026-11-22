@@ -50,6 +50,7 @@ export default function ProblemGuide({ eyebrow, problem, title, summary, explain
         <h2 className="g-h2">Common questions</h2>
         {faqs.map((f) => <div key={f.question} style={{ margin: "26px 0" }}><h3 className="g-h3">{f.question}</h3><p>{f.answer}</p></div>)}
         <div style={{ margin: "28px 0" }}><Link href={matchHref} className="g-btn g-btn--orange">Find my mattress & see the price</Link></div>
+        <p>More help: <Link className="g-link" href="/guides/mattress-problems">All mattress problem guides</Link> · <Link className="g-link" href="/guides/the-sleep-company-mattress-return">The Sleep Company return steps</Link> · <Link className="g-link" href="/alternatives">Mattress alternatives</Link></p>
         <p className="g-note">This is buying guidance, not medical advice. Ongoing or severe pain deserves professional assessment. Mattress comfort and product performance are individual; no quiz can guarantee a result.</p>
         <p className="g-note">GADDA currently screens deliveries in Assam and Meghalaya. Check your PIN and published <Link className="g-link" href="/policies/shipping">delivery terms</Link> before ordering. Read the <Link className="g-link" href="/policies/trial">100-night trial conditions and exclusions</Link> before relying on the offer.</p>
       </div></section>

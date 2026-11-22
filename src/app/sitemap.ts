@@ -39,6 +39,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/guides/mattress-too-soft", 0.55),
     page("/guides/sleeping-hot-on-mattress", 0.55),
     page("/guides/mattress-trial-returns", 0.55),
+    page("/guides/mattress-problems", 0.7),
+    page("/guides/the-sleep-company-mattress-return", 0.6),
     page("/alternatives", 0.6),
     page("/alternatives/wakefit-mattress", 0.55),
     page("/alternatives/sleepycat-mattress", 0.55),
