@@ -57,19 +57,21 @@ export default async function BusinessInformationPage() {
                   </div>
                 ))}
               <div style={{ display: "contents" }}>
-                <dt>Business location (Google Maps)</dt>
+                <dt>Business location</dt>
                 <dd>
+                  <strong>Byrnihat, Umtru Dam Road, Meghalaya, 793101</strong>
+                  <span style={{ display: "block", marginTop: 4 }}>
+                    Coordinates: 26.043196° N, 91.866791° E
+                  </span>
                   <a
                     href="https://www.google.com/maps?q=26.043196,91.866791"
                     className="g-link"
                     target="_blank"
                     rel="noopener noreferrer"
+                    style={{ display: "inline-block", marginTop: 6 }}
                   >
-                    View our location on Google Maps
+                    View exact location on Google Maps
                   </a>
-                  <span style={{ display: "block", marginTop: 4, fontSize: "0.9em" }}>
-                    Map coordinates: 26.043196, 91.866791
-                  </span>
                 </dd>
               </div>
             </dl>
