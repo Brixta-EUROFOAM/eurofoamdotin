@@ -56,6 +56,22 @@ export default async function BusinessInformationPage() {
                     <dd>{v}</dd>
                   </div>
                 ))}
+              <div style={{ display: "contents" }}>
+                <dt>Business location (Google Maps)</dt>
+                <dd>
+                  <a
+                    href="https://www.google.com/maps?q=26.043196,91.866791"
+                    className="g-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View our location on Google Maps
+                  </a>
+                  <span style={{ display: "block", marginTop: 4, fontSize: "0.9em" }}>
+                    Map coordinates: 26.043196, 91.866791
+                  </span>
+                </dd>
+              </div>
             </dl>
             <p style={{ marginTop: 24 }}>
               Policies: <Link href="/policies/terms" className="g-link">Terms of sale</Link>,{" "}
