@@ -120,6 +120,7 @@ export default function ConsentProvider({
       setConsent(state);
       setBannerOpen(false);
       setPrefsOpen(false);
+      const needsUnload = Boolean(consent?.analytics && !state.analytics) || Boolean(consent?.marketing && !state.marketing);
       // Consent receipt — proof of what was agreed, when. No personal data.
       void fetch("/api/consent", {
         method: "POST",
@@ -134,8 +135,9 @@ export default function ConsentProvider({
           localStorage.removeItem("eurofoam-session-v1");
         } catch {}
       }
+      if (needsUnload) window.location.reload(); // Unload previously executed third-party tags.
     },
-    []
+    [consent]
   );
 
   const openPreferences = useCallback(() => {
@@ -164,7 +166,7 @@ export default function ConsentProvider({
           <h2>Cookies, briefly</h2>
           <p>
             We use a few to run the shop (cart, sign-in, your PIN code). With your OK we&apos;d also count visits
-            to make the site better — first-party, never sold. Your call. <Link href="/policies/cookies" className="g-link">Cookie policy</Link>
+            to make the site better using our analytics and Google Analytics. You can refuse. Your call. <Link href="/policies/cookies" className="g-link">Cookie policy</Link>
           </p>
           <div className="g-consent-actions">
             <button type="button" className="g-btn g-btn--ghost" onClick={() => save({ analytics: false, marketing: false })}>

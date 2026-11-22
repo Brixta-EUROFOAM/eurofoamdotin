@@ -12,7 +12,7 @@
 */
 
 export const CONSENT_COOKIE = "gd_consent";
-export const CONSENT_VERSION = 1;
+export const CONSENT_VERSION = 2; // New Google Analytics disclosure: re-ask for consent.
 export const CONSENT_MAX_AGE = 60 * 60 * 24 * 180; // 6 months, then re-ask
 
 export type ConsentPurpose = "necessary" | "analytics" | "marketing";
@@ -42,7 +42,7 @@ export const PURPOSES: {
   {
     key: "analytics",
     title: "Improve the site",
-    body: "Anonymous visit counts and which pages help or confuse people. First-party only — nothing is sent to Google or Meta.",
+    body: "With your permission, our own analytics and Google Analytics measure website visits, navigation and shopping events. No contact details are sent to Google Analytics.",
   },
   {
     key: "marketing",

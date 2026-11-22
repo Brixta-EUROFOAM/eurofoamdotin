@@ -329,9 +329,9 @@ export const POLICIES: Policy[] = [
               <td>90 days on your device</td>
             </tr>
             <tr>
-              <td>Anonymous visit data (pages viewed, device type) — only with your consent</td>
-              <td>To understand what&apos;s confusing on the site and fix it</td>
-              <td>13 months</td>
+              <td>Website analytics (pages viewed, device type and shopping events) — only with your consent</td>
+              <td>To improve the store and understand purchase journeys through our analytics and Google Analytics</td>
+              <td>Our own analytics: 13 months. Google Analytics: configured property retention settings.</td>
             </tr>
           </tbody>
         </table>
@@ -344,7 +344,7 @@ export const POLICIES: Policy[] = [
         <p>
           Only what&apos;s needed: the transport company delivering your order gets your name, phone and address; our
           payment partner Razorpay and our bank process payments; the website runs on our own server in India and is served through Cloudflare&apos;s network, which shields it from attacks. Each is bound to use the
-          data only for that job. We disclose data to authorities only when Indian law requires it.
+          data only for that job. If you allow analytics, Google Analytics also receives browsing and event data. We do not intentionally send contact details, precise addresses or phone numbers to Google Analytics. We disclose data to authorities only when Indian law requires it.
         </p>
 
         <h2>Your rights</h2>
@@ -445,15 +445,16 @@ export const POLICIES: Policy[] = [
           <tbody>
             <tr>
               <td>eurofoam-visitor-v1, eurofoam-session-v1 (browser storage)</td>
-              <td>Random IDs so we can count visits and see which pages help. Sent only to our own server — no Google Analytics, no Meta.</td>
+              <td>Random IDs used by our own first-party analytics; sent only to our server. Google Analytics is separately enabled only after analytics consent.</td>
               <td>Deleted when you withdraw consent</td>
             </tr>
           </tbody>
         </table>
+        <p>If you opt into analytics, Google Analytics may set cookies such as <code>_ga</code> and <code>_ga_*</code> for usage measurement. Their duration follows Google&apos;s settings and browser restrictions. Rejecting analytics prevents the Google tag from loading.</p>
         <h2>Only with your consent: &ldquo;Ads and offers&rdquo;</h2>
         <p>
-          Currently not in use. If we ever add an advertising partner (like Google or Meta), it will be listed here
-          first and will only load if you switch this on.
+          Optional advertising tags are enabled only when configured and you separately opt into Ads and offers.
+          We do not treat analytics consent as advertising consent.
         </p>
       </>
     ),

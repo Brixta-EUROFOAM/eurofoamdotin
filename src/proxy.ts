@@ -14,7 +14,7 @@ import { NextResponse, type NextRequest } from "next/server";
 const isDev = process.env.NODE_ENV !== "production";
 
 function csp(nonce: string) {
-  const gtm = Boolean(process.env.NEXT_PUBLIC_GTM_ID);
+  const gtm = Boolean(process.env.NEXT_PUBLIC_GTM_ID || "GTM-P2KKR8HJ");
   const meta = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
   const cfAnalytics = Boolean(process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN);
 
