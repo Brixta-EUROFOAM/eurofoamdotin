@@ -12,6 +12,7 @@ import { trackEvent } from "@/lib/telemetry-client";
 import { useConsent } from "@/components/store/ConsentProvider";
 import { getAcquisition } from "@/lib/acquisition-client";
 import { recordVerifiedPurchase } from "@/lib/paid-conversions-client";
+import { trackVerifiedGa4Purchase } from "@/lib/ga4-client";
 import TurnstileWidget from "@/components/store/TurnstileWidget";
 
 type Done = { id: string; total: number; whatsapp: string | null; payError?: string };
@@ -39,7 +40,7 @@ export default function CheckoutClient({
   onlinePay?: boolean;
   testMode?: boolean;
 }) {
-  const { marketing } = useConsent();
+  const { marketing, analytics } = useConsent();
   const { items, subtotal, clearCart, hydrated } = useCart();
   const { total, stale, dropped } = useLiveQuote(true);
   const { pin, info, check } = useLocation();
@@ -197,7 +198,10 @@ export default function CheckoutClient({
               const verified = await verifyRes.json().catch(() => ({}));
               if (!verifyRes.ok || !verified.success) throw new Error(verified.error || "Payment could not be verified.");
               // Paid conversion: never fire for order creation, failed payments, or COD.
-              if (!testMode) recordVerifiedPurchase(data.id, Number(data.total), marketing);
+              if (!testMode) {
+                recordVerifiedPurchase(data.id, Number(data.total), marketing);
+                trackVerifiedGa4Purchase(data.id, Number(data.total), analytics);
+              }
               clearCart();
               setDone({ id: data.id, total: data.total, whatsapp: data.whatsapp || null });
               window.scrollTo({ top: 0 });

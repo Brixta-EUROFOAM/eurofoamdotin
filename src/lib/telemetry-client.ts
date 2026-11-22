@@ -1,5 +1,7 @@
 "use client";
 
+import { trackGa4Interaction } from "@/lib/ga4-client";
+
 /*
   First-party analytics. Runs ONLY after the visitor allows "Improve the
   site" in the cookie choices (see ConsentProvider). Before that, and for
@@ -112,6 +114,9 @@ export function trackEvent(type: TelemetryType, extra: Record<string, unknown> =
       utmCampaign: params.get("utm_campaign") || "",
       ...extra,
     });
+
+    // Only approved, non-PII interaction fields are forwarded to GA4.
+    trackGa4Interaction(type, extra);
 
     const blob = new Blob([body], { type: "application/json" });
     if (!navigator.sendBeacon?.("/api/telemetry", blob)) {

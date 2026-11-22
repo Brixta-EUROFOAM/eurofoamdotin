@@ -16,6 +16,7 @@ import { useConsent } from "@/components/store/ConsentProvider";
   Never add a second Google tag directly to layout.tsx.
 */
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "GTM-P2KKR8HJ";
+const ENABLE_GTM = process.env.NEXT_PUBLIC_ENABLE_GTM === "true";
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 const safeId = (v?: string) => (v && /^[A-Za-z0-9-]{4,30}$/.test(v) ? v : "");
 
@@ -31,7 +32,7 @@ export default function MarketingTags({ nonce }: { nonce?: string }) {
       (navigator.doNotTrack === "1" || navigator.globalPrivacyControl === true));
   const gtm = safeId(GTM_ID);
   const pixel = safeId(META_PIXEL_ID);
-  const loadGtm = !blocked && analytics && Boolean(gtm) && !pathname.startsWith("/admin");
+  const loadGtm = ENABLE_GTM && !blocked && analytics && Boolean(gtm) && !pathname.startsWith("/admin");
   const loadPixel = !blocked && marketing && Boolean(pixel) && !pathname.startsWith("/admin");
 
   if (!loadGtm && !loadPixel) return null;

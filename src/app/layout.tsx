@@ -14,6 +14,7 @@ import CloudflareAnalytics from "@/components/store/CloudflareAnalytics";
 import LocationProvider from "@/components/store/LocationProvider";
 import CartDrawer from "@/components/store/CartDrawer";
 import MarketingTags from "@/components/store/MarketingTags";
+import GA4Tracker from "@/components/store/GA4Tracker";
 import JsonLd from "@/components/store/JsonLd";
 import SewingThread from "@/components/store/SewingThread";
 import { CONSENT_COOKIE, parseConsent } from "@/lib/consent";
@@ -80,6 +81,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <AcquisitionTracker />
           <CloudflareAnalytics nonce={nonce} />
           <MarketingTags nonce={nonce} />
+          <GA4Tracker nonce={nonce} />
           <LocationProvider initialPin={isValidPin(savedPin) ? savedPin : ""}>
             <CartProvider>
               <TelemetryTracker />
