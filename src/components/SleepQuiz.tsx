@@ -11,6 +11,7 @@ import { money, type Mattress } from "@/lib/catalog";
 import { mattressPrice } from "@/lib/mattress-pricing";
 import { SIZE_GROUPS, type SizeRow } from "@/lib/sizes";
 import { trackEvent } from "@/lib/telemetry-client";
+import SleepMatchLeadCapture from "@/components/store/SleepMatchLeadCapture";
 
 type MatchKey = "regular" | "pro" | "ultimate";
 type Option = {
@@ -269,6 +270,7 @@ export default function SleepQuiz({ products }: { products: Mattress[] }) {
               {count > 0 && <p className="sm-cart-notice">You already have {count} item{count > 1 ? "s" : ""} in your cart. This match will be added to your existing checkout.</p>}
               <p className="sm-fineprint">Your delivery PIN will be checked at checkout. Currently serving eligible PIN codes in Assam and Meghalaya. <Link href="/policies/trial">Read the 100-night trial terms.</Link></p>
             </div>
+            <SleepMatchLeadCapture product={best.name} concern={answers[0]?.label || ""} size={size} height={height} price={price ?? 0} />
             <div className="sm-result-links"><Link href={`/mattresses/${best.slug}?variant=true`}>Product details and custom sizes →</Link>{ranked[1] && <Link href={`/mattresses/${ranked[1].slug}`}>Compare with {ranked[1].name} ↗</Link>}</div>
           </div>
         </div>

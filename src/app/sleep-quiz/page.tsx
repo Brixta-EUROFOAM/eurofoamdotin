@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SleepQuiz from "@/components/SleepQuiz";
 import SleepMatchFilm from "@/components/store/SleepMatchFilm";
+import SleepMatchPinPrompt from "@/components/store/SleepMatchPinPrompt";
 import ProductVisual from "@/components/store/ProductVisual";
 import JsonLd from "@/components/store/JsonLd";
 import { getStoreData } from "@/lib/store";
@@ -13,11 +14,12 @@ import { breadcrumbLd } from "@/lib/seo";
 import { siteUrl } from "@/lib/public-url";
 import "./sleepmatch.css";
 import "./sleepmatch-story.css";
+import "./sleepmatch-extra.css";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "SleepMatch | Find a Mattress for Your Sleeping Style & Budget",
+  title: "Mattress Finder for Firmness, Heat & Comfort | GADDA SleepMatch",
   description: "Mattress too firm, too soft or too hot? Explore real GADDA foam layers, compare Regular, Pro and Ultimate, then answer four questions for a size-priced mattress match. Assam and Meghalaya delivery eligibility checked at checkout.",
   alternates: { canonical: "/sleep-quiz" },
   openGraph: {
@@ -52,7 +54,7 @@ const faqs = [
   { question: "How does SleepMatch choose a mattress?", answer: "The four-question tool scores your main concern, sleeping position, preferred surface feel and buying priorities against the three GADDA constructions. It is a preference-based shortlist, not a medical assessment or laboratory comfort test." },
   { question: "What's the difference between a firm mattress and a supportive mattress?", answer: "Firmness describes how a surface feels. Support describes how the mattress helps hold the body. A soft comfort layer can sit above a firmer base, so a supportive mattress does not have to feel uniformly hard." },
   { question: "Is cooling memory foam guaranteed to stop night sweats?", answer: "No. Temperature depends on covers, bedding, room temperature, ventilation and the sleeper. The Ultimate includes a cooling-oriented comfort layer, but no universal temperature reduction is promised." },
-  { question: "Do I have to enter my phone number or email before seeing my result?", answer: "No. SleepMatch shows its recommendation and size-based price without signing up. Contact and delivery details are requested only through the normal checkout process." },
+  { question: "Do I have to enter my phone number or email before seeing my result?", answer: "No. SleepMatch shows its recommendation and size-based price without signing up. A skippable PIN prompt helps check delivery, and an optional callback request lets you ask for advice. Neither is required to see your result." },
   { question: "Can I use the 100-night trial on any mattress or custom size?", answer: "Not necessarily. Eligibility, exclusions, product condition and collection conditions are governed by GADDA's published trial policy. Read the full terms before ordering." },
   { question: "Where can GADDA deliver?", answer: "GADDA screens PIN codes for Assam and Meghalaya. Final order eligibility depends on the exact delivery address and serviceability validation at checkout." },
 ];
@@ -66,7 +68,7 @@ export default async function SleepQuizPage() {
     image: p.image,
     firmness: p.firmness,
     longDescription: p.longDescription,
-    layers: p.layers.map((layer) => layer.name),
+    layers: p.layers.map((layer) => ({ name: layer.name, material: layer.material, description: layer.description, visualKind: layer.visualKind })),
   }));
   const hero = products.find((p) => p.slug === "gadda-pro") || products[0];
   return (
@@ -88,6 +90,7 @@ export default async function SleepQuizPage() {
                 <a className="sm4-quiet-link" href="#construction">See what&apos;s inside <span aria-hidden="true">↓</span></a>
               </div>
               <p className="sm4-hero-proof">Four questions. Three actual mattresses. No email gate.</p>
+              <SleepMatchPinPrompt />
             </div>
             <div className="sm4-hero-visual" aria-label="GADDA Pro mattress construction photography">
               {hero ? <ProductVisual image={hero.cardImage || hero.image} layers={hero.layers} alt={`${hero.name}, real GADDA catalogue photo`} /> : null}
@@ -161,6 +164,21 @@ export default async function SleepQuizPage() {
               </article>)}
               <article><span className="sm4-tabular">04</span><div><h3>I&apos;m worried about returns</h3><p>Read the written trial rules, pickup conditions and exclusions before committing.</p><div><Link href="/guides/mattress-trial-returns">Trial and returns guide</Link><Link href="/policies/trial">Current GADDA policy →</Link></div></div></article>
             </div>
+          </div>
+        </section>
+
+
+        <section className="sm5-search" aria-labelledby="sm5-search-title">
+          <div className="g-wrap">
+            <div className="sm5-search-top"><div><p className="sm4-kicker">BUYING AFTER RESEARCHING A REVIEW?</p><h2 id="sm5-search-title">Searching for a mattress alternative? Start with what went wrong.</h2></div>
+              <p>Delivery worries, a mattress that feels too hard, or a confusing return policy are different problems. We help you examine the original concern and compare real constructions, not make unverified claims about another brand.</p>
+            </div>
+            <div className="sm5-search-list">
+              <article><span>DELIVERY &amp; SUPPORT</span><div><h3>Wakefit mattress alternatives</h3><p>What to check about your PIN, service commitments, returns and total delivered cost.</p></div><Link href="/alternatives/wakefit-mattress">Read buyer checklist →</Link></article>
+              <article><span>FIRMNESS &amp; FIT</span><div><h3>SleepyCat mattress alternatives</h3><p>Separate surface comfort from support, and find what a real foam-layer specification can tell you.</p></div><Link href="/alternatives/sleepycat-mattress">Compare the questions →</Link></article>
+              <article><span>COMFORT TECHNOLOGY</span><div><h3>The Sleep Company mattress alternatives</h3><p>Evaluate material claims, size-based prices, support design and written trial eligibility.</p></div><Link href="/alternatives/the-sleep-company-mattress">Explore the comparison →</Link></article>
+            </div>
+            <p className="sm5-search-note">GADDA is not affiliated with these brands. Reviews are individual accounts, not proof of brand-wide performance. Each guide links to independent buyer discussions and provides a practical comparison checklist. <Link href="/alternatives">All mattress buying checklists →</Link></p>
           </div>
         </section>
 
