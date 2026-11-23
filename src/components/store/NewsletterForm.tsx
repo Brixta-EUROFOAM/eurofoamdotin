@@ -20,7 +20,7 @@ export default function NewsletterForm() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: form.get("email"), website: form.get("website"), turnstileToken }),
+        body: JSON.stringify({ email: form.get("email"), website: form.get("website"), optIn: true, turnstileToken }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Couldn't sign you up. Try again.");
@@ -33,7 +33,7 @@ export default function NewsletterForm() {
   }
 
   if (state === "done") {
-    return <p style={{ marginTop: 18, color: "#fff" }}>You&apos;re on the list. Unsubscribe from any email in one click.</p>;
+    return <p style={{ marginTop: 18, color: "#fff" }}>Check your inbox and click the Brevo confirmation link to join the GADDA newsletter. You can unsubscribe anytime.</p>;
   }
 
   return (

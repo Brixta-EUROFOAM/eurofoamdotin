@@ -15,6 +15,8 @@ export type Customer = {
   email: string;
   mobile: string;
   createdAt: string;
+  emailVerifiedAt?: string;
+  phoneVerifiedAt?: string;
 };
 
 type CustomerRecord = Customer & {
@@ -51,14 +53,16 @@ async function writeDb(db: CustomerDatabase) {
 
 /* ---------- storage: Postgres (gadda.customers) or data/customers.json ---------- */
 
-type Row = { id: string; name: string; email: string; mobile: string; password_hash: string; created_at: Date };
+type Row = { id: string; name: string; email: string; mobile: string; password_hash: string; created_at: Date; email_verified_at?: Date | null; phone_verified_at?: Date | null };
 const fromRow = (r: Row): CustomerRecord => ({
   id: r.id,
   name: r.name,
   email: r.email,
   mobile: r.mobile,
   passwordHash: r.password_hash,
-  createdAt: new Date(r.created_at).toISOString()
+  createdAt: new Date(r.created_at).toISOString(),
+  ...(r.email_verified_at ? { emailVerifiedAt: new Date(r.email_verified_at).toISOString() } : {}),
+  ...(r.phone_verified_at ? { phoneVerifiedAt: new Date(r.phone_verified_at).toISOString() } : {})
 });
 
 async function findByEmail(email: string): Promise<CustomerRecord | undefined> {
@@ -132,7 +136,9 @@ function publicCustomer(record: CustomerRecord): Customer {
     name: record.name,
     email: record.email,
     mobile: record.mobile,
-    createdAt: record.createdAt
+    createdAt: record.createdAt,
+    ...(record.emailVerifiedAt ? { emailVerifiedAt: record.emailVerifiedAt } : {}),
+    ...(record.phoneVerifiedAt ? { phoneVerifiedAt: record.phoneVerifiedAt } : {})
   };
 }
 

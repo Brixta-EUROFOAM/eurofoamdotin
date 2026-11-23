@@ -14,6 +14,8 @@ import { getAcquisition } from "@/lib/acquisition-client";
 import { recordVerifiedPurchase } from "@/lib/paid-conversions-client";
 import { trackVerifiedGa4Purchase } from "@/lib/ga4-client";
 import TurnstileWidget from "@/components/store/TurnstileWidget";
+import EmailCodeAccess from "@/components/store/EmailCodeAccess";
+import PhoneCodeAccess from "@/components/store/PhoneCodeAccess";
 
 type Done = { id: string; total: number; whatsapp: string | null; payError?: string };
 type Pay = "online" | "pay_on_delivery";
@@ -61,6 +63,14 @@ export default function CheckoutClient({
   const [leaving, setLeaving] = useState(false);
   const [accept, setAccept] = useState(false);
   const [waUpdates, setWaUpdates] = useState(false);
+  const [newsletterOptIn, setNewsletterOptIn] = useState(false);
+  const [createAccount, setCreateAccount] = useState(false);
+  const [verifiedEmail, setVerifiedEmail] = useState("");
+  const [verifiedPhone, setVerifiedPhone] = useState("");
+  const [verifiedWhatsApp, setVerifiedWhatsApp] = useState("");
+  const [phoneOtpRequired, setPhoneOtpRequired] = useState(false);
+  const [otpEnabled, setOtpEnabled] = useState(false);
+  const [whatsappAvailable, setWhatsappAvailable] = useState(false);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [checkoutReady, setCheckoutReady] = useState(false);
@@ -94,6 +104,12 @@ export default function CheckoutClient({
       .catch(() => {});
   }, []);
 
+  // Server determines whether phone OTP is required. The order API also enforces this.
+  useEffect(() => {
+    fetch("/api/customer/phone/status", { cache: "no-store" })
+      .then((r) => r.json()).then((x) => { setPhoneOtpRequired(x.required === true); setOtpEnabled(x.otpEnabled === true); setWhatsappAvailable(x.whatsappAvailable === true); }).catch(() => {});
+  }, []);
+
   // PIN → city/state autofill.
   useEffect(() => {
     if (info?.ok && info.pin === form.pincode && info.place) {
@@ -107,11 +123,14 @@ export default function CheckoutClient({
 
   const stepValid = useMemo(
     () => ({
-      contact: form.name.trim().length >= 2 && /^[6-9]\d{9}$/.test(phoneDigits) && (!form.email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)),
+      contact: form.name.trim().length >= 2 && /^[6-9]\d{9}$/.test(phoneDigits) && (!form.email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+          && (!phoneOtpRequired || verifiedPhone === phoneDigits)
+          && (!(otpEnabled && createAccount) || (Boolean(form.email) && verifiedEmail === form.email.trim().toLowerCase()))
+          && (!newsletterOptIn || Boolean(form.email)),
       address: /^[1-9]\d{5}$/.test(form.pincode) && form.address.trim().length >= 8 && form.city.trim().length >= 2 && info?.ok === true && info.pin === form.pincode,
       payment: accept,
     }),
-    [form, phoneDigits, accept, info]
+    [form, phoneDigits, accept, info, phoneOtpRequired, verifiedPhone, otpEnabled, createAccount, verifiedEmail, newsletterOptIn]
   );
 
   function go(next: Step) {
@@ -125,7 +144,13 @@ export default function CheckoutClient({
     if (!stepValid[current]) {
       setError(
         current === "contact"
-          ? "Enter your name and a 10-digit mobile number."
+          ? newsletterOptIn && !form.email
+              ? "Enter your email to receive the newsletter confirmation, or untick the newsletter option."
+              : phoneOtpRequired && verifiedPhone !== phoneDigits
+              ? "Verify your WhatsApp number with the received code to continue."
+              : otpEnabled && createAccount && verifiedEmail !== form.email.trim().toLowerCase()
+              ? "Verify your email code or untick account creation to continue as a guest."
+              : "Enter your name and a 10-digit mobile number."
           : "Enter a full address and a verified delivery PIN in Assam or Meghalaya."
       );
       return;
@@ -160,7 +185,8 @@ export default function CheckoutClient({
           payment,
           acceptTerms: true,
           turnstileToken,
-          whatsappUpdates: waUpdates,
+          whatsappUpdates: otpEnabled && whatsappAvailable && waUpdates,
+           newsletterOptIn,
           idempotencyKey: key.current,
           acquisition: getAcquisition(marketing),
           items: items.map((i) => ({ slug: i.slug, size: i.size, height: i.height, variant: i.variant, quantity: i.quantity })),
@@ -340,6 +366,21 @@ export default function CheckoutClient({
                 <small>For the order receipt.</small>
               </label>
             </div>
+            <PhoneCodeAccess phone={phoneDigits} required={phoneOtpRequired} onVerified={(phone, channel) => { setVerifiedPhone(phone); setVerifiedWhatsApp(channel === "whatsapp" ? phone : ""); }} />
+            {phoneOtpRequired ? <p className="g-note" style={{ margin: 0, textAlign: "left" }}>WhatsApp OTP confirmation is required for ordering.</p> : null}
+            <label className="g-check" style={{ display: otpEnabled ? undefined : "none" }}>
+              <input type="checkbox" checked={createAccount} disabled={!otpEnabled} onChange={(e) => setCreateAccount(e.target.checked)} />
+              <span>Save my details with a GADDA account (verify by email, no password). Optional; guest checkout is available.</span>
+            </label>
+            {otpEnabled && createAccount ? <EmailCodeAccess email={form.email} name={form.name} onVerified={(customer) => {
+              setVerifiedEmail(customer.email);
+              setForm((f) => ({ ...f, email: customer.email, name: f.name || customer.name }));
+            }} /> : null}
+            <label className="g-check">
+              <input type="checkbox" checked={newsletterOptIn} onChange={(e) => setNewsletterOptIn(e.target.checked)} />
+              <span>Email me GADDA buying tips, launches and offers. I'll confirm my subscription by email, and can unsubscribe anytime. Not required for checkout.</span>
+            </label>
+            {newsletterOptIn && !form.email ? <small>Please enter an email to receive the newsletter confirmation.</small> : null}
             <div className="g-hp" aria-hidden="true">
               <input tabIndex={-1} autoComplete="off" value={form.website} onChange={set("website")} />
             </div>
@@ -460,9 +501,9 @@ export default function CheckoutClient({
                 . My details are used only to deliver this order.
               </span>
             </label>
-            <label className="g-check">
-              <input type="checkbox" checked={waUpdates} onChange={(e) => setWaUpdates(e.target.checked)} />
-              <span>Send me order and delivery updates on WhatsApp (optional).</span>
+            <label className="g-check" style={{ display: otpEnabled && whatsappAvailable ? undefined : "none" }}>
+              <input type="checkbox" checked={waUpdates} disabled={!otpEnabled || !whatsappAvailable || verifiedWhatsApp !== phoneDigits} onChange={(e) => setWaUpdates(e.target.checked)} />
+              <span>Send me order confirmations, payment and delivery updates on WhatsApp (optional; verify this WhatsApp number first). Reply STOP at any time.</span>
             </label>
 
             <TurnstileWidget key={turnstileRun} action="order" onToken={setTurnstileToken} />

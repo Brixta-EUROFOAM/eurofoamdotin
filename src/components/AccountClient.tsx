@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import OtpAccountAccess from "@/components/store/OtpAccountAccess";
+import PhoneCodeAccess from "@/components/store/PhoneCodeAccess";
 import { useEffect, useState, type FormEvent } from "react";
 import { money } from "@/lib/catalog";
 import { useCart } from "@/components/CartProvider";
@@ -33,6 +35,13 @@ export default function AccountClient() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [otpEnabled, setOtpEnabled] = useState(false);
+  const [whatsappAvailable, setWhatsappAvailable] = useState(false);
+  useEffect(() => {
+    fetch("/api/customer/phone/status", { cache: "no-store" })
+      .then((r) => r.json()).then((x) => { setOtpEnabled(x.otpEnabled === true); setWhatsappAvailable(x.whatsappAvailable === true); }).catch(() => {});
+  }, []);
 
   async function loadOrders() {
     const r = await fetch("/api/customer/orders").catch(() => null);
@@ -162,6 +171,18 @@ export default function AccountClient() {
           )}
         </section>
 
+        <section className="g-card-flat" aria-labelledby="wa-phone-h" style={{ display: otpEnabled && whatsappAvailable ? undefined : "none" }}>
+          <h2 className="g-h3" id="wa-phone-h">Verified WhatsApp number</h2>
+          <p>Verify a WhatsApp number for your GADDA account and to receive optional order updates. Account sign-in by email remains available.</p>
+          <label className="g-field"><span>Your WhatsApp number</span>
+            <input type="tel" inputMode="tel" autoComplete="tel-national" value={whatsappNumber || customer.mobile}
+              onChange={(e) => setWhatsappNumber(e.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit WhatsApp number" />
+          </label>
+          <PhoneCodeAccess phone={whatsappNumber || customer.mobile} onVerified={(phone) => {
+            setCustomer((current) => current ? { ...current, mobile: phone } : current);
+            setWhatsappNumber(phone);
+          }} />
+        </section>
         <section className="g-card-flat" aria-labelledby="share-h">
           <h2 className="g-h3" id="share-h">Recommend GADDA</h2>
           <p>Share our mattresses with a friend. No discount or referral reward is currently promised.</p>
@@ -209,66 +230,5 @@ export default function AccountClient() {
     );
   }
 
-  return (
-    <div className="g-narrow" style={{ marginInline: "auto", paddingBlock: 48 }}>
-      <h1 className="g-h2" style={{ marginBottom: 8 }}>
-        {mode === "login" ? "Sign in" : "Create an account"}
-      </h1>
-      <p className="g-lede" style={{ marginBottom: 24 }}>
-        You don&apos;t need an account to order. It just keeps your orders in one place and fills in checkout for you.
-      </p>
-      <div className="g-tabs" role="tablist">
-        <button type="button" role="tab" aria-selected={mode === "login"} onClick={() => setMode("login")}>
-          Sign in
-        </button>
-        <button type="button" role="tab" aria-selected={mode === "register"} onClick={() => setMode("register")}>
-          Create account
-        </button>
-      </div>
-      <form className="g-card-flat" style={{ display: "grid", gap: 14 }} onSubmit={submit}>
-        {mode === "register" ? (
-          <>
-            <label className="g-field">
-              <span>Full name</span>
-              <input name="name" required minLength={2} maxLength={80} autoComplete="name" />
-            </label>
-            <label className="g-field">
-              <span>Mobile (optional)</span>
-              <input name="mobile" type="tel" inputMode="tel" maxLength={14} autoComplete="tel" />
-            </label>
-          </>
-        ) : null}
-        <label className="g-field">
-          <span>Email</span>
-          <input name="email" type="email" required maxLength={120} autoComplete="email" />
-        </label>
-        <label className="g-field">
-          <span>Password</span>
-          <input
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            maxLength={200}
-            autoComplete={mode === "login" ? "current-password" : "new-password"}
-          />
-          {mode === "register" ? <small>At least 8 characters.</small> : null}
-        </label>
-        {mode === "register" ? (
-          <p className="g-note" style={{ textAlign: "left", margin: 0 }}>
-            By creating an account you agree to the <Link href="/policies/terms" className="g-link">Terms</Link> and{" "}
-            <Link href="/policies/privacy" className="g-link">Privacy Notice</Link>.
-          </p>
-        ) : null}
-        {error ? (
-          <p className="g-error" role="alert">
-            {error}
-          </p>
-        ) : null}
-        <button type="submit" className="g-btn g-btn--block" disabled={busy}>
-          {busy ? "One moment…" : mode === "login" ? "Sign in" : "Create account"}
-        </button>
-      </form>
-    </div>
-  );
+  return <OtpAccountAccess onSuccess={(verified) => { setCustomer(verified); void loadOrders(); }} />;
 }

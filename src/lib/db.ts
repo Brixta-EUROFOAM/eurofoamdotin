@@ -49,6 +49,10 @@ create table if not exists gadda.customers (
   created_at     timestamptz not null default now()
 );
 
+-- Verification timestamps are distinct from merely supplied contact values.
+alter table gadda.customers add column if not exists email_verified_at timestamptz;
+alter table gadda.customers add column if not exists phone_verified_at timestamptz;
+
 create table if not exists gadda.orders (
   id               text primary key,
   created_at       timestamptz not null default now(),

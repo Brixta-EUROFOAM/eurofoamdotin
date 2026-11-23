@@ -4,6 +4,8 @@ import { verifyTurnstile } from "@/lib/turnstile";
 import { createOrder, OrderError, whatsappFor } from "@/lib/orders";
 import { getStoreData } from "@/lib/store";
 import { CUSTOMER_COOKIE, customerFromSession } from "@/lib/customerAuth";
+import { PHONE_COOKIE, phoneOtpRequired, phoneProofValid, phoneWhatsAppProofValid } from "@/lib/gadda-otp-phone";
+import { initiateGaddaNewsletter } from "@/lib/gadda-newsletter-doi";
 import { clientIp, forbidden, rateLimit, readJson, sameOrigin, tooMany } from "@/lib/security";
 
 export const runtime = "nodejs";
@@ -27,7 +29,17 @@ export async function POST(request: Request) {
   try {
     const jar = await cookies();
     const customer = await customerFromSession(jar.get(CUSTOMER_COOKIE)?.value);
-    const order = await createOrder(body, { customerId: customer?.id });
+    const phoneVerified = phoneProofValid(jar.get(PHONE_COOKIE)?.value, String(body.phone || ""));
+    if (phoneOtpRequired() && !phoneVerified) {
+      return NextResponse.json({ error: "Verify your mobile number with a WhatsApp code before ordering." }, { status: 422 });
+    }
+    const whatsappVerified = phoneWhatsAppProofValid(jar.get(PHONE_COOKIE)?.value, String(body.phone || ""));
+    const order = await createOrder(body, { customerId: customer?.id, phoneVerified, whatsappVerified });
+    if (body.newsletterOptIn === true && typeof body.email === "string" && body.email.trim()) {
+      // Marketing confirmation cannot delay or invalidate a successful order.
+      try { await initiateGaddaNewsletter(body.email, "checkout"); }
+      catch (error) { console.error("[gadda newsletter] Checkout DOI not accepted", (error as Error).name); }
+    }
     const { site } = await getStoreData();
 
     // Standard Checkout is started by /api/create-order after the merchant order is saved.

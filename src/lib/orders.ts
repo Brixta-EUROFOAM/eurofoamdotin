@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomBytes } from "crypto";
 import { notifyAdmin } from "@/lib/admin-notify";
+import { notifyOrderWhatsApp } from "@/lib/gadda-whatsapp-orders";
 import { normalizeAcquisition, type Acquisition } from "@/lib/acquisition";
 import { dataDir, getStoreData } from "@/lib/store";
 import { checkPin } from "@/lib/delivery";
@@ -54,6 +55,7 @@ export type Order = {
   acquisition?: Acquisition;
   /* signed-in customer, if any */
   customerId?: string;
+  phoneVerifiedAt?: string;
   /* when the buyer ticked "I agree to the Terms of Sale" */
   termsAcceptedAt?: string;
   /* opted in to order updates on WhatsApp (separate, optional consent) */
@@ -158,7 +160,7 @@ export async function priceLines(input: unknown): Promise<OrderLine[]> {
 
 export async function createOrder(
   body: Record<string, unknown>,
-  meta: { customerId?: string } = {}
+  meta: { customerId?: string; phoneVerified?: boolean; whatsappVerified?: boolean } = {}
 ): Promise<Order> {
   const name = clip(body.name, 80);
   const phone = clip(body.phone, 20).replace(/[^\d+]/g, "");
@@ -199,8 +201,9 @@ export async function createOrder(
     notes: notes || undefined,
     acquisition: normalizeAcquisition(body.acquisition),
     customerId: meta.customerId,
+    ...(meta.phoneVerified ? { phoneVerifiedAt: d.toISOString() } : {}),
     termsAcceptedAt: d.toISOString(),
-    whatsappUpdates: body.whatsappUpdates === true,
+    whatsappUpdates: body.whatsappUpdates === true && meta.whatsappVerified === true,
     idempotencyKey: idempotencyKey || undefined,
     lines,
     total: lines.reduce((sum, l) => sum + l.lineTotal, 0),
@@ -218,6 +221,7 @@ export async function createOrder(
     `Delivery: ${city} ${pincode}`, `Source: ${order.acquisition?.source || "unattributed"}`,
     `Campaign: ${order.acquisition?.campaign || ""}`, "Manage: /admin/orders",
   ] });
+  await notifyOrderWhatsApp(order, "received");
   return order;
 }
 
@@ -348,6 +352,7 @@ export async function actOnOrder(
 ): Promise<Order> {
   const order = await getOrder(id);
   if (!order) throw new OpsError("Order not found.");
+  const previousStatus = order.status;
   const { stages } = await getOps();
   const i = stages.findIndex((s) => s.id === order.status);
   const now = new Date().toISOString();
@@ -389,6 +394,7 @@ export async function actOnOrder(
   }
   order.history = history.slice(-200);
   await saveOrder(order);
+  if (order.status !== previousStatus) await notifyOrderWhatsApp(order, "status");
   return order;
 }
 
@@ -541,6 +547,7 @@ export async function applyPaymentLink(link: RazorpayLink): Promise<Order | null
       `Phone: ${order.customer.phone}`, `Source: ${order.acquisition?.source || "unattributed"}`,
       "Status: Payment link paid (verified through Razorpay)", "Manage: /admin/orders",
     ] });
+    await notifyOrderWhatsApp(order, "paid");
   }
   return order;
 }
@@ -583,5 +590,6 @@ export async function confirmCheckoutPayment(razorpayOrderId: string, paymentId:
     `Source: ${fresh.acquisition?.source || "unattributed"}`, `Campaign: ${fresh.acquisition?.campaign || ""}`,
     "Status: PAID (verified through Razorpay)", "Manage: /admin/orders",
   ] });
+  await notifyOrderWhatsApp(fresh, "paid");
   return fresh;
 }
