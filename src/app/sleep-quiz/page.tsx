@@ -4,6 +4,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SleepQuiz from "@/components/SleepQuiz";
+import SleepMatchV11 from "@/components/sleepmatch-v11/SleepMatchV11";
+import type { CampaignKey } from "@/components/sleepmatch-v11/campaigns";
 import SleepMatchFilm from "@/components/store/SleepMatchFilm";
 import SleepMatchPinPrompt from "@/components/store/SleepMatchPinPrompt";
 import ProductVisual from "@/components/store/ProductVisual";
@@ -15,12 +17,13 @@ import { siteUrl } from "@/lib/public-url";
 import "./sleepmatch.css";
 import "./sleepmatch-story.css";
 import "./sleepmatch-extra.css";
+import "./sleepmatch-v11.css";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Mattress Finder: Firmness, Heat & Comfort",
-  description: "Mattress too firm, soft or hot? Compare GADDA models and find your match in four questions. Check delivery eligibility in Assam and Meghalaya.",
+  title: "Mattress Finder | Three Mattresses. No Nonsense." ,
+  description: "Bed too hard, too soft, too warm or just uncomfortable? Start with your concern and compare three GADDA mattresses in four questions. Assam and Meghalaya delivery eligibility.",
   alternates: { canonical: "/sleep-quiz" },
   openGraph: {
     title: "SleepMatch | Which GADDA Mattress Is Right for You?",
@@ -37,15 +40,15 @@ const problemGuides = [
 
 const positioning: Record<string, { problem: string; tradeoff: string }> = {
   "gadda-regular": {
-    problem: "Want a firmer, straightforward mattress without premium extras?",
+    problem: "Support. Without the unnecessary extras.",
     tradeoff: "A simple high-density foam foundation with a soft top. Less contouring than memory-foam models.",
   },
   "gadda-pro": {
-    problem: "Need some pressure-sensitive cushioning without a very plush feel?",
+    problem: "Cushioned where you need it. Supported where it matters.",
     tradeoff: "Memory foam over a 32D HR base. Pocket springs are optional, at an additional cost.",
   },
   "gadda-ultimate": {
-    problem: "Prefer a more plush, responsive surface and want cooling-oriented materials?",
+    problem: "More responsive comfort. Temperature in mind.",
     tradeoff: "Cooling-oriented memory foam and adaptive foam over 40D HR. Cooling is not a guaranteed temperature reduction.",
   },
 };
@@ -59,7 +62,15 @@ const faqs = [
   { question: "Where can GADDA deliver?", answer: "GADDA screens PIN codes for Assam and Meghalaya. Final order eligibility depends on the exact delivery address and serviceability validation at checkout." },
 ];
 
-export default async function SleepQuizPage() {
+const AD_JOURNEYS: Record<string, {headline:string;intro:string}> = {"tired": {"headline": "Eight hours. Still exhausted?", "intro": "More sleep does not always mean better rest. Let’s check whether your bed is making comfort harder, without assuming your mattress is the cause."}, "hot": {"headline": "Your bed shouldn't feel like a heater.", "intro": "Start with where the warmth comes from. Compare materials, bedding and room conditions before paying for a cooling upgrade."}, "restless": {"headline": "47 positions. Still uncomfortable.", "intro": "Side. Back. Side again. Let’s work out whether you want more cushioning, less sink, or simply a different feel."}, "stiff": {"headline": "Your morning shouldn't start with a backache.", "intro": "Firmness and support are not the same. Let’s compare your preferred feel and sleeping position, without promising to treat pain."}, "cold": {"headline": "Waking up cold again?", "intro": "Before you replace your mattress, check the layers you sleep under and the room you sleep in. Then we can compare the feel of your bed."}};
+
+const V11_CAMPAIGNS = new Set<CampaignKey>(["hot", "cold", "tired", "restless", "stiff"]);
+
+export default async function SleepQuizPage({ searchParams }: { searchParams: Promise<{ concern?: string | string[] }> }) {
+  const query = await searchParams;
+  const key = typeof query.concern === "string" ? query.concern : "";
+  const v11Campaign = V11_CAMPAIGNS.has(key as CampaignKey) ? (key as CampaignKey) : null;
+  const campaign = Object.prototype.hasOwnProperty.call(AD_JOURNEYS, key) ? AD_JOURNEYS[key] : undefined;
   const { products } = await getStoreData();
   const nonce = (await headers()).get("x-nonce") || undefined;
   const filmProducts = products.map((p) => ({
@@ -79,17 +90,24 @@ export default async function SleepQuizPage() {
         { "@context": "https://schema.org", "@type": "ItemList", name: "GADDA mattress constructions", itemListElement: products.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.name, url: siteUrl(`/mattresses/${p.slug}`) })) },
       ]} />
       <main className="sm4-page sm-page" id="main">
-        <section className="sm4-hero" aria-labelledby="sm4-title">
+        {v11Campaign ? (
+          <SleepMatchV11 products={products} campaign={v11Campaign} />
+        ) : (
+        <>
+        {campaign ? <section className="sm7-campaign-hero" aria-labelledby="sm4-title"><div className="g-wrap"><p className="sm4-kicker">GADDA / THREE MATTRESSES. NO NONSENSE.</p><h1 id="sm4-title">{campaign.headline}</h1><p>{campaign.intro}</p><a href="#sleepmatch" className="sm4-btn">Find my fit →</a><small>Four illustrated questions. No account required.</small></div></section> : <section className="sm4-hero" aria-labelledby="sm4-title">
           <div className="g-wrap sm4-hero-grid">
             <div className="sm4-hero-copy">
               <p className="sm4-kicker">GADDA / SLEEPMATCH</p>
-              <h1 id="sm4-title">A mattress should fit <em>your sleep.</em><br />Not the other way around.</h1>
-              <p className="sm4-lede">Too firm? Sinking in? Waking up warm? Before you buy another mattress, understand what actually changes between foam constructions—and find the one that fits your priorities.</p>
+              <h1 id="sm4-title">Three mattresses.<br /><em>No nonsense.</em></h1>
+              <p className="sm4-lede">What if choosing a mattress started with what bothers you at night, instead of a catalogue full of foam names? Tell us what feels wrong. We will help you compare three real constructions and find a sensible fit.</p>
               <div className="sm4-hero-actions">
-                <a className="sm4-btn" href="#sleepmatch">Find my mattress <span aria-hidden="true">→</span></a>
+                <a className="sm4-btn" href="#sleepmatch">Start with my problem <span aria-hidden="true">→</span></a>
                 <a className="sm4-quiet-link" href="#construction">See what&apos;s inside <span aria-hidden="true">↓</span></a>
               </div>
-              <p className="sm4-hero-proof">Four questions. Three actual mattresses. No email gate.</p>
+              <p className="sm4-hero-proof">Four questions. Three real mattresses. No email gate. No automatic upsell.</p>
+              <div className="sm-v6-campaigns" aria-label="Start with a common sleep concern">
+                {[["hot", "Sleeping too warm"], ["cold", "Waking up cold"], ["tired", "Waking up tired"], ["restless", "Can't get comfortable"], ["stiff", "Waking up stiff"]].map(([key, label]) => <a key={key} href={`/sleep-quiz?concern=${key}#sleepmatch`}>{label}</a>)}
+              </div>
               <SleepMatchPinPrompt />
             </div>
             <div className="sm4-hero-visual" aria-label="GADDA Pro mattress construction photography">
@@ -97,8 +115,28 @@ export default async function SleepQuizPage() {
               <div className="sm4-hero-visual-caption"><span>01 / THE MATERIALS</span><span>{hero?.name || "GADDA"} · Layer construction</span></div>
             </div>
           </div>
-          <div className="sm4-hero-rule"><div className="g-wrap"><span>WHAT&apos;S INSIDE MATTERS</span><span>SCROLL TO COMPARE OUR THREE BUILDS</span></div></div>
+          <div className="sm4-hero-rule"><div className="g-wrap"><span>WHAT&apos;S INSIDE MATTERS</span><span>START WITH YOUR CONCERN</span></div></div>
+        </section>}
+
+        <section className="sm4-match" id="sleepmatch" aria-labelledby="sm4-match-title">
+          <div className="g-wrap sm4-match-grid">
+            <div className="sm4-match-aside">
+              <p className="sm4-kicker">THE FINDER</p>
+              <h2 id="sm4-match-title">What is your bed getting wrong?</h2>
+              <p>Start with your experience. We explain why it matters, compare your comfort preferences, and show the closest of our three builds with a real configuration price. No pressure to buy the premium one.</p>
+              <dl>
+                <div><dt>01</dt><dd>What bothers you now</dd></div>
+                <div><dt>02</dt><dd>How you normally sleep</dd></div>
+                <div><dt>03</dt><dd>Your ideal mattress feel</dd></div>
+                <div><dt>04</dt><dd>Your buying priority</dd></div>
+              </dl>
+              <small>Your result is a preference-based recommendation, not a medical diagnosis or a guarantee.</small>
+            </div>
+            <div className="sm4-match-tool"><SleepQuiz products={products} initialConcern={campaign ? key : ""} /></div>
+          </div>
         </section>
+        </>
+        )}
 
         <section className="sm4-opening" id="construction" aria-labelledby="sm4-construction-title">
           <div className="g-wrap sm4-opening-grid">
@@ -112,26 +150,8 @@ export default async function SleepQuizPage() {
             <SleepMatchFilm products={filmProducts} />
           </div>
           <div className="g-wrap sm4-bridge">
-            <div><p className="sm4-kicker">YOUR TURN</p><h2>Now find which one fits <em>you.</em></h2></div>
+            <div><p className="sm4-kicker">YOUR TURN</p><h2>Want to check your own <em>match?</em></h2></div>
             <a href="#sleepmatch" className="sm4-btn">Take the four-question match <span aria-hidden="true">→</span></a>
-          </div>
-        </section>
-
-        <section className="sm4-match" id="sleepmatch" aria-labelledby="sm4-match-title">
-          <div className="g-wrap sm4-match-grid">
-            <div className="sm4-match-aside">
-              <p className="sm4-kicker">THE FINDER</p>
-              <h2 id="sm4-match-title">Tell us what&apos;s not working.</h2>
-              <p>Four questions narrow down your preferred surface feel and support construction. See your closest product match, choose dimensions and go straight to checkout.</p>
-              <dl>
-                <div><dt>01</dt><dd>What bothers you now</dd></div>
-                <div><dt>02</dt><dd>How you normally sleep</dd></div>
-                <div><dt>03</dt><dd>Your ideal mattress feel</dd></div>
-                <div><dt>04</dt><dd>Your buying priority</dd></div>
-              </dl>
-              <small>Your result is a preference-based recommendation, not a medical diagnosis or a guarantee.</small>
-            </div>
-            <div className="sm4-match-tool"><SleepQuiz products={products} /></div>
           </div>
         </section>
 

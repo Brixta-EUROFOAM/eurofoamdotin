@@ -39,3 +39,12 @@ next-env.d.ts
 /data/*
 !/data/store.json
 !/data/media/
+
+/cgi/
+*.blend
+*.blend1
+*.blend2
+*.blend@
+/.agents/skills/
+/.gadda-*-backup/
+.DS_Store
